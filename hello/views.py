@@ -6,9 +6,14 @@ from django.http import HttpResponse
 from .models import Greeting
 
 def index(request):
-    r = requests.get('http://httpbin.org/status/418')
-    print r.text
-    return HttpResponse('<pre>' + r.text + 'dsfdsfddsfdfsdsfdfs' + '</pre>')
+    return HttpResponse("""
+    	<html>
+    	<head>
+    	<title>SpareStub</title>
+    	</head>
+    	Welcome to sparestub
+    	</html>
+    	"""
 
 def db(request):
 
