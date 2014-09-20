@@ -13,7 +13,7 @@ def index(request):
     	</head>
     	Welcome to sparestub
     	</html>
-    	"""
+    	""")
 
 def db(request):
 
