@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', hello.views.index, name='index'),
-    url(r'^contact$', hello.views.contact, name='contact')
+    url(r'^contact/$', hello.views.contact, name='contact'),
     url(r'^admin/', include(admin.site.urls)),
 
 )
