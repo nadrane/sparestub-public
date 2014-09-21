@@ -13,7 +13,9 @@ def contact(request):
         email = request.get('from_email_address', '')
         im_in = request.get('subject_type', '')
         body = request.get('body', '')
-
+        print email
+        print im_in
+        print body
         if all(email, im_in, body):
             sg = sendgrid.SendGridClient('SpareStub', 'rrY8qQVYwMsAV=Z^nTC4X')
             message = sendgrid.Mail()
