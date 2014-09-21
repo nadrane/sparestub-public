@@ -44,8 +44,8 @@ def index(request):
             <p class="lead" style="text-align: center">Across town, Susie wants to go to the event, but has no ticket and no one to go with. Poor Susie!</p>
             <p class="lead" style="text-align: center"><b>Introducing SpareStub!</b> We will help connect Joey and Susie. After reviewing each other’s profiles and messaging a bit, Susie will not only buy Joey's extra ticket but also accompany him to the event.</p>
             <h2 class="cover-heading" style="text-align: center"><i>Convenient. Social. SpareStub.</i><br> Coming: Spring 2015</h2>
-            <p class="lead" style="font-size: 100%" style="text-align: center">As we develop SpareStub, we would love ideas, feedback and Beta users! If you would like periodic updates on SpareStub development and release, or would like to be included in helping to design and test the product, click below and send us an email! </p>
-            <p class="lead" style="text-align: center"><a href="mailto:stephanie@sparestub.com" class="btn btn-lg btn-default">Sign Up Form</a></p>
+            <p class="lead" style="font-size: 100%" style="text-align: center">As we develop SpareStub, we would love ideas, feedback and Beta users! If you would like periodic updates on SpareStub development and release, or would like to be included in helping to design and test the product, click below to send us an email! </p>
+            <p class="lead" style="text-align: center"><a href="mailto:stephanie@sparestub.com" class="btn btn-lg btn-default">I'm in!</a></p>
           </div>
 
         </div>
