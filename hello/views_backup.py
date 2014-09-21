@@ -75,7 +75,7 @@ def index(request):
 
             <p class="lead" style="text-align: center">
 
-            <a href=mailto:feeback@sparestub.com class="btn btn-lg btn-default">I'm in!</a>
+            <button class="btn btn-lg btn-default" data-toggle="modal" data-target="#modal-contact-form">I'm in!</button>
 
           </div>
 
@@ -91,6 +91,47 @@ def index(request):
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   </body>
+
+  <div class="modal fade" id="modal-contact-form" tabindex="-1" role="dialog" aria-labelledby="Contact form" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" id="modal-contact-form-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Email Us</h4>
+          </div>
+
+          <div class="modal-body">
+            <form id="contact-form" class="form-horizontal" url="/contact/" method="post">
+
+              <div class="form-group">
+                <label for="contact-email" class="control-label sr-only"></label>
+                <input id="contact-email" class="form-control" type="email" required name="from_email_address"
+                       placeholder="Your Email Address">
+              </div>
+
+              <div class="form-group">
+                <label for="contact-subject-type" class="control-label sr-only"></label>
+                <select id="contact-subject-type" class="form-control" name="subject_type" required>
+                  <option value="" disabled selected>I'm in for...</option>]
+                    <option value="str">Beta only</option>
+                    <option value="str">Updates only</option>
+                    <option value="str">Beta and Updates</option>
+                </select>
+              </div>  <!-- form group -->
+
+              <div class="form-group">
+                <label for="contact-body" class="control-label sr-only"></label>
+                <textarea id="contact-body" class="form-control" name="body" required placeholder="Your message here"></textarea>
+              </div>  <!-- form group -->
+            </form>  <!-- contact form -->
+          </div>  <!-- modal body -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id="contact-form-button" class="btn btn-primary form-submit-button" form="contact-form" type="submit">Submit</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
