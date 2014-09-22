@@ -7,11 +7,10 @@ import contact.views
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'gettingstarted.views.home', name='home'),
+    # url(r'^$', 'sparestub.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', contact.views.index, name='index'),
     url(r'^contact/$', contact.views.contact, name='contact'),
     url(r'^admin/', include(admin.site.urls)),
-
 )

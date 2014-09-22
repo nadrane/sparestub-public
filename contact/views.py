@@ -15,9 +15,9 @@ def contact(request):
         email = request.get('from_email_address', '')
         im_in = request.get('subject_type', '')
         body = request.get('body', '')
-        print email
-        print im_in
-        print body
+        print (email)
+        print (im_in)
+        print (body)
         if all(email, im_in, body):
             sg = sendgrid.SendGridClient('SpareStub', 'rrY8qQVYwMsAV=Z^nTC4X')
             message = sendgrid.Mail()
@@ -75,7 +75,7 @@ def index(request):
 
             <p class="lead" style="text-align: center">
 
-            <a href=mailto:feeback@sparestub.com class="btn btn-lg btn-default">I'm in!</a>
+            <a href=mailto:feedback@sparestub.com class="btn btn-lg btn-default">I'm in!</a>
 
           </div>
 
