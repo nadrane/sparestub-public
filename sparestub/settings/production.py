@@ -1,0 +1,6 @@
+__author__ = 'Nick'
+
+from .base import *
+
+DEBUG = False
+TEMPLATE_DEBUG = False

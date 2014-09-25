@@ -6,11 +6,9 @@ admin.autodiscover()
 import contact.views
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'sparestub.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
-    url(r'^$', contact.views.index, name='index'),
-    url(r'^contact/$', contact.views.contact, name='contact'),
+    url(r'^$', contact.views.home, name='homepage'),
+    url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
+    url(r'^comments/', include('django_comments.urls')),
+    url(r'^contact/', include('contact.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

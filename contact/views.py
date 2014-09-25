@@ -2,68 +2,49 @@
 import requests
 
 import sendgrid
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.http import HttpResponse
 
-from .models import Greeting
+from .forms import ContactForm
+from .settings import contact_form_settings
+import pdb
 
+from django.template import RequestContext
 
-def contact(request):
-    import pdb
-    pdb.set_trace()
+def submit(request):
     if request.method == 'POST':
-        email = request.get('from_email_address', '')
-        im_in = request.get('subject_type', '')
-        body = request.get('body', '')
-        print (email)
-        print (im_in)
-        print (body)
-        if all(email, im_in, body):
+        contact_form = ContactForm(request.POST)
+        if contact_form.is_valid():
+            subject_type = contact_form.cleaned_data.get('subject_type', 'empty subject')
+            body = contact_form.cleaned_data.get('body', 'empty body')
+            from_email_address = contact_form.cleaned_data.get('from_email_address', "nick@sparestub.com")
             sg = sendgrid.SendGridClient('SpareStub', 'rrY8qQVYwMsAV=Z^nTC4X')
             message = sendgrid.Mail()
             message.add_to('feedback@sparestub.com')
-            message.set_subject(im_in)
+            message.set_subject(subject_type)
             message.set_html(body)
-            message.set_from(email)
+            message.set_from(from_email_address)
             status, msg = sg.send(message)
 
-    return redirect('/')
+        #TODO it might be nice to just close to popup modal and submit the email using an ajax request later
+        return redirect("contact.views.home")
 
-#or
+    else:
+        contact_form = ContactForm()
+
+    return render(request,
+                  'contact/contact_form.html',
+                  {'contact_form': contact_form,
+                   'form_settings': contact_form_settings,
+                   }
+                  )
 
 
-def index(request):
-    return HttpResponse("""
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>SpareStub</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Homepage CSS -->
-    <link href="https://s3.amazonaws.com/sparestub/static/homepage2.css" rel="stylesheet">
-  </head>
-
-  <body>
-
-    <div class="site-wrapper">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="masthead clearfix">
-            <div class="inner">
-            </div>
-          </div>
-
+def home(request):
+    return render(request,
+                  'home.html'
+                  )
+"""
           <div class="inner cover">
             <h1 class="cover-heading" style="text-align: center">Imagine this:</h1>
             <p class="lead" style="text-align: center">Joey purchased two tickets to an event, but his friend bails and he has no one to go with.<br> Poor Joey!</p>
@@ -71,19 +52,12 @@ def index(request):
             <p class="lead" style="text-align: center"><b>Introducing SpareStub!</b> We will help connect Joey and Susie. After reviewing each other’s profiles and messaging a bit, Susie will not only buy Joey's extra ticket but also accompany him to the event.</p>
             <h2 class="cover-heading" style="text-align: center"><i>Convenient. Social. SpareStub.</i><br> Coming: Spring 2015</h2>
             <p class="lead" style="font-size: 100%" style="text-align: center">As we develop SpareStub, we would love ideas, feedback and Beta users! If you would like periodic updates on SpareStub development and release, or would like to be included in helping to design and test the product, click below to send us an email! </p>
-            
+        </div>
 
             <p class="lead" style="text-align: center">
 
             <a href=mailto:feedback@sparestub.com class="btn btn-lg btn-default">I'm in!</a>
 
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -92,16 +66,5 @@ def index(request):
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   </body>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-55020709-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
 </html>
-    	""")
+    	"""

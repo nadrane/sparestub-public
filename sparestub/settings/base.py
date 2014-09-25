@@ -41,6 +41,21 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'contact',
+
+    # All needed for zinnia
+    'django.contrib.sites',
+    'django_comments',
+    'mptt',
+    'tagging',
+    'zinnia',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'django.contrib.auth.context_processors.auth',
+  'django.core.context_processors.i18n',
+  'django.core.context_processors.request',
+  'zinnia.context_processors.version',  # Optional
+  'utils.context_processors.environment',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -97,10 +112,14 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = ['*']
 
 # Static asset configuration
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
+TEMPLATE_DIRS = (
+    # Location of base.html
+    os.path.join(BASE_DIR, 'templates'),
+)
+
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, '../static'),
 )

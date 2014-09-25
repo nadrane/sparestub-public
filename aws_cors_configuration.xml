@@ -1,0 +1,13 @@
+<CORSConfiguration>
+ <CORSRule>
+   <AllowedOrigin>http://www.sparestub.com</AllowedOrigin>
+
+   <AllowedMethod>GET</AllowedMethod>
+   <AllowedMethod>PUT</AllowedMethod>
+   <AllowedMethod>POST</AllowedMethod>
+   <AllowedMethod>DELETE</AllowedMethod>
+
+   <AllowedHeader>*</AllowedHeader>
+ </CORSRule>
+ </CORSRule>
+</CORSConfiguration>

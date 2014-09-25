@@ -1,0 +1,77 @@
+<style>
+    /*
+    We cannot wait for the script to load using a link tag, otherwise we get graphics glitches.
+    This is why the script is inline
+    /*
+
+    /* Make sure that there is even spacing between the form fields and submit buttons */
+    #login-form>div:last-child
+    {
+        margin-bottom: 0px;
+    }
+
+    .modal-title
+    {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container modal-container">
+  <div class="modal-header">
+    <h4 class="modal-title">Login to Crowdsurfer</h4>
+    <!-- Below we include the Login Button social plugin. This button uses the JavaScript SDK to
+         present a graphical Login button that triggers the FB.login() function when clicked. -->
+        <!-- Keep show faces set to false so login button appears when user is already logged in.
+             They have not necessarily linked their Crowdsurfer account to their FB account. -->
+    <fb:login-button id="fb-login-button" show-faces="false" data-auto-logout-link="true" perms="email" size="large" width="200" max-rows="1"></fb:login-button>
+  </div>
+
+  <div class="modal-body">
+    <form id="login-form" class="form-horizontal">
+
+      <div class="form-group">
+          <label for="login-email" class="control-label sr-only"></label>
+          <input id="login-email" type="email" class="form-control" name="email" placeholder="Email Address" required
+
+               data-bv-notempty-message="{{ form_settings.EMAIL_NOTEMPTY_MESSAGE }}"
+               data-bv-emailaddress-message="{{ form_settings.EMAIL_EMAILADDRESS_MESSAGE }}"
+
+               data-bv-stringlength="true"
+               data-bv-stringlength-max="{{ form_settings.EMAIL_MAXLENGTH }}"
+               data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}">
+
+      </div>
+
+      <div class="form-group">
+          <label for="login-password" class="control-label sr-only"></label>
+          <input id="login-password" type="password" class="form-control" name="password" placeholder="Password"
+                 required
+
+               data-by-notempty-message=""{{ form_settings.PASSWORD_NOTEMPTY_MESSAGE }}>
+      </div>  <!-- form group -->
+
+    </form>  <!-- login form -->
+  </div>  <!-- modal body -->
+
+    <div class="modal-footer">
+        <button id="login-form-button" class='btn btn-primary' form="login-form" type="button">Login</button>
+        <button type="button" class="btn btn-default form-submit-button" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}registration/js/login.js"></script>
+
+<!-- TODO I didn't want to load this in a separate file from base.html because the form won't exist yet, so it wouldn't
+     work. Need to figure out dependency management... aka requireJS -->
+<script>
+    $('#login-form').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        submitButtons: $(".form-submit-button")
+    });
+
+</script>
