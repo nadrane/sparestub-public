@@ -82,19 +82,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".env" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name=".env" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="27" selection-start="71" selection-end="71" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="105">
+            <state line="1" column="47" selection-start="91" selection-end="91" vertical-scroll-proportion="0.025510205" vertical-offset="0" max-vertical-offset="588">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="11" selection-start="22" selection-end="22" vertical-scroll-proportion="0.053285968" vertical-offset="0" max-vertical-offset="563">
+            <state line="3" column="4" selection-start="27" selection-end="27" vertical-scroll-proportion="-1.8" vertical-offset="0" max-vertical-offset="150">
               <folding />
             </state>
           </provider>
@@ -980,16 +980,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="27" selection-start="71" selection-end="71" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="105">
+        <state line="3" column="4" selection-start="27" selection-end="27" vertical-scroll-proportion="-1.8" vertical-offset="0" max-vertical-offset="150">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="11" selection-start="22" selection-end="22" vertical-scroll-proportion="0.053285968" vertical-offset="0" max-vertical-offset="563">
+        <state line="1" column="47" selection-start="91" selection-end="91" vertical-scroll-proportion="0.025510205" vertical-offset="0" max-vertical-offset="588">
           <folding />
         </state>
       </provider>
