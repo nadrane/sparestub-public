@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3034131-a363-4419-a512-c3b14da4b31c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.env" afterPath="$PROJECT_DIR$/.env" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/base.html" afterPath="$PROJECT_DIR$/sparestub/templates/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/home.html" afterPath="$PROJECT_DIR$/sparestub/templates/home.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="sparestub.iws" />
@@ -54,10 +53,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="home.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="home.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sparestub/templates/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="46" selection-start="1365" selection-end="1365" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="420">
+            <state line="10" column="23" selection-start="158" selection-end="158" vertical-scroll-proportion="0.2722323" vertical-offset="0" max-vertical-offset="551">
               <folding />
             </state>
           </provider>
@@ -99,10 +98,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="manage.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="manage.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/manage.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.17857143" vertical-offset="0" max-vertical-offset="588">
+            <state line="8" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
               <folding />
             </state>
           </provider>
@@ -154,11 +153,11 @@
         <option value="$PROJECT_DIR$/sparestub/urls.py" />
         <option value="$PROJECT_DIR$/contact/views.py" />
         <option value="$PROJECT_DIR$/sparestub/static/css/base.css" />
-        <option value="$PROJECT_DIR$/sparestub/templates/home.html" />
         <option value="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
+        <option value="$PROJECT_DIR$/sparestub/templates/home.html" />
       </list>
     </option>
   </component>
@@ -945,13 +944,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/templates/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="46" selection-start="1365" selection-end="1365" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="420">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="22" column="0" selection-start="497" selection-end="497" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
@@ -966,13 +958,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="1" selection-start="31" selection-end="31" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="120">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="93" selection-start="802" selection-end="802" vertical-scroll-proportion="-11.25" vertical-offset="0" max-vertical-offset="1665">
@@ -982,7 +967,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/manage.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.17857143" vertical-offset="0" max-vertical-offset="588">
+        <state line="8" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="1" selection-start="31" selection-end="31" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="120">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/templates/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="23" selection-start="158" selection-end="158" vertical-scroll-proportion="0.2722323" vertical-offset="0" max-vertical-offset="551">
           <folding />
         </state>
       </provider>
