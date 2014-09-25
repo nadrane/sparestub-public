@@ -15,3 +15,12 @@ def get_env_variable(var_name):
         error_message = "Set the %s environment variable" % var_name
         raise ImproperlyConfigured(error_message)
 
+
+def reverse_category_lookup(input_key, category_list):
+    for key, value in category_list:
+        if input_key == key:
+            return value
+
+
+def reverse_dictionary(dictionary):
+    return {value: key for key, value in dictionary.items()}
