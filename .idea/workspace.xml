@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3034131-a363-4419-a512-c3b14da4b31c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/base.html" afterPath="$PROJECT_DIR$/sparestub/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/contact/templates/contact/contact_form.html" afterPath="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
     </list>
     <ignored path="sparestub.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,25 +28,7 @@
       <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="41" selection-start="437" selection-end="437" vertical-scroll-proportion="-7.5" vertical-offset="30" max-vertical-offset="1665">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="105">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="28" selection-end="28" vertical-scroll-proportion="0.106571935" vertical-offset="0" max-vertical-offset="563">
+            <state line="88" column="0" selection-start="4030" selection-end="4030" vertical-scroll-proportion="-14.208333" vertical-offset="979" max-vertical-offset="1665">
               <folding />
             </state>
           </provider>
@@ -57,7 +37,7 @@
       <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/contact/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="26" selection-start="26" selection-end="40" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+            <state line="4" column="29" selection-start="210" selection-end="210" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
               <folding />
             </state>
           </provider>
@@ -110,10 +90,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="contact_form.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="contact_form.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="47" column="34" selection-start="1801" selection-end="1801" vertical-scroll-proportion="-8.75" vertical-offset="495" max-vertical-offset="1425">
+            <state line="47" column="26" selection-start="1793" selection-end="1793" vertical-scroll-proportion="0.37366548" vertical-offset="495" max-vertical-offset="1425">
               <folding />
             </state>
           </provider>
@@ -155,20 +135,20 @@
         <option value="$PROJECT_DIR$/sparestub/static/css/base.css" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/sparestub/templates/home.html" />
-        <option value="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
         <option value="$PROJECT_DIR$/contact/settings.py" />
         <option value="$PROJECT_DIR$/utils/miscellaneous.py" />
         <option value="$PROJECT_DIR$/contact/views.py" />
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
     <option name="width" value="1280" />
-    <option name="height" value="708" />
+    <option name="height" value="706" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -621,7 +601,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1280" height="708" extended-state="0" />
+    <frame x="0" y="22" width="1280" height="706" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -629,7 +609,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19765624" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19765624" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15962441" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -939,20 +919,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/contact/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="26" selection-start="26" selection-end="40" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="34" selection-start="1801" selection-end="1801" vertical-scroll-proportion="-8.75" vertical-offset="495" max-vertical-offset="1425">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/contact/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="32" selection-start="291" selection-end="291" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="765">
@@ -976,9 +942,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="41" selection-start="437" selection-end="437" vertical-scroll-proportion="-7.5" vertical-offset="30" max-vertical-offset="1665">
+        <state line="4" column="0" selection-start="28" selection-end="28" vertical-scroll-proportion="0.106571935" vertical-offset="0" max-vertical-offset="563">
           <folding />
         </state>
       </provider>
@@ -990,9 +956,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="28" selection-end="28" vertical-scroll-proportion="0.106571935" vertical-offset="0" max-vertical-offset="563">
+        <state line="88" column="0" selection-start="4030" selection-end="4030" vertical-scroll-proportion="-14.208333" vertical-offset="979" max-vertical-offset="1665">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contact/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="29" selection-start="210" selection-end="210" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="26" selection-start="1793" selection-end="1793" vertical-scroll-proportion="0.37366548" vertical-offset="495" max-vertical-offset="1425">
           <folding />
         </state>
       </provider>
