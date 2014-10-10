@@ -6,6 +6,7 @@ import logging
 from django.http import HttpResponse
 from django.shortcuts import render
 
+"""
 # Crowd Surfer modules
 from utils.cache import get_cache_contents
 from utils.miscellaneous import PageType
@@ -34,3 +35,4 @@ def after_AJAX_login_HTTP_response(request, user):
     return HttpResponse(json.dumps(json_response),
                         content_type='application/json'
                         )
+"""

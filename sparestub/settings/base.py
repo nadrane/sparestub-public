@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 
 import dj_database_url
+from utils.miscellaneous import get_env_variable
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -25,11 +27,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', DEFAULT_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -41,13 +41,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'contact',
+    'registration',
+    'user_profile',
+    'photos',
 
     # All needed for zinnia
-    'django.contrib.sites',
-    'django_comments',
-    'mptt',
-    'tagging',
-    'zinnia',
+    #'django.contrib.sites',
+    #'django_comments',
+    #'mptt',
+    #'tagging',
+    #'zinnia',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -99,8 +102,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-STATIC_URL = '/static/'
-
 
 # Parse database configuration from $DATABASE_URL
 DATABASES['default'] =  dj_database_url.config()
@@ -111,15 +112,14 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
-# Static asset configuration
-STATIC_ROOT = 'staticfiles'
-STATIC_URL = '/static/'
-
 TEMPLATE_DIRS = (
-    # Location of base.html
+    # Location of base.html and a couple others
     os.path.join(BASE_DIR, 'templates'),
 )
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, '../static'),
-)
+
+AUTH_USER_MODEL = 'registration.User'  # We wrote a custom user model that is used everywhere.
+
+AWS_ACCESS_KEY_ID = get_env_variable('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_env_variable('AWS_SECRET_ACCESS_KEY')
+AWS_BUCKET_NAME = 'sparestub'

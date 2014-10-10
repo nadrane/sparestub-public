@@ -1,34 +1,12 @@
-<style>
-    /*
-    We cannot wait for the script to load using a link tag, otherwise we get graphics glitches.
-    This is why the script is inline
-    /*
-
-    /* Make sure that there is even spacing between the form fields and submit buttons */
-    #contact-form>div:last-child
-    {
-        margin-bottom: 0px;
-    }
-
-    .modal-title
-    {
-        margin-bottom: 0px;
-    }
-
-    .modal-content .form-group{
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-</style>
-
 <div class="modal-content">
   <div class="modal-header">
     <h4 class="modal-title">Email Us</h4>
   </div>
 
-  <div class="modal-body">
-    <form id="contact-form" class="form-horizontal" data-toggle="validator" method="post" action="/contact/">{% csrf_token %}
+  <form id="contact-form" class="form-horizontal" method="post" action="{% url "contact.views.submit" %}">
+        {% csrf_token %}
 
+    <div class="modal-body">
       <div class="form-group">
         <label for="contact-email" class="control-label sr-only"></label>
         <input id="contact-email" class="form-control" type="email" required name="from_email_address"
@@ -67,24 +45,12 @@
                   data-bv-stringlength-max="{{ form_settings.BODY_MAXLENGTH }}"
                   data-bv-stringlength-message="{{ form_settings.BODY_LENGTH_MESSAGE }}"></textarea>
       </div>  <!-- form group -->
-    </form>  <!-- contact form -->
-  </div>  <!-- modal body -->
+    </div>  <!-- modal body -->
 
-  <div class="modal-footer">
-    <button id="contact-form-button" class="btn btn-primary form-submit-button" form="contact-form" type="submit">Submit</button>
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-  </div>
+      <div class="modal-footer">
+        <button id="contact-form-submit-button" class="btn btn-primary form-submit-button" type="submit">Submit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+  </form>  <!-- contact form -->
 </div>
-
-<!-- TODO I didn't want to load this in a separate file from base.html because the form won't exist yet, so it wouldn't
-     work. Need to figure out dependency management... aka requireJS -->
-<script>
-    $('#contact-form').bootstrapValidator({
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        submitButtons: $('.form-submit-button')
-    });
-</script>

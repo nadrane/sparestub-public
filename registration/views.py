@@ -8,14 +8,81 @@ from django.shortcuts import render
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.decorators import login_required
 
-# Crowd Surfer modules
-from .models import User
+# SpareStub modules
+#from .models import User
 from .settings import signup_form_settings, login_form_settings
-from .forms import SignupForm, LoginForm
-from .utils import after_AJAX_login_HTTP_response
-from utils.view_miscellaneous import form_default_HTTP_response_redirect, ajax_view_only_decorator
+#from .forms import SignupForm, LoginForm
+#from .utils import after_AJAX_login_HTTP_response
 
-@ajax_view_only_decorator
+
+def basic_info(request):
+    return render(request,
+                  'registration/basic_info.html',
+                  )
+
+
+def signup(request):
+
+    #If the user is already logged in, they're doing something they aren't supposed to. Send them a 405.
+    if request.user.is_authenticated():
+        return HttpResponseNotAllowed(['POST'])
+
+    # If the form has been submitted by the user
+    if request.method == 'POST':
+        signup_form = SignupForm(request.POST)
+        #Determine which form the user submitted.
+        if signup_form.is_valid():
+            password = signup_form.cleaned_data.get('password')
+            email = signup_form.cleaned_data.get('email', None) # Not always sent if user signs up with Facebook
+                                                    # that does not have a released email.
+            first_name = signup_form.cleaned_data.get('first_name')
+            last_name = signup_form.cleaned_data.get('last_name')
+            fb_uid = signup_form.cleaned_data.get('fb_uid', None)  # Not always sent. Default to none if user signed up with email.
+
+            # This should never happen. Form validation should prevent it.
+            if not email and not fb_uid:
+                logger = logging.error('User created without email or facebook ID.')
+                return form_default_HTTP_response_redirect()
+
+            #Email the user to welcome them to out website.  Do this before creating a user in case there are errors.
+            #send_mail('Welcome!', message, "DatingWebsite.com", [form.cleaned_data['email']])
+
+            #Check to see if this username_or_email already exists in the database... Probably best down with an
+            #AJAX query immediately after inputting the username_or_email
+
+            new_user = User.objects.create_user(email=email,
+                                                password=password,
+                                                first_name=first_name,
+                                                last_name=last_name,
+                                                facebook_user_id=fb_uid,
+                                                )
+
+            #Immediately log the user in after saving them to the database
+            #Even though we know the username_or_email and password are valid since we just got them, we MUST authenticate anyway.
+            #This is because authenticate sets an attribute on the user that notes that authentication was successful.
+            #auth_login() requires this attribute to exist.
+            #Note that we pass in a non-hashed version of the password into authenticate
+            user = authenticate(email=email, password=password)
+            auth_login(request, user)
+
+            return after_AJAX_login_HTTP_response(request, user)
+    else:
+        signup_form = SignupForm()
+
+    return render(request,
+                  'registration/signup.html',
+                  {'is_form_bound': signup_form.is_bound,
+                   'errors': signup_form.errors,
+                   'non_field_errors': signup_form.non_field_errors,
+                   'form_settings': signup_form_settings,
+                   },
+                  )
+
+
+def login(request):
+    return
+
+"""
 def signup(request):
 
     #If the user is already logged in, they're doing something they aren't supposed to. Send them a 405.
@@ -280,4 +347,4 @@ def search_users(request):
         context = request.GET['context']
 
         if context == messages:
-            userList = lookup_by_name(searchString)
+            userList = lookup_by_name(searchString)"""

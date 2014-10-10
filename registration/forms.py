@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate
 from django.forms import ValidationError
 
 # Crowd Surfer
+"""
 from .models import User
 from utils.miscellaneous import normalize_email
 from .settings import signup_form_settings, login_form_settings
@@ -93,3 +94,4 @@ class LoginForm(forms.Form):
             raise forms.ValidationError('Wrong email or password entered. Please try again.', code="invalid_credentials")
 
         return
+"""

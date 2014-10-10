@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron" style="height: 500px">
+    <div class="container" style="text-align: center">
+      <h1>Oops!</h1>
+      <p>Something went wrong! We'd really appreciate if you send us a description of what you just did.</p>
+      <br>
+      <p><a href="/contact" class="btn btn-primary btn-lg" role="button" data-toggle="modal" data-target="#modal-contact-form" href="{% url "contact.views.submit" %}/">Contact Us!</a></p>
+    </div>
+  </div>
+{% endblock %}

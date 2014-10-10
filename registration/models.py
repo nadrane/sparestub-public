@@ -11,21 +11,25 @@ from django.forms import ValidationError
 from django.core.mail import send_mail
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
+from utils.models import TimeStampedModel
+#from user_profile.models import UserProfile
+from .settings import user_model_settings
+from utils.miscellaneous import get_variable_from_settings
+
+
 # Crowd Surfer modules
 from photos.models import Photo
-from utils.models import TimeStampedModel, UserPostableModel
+from utils.models import TimeStampedModel
 from .settings import user_model_settings
 from utils.miscellaneous import get_variable_from_settings, normalize_email
 from user_profile.models import UserProfile
-from share.models import Listing
-
 
 def random_user():
     return User.objects.order_by('?')[0]
 
 
 def lookup_by_name(name, limit=5):
-    '''
+    """
         Description: Return a list of users whose usernames start with the inputted string.
                      The case of the inputted text is ignored, since usernames are case-insensitive.
         Parameters:
@@ -34,7 +38,7 @@ def lookup_by_name(name, limit=5):
 
         returns: A list of DisplayObjects, which represent information about users.
                  The objects will contain a username and a profile.html picture.
-    '''
+    """
     userList = []
 
     class UserObject:
@@ -55,9 +59,9 @@ class UserManager(BaseUserManager):
 
     @transaction.atomic()  # We definitely do not want to create a User record without a UserProfile
     def _create_user(self, email, password, first_name, last_name, is_staff, is_superuser, facebook_user_id=None, **extra_fields):
-        """
-        Creates and saves a User with the given email and password.
-        """
+
+        '''Creates and saves a User with the given email and password.'''
+
 
         # Remember that the database requires an integer, not a string, which is likely what we got as an argument.
         if facebook_user_id:
@@ -113,7 +117,7 @@ class UserManager(BaseUserManager):
                                  )
 
 
-class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel, UserPostableModel):
+class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     """
     A fully featured User model with admin-compliant permissions that uses a full-length email field as the username.
 
@@ -182,9 +186,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel, UserPostableMod
 
     @staticmethod
     def user_exists(email):
-        '''
+        """
         Since the email is unique for every user, we can check for the existence of a user by querying by email
-        '''
+        """
         # Note that the non-domain part of an email address is case sensitive, so we need email__exact
         if User.objects.filter(email__iexact=email):
             return True
@@ -197,24 +201,24 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel, UserPostableMod
         """
         Returns the first_name plus the last_name, with a space in between.
         """
+
         full_name = '%s %s' % (self.first_name.capitalize(), self.last_name.capitalize())
         return full_name.strip()
 
     def get_short_name(self):
-        "Returns the short name for the user."
+        """
+        Returns the short name for the user."
+        """
+
         return self.first_name
 
+    #TODO email function needs to use sendgrid or mandrill.
     def email_user(self, subject, message, from_email=None):
         """
         Sends an email to this User.
         """
-        send_mail(subject, message, get_variable_from_settings('DEFAULT_FROM_EMAIL'), [self.email])
 
-    def active_submissions(self):
-        '''
-        Returns the number of listings that this user has submitted that are still active.
-        '''
-        return Listing.objects.filter(poster=self).filter(active=True).count()
+        send_mail(subject, message, get_variable_from_settings('DEFAULT_FROM_EMAIL'), [self.email])
 
     @staticmethod
     def name_contains_explicit_language(name):

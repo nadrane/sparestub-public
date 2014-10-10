@@ -1,33 +1,34 @@
-# -*- coding: utf-8 -*-
-import requests
+import json
 
-import sendgrid
-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, HttpResponse
 
 from .forms import ContactForm
 from .settings import contact_form_settings
-from utils.miscellaneous import reverse_category_lookup
+from utils.miscellaneous import reverse_category_lookup, send_email
 
 
 def submit(request):
     if request.method == 'POST':
         contact_form = ContactForm(request.POST)
         if contact_form.is_valid():
-            subject_type = contact_form.cleaned_data.get('subject_type', 'empty subject')
-            subject_type = reverse_category_lookup(subject_type, contact_form_settings.get('SUBJECT_TYPES', ''))
-            body = contact_form.cleaned_data.get('body', 'empty body')
-            from_email_address = contact_form.cleaned_data.get('from_email_address', "nick@sparestub.com")
-            sg = sendgrid.SendGridClient('SpareStub', 'rrY8qQVYwMsAV=Z^nTC4X')
-            message = sendgrid.Mail()
-            message.add_to('feedback@sparestub.com')
-            message.set_subject(subject_type)
-            message.set_html(body)
-            message.set_from(from_email_address)
-            status, msg = sg.send(message)
+            subject_type = contact_form.cleaned_data.get('subject_type')
+            subject_type = reverse_category_lookup(subject_type, contact_form_settings.get('SUBJECT_TYPES'))
+            body = contact_form.cleaned_data.get('body')
+            from_email_address = contact_form.cleaned_data.get('from_email_address')
 
-        #TODO it might be nice to just close to popup modal and submit the email using an ajax request later
-        return redirect("contact.views.home")
+            successful = send_email('feedback@sparestub.com',
+                                     subject_type,
+                                     body,
+                                     from_email_address
+                                     )
+
+            # Notice that we always return True. If the email failed to send, we need to figure it out on our side.
+            # THere is nothing additional for the client to do.
+            return HttpResponse(json.dumps(True))
+
+        # If the user ignored out javascript validation and sent an invalid form, send back an error.
+        else:
+            return HttpResponse(json.dumps(False))
 
     else:
         contact_form = ContactForm()
