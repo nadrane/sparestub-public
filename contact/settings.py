@@ -22,3 +22,6 @@ contact_form_settings['BODY_LENGTH_MESSAGE'] = "Please keep your message between
 
 contact_form_settings['EMAIL_LENGTH_MESSAGE'] = 'Please keep your email address fewer than %s characters.' % \
                                                  contact_form_settings['EMAIL_MAXLENGTH']
+
+social_email_address = 'shout@sparestub.com'
+auto_response_subject = 'Thanks From SpareStub!'

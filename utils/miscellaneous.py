@@ -51,7 +51,7 @@ def normalize_email(email):
     return email
 
 
-def send_email(to_email, subject, body, from_email, **kwargs):
+def send_email(to_email, subject, body, from_email, from_name='', **kwargs):
     """
     Generic function to send an email. We encapsulate the 3rd party API call in case we every change APIs
 
@@ -61,13 +61,19 @@ def send_email(to_email, subject, body, from_email, **kwargs):
     if not isinstance(to_email, list):
         to_email = [{'email': to_email}]
 
+    if not from_name:
+        from_name = from_email
+
     try:
         mandrill_client = mandrill.Mandrill(get_env_variable('MANDRILL_API_KEY'))
+
+        # The contents of html will override the contents of body if both are present
         message = {'from_email': from_email,
-                   'from_name': 'SpareStub',
+                   'from_name': from_name,
                    'subject': subject,
                    'text': body,
                    'to': to_email,
+                   'html': kwargs.get('html')
         }
 
         result = mandrill_client.messages.send(message=message, async=False)
