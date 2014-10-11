@@ -23,12 +23,9 @@
         <select id="contact-subject-type" class="form-control" name="subject_type" required
                 data-bv-notempty-message="{{ form_settings.SUBJECT_TYPE_NOTEMPTY_MESSAGE }}">
           <option value="" disabled selected>Select a subject</option>
-          <option value="U">Sign Up for Updates</option>
-        {% comment %}
           {% for option in form_settings.SUBJECT_TYPES %}
             <option value="{{ option.0 }}"> {{ option.1 }} </option>
-          {% endfor %}
-        {% endcomment %}
+          {% endfor %}\
         </select>
       </div>  <!-- form group -->
 
