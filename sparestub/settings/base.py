@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'registration',
     'user_profile',
     'photos',
+    'utils',
 
     # All needed for zinnia
     #'django.contrib.sites',

@@ -16,16 +16,15 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
         <!-- Boostrap Validator CSS -->
         <link href="https://s3.amazonaws.com/sparestub/static/css/bootstrapValidator.min.css" rel="stylesheet">
-        <!-- basic base.html styling -->
-        <link href="https://s3.amazonaws.com/sparestub/static/css/base.css" rel="stylesheet">
     {% else %}
         <!-- Bootstrap core CSS -->
         <link href="{% static "bootstrap.css" %}" rel="stylesheet">
         <!-- Boostrap Validator CSS -->
         <link href="{% static "bootstrapValidator.css" %}" rel="stylesheet">
-        <!-- basic base.html styling -->
-        <link href="{% static "base.css" %}" rel="stylesheet">
     {% endif %}
+
+    <!-- basic base.html styling -->
+    <link href="{% static "base.css" %}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!---Must remain in the head tag so that the script has loaded before IE encounters the HTML5 tags -->

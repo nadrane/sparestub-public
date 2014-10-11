@@ -22,7 +22,7 @@ var set_notification = function (header_message, content_message, message_type) 
     $('#notification-header').text(header_message);
     $('#notification-content').text(content_message);
     $('#notification-root').addClass('alert ' + message_type)
-                      .css('display', '');
+                           .css('display', '');
 };
 
 var hide_notification = function () {
