@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3034131-a363-4419-a512-c3b14da4b31c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.woff" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/settings/local.py" afterPath="$PROJECT_DIR$/sparestub/settings/local.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/base.html" afterPath="$PROJECT_DIR$/sparestub/templates/base.html" />
     </list>
     <ignored path="sparestub.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,16 +30,7 @@
           <file leaf-file-name="sync_s3.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/utils/management/commands/sync_s3.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="6000">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="awsqueryrequest.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/boto/roboto/awsqueryrequest.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="34" column="4" selection-start="1349" selection-end="1349" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="7635">
+                <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5820">
                   <folding />
                 </state>
               </provider>
@@ -59,19 +45,19 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="local.py" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="local.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="10" column="60" selection-start="285" selection-end="285" vertical-scroll-proportion="0.19847329" vertical-offset="20" max-vertical-offset="675">
+                <state line="18" column="28" selection-start="516" selection-end="516" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="61" column="35" selection-start="2772" selection-end="2773" vertical-scroll-proportion="-4.02" vertical-offset="714" max-vertical-offset="2460">
+                <state line="101" column="0" selection-start="4385" selection-end="4385" vertical-scroll-proportion="0.40661156" vertical-offset="1269" max-vertical-offset="2460">
                   <folding />
                 </state>
               </provider>
@@ -181,8 +167,8 @@
         <option value="$PROJECT_DIR$/utils/management/commands/sync_s3.py" />
         <option value="$PROJECT_DIR$/sparestub/settings/staging.py" />
         <option value="$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py" />
-        <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
         <option value="$PROJECT_DIR$/sparestub/settings/local.py" />
+        <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
       </list>
     </option>
   </component>
@@ -1249,7 +1235,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="181" column="34" selection-start="7092" selection-end="7092" vertical-scroll-proportion="0.0" vertical-offset="2738" max-vertical-offset="8190" />
+        <state line="181" column="34" selection-start="7092" selection-end="7092" vertical-scroll-proportion="0.0" vertical-offset="2738" max-vertical-offset="8190">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/utils/lru_cache.py">
@@ -1265,20 +1253,6 @@
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/conf/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="41" column="21" selection-start="1571" selection-end="1579" vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="2670">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/management/commands/sync_s3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="6000">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/boto/roboto/awsqueryrequest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="4" selection-start="1349" selection-end="1349" vertical-scroll-proportion="0.0" vertical-offset="160" max-vertical-offset="7500">
           <folding />
         </state>
       </provider>
@@ -1339,9 +1313,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/boto/roboto/awsqueryrequest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="35" selection-start="2772" selection-end="2773" vertical-scroll-proportion="-4.02" vertical-offset="714" max-vertical-offset="2460">
+        <state line="34" column="4" selection-start="1349" selection-end="1349" vertical-scroll-proportion="-0.2020958" vertical-offset="510" max-vertical-offset="7500">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/management/commands/sync_s3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="6000">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="28" selection-start="516" selection-end="516" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
           <folding />
         </state>
       </provider>
@@ -1353,9 +1341,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
+    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="60" selection-start="285" selection-end="285" vertical-scroll-proportion="0.19847329" vertical-offset="20" max-vertical-offset="675">
+        <state line="101" column="0" selection-start="4385" selection-end="4385" vertical-scroll-proportion="0.40661156" vertical-offset="1269" max-vertical-offset="2460">
           <folding />
         </state>
       </provider>
