@@ -8,7 +8,7 @@ dirname = os.path.dirname
 STATICFILES_DIRS = (
     ('sparestub/css', os.path.join(BASE_DIR, 'static/css')),
     ('sparestub/js', os.path.join(BASE_DIR, 'static/js')),
-    ('sparestub/font', os.path.join(BASE_DIR, 'static/fonts')),
+    ('sparestub/fonts', os.path.join(BASE_DIR, 'static/fonts')),
     ('sparestub/logos', os.path.join(BASE_DIR, 'static/logos')),
 )
 

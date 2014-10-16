@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3034131-a363-4419-a512-c3b14da4b31c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/base.html" afterPath="$PROJECT_DIR$/sparestub/templates/base.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sparestub/fonts/glyphicons-halflings-regular.woff" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/settings/local.py" afterPath="$PROJECT_DIR$/sparestub/settings/local.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -56,19 +59,19 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="local.py" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="local.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="17" column="36" selection-start="473" selection-end="473" vertical-scroll-proportion="0.0" vertical-offset="20" max-vertical-offset="675">
+                <state line="10" column="60" selection-start="285" selection-end="285" vertical-scroll-proportion="0.19847329" vertical-offset="20" max-vertical-offset="675">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="52" column="34" selection-start="2492" selection-end="2492" vertical-scroll-proportion="0.4446281" vertical-offset="511" max-vertical-offset="2460">
+                <state line="61" column="35" selection-start="2772" selection-end="2773" vertical-scroll-proportion="-4.02" vertical-offset="714" max-vertical-offset="2460">
                   <folding />
                 </state>
               </provider>
@@ -178,8 +181,8 @@
         <option value="$PROJECT_DIR$/utils/management/commands/sync_s3.py" />
         <option value="$PROJECT_DIR$/sparestub/settings/staging.py" />
         <option value="$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py" />
-        <option value="$PROJECT_DIR$/sparestub/settings/local.py" />
         <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
+        <option value="$PROJECT_DIR$/sparestub/settings/local.py" />
       </list>
     </option>
   </component>
@@ -580,6 +583,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1318,9 +1339,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
+    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="36" selection-start="473" selection-end="473" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
+        <state line="61" column="35" selection-start="2772" selection-end="2773" vertical-scroll-proportion="-4.02" vertical-offset="714" max-vertical-offset="2460">
           <folding />
         </state>
       </provider>
@@ -1332,9 +1353,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="34" selection-start="2492" selection-end="2492" vertical-scroll-proportion="0.4446281" vertical-offset="511" max-vertical-offset="2460">
+        <state line="10" column="60" selection-start="285" selection-end="285" vertical-scroll-proportion="0.19847329" vertical-offset="20" max-vertical-offset="675">
           <folding />
         </state>
       </provider>
