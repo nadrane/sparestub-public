@@ -57,7 +57,7 @@
           <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="101" column="0" selection-start="4385" selection-end="4385" vertical-scroll-proportion="0.40661156" vertical-offset="1269" max-vertical-offset="2460">
+                <state line="15" column="37" selection-start="725" selection-end="725" vertical-scroll-proportion="0.37190083" vertical-offset="0" max-vertical-offset="2460">
                   <folding />
                 </state>
               </provider>
@@ -1343,7 +1343,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="0" selection-start="4385" selection-end="4385" vertical-scroll-proportion="0.40661156" vertical-offset="1269" max-vertical-offset="2460">
+        <state line="15" column="37" selection-start="725" selection-end="725" vertical-scroll-proportion="0.37190083" vertical-offset="0" max-vertical-offset="2460">
           <folding />
         </state>
       </provider>

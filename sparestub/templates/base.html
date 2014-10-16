@@ -12,7 +12,7 @@
     <title>SpareStub</title>
 
     {% block css %}
-      {% if environment == 'production' %}
+      {% if environment == 'production' or environment == 'staging' %}
           <!-- Bootstrap core CSS -->
           <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
           <!-- Boostrap Validator CSS -->
