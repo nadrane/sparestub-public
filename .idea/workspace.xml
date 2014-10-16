@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3034131-a363-4419-a512-c3b14da4b31c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/registration/static/registration/js/logout.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/static/css/base.css" afterPath="$PROJECT_DIR$/sparestub/static/css/base.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/base.html" afterPath="$PROJECT_DIR$/sparestub/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/contact/static/contact/js/contact.js" afterPath="$PROJECT_DIR$/contact/static/contact/js/contact.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/registration/static/registration/js/login.js" afterPath="$PROJECT_DIR$/registration/static/registration/js/login.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/registration/static/registration/js/signup.js" afterPath="$PROJECT_DIR$/registration/static/registration/js/signup.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="sparestub.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,7 +57,7 @@
           <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="45" column="42" selection-start="2229" selection-end="2229" vertical-scroll-proportion="0.75092936" vertical-offset="271" max-vertical-offset="2460">
+                <state line="68" column="26" selection-start="3029" selection-end="3029" vertical-scroll-proportion="0.4163569" vertical-offset="796" max-vertical-offset="2490">
                   <folding>
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1391,7 +1385,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="42" selection-start="2229" selection-end="2229" vertical-scroll-proportion="0.75092936" vertical-offset="271" max-vertical-offset="2460">
+        <state line="68" column="26" selection-start="3029" selection-end="3029" vertical-scroll-proportion="0.4163569" vertical-offset="796" max-vertical-offset="2490">
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
