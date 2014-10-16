@@ -24,7 +24,7 @@
     <favorites_list name="sparestub" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4564809">
+    <splitter split-orientation="horizontal" split-proportion="0.4157796">
       <split-first>
         <leaf>
           <file leaf-file-name="sync_s3.py" pinned="false" current="false" current-in-tab="false">
@@ -48,7 +48,7 @@
           <file leaf-file-name="local.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="18" column="28" selection-start="516" selection-end="516" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
+                <state line="20" column="39" selection-start="554" selection-end="557" vertical-scroll-proportion="-8.884615" vertical-offset="69" max-vertical-offset="675">
                   <folding />
                 </state>
               </provider>
@@ -57,7 +57,28 @@
           <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="15" column="37" selection-start="725" selection-end="725" vertical-scroll-proportion="0.37190083" vertical-offset="0" max-vertical-offset="2460">
+                <state line="67" column="25" selection-start="3097" selection-end="3097" vertical-scroll-proportion="0.41065294" vertical-offset="766" max-vertical-offset="2490">
+                  <folding>
+                    <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="staging.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/sparestub/settings/staging.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="11" column="39" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="production.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/sparestub/settings/production.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="14" column="60" selection-start="518" selection-end="518" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
                   <folding />
                 </state>
               </provider>
@@ -70,7 +91,25 @@
           <file leaf-file-name="login.html" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/registration/templates/registration/login.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="750">
+                <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="-0.041666668" vertical-offset="119" max-vertical-offset="750">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="contact_form.html" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="28" column="19" selection-start="1257" selection-end="1257" vertical-scroll-proportion="-8.125" vertical-offset="225" max-vertical-offset="990">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="navigation_bar_right.html" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/sparestub/templates/navigation_bar_right.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="3" column="31" selection-start="377" selection-end="377" vertical-scroll-proportion="0.07131537" vertical-offset="0" max-vertical-offset="631">
                   <folding />
                 </state>
               </provider>
@@ -85,10 +124,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="base.css" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="base.css" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="11" column="2" selection-start="214" selection-end="214" vertical-scroll-proportion="0.24700598" vertical-offset="0" max-vertical-offset="960">
+                <state line="11" column="2" selection-start="214" selection-end="214" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
                   <folding />
                 </state>
               </provider>
@@ -125,7 +164,6 @@
         <option value="$PROJECT_DIR$/registration/forms.py" />
         <option value="$PROJECT_DIR$/sparestub/urls.py" />
         <option value="$PROJECT_DIR$/registration/urls.py" />
-        <option value="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
         <option value="$PROJECT_DIR$/utils/email.py" />
         <option value="$PROJECT_DIR$/utils/management/commands/sqlinit.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
@@ -168,6 +206,7 @@
         <option value="$PROJECT_DIR$/sparestub/settings/staging.py" />
         <option value="$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py" />
         <option value="$PROJECT_DIR$/sparestub/settings/local.py" />
+        <option value="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
         <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
       </list>
     </option>
@@ -636,6 +675,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="registration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="registration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -659,6 +720,42 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="locations" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="contact" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="contact" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="contact" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1051,11 +1148,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/utils/email.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="1225" selection-end="1225" vertical-scroll-proportion="0.0" vertical-offset="145" max-vertical-offset="810" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/mail/message.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="282" column="0" selection-start="9948" selection-end="9948" vertical-scroll-proportion="0.40699816" vertical-offset="3709" max-vertical-offset="6045" />
@@ -1155,11 +1247,6 @@
         <state line="112" column="1" selection-start="5100" selection-end="5100" vertical-scroll-proportion="-16.0" vertical-offset="1249" max-vertical-offset="2070">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/templates/navigation_bar_right.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="40" selection-start="841" selection-end="845" vertical-scroll-proportion="0.1744186" vertical-offset="0" max-vertical-offset="688" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/home.html">
@@ -1264,20 +1351,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/settings/production.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="60" selection-start="518" selection-end="518" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/settings/staging.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="39" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="67" column="75" selection-start="2367" selection-end="2367" vertical-scroll-proportion="0.0" vertical-offset="788" max-vertical-offset="5850">
@@ -1285,23 +1358,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/registration/templates/registration/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="750">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/registration/templates/registration/signup.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="69" column="45" selection-start="3313" selection-end="3313" vertical-scroll-proportion="0.0" vertical-offset="1035" max-vertical-offset="1455">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="2" selection-start="214" selection-end="214" vertical-scroll-proportion="0.24700598" vertical-offset="0" max-vertical-offset="960">
           <folding />
         </state>
       </provider>
@@ -1327,13 +1386,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="28" selection-start="516" selection-end="516" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/settings/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="40" column="30" selection-start="1070" selection-end="1080" vertical-scroll-proportion="0.0" vertical-offset="600" max-vertical-offset="2190">
@@ -1341,10 +1393,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/settings/staging.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="39" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/settings/production.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="60" selection-start="518" selection-end="518" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="2" selection-start="214" selection-end="214" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/registration/templates/registration/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="-0.041666668" vertical-offset="119" max-vertical-offset="750">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="19" selection-start="1257" selection-end="1257" vertical-scroll-proportion="-8.125" vertical-offset="225" max-vertical-offset="990">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/templates/navigation_bar_right.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="31" selection-start="377" selection-end="377" vertical-scroll-proportion="0.07131537" vertical-offset="0" max-vertical-offset="631">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="39" selection-start="554" selection-end="557" vertical-scroll-proportion="-8.884615" vertical-offset="69" max-vertical-offset="675">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="37" selection-start="725" selection-end="725" vertical-scroll-proportion="0.37190083" vertical-offset="0" max-vertical-offset="2460">
-          <folding />
+        <state line="67" column="25" selection-start="3097" selection-end="3097" vertical-scroll-proportion="0.41065294" vertical-offset="766" max-vertical-offset="2490">
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
