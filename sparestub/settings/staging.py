@@ -3,7 +3,7 @@ __author__ = 'Nick'
 from .base import *
 
 # Keep these in here always. regardless of what base.py says. Just be safe.
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = False
 
 # Put on hold until https://github.com/cobrateam/django-htmlmin is migrated to python 3.
