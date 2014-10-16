@@ -1,57 +1,20 @@
-<div class="container modal-container">
-  <div class="modal-header">
-    <h4 class="modal-title">Login to Crowdsurfer</h4>
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block css %}
+  {{ block.super }}
+  <link href="{% static "user_profile/css/user_profile.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="profile-header">
+
   </div>
 
-  <div class="modal-body">
-    <form id="login-form" class="form-horizontal" action="{% url "registration.views.profile" %}" method="post"> {% csrf_token %}
+{% endblock %}
 
-      <div class="form-group">
-        <label for="profile-first-name" class="control-label"></label>
-        <input type="text" class="form-control" id="profile-first-name" name="first_name">
-      </div>
-
-      <div class="form-group">
-        <label for="profile-last-name" class="control-label"></label>
-        <input type="text" class="form-control" id="profile-last-name" name="last_name">
-      </div>  <!-- form group -->
-
-      <div class="username">
-        <label for="profile-username" class="control-label"></label>
-        <input type="text" class="form-control" id="profile-username" name="username">
-      </div>
-
-      <div class="form-group">
-        <label for="profile-email" class="control-label"></label>
-        <input type="email" class="form-control" id="profile-email" name="email">
-      </div>
-
-      <div class="form-group">
-        <label for="profile-password" class="control-label"></label>
-        <input type="password" class="form-control" id="profile-password" name="password">
-      </div>
-
-      <div class="form-group">
-        <label for="profile-website" class="control-label"></label>
-        <input type="text" class="form-control" id="profile-website" name="website">
-      </div>
-
-      <div class="form-group">
-        <label for="profile-description" class="control-label">About you</label>
-        <textarea class="form-control" id="profile-description" name="description"> </textarea>
-      </div>
-
-      <div class="modal-footer">
-          <button class='btn btn-primary' form="profile-form" type="submit">Save Settings</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-{% block jsFoot %}
-
-    <!-- Load jQuery.validate.min.js from Microsoft's CDN -->
-    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static "user_profile/js/user_profile.js" %}"></script>
 {% endblock %}

@@ -133,6 +133,9 @@ AUTH_USER_MODEL = 'registration.User'  # We wrote a custom user model that is us
 
 AWS_ACCESS_KEY_ID = get_env_variable('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = get_env_variable('AWS_SECRET_ACCESS_KEY')
-AWS_BUCKET_NAME = 'sparestub'
 
 SOCIAL_EMAIL_ADDRESS = 'shout@sparestub.com'
+
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_root')
+
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_root')

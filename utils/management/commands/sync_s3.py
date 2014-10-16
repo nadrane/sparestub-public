@@ -99,6 +99,8 @@ class Command(BaseCommand):
     upload_count = 0
     skip_count = 0
 
+    import pdb
+    pdb.set_trace()
     option_list = BaseCommand.option_list + (
         make_option('-p', '--prefix',
                     dest='prefix',

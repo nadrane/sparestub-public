@@ -1,11 +1,18 @@
+@charset "UTF-8";
+
 /* 50px for the nav bar and another 5 to separate the nav bar from the rest of the page */
 body {
     padding-top: 60px;
 }
-
+/*
+.navbar {
+    background-color: #F0F0F5;
+    border-style: none;
+}
+*/
 /* Make sure that every link in the navbar changes the cursor to a hand */
 .navbar a {
-    cursor: pointer
+    cursor: pointer;
 }
 
 /* The alert bar should have minimal spacing around it to conserve vertical screen space */

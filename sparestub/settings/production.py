@@ -12,7 +12,19 @@ MIDDLEWARE_CLASSES += (#'htmlmin.middleware.HTMLMinMiddleware',
                        #'htmlmin.middleware.MarkRequestMiddleware',
                        )
 
-STATIC_URL = 'https://s3.amazonaws.com/sparestub/'
+STATIC_URL = 'https://s3.amazonaws.com/sparestub-production/'
 MEDIA_URL = ''
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sparestub',
+        'USER': 'postgres',
+        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
+        'HOST': '127.0.0.1'
+    }
+}
+
 #ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
+
+AWS_BUCKET_NAME = 'sparestub-production'

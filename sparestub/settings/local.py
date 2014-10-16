@@ -12,12 +12,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/logos'),
 )
 
-STATIC_ROOT = os.path.join(dirname(BASE_DIR), 'static_root')
-
 # Serve from the local machine during development
 STATIC_URL = '/static_root/'
-
-MEDIA_ROOT = os.path.join(dirname(BASE_DIR), 'media_root')
 
 # Serve from the local machine during development
 MEDIA_URL = MEDIA_ROOT + '/'
@@ -37,3 +33,8 @@ DATABASES = {
         'HOST': '127.0.0.1'
     }
 }
+
+# We really don't want sync_s3 changing the production or staging environents when run using
+# the the dev environment. The only purpose for this bucket is testing the sync_s3 script.
+# The sparestub-staging and sparestub-production buckets are used for staging and production, respectively
+AWS_BUCKET_NAME = 'sparestub'
