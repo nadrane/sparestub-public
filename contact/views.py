@@ -5,9 +5,15 @@ from django.template.loader import render_to_string
 
 from .forms import ContactForm
 from .settings import contact_form_settings
-from utils.miscellaneous import reverse_category_lookup, send_email
+from utils.miscellaneous import reverse_category_lookup, get_variable_from_settings
+from utils.networking import ajax_http
+from utils.email import send_email
+
 
 from .settings import social_email_address, auto_response_subject
+
+SOCIAL_EMAIL_ADDRESS = get_variable_from_settings('SOCIAL_EMAIL_ADDRESS')
+
 
 def submit(request):
     if request.method == 'POST':
@@ -19,30 +25,32 @@ def submit(request):
             from_email_address = contact_form.cleaned_data.get('from_email_address')
 
             # Send an email to shout@sparestub.com with the user's message
-            successful = send_email('shout@sparestub.com',
+            successful = send_email(SOCIAL_EMAIL_ADDRESS,
                                     subject_type,
                                     body,
                                     from_email_address,
                                     )
 
-            auto_response_body = render_to_string('contact/contact_auto_response.html')
+            auto_response_message = render_to_string('contact/contact_auto_response.html')
             # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
             successful = send_email(from_email_address,
                                     auto_response_subject,
                                     '',
-                                    social_email_address,
+                                    SOCIAL_EMAIL_ADDRESS,
                                     'SpareStub',
-                                    html=auto_response_body
+                                    html=auto_response_message
                                     )
 
             # Notice that we always return True. If the email failed to send, we need to figure it out on our side.
-            # THere is nothing additional for the client to do.
-            return HttpResponse(json.dumps(True))
+            # There is nothing additional for the client to do.
+            return ajax_http(True, 200)
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
+        # We don't actually specify what the form error was. This is okay because our app requires JS to be enabled.
+        # If the user managed to send us an aysynch request with JS disabled, they aren't using the site as designed.
+        # eg., possibly a malicious user. No need to repeat the form pretty validation already done on the front end.
         else:
-            return HttpResponse(json.dumps(False))
-
+            return ajax_http(True, 400)
     else:
         contact_form = ContactForm()
 

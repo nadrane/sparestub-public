@@ -22,8 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-DEFAULT_SECRET_KEY = '3iy-!-d$!pc_ll$#$elg&cpr@*tfn-d5&n9ag=)%#()t$$5%5^'
-SECRET_KEY = os.environ.get('SECRET_KEY', DEFAULT_SECRET_KEY)
+SECRET_KEY = '3iy-!-d$!pc_ll$#$elg&cpr@*tfn-d5&n9ag=)%#()t$$5%5^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,24 +39,27 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # Required by allauth and zinnia
     'contact',
     'registration',
     'user_profile',
     'photos',
     'utils',
+    'djrill',
 
     # All needed for zinnia
-    #'django.contrib.sites',
     #'django_comments',
     #'mptt',
     #'tagging',
     #'zinnia',
 )
 
+SITE_ID = 1 # Needed for allauth
+
 TEMPLATE_CONTEXT_PROCESSORS = (
   'django.contrib.auth.context_processors.auth',
   'django.core.context_processors.i18n',
-  'django.core.context_processors.request',
+  'django.core.context_processors.request',       # Required by allauth template tags
   'zinnia.context_processors.version',  # Optional
   'utils.context_processors.environment',
 )
@@ -70,6 +72,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+MANDRILL_API_KEY = get_env_variable('MANDRILL_API_KEY')
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 
 ROOT_URLCONF = 'sparestub.urls'
 
@@ -124,3 +134,5 @@ AUTH_USER_MODEL = 'registration.User'  # We wrote a custom user model that is us
 AWS_ACCESS_KEY_ID = get_env_variable('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = get_env_variable('AWS_SECRET_ACCESS_KEY')
 AWS_BUCKET_NAME = 'sparestub'
+
+SOCIAL_EMAIL_ADDRESS = 'shout@sparestub.com'

@@ -24,4 +24,5 @@ contact_form_settings['EMAIL_LENGTH_MESSAGE'] = 'Please keep your email address 
                                                  contact_form_settings['EMAIL_MAXLENGTH']
 
 social_email_address = 'shout@sparestub.com'
+
 auto_response_subject = 'Thanks From SpareStub!'

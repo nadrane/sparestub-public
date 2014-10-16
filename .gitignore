@@ -1,5 +1,7 @@
 venv
 *.pyc
-staticfiles
+static_root
+media_root
 .env
 .idea
+*.csv

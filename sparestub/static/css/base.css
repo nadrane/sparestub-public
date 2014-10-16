@@ -9,9 +9,25 @@ body {
 }
 
 /* The alert bar should have minimal spacing around it to conserve vertical screen space */
-.alert {
+#notification-root .alert {
     margin-bottom: 10px;
 }
+
+#signup-notification-root .alert {
+    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
+    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+}
+
+#login-notification-root .alert {
+    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
+    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+}
+
+#contact-notification-root .alert {
+    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
+    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+}
+
 
 /* Center the text for the notification bar */
 #notification-root {

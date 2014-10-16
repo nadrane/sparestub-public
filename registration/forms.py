@@ -9,26 +9,20 @@ from django.contrib.auth import authenticate
 from django.forms import ValidationError
 
 # Crowd Surfer
-"""
+
 from .models import User
-from utils.miscellaneous import normalize_email
+from utils.email import send_mail
+
 from .settings import signup_form_settings, login_form_settings
 
 
 #Form that will be displayed on signup.html to load a person
 class SignupForm(forms.Form):
 
-    email = forms.EmailField(required=False,  # If a facebook ID is present, an email is not required.
-                                              # Although an email is needed to sign up for facebook, it might not be
-                                              # publicly available.
+    email = forms.EmailField(required=True,
                              max_length=signup_form_settings['EMAIL_MAX_LENGTH'],
                              widget=forms.EmailInput(),
                              )
-
-    fb_uid = forms.IntegerField(required=False)  # The to_python value of IntegerField will coerce an inputted string
-                                                 # to an integer
-
-    fb_access_token = forms.CharField(required=False)  # We need this to validate the fb_uid that the user sent us
 
     password = forms.CharField(required=True,
                                min_length=signup_form_settings['PASSWORD_MIN_LENGTH'],
@@ -44,6 +38,10 @@ class SignupForm(forms.Form):
                                 max_length=signup_form_settings['LAST_NAME_MAX_LENGTH']
                                 )
 
+    zipcode = forms.CharField(required=True,
+                              max_length=signup_form_settings.get('ZIPCODE_MAX_LENGTH')
+                              )
+
     #Make sure that this email address does not already exist in the database
     def clean_email(self):
         return User.valid_email(self.cleaned_data.get('email', None))
@@ -54,15 +52,8 @@ class SignupForm(forms.Form):
     def clean_last_name(self):
         return User.valid_name(self.cleaned_data.get('last_name'))
 
-    def clean(self):
-        fb_uid = self.cleaned_data.get('fb_uid', None)
-        fb_access_token = self.cleaned_data.get('fb_access_token', None)
-
-        if not User.is_fb_access_token_valid(fb_uid, fb_access_token):
-            raise ValidationError('Something went wrong on our side. Please try again', 'fb_uid token mismatch')
-
-        return self.cleaned_data # TODO can remove in Django 1.7. No longer required then.
-                                 # At bottom of page: https://docs.djangoproject.com/en/dev/ref/forms/validation/
+    def clean_zipcode(self):
+        return User.valid_zipcode(self.cleaned_data.get('zipcode'))
 
 
 class LoginForm(forms.Form):
@@ -94,4 +85,3 @@ class LoginForm(forms.Form):
             raise forms.ValidationError('Wrong email or password entered. Please try again.', code="invalid_credentials")
 
         return
-"""

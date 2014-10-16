@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,7 +46,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">SpareStub</a>
+          <div style="padding-top: 10px; padding-left: 0px; padding-bottom: 0px">
+            <a href="/">
+             <img src="{% static "sparestub4a.png" %}" height="30px">
+            </a>
+          </div>
         </div>
 
         <div class="collapse navbar-collapse">
@@ -56,19 +60,19 @@
                 <a class="contact-form-button" data-toggle="modal" data-target="#modal-contact-root">Contact</a>
             </li>
           </ul>
-            {% comment %}
           <div id="navigation-bar-right-div" class="navbar-form navbar-right">
             {% include "navigation_bar_right.html" %}
           </div>
-          {% endcomment %}
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
     </div><!-- /.navbar -->
 
-    <div id="notification-root" class="alert alert-success" style="display: None">
+    <div id="notification-root">
+      <div class="notification-style" style="display: None">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong id="notification-header"></strong>
-        <span id="notification-content"></span>
+        <strong class="notification-header"></strong>
+        <span class="notification-content"></span>
+      </div>
     </div>
 
     <div class="container" role="main">
@@ -79,7 +83,9 @@
     <script type="text/javascript">
     window.additional_parameters =
     {
-        'contact_form_url' : "{% url "contact.views.submit" %}"
+        'contact_form_url' : "{% url "contact.views.submit" %}",
+        'signup_form_url' : "{% url "registration.views.signup" %}",
+        'login_form_url' : "{% url "registration.views.login" %}"
     }
     </script>
 
@@ -114,17 +120,32 @@
     {% endif %}
 
     <script type="text/javascript" src="{% static "utils.js" %}"></script>
-
     <script type="text/javascript" src="{% static "contact/js/contact.js" %}"></script>
 
     {% comment %} Depends on initialize_bootstrap_validation, which is defined in contact.js {% endcomment %}
     <script type="text/javascript" src="{% static "base.js" %}"></script>
 
+    <script type="text/javascript" src="{% static "registration/js/signup.js" %}"></script>
+    <script type="text/javascript" src={% static "registration/js/login.js"%}></script>
 
      <!-- TODO aria-labeledby we need to set this appropriately -->
     <div id="modal-contact-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content" id="modal-contact-form-content">
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-signup-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="modal-signup-form-content">
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-login-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="modal-login-form-content">
         </div>
       </div>
     </div>

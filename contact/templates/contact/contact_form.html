@@ -1,9 +1,16 @@
 <div class="modal-content">
   <div class="modal-header">
     <h4 class="modal-title">Email Us</h4>
+    <div id="contact-notification-root">
+      <div class="notification-style" style="display: None">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong class="notification-header"></strong>
+        <span class="notification-content"></span>
+      </div>
+    </div>
   </div>
 
-  <form id="contact-form" class="form-horizontal" method="post" action="{% url "contact.views.submit" %}">
+  <form id="contact-form" class="form-horizontal" action="{% url "contact.views.submit" %}">
         {% csrf_token %}
 
     <div class="modal-body">

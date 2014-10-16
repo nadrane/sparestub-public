@@ -10,6 +10,7 @@ from django.conf.urls.static import static
 urlpatterns = patterns('',
     url(r'^$', contact.views.home, name='homepage'),
     #url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
+    url(r'^profile/', include('user_profile.urls')),
     url(r'^registration/', include('registration.urls')),
     url(r'^comments/', include('django_comments.urls')),
     url(r'^contact/', include('contact.urls')),
