@@ -19,13 +19,13 @@
           <link href="https://s3.amazonaws.com/sparestub/static/css/bootstrapValidator.min.css" rel="stylesheet">
       {% else %}
           <!-- Bootstrap core CSS -->
-          <link href="{% static "bootstrap.css" %}" rel="stylesheet">
+          <link href="{% static "sparestub/css/bootstrap.css" %}" rel="stylesheet">
           <!-- Boostrap Validator CSS -->
-          <link href="{% static "bootstrapValidator.css" %}" rel="stylesheet">
+          <link href="{% static "sparestub/css/bootstrapValidator.css" %}" rel="stylesheet">
       {% endif %}
 
       <!-- basic base.html styling -->
-      <link href="{% static "base.css" %}" rel="stylesheet">
+      <link href="{% static "sparestub/css/base.css" %}" rel="stylesheet">
     {% endblock %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -50,7 +50,7 @@
           </button>
           <div style="padding-top: 10px; padding-left: 0px; padding-bottom: 0px">
             <a href="/">
-             <img src="{% static "sparestub4a.png" %}" height="30px">
+             <img src="{% static "sparestub/logos/sparestub4a.png" %}" height="30px">
             </a>
           </div>
         </div>
@@ -113,21 +113,21 @@
           ga('send', 'pageview');
         </script>
       {% else %}
-        <script type="text/javascript" src="{% static "jquery-1.11.1.js" %}"></script>
-        <script type="text/javascript" src="{% static "bootstrap.js" %}"></script>
+        <script type="text/javascript" src="{% static "sparestub/js/jquery-1.11.1.js" %}"></script>
+        <script type="text/javascript" src="{% static "sparestub/js/bootstrap.js" %}"></script>
 
         <!-- Bootstrap validator Javascript -->
-        <script type="text/javascript" src="{% static "bootstrapValidator.js" %}"></script>
+        <script type="text/javascript" src="{% static "sparestub/js/bootstrapValidator.js" %}"></script>
 
         <!-- Bootstrap linter -->
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>
       {% endif %}
 
-      <script type="text/javascript" src="{% static "utils.js" %}"></script>
+      <script type="text/javascript" src="{% static "sparestub/js/utils.js" %}"></script>
       <script type="text/javascript" src="{% static "contact/js/contact.js" %}"></script>
 
       {% comment %} Depends on initialize_bootstrap_validation, which is defined in contact.js {% endcomment %}
-      <script type="text/javascript" src="{% static "base.js" %}"></script>
+      <script type="text/javascript" src="{% static "sparestub/js/base.js" %}"></script>
 
       <script type="text/javascript" src="{% static "registration/js/signup.js" %}"></script>
       <script type="text/javascript" src={% static "registration/js/login.js"%}></script>

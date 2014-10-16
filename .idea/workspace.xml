@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3034131-a363-4419-a512-c3b14da4b31c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/settings/staging.py" afterPath="$PROJECT_DIR$/sparestub/settings/staging.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/base.html" afterPath="$PROJECT_DIR$/sparestub/templates/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/settings/local.py" afterPath="$PROJECT_DIR$/sparestub/settings/local.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="sparestub.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,7 +32,7 @@
           <file leaf-file-name="sync_s3.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/utils/management/commands/sync_s3.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="-11.346154" vertical-offset="1025" max-vertical-offset="5820">
+                <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="6000">
                   <folding />
                 </state>
               </provider>
@@ -39,74 +41,16 @@
           <file leaf-file-name="awsqueryrequest.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/boto/roboto/awsqueryrequest.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="34" column="4" selection-start="1349" selection-end="1349" vertical-scroll-proportion="0.0" vertical-offset="160" max-vertical-offset="7500">
+                <state line="34" column="4" selection-start="1349" selection-end="1349" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="7635">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py">
+          <file leaf-file-name="base.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/sparestub/settings/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="66" column="7" selection-start="2291" selection-end="2291" vertical-scroll-proportion="-7.1923075" vertical-offset="803" max-vertical-offset="5865">
-                  <folding>
-                    <element signature="e#0#18#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="_doctest.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/test/_doctest.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="2614" column="4" selection-start="98759" selection-end="98759" vertical-scroll-proportion="0.0" vertical-offset="38965" max-vertical-offset="41415">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/conf/__init__.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="41" column="21" selection-start="1571" selection-end="1579" vertical-scroll-proportion="-14.115385" vertical-offset="248" max-vertical-offset="2670">
-                  <folding>
-                    <element signature="e#257#273#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="lru_cache.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/utils/lru_cache.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2685">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="functools.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/functools.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="363" column="10" selection-start="14221" selection-end="14221" vertical-scroll-proportion="-16.423077" vertical-offset="4973" max-vertical-offset="10770">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="staging.py" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/sparestub/settings/staging.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="9" column="26" selection-start="270" selection-end="270" vertical-scroll-proportion="0.20930232" vertical-offset="0" max-vertical-offset="645">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="production.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/sparestub/settings/production.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="14" column="60" selection-start="518" selection-end="518" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+                <state line="40" column="30" selection-start="1070" selection-end="1080" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2145">
                   <folding />
                 </state>
               </provider>
@@ -115,7 +59,16 @@
           <file leaf-file-name="local.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="12" column="0" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
+                <state line="17" column="36" selection-start="473" selection-end="473" vertical-scroll-proportion="0.0" vertical-offset="20" max-vertical-offset="675">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="52" column="34" selection-start="2492" selection-end="2492" vertical-scroll-proportion="0.4446281" vertical-offset="511" max-vertical-offset="2460">
                   <folding />
                 </state>
               </provider>
@@ -128,7 +81,7 @@
           <file leaf-file-name="login.html" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/registration/templates/registration/login.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="750">
+                <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="750">
                   <folding />
                 </state>
               </provider>
@@ -137,7 +90,7 @@
           <file leaf-file-name="signup.html" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/registration/templates/registration/signup.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="69" column="45" selection-start="3313" selection-end="3313" vertical-scroll-proportion="-20.7" vertical-offset="0" max-vertical-offset="1455">
+                <state line="69" column="45" selection-start="3313" selection-end="3313" vertical-scroll-proportion="0.0" vertical-offset="1035" max-vertical-offset="1455">
                   <folding />
                 </state>
               </provider>
@@ -155,7 +108,7 @@
           <file leaf-file-name="user_profile.css" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/user_profile/static/user_profile/css/user_profile.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="11" column="17" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
+                <state line="11" column="17" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="270">
                   <folding />
                 </state>
               </provider>
@@ -214,7 +167,6 @@
         <option value="$PROJECT_DIR$/registration/settings.py" />
         <option value="$PROJECT_DIR$/registration/templates/registration/signup.html" />
         <option value="$PROJECT_DIR$/user_profile/static/user_profile/js.js" />
-        <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
         <option value="$PROJECT_DIR$/user_profile/static/user_profile/js/user_profile.js" />
         <option value="$PROJECT_DIR$/user_profile/templates/user_profile/profile.html" />
         <option value="$PROJECT_DIR$/user_profile/static/user_profile/css/user_profile.css" />
@@ -223,10 +175,11 @@
         <option value="$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/base.py" />
         <option value="$PROJECT_DIR$/sparestub/settings/production.py" />
         <option value="$PROJECT_DIR$/sparestub/settings/base.py" />
-        <option value="$PROJECT_DIR$/sparestub/settings/local.py" />
         <option value="$PROJECT_DIR$/utils/management/commands/sync_s3.py" />
-        <option value="$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py" />
         <option value="$PROJECT_DIR$/sparestub/settings/staging.py" />
+        <option value="$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py" />
+        <option value="$PROJECT_DIR$/sparestub/settings/local.py" />
+        <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
       </list>
     </option>
   </component>
@@ -626,6 +579,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparestub" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="settings" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -810,27 +781,7 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="sparestub" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -856,7 +807,27 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="sparestub" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -978,8 +949,8 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -997,9 +968,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16822916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24878994" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1075,16 +1046,12 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/utils/email.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="1225" selection-end="1225" vertical-scroll-proportion="0.0" vertical-offset="145" max-vertical-offset="810">
-          <folding />
-        </state>
+        <state line="43" column="0" selection-start="1225" selection-end="1225" vertical-scroll-proportion="0.0" vertical-offset="145" max-vertical-offset="810" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/mail/message.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="282" column="0" selection-start="9948" selection-end="9948" vertical-scroll-proportion="0.40699816" vertical-offset="3709" max-vertical-offset="6045">
-          <folding />
-        </state>
+        <state line="282" column="0" selection-start="9948" selection-end="9948" vertical-scroll-proportion="0.40699816" vertical-offset="3709" max-vertical-offset="6045" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/contact/views.py">
@@ -1098,116 +1065,82 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/http/response.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="436" column="6" selection-start="15209" selection-end="15209" vertical-scroll-proportion="0.33333334" vertical-offset="6089" max-vertical-offset="7020">
-          <folding />
-        </state>
+        <state line="436" column="6" selection-start="15209" selection-end="15209" vertical-scroll-proportion="0.33333334" vertical-offset="6089" max-vertical-offset="7020" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/registration/static/registration/js/logout.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="100" selection-start="740" selection-end="740" vertical-scroll-proportion="0.5221519" vertical-offset="0" max-vertical-offset="810">
-          <folding />
-        </state>
+        <state line="22" column="100" selection-start="740" selection-end="740" vertical-scroll-proportion="0.5221519" vertical-offset="0" max-vertical-offset="810" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/forms/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="370" column="0" selection-start="15102" selection-end="15102" vertical-scroll-proportion="0.33282208" vertical-offset="5093" max-vertical-offset="9960">
-          <folding />
-        </state>
+        <state line="370" column="0" selection-start="15102" selection-end="15102" vertical-scroll-proportion="0.33282208" vertical-offset="5093" max-vertical-offset="9960" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/registration/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="0" selection-start="1871" selection-end="1871" vertical-scroll-proportion="0.33233082" vertical-offset="574" max-vertical-offset="1365">
-          <folding />
-        </state>
+        <state line="55" column="0" selection-start="1871" selection-end="1871" vertical-scroll-proportion="0.33233082" vertical-offset="574" max-vertical-offset="1365" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/handlers/wsgi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="133" column="0" selection-start="4748" selection-end="4748" vertical-scroll-proportion="0.0" vertical-offset="1489" max-vertical-offset="3735">
-          <folding />
-        </state>
+        <state line="133" column="0" selection-start="4748" selection-end="4748" vertical-scroll-proportion="0.0" vertical-offset="1489" max-vertical-offset="3735" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/contrib/auth/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="0" selection-start="1561" selection-end="1561" vertical-scroll-proportion="0.33227345" vertical-offset="391" max-vertical-offset="2670">
-          <folding />
-        </state>
+        <state line="50" column="0" selection-start="1561" selection-end="1561" vertical-scroll-proportion="0.33227345" vertical-offset="391" max-vertical-offset="2670" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="0" selection-start="4835" selection-end="4835" vertical-scroll-proportion="0.33227345" vertical-offset="1291" max-vertical-offset="3660">
-          <folding />
-        </state>
+        <state line="115" column="0" selection-start="4835" selection-end="4835" vertical-scroll-proportion="0.33227345" vertical-offset="1291" max-vertical-offset="3660" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/shortcuts.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="1182" selection-end="1182" vertical-scroll-proportion="0.33333334" vertical-offset="146" max-vertical-offset="2505">
-          <folding />
-        </state>
+        <state line="31" column="0" selection-start="1182" selection-end="1182" vertical-scroll-proportion="0.33333334" vertical-offset="146" max-vertical-offset="2505" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/contact/static/contact/js/contact.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="48" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="48" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/miscellaneous.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="4" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
-          <folding />
-        </state>
+        <state line="28" column="4" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/networking.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="4" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
-          <folding />
-        </state>
+        <state line="8" column="4" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/static/js/base.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="19" selection-start="1244" selection-end="1244" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="720">
-          <folding />
-        </state>
+        <state line="34" column="19" selection-start="1244" selection-end="1244" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="720" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/registration/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="4" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
-          <folding />
-        </state>
+        <state line="4" column="4" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/registration/static/registration/js/signup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="32" selection-start="1562" selection-end="1566" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="780">
-          <folding>
-            <marker date="1413427354000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
+        <state line="34" column="32" selection-start="1562" selection-end="1566" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="780" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/registration/static/registration/js/login.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="69" selection-start="1616" selection-end="1616" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
-          <folding />
-        </state>
+        <state line="34" column="69" selection-start="1616" selection-end="1616" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/static/js/utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="20" selection-start="1745" selection-end="1745" vertical-scroll-proportion="0.0" vertical-offset="233" max-vertical-offset="945">
-          <folding />
-        </state>
+        <state line="38" column="20" selection-start="1745" selection-end="1745" vertical-scroll-proportion="0.0" vertical-offset="233" max-vertical-offset="945" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/registration/views.py">
@@ -1219,9 +1152,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/navigation_bar_right.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="40" selection-start="841" selection-end="845" vertical-scroll-proportion="0.1744186" vertical-offset="0" max-vertical-offset="688">
-          <folding />
-        </state>
+        <state line="8" column="40" selection-start="841" selection-end="845" vertical-scroll-proportion="0.1744186" vertical-offset="0" max-vertical-offset="688" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/home.html">
@@ -1248,9 +1179,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/user_profile/static/user_profile/js/user_profile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/static/css/bootstrap.css">
@@ -1260,139 +1189,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/registration/templates/registration/signup.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="45" selection-start="3313" selection-end="3313" vertical-scroll-proportion="-20.7" vertical-offset="0" max-vertical-offset="1455">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/locations/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="858">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/registration/templates/registration/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="750">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user_profile/static/user_profile/css/user_profile.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="17" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="858" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/user_profile/templates/user_profile/profile.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="0" selection-start="45" selection-end="45" vertical-scroll-proportion="-1.875" vertical-offset="0" max-vertical-offset="375">
-          <folding>
-            <marker date="1413442210000" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="2" selection-start="214" selection-end="214" vertical-scroll-proportion="0.24700598" vertical-offset="0" max-vertical-offset="960">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="596" selection-end="596" vertical-scroll-proportion="-7.5" vertical-offset="0" max-vertical-offset="2460">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/registration/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="69" selection-start="4179" selection-end="4179" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1200">
-          <folding />
-        </state>
+        <state line="62" column="69" selection-start="4179" selection-end="4179" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1200" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/boto/s3/key.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1394" column="13" selection-start="59101" selection-end="59102" vertical-scroll-proportion="0.33291456" vertical-offset="20315" max-vertical-offset="28470">
-          <folding />
-        </state>
+        <state line="1394" column="13" selection-start="59101" selection-end="59102" vertical-scroll-proportion="0.33291456" vertical-offset="20315" max-vertical-offset="28470" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/pip/commands/help.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="20" selection-start="663" selection-end="663" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
-          <folding />
-        </state>
+        <state line="23" column="20" selection-start="663" selection-end="663" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/pip/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="160" column="16" selection-start="5596" selection-end="5596" vertical-scroll-proportion="0.0" vertical-offset="2025" max-vertical-offset="4080">
-          <folding />
-        </state>
+        <state line="160" column="16" selection-start="5596" selection-end="5596" vertical-scroll-proportion="0.0" vertical-offset="2025" max-vertical-offset="4080" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/management/commands/empty_database.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="25" selection-start="1531" selection-end="1531" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585">
-          <folding />
-        </state>
+        <state line="35" column="25" selection-start="1531" selection-end="1531" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="181" column="34" selection-start="7092" selection-end="7092" vertical-scroll-proportion="0.0" vertical-offset="2738" max-vertical-offset="8190">
-          <folding />
-        </state>
+        <state line="181" column="34" selection-start="7092" selection-end="7092" vertical-scroll-proportion="0.0" vertical-offset="2738" max-vertical-offset="8190" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/utils/lru_cache.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2685">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2685" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/functools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="363" column="10" selection-start="14221" selection-end="14221" vertical-scroll-proportion="-16.423077" vertical-offset="4973" max-vertical-offset="10770">
-          <folding />
-        </state>
+        <state line="363" column="10" selection-start="14221" selection-end="14221" vertical-scroll-proportion="-16.423077" vertical-offset="4973" max-vertical-offset="10770" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/conf/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="21" selection-start="1571" selection-end="1579" vertical-scroll-proportion="-14.115385" vertical-offset="248" max-vertical-offset="2670">
-          <folding>
-            <element signature="e#257#273#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/settings/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="135" column="0" selection-start="3476" selection-end="3476" vertical-scroll-proportion="0.7863924" vertical-offset="1483" max-vertical-offset="2145">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
+        <state line="41" column="21" selection-start="1571" selection-end="1579" vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="2670">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/management/commands/sync_s3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="-11.346154" vertical-offset="1025" max-vertical-offset="5820">
+        <state line="100" column="0" selection-start="3371" selection-end="3371" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="6000">
           <folding />
         </state>
       </provider>
@@ -1401,15 +1259,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="34" column="4" selection-start="1349" selection-end="1349" vertical-scroll-proportion="0.0" vertical-offset="160" max-vertical-offset="7500">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="7" selection-start="2291" selection-end="2291" vertical-scroll-proportion="-7.1923075" vertical-offset="803" max-vertical-offset="5865">
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1429,7 +1278,63 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/settings/staging.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="26" selection-start="270" selection-end="270" vertical-scroll-proportion="0.20930232" vertical-offset="0" max-vertical-offset="645">
+        <state line="11" column="39" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="75" selection-start="2367" selection-end="2367" vertical-scroll-proportion="0.0" vertical-offset="788" max-vertical-offset="5850">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/registration/templates/registration/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="12" selection-start="393" selection-end="393" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="750">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/registration/templates/registration/signup.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="69" column="45" selection-start="3313" selection-end="3313" vertical-scroll-proportion="0.0" vertical-offset="1035" max-vertical-offset="1455">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="2" selection-start="214" selection-end="214" vertical-scroll-proportion="0.24700598" vertical-offset="0" max-vertical-offset="960">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user_profile/static/user_profile/css/user_profile.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="17" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="36" selection-start="473" selection-end="473" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/settings/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="30" selection-start="1070" selection-end="1080" vertical-scroll-proportion="0.0" vertical-offset="600" max-vertical-offset="2190">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="34" selection-start="2492" selection-end="2492" vertical-scroll-proportion="0.4446281" vertical-offset="511" max-vertical-offset="2460">
           <folding />
         </state>
       </provider>

@@ -6,10 +6,10 @@ TEMPLATE_DEBUG = True
 dirname = os.path.dirname
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static/css'),
-    os.path.join(BASE_DIR, 'static/js'),
-    os.path.join(BASE_DIR, 'static/fonts'),
-    os.path.join(BASE_DIR, 'static/logos'),
+    ('sparestub/css', os.path.join(BASE_DIR, 'static/css')),
+    ('sparestub/js', os.path.join(BASE_DIR, 'static/js')),
+    ('sparestub/font', os.path.join(BASE_DIR, 'static/fonts')),
+    ('sparestub/logos', os.path.join(BASE_DIR, 'static/logos')),
 )
 
 # Serve from the local machine during development
