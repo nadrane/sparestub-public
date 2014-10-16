@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3034131-a363-4419-a512-c3b14da4b31c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparestub/templates/base.html" afterPath="$PROJECT_DIR$/sparestub/templates/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/contact/templates/contact/contact_form.html" afterPath="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
     </list>
     <ignored path="sparestub.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +24,7 @@
     <favorites_list name="sparestub" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4157796">
+    <splitter split-orientation="horizontal" split-proportion="0.37132123">
       <split-first>
         <leaf>
           <file leaf-file-name="sync_s3.py" pinned="false" current="false" current-in-tab="false">
@@ -57,7 +57,7 @@
           <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="68" column="26" selection-start="3029" selection-end="3029" vertical-scroll-proportion="0.4163569" vertical-offset="796" max-vertical-offset="2490">
+                <state line="43" column="53" selection-start="2138" selection-end="2138" vertical-scroll-proportion="0.5" vertical-offset="376" max-vertical-offset="2490">
                   <folding>
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -124,10 +124,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="contact_form.html" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="contact_form.html" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="28" column="19" selection-start="1257" selection-end="1257" vertical-scroll-proportion="-8.125" vertical-offset="225" max-vertical-offset="990">
+                <state line="29" column="41" selection-start="1360" selection-end="1360" vertical-scroll-proportion="0.375" vertical-offset="210" max-vertical-offset="1035">
                   <folding />
                 </state>
               </provider>
@@ -151,10 +151,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="base.css" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="base.css" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="12" column="74" selection-start="285" selection-end="285" vertical-scroll-proportion="0.28846154" vertical-offset="0" max-vertical-offset="960">
+                <state line="12" column="74" selection-start="285" selection-end="285" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
                   <folding />
                 </state>
               </provider>
@@ -229,12 +229,12 @@
         <option value="$PROJECT_DIR$/sparestub/settings/staging.py" />
         <option value="$PROJECT_DIR$/venv/lib/python3.4/site-packages/django/core/management/__init__.py" />
         <option value="$PROJECT_DIR$/sparestub/settings/local.py" />
-        <option value="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
         <option value="$PROJECT_DIR$/sparestub/static/css/base.css" />
         <option value="$PROJECT_DIR$/registration/static/registration/js/login.js" />
         <option value="$PROJECT_DIR$/registration/static/registration/js/signup.js" />
         <option value="$PROJECT_DIR$/contact/static/contact/js/contact.js" />
         <option value="$PROJECT_DIR$/sparestub/templates/base.html" />
+        <option value="$PROJECT_DIR$/contact/templates/contact/contact_form.html" />
       </list>
     </option>
   </component>
@@ -1324,13 +1324,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="19" selection-start="1257" selection-end="1257" vertical-scroll-proportion="-8.125" vertical-offset="225" max-vertical-offset="990">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/settings/local.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="39" selection-start="554" selection-end="557" vertical-scroll-proportion="-8.884615" vertical-offset="69" max-vertical-offset="675">
@@ -1369,13 +1362,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="74" selection-start="285" selection-end="285" vertical-scroll-proportion="0.28846154" vertical-offset="0" max-vertical-offset="960">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/contact/static/contact/js/contact.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="10" selection-start="512" selection-end="512" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
@@ -1383,9 +1369,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sparestub/static/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="74" selection-start="285" selection-end="285" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contact/templates/contact/contact_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="41" selection-start="1360" selection-end="1360" vertical-scroll-proportion="0.375" vertical-offset="210" max-vertical-offset="1035">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sparestub/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="26" selection-start="3029" selection-end="3029" vertical-scroll-proportion="0.4163569" vertical-offset="796" max-vertical-offset="2490">
+        <state line="43" column="53" selection-start="2138" selection-end="2138" vertical-scroll-proportion="0.5" vertical-offset="376" max-vertical-offset="2490">
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
