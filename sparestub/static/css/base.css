@@ -4,12 +4,12 @@
 body {
     padding-top: 60px;
 }
-/*
+
 .navbar {
     background-color: #F0F0F5;
     border-style: none;
 }
-*/
+
 /* Make sure that every link in the navbar changes the cursor to a hand */
 .navbar a {
     cursor: pointer;

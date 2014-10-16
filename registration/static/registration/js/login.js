@@ -11,7 +11,8 @@ function initialize_bootstrap_validator_login() {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
-        submitButtons: $('#login-form-submit-button')
+        submitButtons: $('#login-form-submit-button'),
+        live: 'disabled'
     }).on('success.form.bv', function (e) {
         // Prevent form submission
         e.preventDefault();
