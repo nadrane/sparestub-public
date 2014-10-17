@@ -23,6 +23,12 @@ class City:
         return '{} -- {} {}'.format(self.city, self.lat, self.lon)
 
 
+def map_zip_to_city(zipcode):
+    return 'Astoria', 'New York'
+
+def get_state_full_name(state_abbreviation):
+    pass
+
 def calculate_distance_between_points(lat1, long1, lat2, long2):
     """
     Takes two tuples containing latitude and longitude and calculates the distance between them in miles.

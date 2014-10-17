@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.profile-header {
+#profile-header {
     background: rgba(226, 226, 226, 1);
     background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 15%, rgba(209,209,209,1) 88%, rgba(254,254,254,1) 100%);
     background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(226,226,226,1)), color-stop(15%, rgba(219,219,219,1)), color-stop(88%, rgba(209,209,209,1)), color-stop(100%, rgba(254,254,254,1)));
@@ -10,4 +10,77 @@
     background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 15%, rgba(209,209,209,1) 88%, rgba(254,254,254,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );
     height: 100px;
+    padding: 0px;
 }
+
+/* Space the profile picture away from the left of the screen slightly */
+#user-picture {
+    padding-left: 40px; /* notice that 40px is way bigger than what happens... something eats some of the pixels. */
+}
+
+/* rounded corners */
+#user-picture img {
+    border: none;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    -webkit-border-radius: 20px;
+}
+
+#profile-header {
+    padding-top: 25px;
+}
+
+/* center the user rating with the user's name */
+#user-rating {
+    padding-bottom: -8px;
+}
+
+#user-info {
+    padding-left: 30px;
+}
+
+#user-info h3{
+    margin-top: 0px;
+    display: inline;
+}
+
+/* We need to match the padding from the user profile picture of the user info */
+#profile-thumbnails:first-child {
+    padding-left: 300px;
+}
+
+#left-side-bar {
+    padding-left: 40px;
+}
+
+#left-side-bar-content:first-child {
+    margin-top: 20px;
+}
+
+.side-bar-element {
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #f0e8e8;
+}
+
+.side-bar-title {
+    padding-left: 10px;
+}
+
+#left-side-bar-content:last-child {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #f0e8e8;
+}
+
+/* Don't just end when the text entered ends */
+body {
+    padding-bottom: 100px;
+}
+
+/* Make the h tags inline-block so that we can place glyphcons next to them */
+#left-side-bar-content h4 {
+    display: inline-block;
+}
+

@@ -2,12 +2,15 @@
 
 /* 50px for the nav bar and another 5 to separate the nav bar from the rest of the page */
 body {
-    padding-top: 60px;
+    padding-top: 50px;
 }
 
 .navbar {
     background-color: #F0F0F5;
     border-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 0;
 }
 
 /* Make sure that every link in the navbar changes the cursor to a hand */
@@ -55,4 +58,21 @@ body {
 .modal-content .form-group{
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.jumbotron {
+    margin-top: 20px;
+    background-color: #F0F0F5;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.jumbotron a {
+    margin:0 auto;
+    display:block;
+    max-width: 250px;
+}
+
+.container-fluid {
+    padding: 0;
 }

@@ -3,9 +3,9 @@ from django.shortcuts import render
 from django.db import transaction
 from django.http.response import HttpResponseRedirect
 
-# Crowd Surfer moduels
+# SpareStub modfules
 from user_profile.forms import EditUserProfileForm, PasswordChangeForm
-
+from locations.models import map_zip_to_city
 
 @transaction.atomic()
 # We want updates to the user profile.html and user models to be atomic.
@@ -34,7 +34,14 @@ def view_or_edit_profile(request, current_username):
             return HttpResponseRedirect('/profile.html/%s.html'.format(new_username))
     else:
         edit_user_profile_form = EditUserProfileForm() # An unbound form
+
+    city, state = map_zip_to_city(request.user.zipcode)
+    most_recent_review = request.user.most_recent_review()
+
     return render(request,
                   'user_profile/profile.html',
-                  {'edit_user_profile_form': edit_user_profile_form},
+                  {'city': city,
+                   'state': state,
+                   'most_recent_review': most_recent_review},
+                  content_type='text/html',
                   )

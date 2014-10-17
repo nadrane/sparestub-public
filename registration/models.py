@@ -4,39 +4,33 @@ import requests
 import logging
 
 # Django modules
-from django.utils import timezone
 from django.utils.http import urlquote
 from django.db import models, transaction
 from django.forms import ValidationError
-from django.core.mail import send_mail
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
-from utils.models import TimeStampedModel
-#from user_profile.models import UserProfile
-from .settings import user_model_settings
-from utils.miscellaneous import get_variable_from_settings
-
-
-# Crowd Surfer modules
+# SpareStub modules
 from photos.models import Photo
 from utils.models import TimeStampedModel
 from .settings import user_model_settings
 from utils.miscellaneous import get_variable_from_settings
 from utils.email import send_mail, normalize_email
 from user_profile.models import UserProfile
+from reviews.models import Review
 
 
 class UserManager(BaseUserManager):
 
     @transaction.atomic()  # We definitely do not want to create a User record without a UserProfile
-    def _create_user(self, email, password, first_name, last_name, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, email, password, first_name, last_name, zipcode, is_staff, is_superuser, **extra_fields):
 
         '''Creates and saves a User with the given email and password.'''
 
         if not email:
-            raise ValueError('User has neither a facebook user id nor an email address.')
+            raise ValueError('User does not have an email address.')
 
         user_profile = UserProfile()
+        user_profile.birth_date = extra_fields.get('birth_date','')
         user_profile.username = UserProfile.make_profile_url(email, first_name, last_name)
         user_profile.save()
 
@@ -44,10 +38,10 @@ class UserManager(BaseUserManager):
         user = self.model(email=email,
                           first_name=first_name,
                           last_name=last_name,
+                          zipcode=zipcode,
                           is_staff=is_staff,
                           is_superuser=is_superuser,
-                          user_profile=user_profile,
-                          **extra_fields
+                          user_profile=user_profile
                           )
 
         user.set_password(password)
@@ -55,21 +49,23 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_user(self, email, password, first_name, last_name, **extra_fields):
+    def create_user(self, email, password, first_name, last_name, zipcode, **extra_fields):
         return self._create_user(email,
                                  password,
                                  first_name,
                                  last_name,
+                                 zipcode,
                                  False,
                                  False,
                                  **extra_fields
                                  )
 
-    def create_superuser(self, email, password, first_name, last_name, **extra_fields):
+    def create_superuser(self, email, password, first_name, last_name, zipcode, **extra_fields):
         return self._create_user(email,
                                  password,
                                  first_name,
                                  last_name,
+                                 zipcode,
                                  True,
                                  True,
                                  **extra_fields
@@ -110,10 +106,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                            default=None,
                                            )
 
-    zipcode = models.IntegerField(max_length=5,
-                                  null=False,
-                                  blank=False,
-                                  )
+    zipcode = models.CharField(max_length=5,
+                               null=False,
+                               blank=False,
+                               )
 
     is_staff = models.BooleanField('staff status',
                                    default=False,
@@ -139,6 +135,12 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     class Meta:
         verbose_name = ('user')
         verbose_name_plural = ('users')
+
+    def age(self):
+        return self.user_profile.age()
+
+    def most_recent_review(self):
+        return Review.objects.filter(reviewee=self.id)
 
     @staticmethod
     def user_exists(email):
@@ -168,7 +170,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
         return self.first_name
 
-    #TODO email function needs to use sendgrid or mandrill.
     def email_user(self, subject, message, from_email=None):
         """
         Sends an email to this User.

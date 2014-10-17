@@ -8,8 +8,72 @@
 {% endblock %}
 
 {% block content %}
-  <div class="profile-header">
-
+  <div id="profile-header" class="row">
+    <div id="user-picture" class="col-md-2">
+      <img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/v/t1.0-1/c0.0.480.480/p480x480/10308285_10152489553738156_1129484635342981777_n.jpg?oh=f0bd580da152ef9b472d1b5477f307cf&oe=54B22CA9&__gda__=1421064665_bd82ac82e3d67c50c53301b0fa31607c"
+           height="175px">
+    </div>
+    <div id="user-info" class="col-md-5">
+      <div id="name">
+        <!-- This h3 tag has been overridden to render inline so that stars are on the same line as it -->
+        <h3>{{ user }} {% if user.age %} - {{ user.age }} {% endif %}</h3>
+        <span id="user-rating">
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+        </span>
+      </div>
+      <div id="location">
+        {{ location }}
+      </div>
+    </div>
+  </div>
+  <div id="profile-thumbnails" class="row">
+    <div class="col-md-2 pic-thumbnail">
+      pic 1
+    </div>
+    <div class="col-md-2 pic-thumbnail">
+      pic 2
+    </div>
+    <div class="col-md-2 pic-thumbnail">
+      pic 3
+    </div>
+    <div class="col-md-2 pic-thumbnail">
+      pic 4
+    </div>
+    <div class="col-md-2 pic-thumbnail">
+      pic 5
+    </div>
+  </div>
+  <div id="profile-content" class="row">
+    <!--Note that the columns spanned by this div need to equal the columns spanned by the profile picture div-->
+    <div id="left-side-bar" class="col-md-2">
+      <div id="left-side-bar-content" class="row">
+        <div id="profile" class="col-md-12 side-bar-element">
+          <span class="glyphicon glyphicon-user"></span><h4 class="side-bar-title">Profile</h4>
+        </div>
+        <div id="reviews" class="col-md-12 side-bar-element">
+          <span class="glyphicon glyphicon-star"></span><h4 class="side-bar-title">Reviews</h4>
+        </div>
+        <div id="tickets" class="col-md-12 side-bar-element">
+          <span class="glyphicon glyphicon-tags"></span><h4 class="side-bar-title">Tickets</h4>
+        </div>
+        <div id="last-review" class="col-md-12 side-bar-element">
+          <h5>Most Recent Review:</h5>
+          <p>
+            "My best friend bailed on me for the Ben Howard concert at the last minute, and Nick hit me up just in time.
+            We had a great time at the show. I couldn't have asked for better gig buddy."
+          </p>
+          <p>Stephanie - 25, Astoria </p>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+        </div>
+      </div>
+    </div>
   </div>
 
 {% endblock %}

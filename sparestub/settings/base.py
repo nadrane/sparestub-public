@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'user_profile',
     'photos',
     'utils',
+    'reviews',
     'djrill',
 
     # All needed for zinnia

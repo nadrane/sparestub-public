@@ -3,6 +3,7 @@ __author__ = 'nicholasdrane'
 from django.db import models
 from django.utils import timezone
 
+
 class TimeStampedModel(models.Model):
     '''
     As an abstract class, this class object cannot actually be instantiated.

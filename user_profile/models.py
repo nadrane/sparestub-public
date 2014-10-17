@@ -7,7 +7,8 @@ import re
 from django.db import models
 from django.forms import ValidationError
 
-# Crowdsurfer imports
+# SpareStub imports
+from .utils import calculate_age
 
 class UserProfile(models.Model):
     #The username must be composed of numbers and upper and lower case letters
@@ -31,6 +32,13 @@ class UserProfile(models.Model):
                              blank=True,
                              default='',
                              )
+
+    birth_date = models.DateField(blank=True,
+                                 default=''
+                                 )
+
+    def age(self):
+        return calculate_age(self.birth_date)
 
     @staticmethod
     def valid_username(username):
@@ -70,15 +78,16 @@ class UserProfile(models.Model):
 
     @staticmethod
     def make_profile_url(email, first_name, last_name):
-        # Try to make the url equal to the non-domain part of the user's email address
-        potential_username1 = email.split('@')[0].lower()  # Emails are case sensitive, but our usernames will be all lowercase
-        if not UserProfile.user_profile_exists(potential_username1):
-            return potential_username1
-
         # Try to make the url equal to the users first and last names concatenated together
         potential_username2 = first_name + last_name
         if not UserProfile.user_profile_exists(potential_username2):
             return potential_username2
+
+        # Try to make the url equal to the non-domain part of the user's email address
+        # Emails are case sensitive, but our usernames will be all lowercase
+        potential_username1 = email.split('@')[0].lower()
+        if not UserProfile.user_profile_exists(potential_username1):
+            return potential_username1
 
         # Make the user's url equal to his email with an appended number
         number_to_append = 100
@@ -87,6 +96,7 @@ class UserProfile(models.Model):
             if not UserProfile.user_profile_exists(potential_username3):
                 return potential_username3
             number_to_append += 1
+
 
         logger = logging(__name__)
         logger.error("profile.html url did not generate properly for profile.html %s", email)
