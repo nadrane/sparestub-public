@@ -18,9 +18,15 @@ body {
     cursor: pointer;
 }
 
-/* The alert bar should have minimal spacing around it to conserve vertical screen space */
-#notification-root .alert {
-    margin-bottom: 10px;
+
+#notification-root {
+    margin-bottom: 10px; /* The alert bar should have minimal spacing around it to conserve vertical screen space */
+    text-align: center;   /* Center the text for the notification bar */
+}
+/*If the margin appears inside the notification root, then the inner div will push the boundaries of
+notifcation-root outwards, and they will not collapse with top margins of elements below notification-root */
+#notification-root div{
+    margin-bottom: 0px;
 }
 
 #signup-notification-root .alert {
@@ -38,11 +44,6 @@ body {
     margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
 }
 
-
-/* Center the text for the notification bar */
-#notification-root {
-    text-align: center;
-}
 
 /* Make sure that there is even spacing between the form fields and submit buttons */
 .modal-body>div:last-child

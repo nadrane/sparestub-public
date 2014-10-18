@@ -14,12 +14,13 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         recreate_empty_database()
         self.create_users()
+        self.create_reviews()
 
-
-    def create_users(self):
+    @staticmethod
+    def create_users():
         logging.debug('Creating user and person objects')
         # Create my user
-        User.objects.create_superuser('nick@gmail.com',
+        User.objects.create_superuser('nick@sparestub.com',
                                       'password',
                                       'nick',
                                       'drane',
@@ -35,7 +36,7 @@ class Command(BaseCommand):
                                       birth_date=date(1989,1,28)
                                       )
 
-        User.objects.create_superuser('stephanie@gmail.com',
+        User.objects.create_superuser('stephanie@sparestubbase.com',
                                       'password',
                                       'stephanie',
                                       'macconnell',
@@ -52,11 +53,23 @@ class Command(BaseCommand):
                                       )
         return
 
-    def create_reviews(self):
-        reviewer = User.objects.all()[1]
-        reviewee = User.objects.all()[2]
-        rating = 4
-        x = Review(reviewer, reviewee, rating, 'terrible')
+    @staticmethod
+    def create_reviews():
+        reviewer = User.objects.all()[2]
+        reviewee = User.objects.all()[0]
+        x = Review(reviewer=reviewer,
+                   reviewee=reviewee,
+                   rating=3,
+                   contents='terrible. This was the single worst gig buddy I have ever had.')
+        x.save()
+
+
+        reviewer = User.objects.all()[2]
+        reviewee = User.objects.all()[0]
+        x = Review(reviewer=reviewer,
+                   reviewee=reviewee,
+                   rating=5,
+                   contents='Amazing')
         x.save()
 
 

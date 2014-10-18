@@ -16,7 +16,6 @@ from .settings import user_model_settings
 from utils.miscellaneous import get_variable_from_settings
 from utils.email import send_mail, normalize_email
 from user_profile.models import UserProfile
-from reviews.models import Review
 
 
 class UserManager(BaseUserManager):
@@ -140,7 +139,14 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return self.user_profile.age()
 
     def most_recent_review(self):
-        return Review.objects.filter(reviewee=self.id)
+
+        from reviews.models import Review # Avoid a circular dependency between Review has foreign keys to User
+        return Review.objects.filter(reviewee=self.id).order_by('creation_timestamp')[0]
+
+    def get_rating(self):
+        from reviews.models import Review # Avoid a circular dependency between Review has foreign keys to User
+        reviews = Review.objects.filter(reviewee=self.id)
+        return int(sum([review.rating for review in reviews]) / reviews.count())
 
     @staticmethod
     def user_exists(email):
@@ -168,7 +174,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         Returns the short name for the user."
         """
 
-        return self.first_name
+        return self.first_name.capitalize()
 
     def email_user(self, subject, message, from_email=None):
         """

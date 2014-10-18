@@ -14,13 +14,15 @@ class Review(TimeStampedModel):
     reviewer = models.ForeignKey(User,
                                  blank=False,
                                  null=False,
-                                 index=True,
+                                 db_index=True,
+                                 related_name='reviewer',
                                  )
 
     reviewee = models.ForeignKey(User,
                                  blank=False,
                                  null=False,
-                                 index=True,
+                                 db_index=True,
+                                 related_name='reviewee',
                                  )
 
     rating = models.IntegerField(max_length=5)

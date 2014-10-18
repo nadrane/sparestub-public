@@ -1,5 +1,11 @@
+# Standard imports
 import math
 
+# Django core imports
+from django.db import models
+
+class location(models.Model):
+    pass
 
 class Zipcode:
     def __init__(self, zipcode, latitude, longitude, city, state, aliases):

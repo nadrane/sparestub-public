@@ -38,10 +38,30 @@ def view_or_edit_profile(request, current_username):
     city, state = map_zip_to_city(request.user.zipcode)
     most_recent_review = request.user.most_recent_review()
 
+    user_info = {'name': request.user,
+                 'age': request.user.age(),
+                 'city': city,
+                 'state': state,
+                 'rating': range(request.user.get_rating())  # Django templates don't support ranges,
+                                                             # so much sure we have an iterable list here
+                 }
+
+    if most_recent_review:
+        reviewer_location = city, state = map_zip_to_city(most_recent_review.reviewer.zipcode)
+        most_recent_review_info = {'name': most_recent_review.reviewer.get_short_name(),
+                                   'age': most_recent_review.reviewer.age(),
+                                   'city': reviewer_location[0],
+                                   'state': reviewer_location[1],
+                                   'contents': most_recent_review.contents,
+                                   'rating': range(most_recent_review.rating)  # Django templates don't support ranges,
+                                                                               # so much sure we have an iterable list
+                                                                               # here
+                                   }
+
+
     return render(request,
                   'user_profile/profile.html',
-                  {'city': city,
-                   'state': state,
-                   'most_recent_review': most_recent_review},
+                  {'user_info': user_info,
+                   'most_recent_review_info': most_recent_review_info},
                   content_type='text/html',
                   )

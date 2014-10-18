@@ -16,6 +16,7 @@
 /* Space the profile picture away from the left of the screen slightly */
 #user-picture {
     padding-left: 40px; /* notice that 40px is way bigger than what happens... something eats some of the pixels. */
+    margin-right: 10px;
 }
 
 /* rounded corners */
@@ -27,6 +28,19 @@
     -webkit-border-radius: 20px;
 }
 
+/* THUMBNAIL GALLERY */
+.pic-thumbnail img {
+    height: 100px;
+}
+
+.pic-thumbnail {
+    width: auto;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+/* END THUMBNAIL GALLERY */
+
+/* USER HEADER */
 #profile-header {
     padding-top: 25px;
 }
@@ -37,18 +51,15 @@
 }
 
 #user-info {
-    padding-left: 30px;
+    padding-left: 0px;
 }
-
 #user-info h3{
     margin-top: 0px;
     display: inline;
 }
+/* END USER HEADER */
 
-/* We need to match the padding from the user profile picture of the user info */
-#profile-thumbnails:first-child {
-    padding-left: 300px;
-}
+/* LEFT SIDE BAR */
 
 #left-side-bar {
     padding-left: 40px;
@@ -63,6 +74,12 @@
     border-top-style: solid;
     border-top-color: #f0e8e8;
 }
+
+/* Make sure to use a pointer hand for links */
+.side-bar-element a {
+    cursor: pointer;
+}
+
 
 .side-bar-title {
     padding-left: 10px;
@@ -80,7 +97,29 @@ body {
 }
 
 /* Make the h tags inline-block so that we can place glyphcons next to them */
-#left-side-bar-content h4 {
+#left-side-bar-content a {
+    color: #837e7e;
+    font-size: 16pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+}
+/* END LEFT SIDE BAR */
+
+/* PROFILE CONTENT */
+.profile-content-pair {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
+.answer {
+    width: 100%;
+    height: 10em;
+}
+
+.glyphicon-star {
+    color: gold;
+}

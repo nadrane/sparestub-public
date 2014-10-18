@@ -9,8 +9,10 @@ from django.forms import ValidationError
 
 # SpareStub imports
 from .utils import calculate_age
+from utils.models import TimeStampedModel
 
-class UserProfile(models.Model):
+
+class UserProfile(TimeStampedModel):
     #The username must be composed of numbers and upper and lower case letters
     username_regex = re.compile(r'^[a-zA-Z0-9]+$')
 
@@ -21,21 +23,13 @@ class UserProfile(models.Model):
                                 unique=True,
                                 )
 
-    # If a user has a personal website, we should make that link visible within their profile.html
-    website = models.URLField()
-
     # The number of times that this person's profile.html has been viewed by others.
     profile_views = models.IntegerField(default=0)
 
-    # A description that a person supplies about themselves. This description is viewable by others in the user's profile.html.
-    about = models.TextField(max_length=500,
-                             blank=True,
-                             default='',
-                             )
-
     birth_date = models.DateField(blank=True,
-                                 default=''
-                                 )
+                                  default=''
+                                  )
+
 
     def age(self):
         return calculate_age(self.birth_date)
@@ -102,3 +96,21 @@ class UserProfile(models.Model):
         logger.error("profile.html url did not generate properly for profile.html %s", email)
         return None
 
+
+class ProfileQuestion(models.Model):
+    question = models.CharField(blank=False,
+                                max_length=254,
+                                )
+
+
+class ProfileAnswer(models.Model):
+    user = models.ForeignKey(UserProfile,
+                             blank=False,
+                             )
+
+    question = models.ForeignKey(ProfileQuestion)
+
+    content = models.TextField(blank=True,
+                               max_length=5000,
+                               default=''
+                               )
