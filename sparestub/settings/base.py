@@ -16,7 +16,7 @@ from utils.miscellaneous import get_env_variable
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
+ROOT_DIR = os.path.dirname(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'contact',
     'registration',
     'user_profile',
+    'locations',
     'photos',
     'utils',
     'reviews',
@@ -140,3 +141,8 @@ SOCIAL_EMAIL_ADDRESS = 'shout@sparestub.com'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_root')
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_root')
+
+DEFAULT_ZIP_CODE_CSV =  os.path.join(ROOT_DIR, 'locations', 'zip_code_database.csv')
+DEFAULT_ZIP_CODE_JSON = os.path.join(ROOT_DIR, 'locations', 'zip_code_database.json')
+
+LOGIN_REDIRECT_URL = '/registration/login_redirect/'

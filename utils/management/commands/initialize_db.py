@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 from .empty_db import recreate_empty_database
 from registration.models import User
 from reviews.models import Review
+from locations.models import Location
 
 
 class Command(BaseCommand):
@@ -24,7 +25,7 @@ class Command(BaseCommand):
                                       'password',
                                       'nick',
                                       'drane',
-                                      zipcode='11102',
+                                      location=Location.objects.filter(zipcode='11102')[0],
                                       birth_date=date(1989,1,28)
                                       )
 
@@ -32,7 +33,7 @@ class Command(BaseCommand):
                                       'password',
                                       'andy',
                                       'drane',
-                                      zipcode='02445',
+                                      location=Location.objects.filter(zipcode='11103')[0],
                                       birth_date=date(1989,1,28)
                                       )
 
@@ -40,7 +41,7 @@ class Command(BaseCommand):
                                       'password',
                                       'stephanie',
                                       'macconnell',
-                                      zipcode='11103',
+                                      location=Location.objects.filter(zipcode='11103')[0],
                                       birth_date=date(1989,1,28)
                                       )
 
@@ -48,7 +49,7 @@ class Command(BaseCommand):
                                       'password',
                                       'chris',
                                       'drane',
-                                      zipcode='11215',
+                                      location=Location.objects.filter(zipcode='11104')[0],
                                       birth_date=date(1989,1,28)
                                       )
         return

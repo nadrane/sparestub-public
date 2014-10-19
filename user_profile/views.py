@@ -5,7 +5,7 @@ from django.http.response import HttpResponseRedirect
 
 # SpareStub modfules
 from user_profile.forms import EditUserProfileForm, PasswordChangeForm
-from locations.models import map_zip_to_city
+
 
 @transaction.atomic()
 # We want updates to the user profile.html and user models to be atomic.
@@ -35,7 +35,9 @@ def view_or_edit_profile(request, current_username):
     else:
         edit_user_profile_form = EditUserProfileForm() # An unbound form
 
-    city, state = map_zip_to_city(request.user.zipcode)
+    user_zip_code = request.user.zipcode
+    city, state = user_zip_code.city, user_zip_code.state
+
     most_recent_review = request.user.most_recent_review()
 
     user_info = {'name': request.user,
@@ -47,11 +49,12 @@ def view_or_edit_profile(request, current_username):
                  }
 
     if most_recent_review:
-        reviewer_location = city, state = map_zip_to_city(most_recent_review.reviewer.zipcode)
+        reviewer_zip_code = most_recent_review.reviewer.zipcode
+        reviewer_city, reviewer_state = reviewer_zip_code.city, reviewer_zip_code.state
         most_recent_review_info = {'name': most_recent_review.reviewer.get_short_name(),
                                    'age': most_recent_review.reviewer.age(),
-                                   'city': reviewer_location[0],
-                                   'state': reviewer_location[1],
+                                   'city': reviewer_city,
+                                   'state': reviewer_state,
                                    'contents': most_recent_review.contents,
                                    'rating': range(most_recent_review.rating)  # Django templates don't support ranges,
                                                                                # so much sure we have an iterable list
@@ -63,5 +66,5 @@ def view_or_edit_profile(request, current_username):
                   'user_profile/profile.html',
                   {'user_info': user_info,
                    'most_recent_review_info': most_recent_review_info},
-                  content_type='text/html',
-                  )
+                   content_type='text/html',
+                   )

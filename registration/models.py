@@ -16,12 +16,12 @@ from .settings import user_model_settings
 from utils.miscellaneous import get_variable_from_settings
 from utils.email import send_mail, normalize_email
 from user_profile.models import UserProfile
-
+from locations.models import Location
 
 class UserManager(BaseUserManager):
 
     @transaction.atomic()  # We definitely do not want to create a User record without a UserProfile
-    def _create_user(self, email, password, first_name, last_name, zipcode, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, email, password, first_name, last_name, location, is_staff, is_superuser, **extra_fields):
 
         '''Creates and saves a User with the given email and password.'''
 
@@ -37,7 +37,7 @@ class UserManager(BaseUserManager):
         user = self.model(email=email,
                           first_name=first_name,
                           last_name=last_name,
-                          zipcode=zipcode,
+                          location=location,
                           is_staff=is_staff,
                           is_superuser=is_superuser,
                           user_profile=user_profile
@@ -48,23 +48,23 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_user(self, email, password, first_name, last_name, zipcode, **extra_fields):
+    def create_user(self, email, password, first_name, last_name, location, **extra_fields):
         return self._create_user(email,
                                  password,
                                  first_name,
                                  last_name,
-                                 zipcode,
+                                 location,
                                  False,
                                  False,
                                  **extra_fields
                                  )
 
-    def create_superuser(self, email, password, first_name, last_name, zipcode, **extra_fields):
+    def create_superuser(self, email, password, first_name, last_name, location, **extra_fields):
         return self._create_user(email,
                                  password,
                                  first_name,
                                  last_name,
-                                 zipcode,
+                                 location,
                                  True,
                                  True,
                                  **extra_fields
@@ -80,7 +80,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
 
     email = models.EmailField('email address',
-                              max_length=user_model_settings['EMAIL_MAX_LENGTH'],
+                              max_length=user_model_settings.get('EMAIL_MAX_LENGTH'),
                               unique=True,
                               blank=False
                               )
@@ -90,14 +90,20 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                         )
 
     first_name = models.CharField('first name',
-                                  max_length=user_model_settings['FIRST_NAME_MAX_LENGTH'],
+                                  max_length=user_model_settings.get('FIRST_NAME_MAX_LENGTH'),
                                   blank=False
                                   )
 
     last_name = models.CharField('last name',
-                                 max_length=user_model_settings['LAST_NAME_MAX_LENGTH'],
+                                 max_length=user_model_settings.get('LAST_NAME_MAX_LENGTH'),
                                  blank=False
                                  )
+
+    gender = models.CharField(max_length=1,
+                              choices=user_model_settings.get('GENDER_CHOICES'),
+                              blank=True,
+                              default=''
+                              )
 
     profile_picture = models.OneToOneField(Photo,
                                            null=True,
@@ -105,10 +111,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                            default=None,
                                            )
 
-    zipcode = models.CharField(max_length=5,
-                               null=False,
-                               blank=False,
-                               )
+    location = models.ForeignKey(Location)
 
     is_staff = models.BooleanField('staff status',
                                    default=False,

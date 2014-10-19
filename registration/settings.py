@@ -9,6 +9,11 @@ user_model_settings = {'PASSWORD_MIN_LENGTH': 6,
                        'EMAIL_MAX_LENGTH': 254,
 
                        'DEACTIVATION_REASON': (),
+
+                       'GENDER_CHOICES': (
+                                          ('M', 'Freshman'),
+                                          ('F', 'Sophomore'),
+                                          )
                        }
 
 signup_form_settings = {'PASSWORD_NOTEMPTY_MESSAGE': 'Please enter a password.',

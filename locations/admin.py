@@ -1,6 +1,5 @@
 from django.contrib import admin
-from django import forms
 
-from models import Zipcode
+from .models import Location
 
-admin.site.register(Zipcode)
+admin.site.register(Location)

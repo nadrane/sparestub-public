@@ -1,11 +1,12 @@
+<form>
+  <input type="text" class="form-control" placeholder="Search for Tickets">
+</form>
 {% if request.user.is_authenticated %}
   <!-- Renders both an anchor tag with the name of the user that links to their user page and a logout button -->
   <a href="{% url "user_profile.views.view_or_edit_profile" current_username=user.user_profile.username %}" class="btn btn-primary" role="button"> {{ user | title }} </a>
   <a id="logout-button" href="{% url "registration.views.logout" %}" class="btn btn-default">Logout </a>
 {% else %} <!-- If the user is not authenticated, allow them the opportunity to log in -->
-  <form class="form-inline" role="form">
-    <a class="btn btn-default signup-form-button" data-toggle="modal" data-target="#modal-signup-root">Sign Up</a>
-    {% comment %} interesting post - http://www.gkogan.co/blog/stop-asking-me-to-sign-up/ {% endcomment %}
-    <a class="btn btn-primary login-form-button" data-toggle="modal" data-target="#modal-login-root">Login</a>
-  </form><!--This renders the username and password input tags as well as the login submit input and Sign Up anchor tags-->
+  <a class="btn btn-default signup-form-button" data-toggle="modal" data-target="#modal-signup-root">Sign Up</a>
+  user{% comment %} interesting post - http://www.gkogan.co/blog/stop-asking-me-to-sign-up/ {% endcomment %}
+  <a class="btn btn-primary login-form-button" data-toggle="modal" data-target="#modal-login-root">Login</a>
 {% endif %}

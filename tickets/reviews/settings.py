@@ -1,1 +1,0 @@
-review_model_settings = {'CONTENT_MAX_LENGTH': 10000}
