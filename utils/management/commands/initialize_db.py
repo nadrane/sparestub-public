@@ -8,12 +8,18 @@ from .empty_db import recreate_empty_database
 from registration.models import User
 from reviews.models import Review
 from locations.models import Location
-
+from django.core.management import call_command
+from locations.management.commands import process_zip_codes
 
 class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
+        import pdb
+        pdb.set_trace()
+        # Recreate the tables in the database according to our models
         recreate_empty_database()
+        # Load the zipcodes from the input script and input them into the database as location records.
+        call_command('process_zip_codes', interactive=False)
         self.create_users()
         self.create_reviews()
 
@@ -25,7 +31,7 @@ class Command(BaseCommand):
                                       'password',
                                       'nick',
                                       'drane',
-                                      location=Location.objects.filter(zipcode='11102')[0],
+                                      location=Location.objects.filter(zip_code='11102')[0],
                                       birth_date=date(1989,1,28)
                                       )
 
@@ -33,7 +39,7 @@ class Command(BaseCommand):
                                       'password',
                                       'andy',
                                       'drane',
-                                      location=Location.objects.filter(zipcode='11103')[0],
+                                      location=Location.objects.filter(zip_code='11103')[0],
                                       birth_date=date(1989,1,28)
                                       )
 
@@ -41,7 +47,7 @@ class Command(BaseCommand):
                                       'password',
                                       'stephanie',
                                       'macconnell',
-                                      location=Location.objects.filter(zipcode='11103')[0],
+                                      location=Location.objects.filter(zip_code='11103')[0],
                                       birth_date=date(1989,1,28)
                                       )
 
@@ -49,7 +55,7 @@ class Command(BaseCommand):
                                       'password',
                                       'chris',
                                       'drane',
-                                      location=Location.objects.filter(zipcode='11104')[0],
+                                      location=Location.objects.filter(zip_code='11104')[0],
                                       birth_date=date(1989,1,28)
                                       )
         return

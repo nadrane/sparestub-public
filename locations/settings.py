@@ -5,6 +5,7 @@ states = (('AL', 'Alabama'),
           ('CA', 'California'),
           ('CO', 'Colorado'),
           ('CT', 'Connecticut'),
+          ('DC', 'District of Columbia'),  # Note this inclusion here, hence why we have 51 entries
           ('DE', 'Delaware'),
           ('FL', 'Florida'),
           ('GA', 'Georgia'),
@@ -53,6 +54,8 @@ states = (('AL', 'Alabama'),
 location_settings = {'STATES': states,
                      'CITY_MAX_LENGTH': 254
                      }
+
+states_abbreviation_list = [state[0] for state in states]
 
 # Distances in miles.
 TICKET_DISTANCE_CHOICES = [10, 25, 50]

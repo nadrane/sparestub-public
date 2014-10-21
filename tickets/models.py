@@ -1,5 +1,4 @@
 # Standard Python modules
-import os
 
 #Django
 from utils.models import TimeStampedModel
@@ -10,18 +9,19 @@ from registration.models import User
 from .settings import ticket_model_settings
 from locations.models import Location
 
-
 class Ticket(TimeStampedModel):
     poster = models.ForeignKey(User,
                                blank=False,
                                null=False,
                                db_index=True,
+                               related_name='poster',
                                )
 
     bidders = models.ManyToManyField(User,
                                      blank=True,
                                      null=True,
                                      db_index=True,
+                                     related_name='bidders',
                                      )
 
     price = models.IntegerField(blank=False)
@@ -35,7 +35,7 @@ class Ticket(TimeStampedModel):
                                 max_length=ticket_model_settings.get('CONTENT_MAX_LENGTH'))
 
     # When does the event start?
-    start_timestamp = models.DateTimeField(blank=False)
+    start_datetime = models.DateTimeField(blank=False)
 
     # The city and state that the user originally entered in the form.
     location_raw = models.CharField(max_length=254)  # Keep the city, state combo around just in case we are
@@ -44,4 +44,6 @@ class Ticket(TimeStampedModel):
     # The system tries to map the raw input form the user to a location record. That's what this is.
     location = models.IntegerField(Location)  # We are going to map the inputted city, state to a zipcode
 
-    category = models.CharField(ticket_model_settings.get('TICKET_TYPES'))
+    type = models.CharField(max_length=1,
+                            choices=ticket_model_settings.get('TICKET_TYPES'))
+

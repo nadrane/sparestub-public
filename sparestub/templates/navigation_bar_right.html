@@ -1,12 +1,16 @@
-<form>
-  <input type="text" class="form-control" placeholder="Search for Tickets">
-</form>
-{% if request.user.is_authenticated %}
-  <!-- Renders both an anchor tag with the name of the user that links to their user page and a logout button -->
-  <a href="{% url "user_profile.views.view_or_edit_profile" current_username=user.user_profile.username %}" class="btn btn-primary" role="button"> {{ user | title }} </a>
-  <a id="logout-button" href="{% url "registration.views.logout" %}" class="btn btn-default">Logout </a>
-{% else %} <!-- If the user is not authenticated, allow them the opportunity to log in -->
-  <a class="btn btn-default signup-form-button" data-toggle="modal" data-target="#modal-signup-root">Sign Up</a>
-  user{% comment %} interesting post - http://www.gkogan.co/blog/stop-asking-me-to-sign-up/ {% endcomment %}
-  <a class="btn btn-primary login-form-button" data-toggle="modal" data-target="#modal-login-root">Login</a>
-{% endif %}
+<ul class="nav navbar-nav navbar-right" id="navigation-bar-right-div" >
+  {% if request.user.is_authenticated %}
+    <li>
+      <a href="{% url "user_profile.views.view_or_edit_profile" current_username=user.user_profile.username %}" class="btn btn-primary" type="button">{{ user | title }}</a>
+    </li>
+    <li>
+      <a href="{% url "registration.views.logout" %}" class="btn btn-default" id="logout-button" type="button">Logout</a>
+    </li>
+  {% else %} <!-- If the user is not authenticated, allow them the opportunity to log in -->
+    <li><button class="btn navbar-btn btn-primary signup-form-button" type="button" data-toggle="modal" data-target="#modal-signup-root">Sign Up</button></li>
+    {% comment %} interesting post - http://www.gkogan.co/blog/stop-asking-me-to-sign-up/ {% endcomment %}
+    <li><button class="btn navbar-btn btn-default login-form-button" id="navbar-login-button" type="button" data-toggle="modal" data-target="#modal-login-root">Login</button></li>
+  {% endif %}
+</ul>
+
+

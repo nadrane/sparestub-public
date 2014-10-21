@@ -35,22 +35,21 @@ def view_or_edit_profile(request, current_username):
     else:
         edit_user_profile_form = EditUserProfileForm() # An unbound form
 
-    user_zip_code = request.user.zipcode
-    city, state = user_zip_code.city, user_zip_code.state
+    user_location = request.user.location
 
     most_recent_review = request.user.most_recent_review()
 
     user_info = {'name': request.user,
                  'age': request.user.age(),
-                 'city': city,
-                 'state': state,
+                 'city': user_location.city,
+                 'state': user_location.state,
                  'rating': range(request.user.get_rating())  # Django templates don't support ranges,
                                                              # so much sure we have an iterable list here
                  }
 
     if most_recent_review:
-        reviewer_zip_code = most_recent_review.reviewer.zipcode
-        reviewer_city, reviewer_state = reviewer_zip_code.city, reviewer_zip_code.state
+        reviewer_location = most_recent_review.reviewer.location
+        reviewer_city, reviewer_state = reviewer_location.city, reviewer_location.state
         most_recent_review_info = {'name': most_recent_review.reviewer.get_short_name(),
                                    'age': most_recent_review.reviewer.age(),
                                    'city': reviewer_city,

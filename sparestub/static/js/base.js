@@ -40,4 +40,15 @@ $(document).ready(function ($) {
         });
     });
 
+    $('.submit-ticket-form-button').on('click', function () {
+        // If the modal content has already been loaded, don't do it again
+        if ($('#modal-submit-ticket-form-content').children().length > 0) {
+            return;
+        }
+        $.get(window.additional_parameters.submit_ticket_form_url, function (data) {
+            $('#modal-submit-ticket-form-content').html(data);
+            initialize_bootstrap_validator_submit_ticket();
+        });
+    });
+
 }(window.jQuery));

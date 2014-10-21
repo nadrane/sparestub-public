@@ -1,22 +1,23 @@
 @charset "UTF-8";
 
-/* 50px for the nav bar and another 5 to separate the nav bar from the rest of the page */
-body {
-    padding-top: 50px;
-}
-
+/* NAVBAR */
 .navbar {
     background-color: #F0F0F5;
     border-style: none;
     padding-left: 10px;
     padding-right: 10px;
-    margin-bottom: 0;
 }
 
 /* Make sure that every link in the navbar changes the cursor to a hand */
 .navbar a {
     cursor: pointer;
 }
+
+#navbar-login-button {
+    margin-left: 5px;
+}
+
+/* END NAVBAR */
 
 
 #notification-root {
@@ -76,4 +77,23 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
 
 .container-fluid {
     padding: 0;
+}
+
+/* Override feedback icon position so they they do not cover other icons
+Only applied to a couple fields that have specific icons before the feedback icons appear
+shifted-feedback-icons is just a class I am using to identify form groups that need adjustment.
+It has no special styling associated with it.
+The form-control-feedback class will be attached by BV to certain <i> tags that contain the feedback icons.
+*/
+#submit-ticket-form .shifted-feedback-icon .form-control-feedback {
+    top: 0!important;
+    right: 60px!important;
+}
+
+/* Turns out because we use input groups in the ticket form, we cannot use the same selector for both
+inputs because the ticket form's date input needs more shifting than the contact form's subject input.
+*/
+#contact-form .shifted-feedback-icon .form-control-feedback {
+    top: 0!important;
+    right: 30px!important;
 }

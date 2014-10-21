@@ -1,14 +1,10 @@
 # 3rd Party Modules
-import requests
-import logging
-import json
 
 # Django Imports
 from django import forms
 
 # SpareStub Imports
-from .models import User
-from .settings import ticket_form_settings
+from .tickets.settings import ticket_form_settings
 from locations.models import Location, Alias
 from locations.settings import location_settings
 

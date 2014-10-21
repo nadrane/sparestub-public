@@ -8,10 +8,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Standard Imports
 import os
+import logging
 
 import dj_database_url
+
+# SpareStub Imports
 from utils.miscellaneous import get_env_variable
 
 
@@ -43,6 +46,7 @@ INSTALLED_APPS = (
     'contact',
     'registration',
     'user_profile',
+    'tickets',
     'locations',
     'photos',
     'utils',

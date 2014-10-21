@@ -38,3 +38,5 @@ DATABASES = {
 # the the dev environment. The only purpose for this bucket is testing the sync_s3 script.
 # The sparestub-staging and sparestub-production buckets are used for staging and production, respectively
 AWS_BUCKET_NAME = 'sparestub'
+
+logging.basicConfig(level=logging.ERROR)

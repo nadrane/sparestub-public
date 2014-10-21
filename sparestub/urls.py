@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^registration/', include('registration.urls')),
     url(r'^comments/', include('django_comments.urls')),
     url(r'^contact/', include('contact.urls')),
+    url(r'^tickets/', include('tickets.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

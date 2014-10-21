@@ -36,7 +36,7 @@ function initialize_bootstrap_validator_signup() {
                 // Obviously there are cases were we never reached the server (internet down or incredibly high loads
                 // resulting in the web server turning people away), so we cannot check the JSON object that might or
                 // might not have been returned by the application level.
-                set_notification($('#signup-notification-root'), 'Uh oh!',
+                set_notification($('#submit-ticket-notification-root'), 'Uh oh!',
                                    "Something went wrong. Try again in a bit!", 'alert-danger');
 
             })

@@ -44,6 +44,7 @@ class SignupForm(forms.Form):
 
     #Make sure that this email address does not already exist in the database
     def clean_email(self):
+        #TODO also check this on the front end via ajax
         return User.valid_email(self.cleaned_data.get('email', None))
 
     def clean_first_name(self):

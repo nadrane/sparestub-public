@@ -6,13 +6,15 @@ import json
 from optparse import make_option
 from collections import namedtuple
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.db.utils import DataError
 
 from locations.models import Location, Alias
 from locations.models import calculate_distance_between_zip_codes
 
-from locations.settings import TICKET_DISTANCE_CHOICES
+from locations.settings import TICKET_DISTANCE_CHOICES, states_abbreviation_list
+
 
 class Command(BaseCommand):
     help = 'Recalculates the zipcode information using the inputted file or zip_code_database.csv'
@@ -30,11 +32,17 @@ class Command(BaseCommand):
 
         make_option('-c', '--commit',
                     dest='commit_to_db',
+                    default=True,
                     help="Should we commit the locations in the file to the database?"),
 
         make_option('-d', '--distance',
                     dest='calculate_distance',
                     help="Should we calculate distances between cities and populate them in the JSON file?"),
+
+        make_option('-y', '--city',
+                    dest='calculate_cities',
+                    default=True,
+                    help="Should we determine all existing cities and populate them in the JSON file?"),
     )
 
     def handle(self, *args, **options):
@@ -42,25 +50,47 @@ class Command(BaseCommand):
         self.output_file = options.get('output_file')
         self.calculate_distance = options.get('calculate_distance')
         self.commit_to_db = options.get('commit_to_db')
+        self.calculate_cities = options.get('calculate_cities')
 
         if self.calculate_distance and not (self.output_file and self.input_file):
             raise Exception('An output file is needed to calculate distances for storage.')
 
         location_list, alias_list = self.read_zip_codes()
 
+        output_dict = {}
+
+        if self.calculate_cities:
+            output_dict = self.make_city_list(location_list, alias_list, output_dict)
+
+        #TODO why is this getting set as a string at the command prompt
+
         if self.commit_to_db:
             self.update_db(location_list, alias_list)
 
         if self.calculate_distance:
-            distance_dict = self.calculate_distances(location_list)
-            self.write_json_file(distance_dict)
+            output_dict = self.calculate_distances(location_list)
+
+        if output_dict:
+            self.write_json_file(output_dict)
+
+    def make_city_list(self, location_list, alias_list, output_dict):
+        output_dict['city'] = []
+        location_set = set([(location.primary_city, location.state) for location in location_list])
+        alias_set = set([(alias.name, alias.state) for alias in alias_list])
+        for place in location_set.union(alias_set):
+            output_dict['city'].append(place)
+
+        return output_dict
 
     def read_zip_codes(self):
         location_list = []
         alias_list = []
-        Location = namedtuple('Location', ['zip_code', 'latitude', 'longitude', 'primary_city', 'state'])
-        Alias = namedtuple('Alias', ['zip_code', 'name'])
+        same_city_state = []
+        Location = namedtuple('Location', ['line_no', 'zip_code', 'latitude', 'longitude', 'primary_city', 'state',
+                                           'estimated_population'])
+        Alias = namedtuple('Alias', ['zip_code', 'name', 'state'])
 
+        city_state_combos = {}
         try:
             # get a csv reader
             reader = csv.reader(open(self.input_file))
@@ -75,6 +105,10 @@ class Command(BaseCommand):
                 # Do not handle military zip codes
                 if mail_type == 'MILITARY':
                     logging.debug('line #{}: country equal to {}'.format(reader.line_num, mail_type))
+                    continue
+
+                if state not in states_abbreviation_list:
+                    logging.debug('line #{}: state equal to {}'.format(reader.line_num, state))
                     continue
 
                 if latitude:
@@ -98,17 +132,39 @@ class Command(BaseCommand):
                     logging.error('line #{}: state not present.'.format(reader.line_num))
 
                 if not county:
-                    logging.warning('line #{}: county not present.'.format(reader.line_num))
+                    logging.debug('line #{}: county not present.'.format(reader.line_num))
 
                 if aliases:
                     aliases = [city.strip() for city in aliases.split()]
-                    for name in [primary_city, aliases]:
-                        alias = Alias(zip_code, name)
+                    for name in aliases:
+                        alias = Alias(zip_code, name, state)
                         alias_list.append(alias)
 
-                location = Location(zip_code, latitude, longitude, primary_city, state)
+                location = Location(reader.line_num, zip_code, latitude, longitude,
+                                    primary_city, state, estimated_population)
                 location_list.append(location)
 
+                if not (primary_city, state) in city_state_combos:
+                    city_state_combos[(primary_city, state)] = location
+                else:
+                    location1 = city_state_combos[(primary_city, state)]
+                    location2 = Location(line_no=reader.line_num, latitude=latitude, longitude=longitude,
+                                         primary_city=primary_city, state=state, zip_code=zip_code,
+                                         estimated_population=estimated_population)
+
+                    if (location1.latitude, location1.longitude) != (location2.latitude, location2.longitude):
+
+                            distance_apart = calculate_distance_between_zip_codes(location1, location2)
+
+                            if distance_apart > 10:
+                                same_city_state.append((distance_apart, location1, location2))
+
+            if same_city_state:
+                same_city_state = sorted(same_city_state, key=lambda loc: loc[0])
+                for match in same_city_state:
+                    logging.critical('{distance:.2f}\n     {loc1}\n     {loc2}\n\n'.format(distance=match[0],
+                                                                                           loc1=match[1],
+                                                                                           loc2=match[2]))
         except:
             logging.error('major error', exc_info=True, stack_info=True)
 
@@ -150,7 +206,7 @@ class Command(BaseCommand):
                         else:
                             distance_dict[location2.zip_code] = {radius: [location1.zip_code]}
 
-            print('Evaluating zip code {} with {}'.format(location1.zip_code, location2.zip_code))
+            logging.debug('Evaluating zip code {} with {}'.format(location1.zip_code, location2.zip_code))
 
         return distance_dict
 
@@ -161,22 +217,32 @@ class Command(BaseCommand):
                                           latitude=location.latitude,
                                           longitude=location.longitude,
                                           city=location.primary_city,
-                                          state=location.state
+                                          state=location.state,
+                                          population=location.estimated_population
                                           )
             logging.debug('Saving {} to the database'.format(location))
             new_location_entry.save()
 
         for alias in aliases:
-            new_alias_entry = Alias(location=Location.objects.filter(zip_code=alias.zip_code),
+
+            new_alias_entry = Alias(location=Location.objects.filter(zip_code=alias.zip_code)[0],
                                     alias=alias.name
                                     )
-            logging.debug('Saving {} to the database'.format(alias))
-            new_alias_entry.save()
 
-    def write_json_file(self, distance_dict):
+            logging.debug('Saving {} to the database'.format(alias))
+            try:
+                new_alias_entry.save()
+
+            # triggered when the input does not match the datatype of the field (eg., too many characters for VARCHAR)
+            except DataError:
+                logging.critical('Failed to enter alias: {} into the database'.format(alias),
+                                 exc_info=True,
+                                 stack_info=True)
+
+    def write_json_file(self, output_dict):
         try:
             json_handler = open(self.output_file, 'wt')
-            json.dump(distance_dict, json_handler)
+            json.dump(output_dict, json_handler)
         except Exception:
             pass
 
