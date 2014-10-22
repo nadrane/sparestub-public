@@ -18,8 +18,6 @@ class Command(BaseCommand):
         pdb.set_trace()
         # Recreate the tables in the database according to our models
         recreate_empty_database()
-        # Load the zipcodes from the input script and input them into the database as location records.
-        call_command('process_zip_codes', interactive=False)
         self.create_users()
         self.create_reviews()
 

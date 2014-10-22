@@ -15,15 +15,6 @@ COS = math.cos
 ACOS = math.acos
 
 
-class Alias(models.Model):
-    #TODO should we link to the locaiton table, or should it link back in a many to one relationship?
-    location = models.ForeignKey(Location)
-
-    # This alias is going to be the name of a city
-    alias = models.CharField(max_length=location_settings.get('CITY_MAX_LENGTH'),
-                             db_index=True,
-                             )
-
 class LocationMatchingException(Exception):
 
     def __init__(self, msg):
@@ -54,74 +45,84 @@ class Location(models.Model):
     def __str__(self):
         return '{}, {} {} -- {} {}'.format(self.city, self.state, self.zip_code, self.latitude, self.longitude)
 
-        @staticmethod
-    def map_citystate_to_location(city, state):
-        '''
-        We need to map the city and state to an entry in the location table.
-        This is actually more difficult than it should be. I'm going to copy and paste an excerpt from an email in here
-        that describes the problem.
 
-        We have users identify their location with a zip code at registration.  Every zip code is associated with a
-        primary city, some aliases (like Manhattan for new york, ny), a latitude and longitude, and bunch of other
-        data. Turns out zip codes are not based on geography but rather a system devised by USPS for efficient
-        distribution of mail. Therefore, it’s possible for people in the same zip code to live across the country
-        for one another. Fortunately, this is mostly a military thing. Suffice to say, zip codes are not terribly
-        indicative of geographic location.
+class Alias(models.Model):
+    #TODO should we link to the location table, or should it link back in a many to one relationship?
+    location = models.ForeignKey(Location)
 
-        When we ask users to submit a ticket, we ask for a location of the event. We aren’t going to ask for a zip
-        code. This location is a city/state combination, and each pair needs to be mapped back to a zip code and its
-        associated latitude and longitude. This would be pretty straightforward except that there are A LOT of
-        instances where two distinct zip code's coordinates differ by as much as 50 miles geographically,
-        even though they map to the same city and state. So when a user submits their ticket,
-        which zip code do we map to?  Probably the one in the more populous area, since it’s most likely the
-        location of the event.
+    # This alias is going to be the name of a city
+    alias = models.CharField(max_length=location_settings.get('CITY_MAX_LENGTH'),
+                             db_index=True,
+                             )
 
-        returns: The best location match for a city/state combination.
-                 Raises LocationMatchingExceptom on invalid input
-        '''
 
-        # Filter over location first since it's a large more precise index than state
-        city_match_list = Location.objects.filter(city=city)
+def map_citystate_to_location(city, state):
+    '''
+    We need to map the city and state to an entry in the location table.
+    This is actually more difficult than it should be. I'm going to copy and paste an excerpt from an email in here
+    that describes the problem.
 
-        if city_match_list:
-            citystate_match_list = city_match_list.filter(state=state)
+    We have users identify their location with a zip code at registration.  Every zip code is associated with a
+    primary city, some aliases (like Manhattan for new york, ny), a latitude and longitude, and bunch of other
+    data. Turns out zip codes are not based on geography but rather a system devised by USPS for efficient
+    distribution of mail. Therefore, it’s possible for people in the same zip code to live across the country
+    for one another. Fortunately, this is mostly a military thing. Suffice to say, zip codes are not terribly
+    indicative of geographic location.
 
-            # If we hone in on a single location using just the inputted city and state, we're golden
-            if citystate_match_list.count() == 1:
-                return citystate_match_list[0]
+    When we ask users to submit a ticket, we ask for a location of the event. We aren’t going to ask for a zip
+    code. This location is a city/state combination, and each pair needs to be mapped back to a zip code and its
+    associated latitude and longitude. This would be pretty straightforward except that there are A LOT of
+    instances where two distinct zip code's coordinates differ by as much as 50 miles geographically,
+    even though they map to the same city and state. So when a user submits their ticket,
+    which zip code do we map to?  Probably the one in the more populous area, since it’s most likely the
+    location of the event.
 
-            # We we identified a city but the matched location does not match the entered state, then they probably
-            # fubbed the state.
-            if city_match_list and not citystate_match_list:
-                raise LocationMatchingException("The inputted city exists in the database, but \
-                                         it does not match the state entered.")
+    returns: The best location match for a city/state combination.
+             Raises LocationMatchingExceptom on invalid input
+    '''
 
-        # We didn't match a city, but maybe we'll match an alias
-        else:
-            alias_match_list = Alias.objects.filter(name=city).location
+    # Filter over location first since it's a large more precise index than state
+    city_match_list = Location.objects.filter(city=city)
 
-            if alias_match_list:
-                aliasstate_match_list = alias_match_list.filter(state=state)
+    if city_match_list:
+        citystate_match_list = city_match_list.filter(state=state)
 
-            # If we hone in on a single location using just the inputted city and state, we're golden
-            if aliasstate_match_list.count() == 1:
-                return aliasstate_match_list[0]
+        # If we hone in on a single location using just the inputted city and state, we're golden
+        if citystate_match_list.count() == 1:
+            return citystate_match_list[0]
 
-            # We we identified a city but the matched location does not match the entered state, then they probably
-            # fubbed the state.
-            if alias_match_list and not aliasstate_match_list:
-                raise LocationMatchingException("The inputted city exists as an alias in the database,"
-                                        " but it does not match the state entered.")
+        # We we identified a city but the matched location does not match the entered state, then they probably
+        # fubbed the state.
+        if city_match_list and not citystate_match_list:
+            raise LocationMatchingException("The inputted city exists in the database, but \
+                                     it does not match the state entered.")
 
-        possible_locations = citystate_match_list.append(aliasstate_match_list)
+    # We didn't match a city, but maybe we'll match an alias
+    else:
+        alias_match_list = Alias.objects.filter(name=city).location
 
-        # Return the location with the largest population from the set of everything matched
-        if possible_locations:
-            possible_locations.sort(possible_locations, key=lambda loc: loc.population)
-            return possible_locations[0]
+        if alias_match_list:
+            aliasstate_match_list = alias_match_list.filter(state=state)
 
-        if not possible_locations:
-            return None
+        # If we hone in on a single location using just the inputted city and state, we're golden
+        if aliasstate_match_list.count() == 1:
+            return aliasstate_match_list[0]
+
+        # We we identified a city but the matched location does not match the entered state, then they probably
+        # fubbed the state.
+        if alias_match_list and not aliasstate_match_list:
+            raise LocationMatchingException("The inputted city exists as an alias in the database,"
+                                    " but it does not match the state entered.")
+
+    possible_locations = citystate_match_list.append(aliasstate_match_list)
+
+    # Return the location with the largest population from the set of everything matched
+    if possible_locations:
+        possible_locations.sort(possible_locations, key=lambda loc: loc.population)
+        return possible_locations[0]
+
+    if not possible_locations:
+        return None
 
 
 def get_state_name(state_abbreviation):

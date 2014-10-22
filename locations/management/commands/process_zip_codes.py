@@ -32,25 +32,28 @@ class Command(BaseCommand):
 
         make_option('-c', '--commit',
                     dest='commit_to_db',
-                    default=True,
+                    default='False',
                     help="Should we commit the locations in the file to the database?"),
 
         make_option('-d', '--distance',
                     dest='calculate_distance',
+                    default='False',
                     help="Should we calculate distances between cities and populate them in the JSON file?"),
 
         make_option('-y', '--city',
                     dest='calculate_cities',
-                    default=True,
+                    default='True',
                     help="Should we determine all existing cities and populate them in the JSON file?"),
     )
 
     def handle(self, *args, **options):
+        import pdb
+        pdb.set_trace()
         self.input_file = options.get('input_file')
         self.output_file = options.get('output_file')
-        self.calculate_distance = options.get('calculate_distance')
-        self.commit_to_db = options.get('commit_to_db')
-        self.calculate_cities = options.get('calculate_cities')
+        self.calculate_distance = options.get('calculate_distance').lower().find('true')
+        self.commit_to_db = options.get('commit_to_db').lower().find('true')
+        self.calculate_cities = options.get('calculate_cities').lower().find('true')
 
         if self.calculate_distance and not (self.output_file and self.input_file):
             raise Exception('An output file is needed to calculate distances for storage.')
