@@ -122,7 +122,9 @@ def map_citystate_to_location(city, state):
         return possible_locations[0]
 
     if not possible_locations:
-        return None
+        raise LocationMatchingException('City name does not match a single city or alias in the database.')
+
+    return
 
 
 def get_state_name(state_abbreviation):

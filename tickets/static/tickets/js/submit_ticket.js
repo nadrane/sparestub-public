@@ -1,12 +1,96 @@
 var $ = jQuery;
 var document = window.document;
 
+function validate_date_not_before_today(value, validator, $field) {
+    'use strict';
+    /*
+    This function will be used by bootstrap validator as a callbackto validate the
+    event date of the ticket to ensure that it is not before the current date.
+     */
+
+    var value_array = value.split('/');
+    var inputted_date = new Date(value_array[2], value_array[0] - 1, value_array[1]);
+    var today = new Date();
+    inputted_date.setHours(0);
+    inputted_date.setMinutes(0);
+    inputted_date.setSeconds(0);
+    inputted_date.setMilliseconds(0);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+    if (inputted_date >= today) {
+        return true;
+    }
+    return false;
+}
+
+function prepend_price_with_currency() {
+    return//TODO need to figure something out here for the price
+}
+
+function validate_time_not_before_now(value, validator, $field) {
+    'use strict';
+    /*
+    This function will be used by bootstrap validator as a callbackto validate the
+    event time of the ticket to ensure that it is not before now.
+     */
+
+    // If there is a space before AM/PM, remove it
+    var inputted_time = value.replace(' ', '');
+
+    inputted_time = inputted_time.toLowerCase();
+
+    var is_morning = inputted_time.find('am');
+    var is_evening = inputted_time.find('pm')
+
+
+
+    if (is_morning !== -1) {
+        // Now that we know if morning or evening was entered, remove that part of the string
+        inputted_time = inputted_time.repalce('am', '');
+
+        var inputted_hour = inputted_time.split(':')[0];
+        var inputted_minute = inputted_time.split(':')[1];
+    }
+    // Better be true
+    else if (is_evening !== -1) {
+        // Now that we know if morning or evening was entered, remove that part of the string
+        inputted_time = inputted_time.repalce('pm', '');
+
+        var inputted_hour = inputted_time.split(':')[0] + 12;
+        var inputted_minute = inputted_time.split(':')[1];
+    }
+    var today = new Date();
+    var today_hours = today.getHours();
+    var today_minutes = today.getMinutes();
+
+    if (inputted_hour > today_hours) {
+        return true
+    }
+
+    else if (inputted_hour < today_hours) {
+        return false;
+    }
+}
+
 // We need to kick the function off when we finish loading the modal content/
 // It appears as in callback to the ajax request that grabs this content in base.html
 function initialize_bootstrap_validator_submit_ticket() {
     'use strict';
+    var today = new Date();
+    var todayDay = today.getDate();
+    var todayMonth = today.getMonth() + 1;
+    var todayYear = today.getFullYear();
+    $('#submit-ticket-date-picker').datetimepicker({
+        pickTime: false,
+        minDate: todayMonth + '/' + todayDay + '/' + todayYear,
+        showToday: true
+    });
 
-    $('#ticket-submit-datetime-picker').datetimepicker();
+    $('#submit-ticket-time-picker').datetimepicker({
+        pickDate: false
+    });
 
     $('#submit-ticket-form').bootstrapValidator({
         feedbackIcons: {
@@ -50,7 +134,67 @@ function initialize_bootstrap_validator_submit_ticket() {
     });
 
     // Bootstrap validator will break the datetime picker. We need this function to undo the breakage.
-    $('#ticket-submit-datetime-picker').on('dp.change dp.show', function (e) {
-        $('#submit-ticket-form').bootstrapValidator('revalidateField', 'start_datetime');
+    $('#submit-ticket-date-picker').on('dp.change dp.show', function (e) {
+        $('#submit-ticket-form').bootstrapValidator('revalidateField', 'start_date');
     });
+
+    // Bootstrap validator will break the datetime picker. We need this function to undo the breakage.
+    $('#submit-ticket-time-picker').on('dp.change dp.show', function (e) {
+        $('#submit-ticket-form').bootstrapValidator('revalidateField', 'start_time');
+    });
+
+    //Listen for typeahead event where the user selects a location. We need to store the associated zipcode to send it
+    // back to the server when this events triggers, otherwise we won't be able to access the location object
+    // (and thus the zipcode) again.
+    $('#submit-ticket-form').bind('typeahead:selected', function (e, suggestion, dataset) {
+        $('#submit-ticket-zipcode').val(e.zip_code);
+    });
+}
+
+function initialize_typeahead_submit_ticket() {
+    'use strict';
+    var locations = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: 5,
+        prefetch: {
+            url: window.additional_parameters.cities_list_url,
+            // the json file contains an array of strings, but the Bloodhound
+            // suggestion engine expects JavaScript objects so this converts all of
+            // those strings
+            filter: function (list) {
+                return $.map(list, function (city) {
+                    return { name: city[0] + ', ' + city[1],
+                             pop: city[2],
+                             zip_code: city[3]
+                             };
+                });
+            }
+        },
+        sorter: function (a, b) {
+            var pop_a = a.pop;
+            var pop_b = b.pop;
+            if (pop_a > pop_b) {
+                return -1;
+            } else if (pop_a < pop_b) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    });
+
+    // kicks off the loading/processing of `prefetch`
+    locations.initialize();
+
+    $('#submit-ticket-location').typeahead(
+        {
+            hint: false
+        },
+        {
+            name: 'locations',
+            displayKey: 'name',
+            source: locations.ttAdapter()
+        }
+    );
 }

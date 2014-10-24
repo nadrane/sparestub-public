@@ -1,4 +1,5 @@
 from datetime import date
+from locations.settings import states
 
 ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                          'CONTENT_MAX_LENGTH': 10000,
@@ -6,8 +7,11 @@ ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                                           ('S', 'Sports'),
                                           ('T', 'Theatre'),
                                           ('C', 'Comedy'),
-                                          ('O', 'Other')
-                                          )
+                                          ('O', 'Other'),
+                                          ),
+                         'PAYMENT_METHODS': (('G', 'Good Faith'),
+                                             ('P', 'Paypal'),
+                                             ),
                          }
 
 ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
@@ -26,11 +30,18 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
                                'PRICE_NUMERIC_SEPARATOR': '.',
                                'PRICE_NUMERIC_MESSAGE': 'Please enter a number',
 
-                               'START_DATETIME_NOTEMPTY_MESSAGE': 'Please enter the date and time the event starts',
-                               'START_DATETIME_DATE_FORMAT': 'MM/DD/YYYY h:m A',
-                               'START_DATETIME_DATE_MESSAGE': 'Please use the date picker to select a date in correct format.',
-                               'START_DATETIME_DATE_SEPARATOR': '/',
-                               'TODAYS_DATE': date.today(),
+                               'START_DATE_NOTEMPTY_MESSAGE': 'Please enter the date event starts',
+                               'START_DATE_DATE_FORMAT': 'MM/DD/YYYY',
+                               'START_DATE_DATE_MESSAGE': 'Please click the calendar icon to select a date in correct format (MM/DD/YYYY)',
+                               'START_DATE_DATE_SEPARATOR': '/',
+
+                               'START_TIME_NOTEMPTY_MESSAGE': 'Please enter the time event starts',
+                               'START_TIME_REGEXP': '^(0?[1-9]|1[012])(:[0-5]\d) ?[APap][mM]$',
+                                # Note that this is javascript. If this changes, the serverside validator MUST change as well.
+                               'START_TIME_REGEXP_MESSAGE': 'Please click the clock to select a time in the correct format (HH:MM AM/PM)',
 
                                'LOCATION_NOTEMPTY_MESSAGE': 'Please enter the city and state where the event takes place',
-                         }
+
+                               'PAYMENT_METHODS': ticket_model_settings.get('PAYMENT_METHODS'),
+                               'PAYMENT_METHOD_NOTEMPTY_MESSAGE': 'Please select a payment method',
+                            }

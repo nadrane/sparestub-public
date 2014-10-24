@@ -1,6 +1,6 @@
 <div class="modal-content">
   <div class="modal-header">
-    <h4 class="modal-title">Submit a Ticket!</h4>
+    <h2 class="modal-title">Submit Your Spare Stub!</h2>
     <div id="submit-ticket-notification-root">
       <div class="notification-style" style="display: None">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -11,71 +11,136 @@
   </div>
 
   <form id="submit-ticket-form" class="form-horizontal" action="{% url "tickets.views.submit_ticket" %}"> {% csrf_token %}
-    <div class="modal-body">
-      <div class="form-group">
-        <label for="submit-ticket-title" class="control-label sr-only"></label>
-        <input id="submit-ticket-title" class="form-control" type="text" name="title" placeholder="Title" required
+    <input id='submit-ticket-zipcode' type="hidden" name="zipcode">
+    <div class="container-fluid">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="input-group">
+                <label for="submit-ticket-title" class="control-label input-group-addon">Post Title</label>
+                <input id="submit-ticket-title" class="form-control" type="text" name="title"
+                       placeholder="Example: Dallas Cowboys at NY Giants. Rival fans welcome!" required
 
-               data-bv-notempty-message="{{ form_settings.TITLE_NOTEMPTY_MESSAGE }}"
+                       data-bv-notempty-message="{{ form_settings.TITLE_NOTEMPTY_MESSAGE }}"
 
-               data-bv-stringlength="true"
-               data-bv-stringlength-max="{{ form_settings.TITLE_MAX_LENGTH }}"
-               data-bv-stringlength-message="{{ form_settings.TITLE_LENGTH_MESSAGE }}">
-      </div>
+                       data-bv-stringlength="true"
+                       data-bv-stringlength-max="{{ form_settings.TITLE_MAX_LENGTH }}"
+                       data-bv-stringlength-message="{{ form_settings.TITLE_LENGTH_MESSAGE }}">
+              </div>
+            </div>
+          </div>  <!-- form-group -->
+        </div> <!-- row -->
 
-      <!-- TODO do not allow numbers with values in the .001 range. consider using step attribute -->
-      <div class="form-group">
-        <label for="submit-ticket-price"  class="control-label sr-only"></label>
-        <input id="submit-ticket-price" type="number" min="0" class="form-control"  name="price"
-               placeholder="Price" required
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="submit-ticket-location" class="control-label sr-only"></label>
+              <input id="submit-ticket-location" type="text" class="form-control" name="location"
+                     placeholder="Location (city, state)" required
+                     data-bv-notempty-message="{{ form_settings.LOCATION_NOTEMPTY_MESSAGE }}">
+              </input>
+            </div>  <!-- form group -->
+          </div> <!-- col-md-4 -->
 
-               data-bv-notempty-message="{{ form_settings.PRICE_NOTEMPTY_MESSAGE }}"
+          <div class="col-md-4">
+            <div class="form-group large-feedback-icon-shift">
+              <div class='input-group date' id='submit-ticket-date-picker'>
+                <label for="submit-ticket-start-date" class="control-label sr-only"></label>
+                <input id="submit-ticket-start-date" type="text" class="form-control" name="start_date"
+                       placeholder="Event date" required
 
-               data-bv-numeric="true"
-               data-bv-numeric-separator="{{ form_settings.PRICE_NUMERIC_SEPARATOR}}"
-               data-bv-numeric-message="{{ form_settings.PRICE_NUMERIC_MESSAGE }}">
-      </div>  <!-- form group -->
+                       data-bv-notempty-message="{{ form_settings.START_DATE_NOTEMPTY_MESSAGE }}"
 
-      <div class="form-group shifted-feedback-icon">
-        <div class='input-group date' id='ticket-submit-datetime-picker'>
-          <label for="submit-ticket-start" class="control-label sr-only"></label>
-          <input id="submit-ticket-start" type="text" class="form-control" name="start_datetime"
-                 placeholder="Start date and time" required
+                       data-bv-date="true"
+                       data-bv-date-format="{{ form_settings.START_DATE_DATE_FORMAT }}"
+                       data-bv-date-message="{{ form_settings.START_DATE_DATE_MESSAGE }}"
+                       data-bv-date-separator="{{ form_settings.START_DATE_DATE_SEPARATOR }}"
 
-                 data-bv-notempty-message="{{ form_settings.START_DATETIME_NOTEMPTY_MESSAGE }}"
+                       data-bv-callback="true"
+                       data-bv-callback-callback="validate_date_not_before_today"
+                       data-bv-callback-message="Please pick today or a future date">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div> <!-- form group -->
+          </div> <!-- col-md-4 -->
 
-                 data-bv-date="true"
-                 data-bv-date-format="{{ form_settings.START_DATETIME_DATE_FORMAT }}"
-                 data-bv-date-message="{{ form_settings.START_DATETIME_DATE_MESSAGE }}"
-                 data-bv-date-separator="{{ form_settings.START_DATETIME_DATE_SEPARATOR }}">
-          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-        </div>
-      </div>
+          <div class="col-md-4">
+            <div class="form-group large-feedback-icon-shift">
+              <div class='input-group date' id='submit-ticket-time-picker'>
+                <label for="submit-ticket-start-time" class="control-label sr-only"></label>
+                <input id="submit-ticket-start-time" type="text" class="form-control" name="start_time"
+                       placeholder="Event time" required
 
-      <div class="form-group">
-        <label for="submit-ticket-location" class="control-label sr-only"></label>
-        <input id="submit-ticket-location" type="text" class="form-control" name="location"
-               placeholder="Location" required
+                       data-bv-notempty-message="{{ form_settings.START_TIME_NOTEMPTY_MESSAGE }}"
 
-               data-bv-notempty-message="{{ form_settings.LOCATION_NOTEMPTY_MESSAGE }}">
-      </div>  <!-- form group -->
+                       pattern="{{ form_settings.START_TIME_REGEXP }}"
+                       data-bv-regexp-message="{{ form_settings.START_TIME_REGEXP_MESSAGE }}">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+              </div>
+            </div>
+          </div> <!-- col-md-4 -->
+        </div> <!-- row -->
 
-      <div class="form-group">
-        <label for="submit-ticket-type" class="control-label sr-only"></label>
-        <select id="submit-ticket-type" type="text" class="form-control" name="type" required
-                data-bv-notempty-message="{{ form_settings.TICKET_TYPE_NOTEMPTY_MESSAGE }}">
-          <option value="" disabled selected>Select the type of event</option>
-          {% for option in form_settings.TICKET_TYPES %}
-            <option value="{{ option.0 }}"> {{ option.1 }} </option>
-          {% endfor %}
-        </select>
+        <div class="row">
+          <div class="col-md-4">
+            <!-- TODO do not allow numbers with values in the .001 range. consider using step attribute -->
+            <div class="form-group">
+              <label for="submit-ticket-price"  class="control-label sr-only"></label>
+              <input id="submit-ticket-price" type="number" min="0" class="form-control"  name="price"
+                     placeholder="Ticket price" required
 
-      </div>  <!-- form group -->
-    </div>  <!-- modal body -->
+                     data-bv-notempty-message="{{ form_settings.PRICE_NOTEMPTY_MESSAGE }}"
+
+                     data-bv-numeric="true"
+                     data-bv-numeric-separator="{{ form_settings.PRICE_NUMERIC_SEPARATOR}}"
+                     data-bv-numeric-message="{{ form_settings.PRICE_NUMERIC_MESSAGE }}">
+            </div>  <!-- form group -->
+          </div> <!-- col-md-4 -->
+
+          <div class="col-md-4">
+            <div class="form-group small-feedback-icon-shift">
+              <label for="submit-ticket-type" class="control-label sr-only"></label>
+              <select id="submit-ticket-type" type="text" class="form-control" name="type" required
+                      data-bv-notempty-message="{{ form_settings.TICKET_TYPE_NOTEMPTY_MESSAGE }}">
+                <option value="" disabled selected>Select the type of event</option>
+                {% for option in form_settings.TICKET_TYPES %}
+                  <option value="{{ option.0 }}"> {{ option.1 }} </option>
+                {% endfor %}
+              </select>
+            </div>  <!-- form group -->
+          </div> <!-- col-md-4 -->
+
+          <div class="col-md-4 small-feedback-icon-shift">
+            <div class="form-group">
+              <label for="submit-ticket-payment-method" class="control-label sr-only"></label>
+              <select id="submit-ticket-payment-method" type="text" class="form-control" name="payment_method" required
+                      data-bv-notempty-message="{{ form_settings.PAYMENT_METHOD_NOTEMPTY_MESSAGE }}">
+                <option value="" disabled selected>Select payment method</option>
+                {% for option in form_settings.PAYMENT_METHODS %}
+                  <option value="{{ option.0 }}"> {{ option.1 }} </option>
+                {% endfor %}
+              </select>
+            </div>  <!-- form group -->
+          </div> <!-- col-md-4 -->
+        </div> <!-- row -->
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group last-form-group">
+              <label for="submit-ticket-about" class="control-label sr-only"></label>
+              <textarea id="submit-ticket-about" class="form-control" name="about"
+                        placeholder="Anything else you'd like to say?"></textarea>
+            </div>  <!-- form group -->
+          </div> <!-- col-md-12 -->
+        </div> <!-- row -->
+
+      </div> <!-- modal body -->
+     </div> <!-- fluid-container -->
 
     <div class="modal-footer">
         <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
-        <button id="submit-ticket-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Sign up</button>
+        <button id="submit-ticket-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Submit Stub!</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
   </form>  <!-- signup form -->

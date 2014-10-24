@@ -56,3 +56,26 @@ var handle_ajax_response = function (response, $notification_root) {
 
     }
 };
+
+var store_in_local = function (key, data_to_store, is_data_json) {
+    'use strict';
+    if (Modernizr.localstorage) {
+        if (is_data_json) {
+            data_to_store = JSON.stringify(data_to_store);
+        }
+        var compressed = LZString.compress(data_to_store);
+        localStorge.setItem(key, compressed);
+    }
+};
+
+var retrieve_from_local = function (key, is_data_json){
+    'use strict';
+    var data;
+    if (Modernizr.localstorage) {
+        data = LZString.decompress(localStorage.getItem(key));
+    }
+    if (is_data_json) {
+        data = JSON.parse(data);
+    }
+    return data;
+};

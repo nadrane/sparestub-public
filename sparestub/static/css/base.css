@@ -47,7 +47,7 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
 
 
 /* Make sure that there is even spacing between the form fields and submit buttons */
-.modal-body>div:last-child
+.last-form-group
 {
     margin-bottom: 0;
 }
@@ -85,9 +85,14 @@ shifted-feedback-icons is just a class I am using to identify form groups that n
 It has no special styling associated with it.
 The form-control-feedback class will be attached by BV to certain <i> tags that contain the feedback icons.
 */
-#submit-ticket-form .shifted-feedback-icon .form-control-feedback {
+#submit-ticket-form .large-feedback-icon-shift .form-control-feedback {
     top: 0!important;
     right: 60px!important;
+}
+
+#submit-ticket-form .small-feedback-icon-shift .form-control-feedback {
+    top: 0!important;
+    right: 30px!important;
 }
 
 /* Turns out because we use input groups in the ticket form, we cannot use the same selector for both
@@ -96,4 +101,66 @@ inputs because the ticket form's date input needs more shifting than the contact
 #contact-form .shifted-feedback-icon .form-control-feedback {
     top: 0!important;
     right: 30px!important;
+}
+
+/* STYLE AUTOCOMPLETE/TYPEAHEAD DROPDOWN */
+
+/* TODO Figure out GNU license 2.0 from https://github.com/bassjobsen/typeahead.js-bootstrap-css */
+
+
+span.twitter-typeahead .tt-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+span.twitter-typeahead .tt-suggestion > p {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+}
+span.twitter-typeahead .tt-suggestion > p:hover,
+span.twitter-typeahead .tt-suggestion > p:focus {
+  color: #ffffff;
+  text-decoration: none;
+  outline: 0;
+  background-color: #428bca;
+}
+span.twitter-typeahead .tt-suggestion.tt-cursor {
+  color: #ffffff;
+  background-color: #428bca;
+}
+span.twitter-typeahead {
+  width: 100%;
+}
+.input-group span.twitter-typeahead {
+  display: block !important;
+}
+.input-group span.twitter-typeahead .tt-dropdown-menu {
+  top: 32px !important;
+}
+.input-group.input-group-lg span.twitter-typeahead .tt-dropdown-menu {
+  top: 44px !important;
+}
+.input-group.input-group-sm span.twitter-typeahead .tt-dropdown-menu {
+  top: 28px !important;
 }

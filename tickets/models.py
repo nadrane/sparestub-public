@@ -17,12 +17,12 @@ class Ticket(TimeStampedModel):
                                related_name='poster',
                                )
 
-    bidders = models.ManyToManyField(User,
-                                     blank=True,
-                                     null=True,
-                                     db_index=True,
-                                     related_name='bidders',
-                                     )
+    bidders = models.ForeignKey(User,
+                                blank=True,
+                                null=True,
+                                db_index=True,
+                                related_name='bidders',
+                                )
 
     price = models.IntegerField(blank=False)
 
@@ -39,11 +39,14 @@ class Ticket(TimeStampedModel):
 
     # The city and state that the user originally entered in the form.
     location_raw = models.CharField(max_length=254)  # Keep the city, state combo around just in case we are
-                                                           # we need to debug
+                                                     # we need to debug
 
     # The system tries to map the raw input form the user to a location record. That's what this is.
     location = models.IntegerField(Location)  # We are going to map the inputted city, state to a zipcode
 
     type = models.CharField(max_length=1,
                             choices=ticket_model_settings.get('TICKET_TYPES'))
+
+    payment_method = models.CharField(max_length=1,
+                                      choices=ticket_model_settings.get('PAYMENT_METHODS'))
 

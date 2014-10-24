@@ -14,11 +14,15 @@
 
     {% block css %}
       {% if environment == 'production' or environment == 'staging' %}
+          <!-- Bootstrap time picker -->
+          <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
           <!-- Bootstrap core CSS -->
           <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
           <!-- Boostrap Validator CSS -->
           <link href="https://s3.amazonaws.com/sparestub/static/css/bootstrapValidator.min.css" rel="stylesheet">
       {% else %}
+          <!-- Bootstrap datetime picker -->
+          <link href="{% static "sparestub/css/bootstrap-datetimepicker.css" %}" rel="stylesheet">
           <!-- Bootstrap core CSS -->
           <link href="{% static "sparestub/css/bootstrap.css" %}" rel="stylesheet">
           <!-- Boostrap Validator CSS -->
@@ -29,8 +33,6 @@
 
       <!-- basic base.html styling -->
       <link href="{% static "sparestub/css/base.css" %}" rel="stylesheet">
-
-      <link href="{% static "sparestub/css/bootstrap-datetimepicker.css" %}" rel="stylesheet">
     {% endblock %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -63,7 +65,7 @@
           <form class="navbar-form navbar-left" id="search-bar" role="search" >
             <div class="form-group has-feedback">
               <label class="control-label sr-only">search</label>
-              <input type="search" class="form-control" placeholder="Search for Tickets">
+              <input id="ticket-search-input" type="search" class="form-control" placeholder="Search for Tickets">
               <i class="glyphicon glyphicon-search form-control-feedback"></i>
             </div>
           </form>
@@ -91,7 +93,8 @@
         'contact_form_url' : "{% url "contact.views.submit" %}",
         'signup_form_url' : "{% url "registration.views.signup" %}",
         'login_form_url' : "{% url "registration.views.login" %}",
-        'submit_ticket_form_url' : "{% url "tickets.views.submit_ticket" %}"
+        'submit_ticket_form_url' : "{% url "tickets.views.submit_ticket" %}",
+        'cities_list_url' : "{% static "locations/json/cities.json" %}"
     }
     </script>
 
@@ -103,6 +106,10 @@
       {% if environment == 'production' or environment == 'staging' %}
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>  <!--TODO get a local copy configure based on what checks we use. -->
+
+        <!-- Bootstrap time picker -->
+        <script type="text/javascript" src=" //cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>
 
         <!-- Bootstrap validator Javascript -->
         <script type="text/javascript" src="https://s3.amazonaws.com/sparestub/static/js/bootstrapValidator.min.js"></script>
@@ -123,14 +130,16 @@
         <script type="text/javascript" src="{% static "sparestub/js/typeahead.bundle.js" %}"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.js"></script>
 
+        <!-- Bootstrap datetime picker -->
+        <script type="text/javascript" src="{% static "sparestub/js/bootstrap-datetimepicker.js" %}"></script>
+
         <!-- Bootstrap validator Javascript -->
         <script type="text/javascript" src="{% static "sparestub/js/bootstrapValidator.js" %}"></script>
 
         <!-- Bootstrap linter -->
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>
       {% endif %}
-
-      <script type="text/javascript" src="{% static "sparestub/js/bootstrap-datetimepicker.js" %}"></script>
+      <script type="text/javascript" src="{% static "sparestub/js/lz-string-1.3.3.js" %}"></script>
       <script type="text/javascript" src="{% static "sparestub/js/utils.js" %}"></script>
       <script type="text/javascript" src="{% static "contact/js/contact.js" %}"></script>
 
@@ -167,7 +176,7 @@
     </div>
 
     <div id="modal-submit-ticket-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content" id="modal-submit-ticket-form-content">
         </div>
       </div>

@@ -1,59 +1,62 @@
-# 3rd Party Modules
+# Standard Imports
+import logging
 
 # Django Imports
 from django import forms
 
 # SpareStub Imports
-from .tickets.settings import ticket_form_settings
-from locations.models import Location, Alias
-from locations.settings import location_settings
-
+from .settings import ticket_submit_form_settings
+from locations.models import Location, Alias, map_citystate_to_location, LocationMatchingException
 
 #Form that will be displayed on signup.html to load a person
-class TicketForm(forms.Form):
+class SubmitTicketForm(forms.Form):
     price = forms.IntegerField(required=True)
 
     title = forms.CharField(required=True,
-                            min_length=ticket_form_settings.get('TITLE_MAX_LENGTH'),
+                            min_length=ticket_submit_form_settings.get('TITLE_MAX_LENGTH'),
                             )
 
-    city = forms.CharField(required=True)
+    location_raw = forms.CharField(required=True)
 
-    state = forms.ChoiceField(choices=location_settings.get('STATES'))
+    zip_code = forms.CharField(required=True)  # Not explicitly entered by the user but determined using the
+                                               # city and state in location_raw
 
-    start_timestamp = forms.DateTimeField(required=True)
+    start_datetimestamp = forms.DateTimeField(required=True)
 
-    category = forms.ChoiceField(choices=ticket_form_settings.get('TICKET_TYPES'))
+    category = forms.ChoiceField(required=True,
+                                 choices=ticket_submit_form_settings.get('TICKET_TYPES'))
 
-    def clean(self):
-        '''
-        We need to map the city and state to an entry in the location table.
-        We should be able to do this pretty accurately using city and state. Note that there might be instances of
-        two cities with the same name in the same state with different zipcodes.
-        '''
-        # Filter over states first because there's a far smaller chance the user selected the wrong state from the
-        # select widget than the chance they fubbed the location name.
-        possible_locations = Location.objects.filter(city=self.city)
+    payment_method = forms.ChoiceField(required=True,
+                                       choices=ticket_submit_form_settings.get('PAYMENT_METHODS'))
 
-        # When multiple cities map to the same zip code, all of location entries have the same latitude and longitude.
-        # The choice to actually store the zip code in the 0th index is arbitrary.
-        # We should NEVER look up tickets using another index other than ciy index. A zipcode lookup would yield
-        # VERY incomplete results.
-        if possible_locations:
-            for location in possible_locations:
-                if location.state == self.state:
-                    # This is the location will we store in the DB
-                    self.cleaned_data['location'] = location
-                    return
+    def clean_start_timestamp(self):
+        
 
-        possible_locations = Alias.objects.filter(alias=self.city)
+    def clean_location(self):
+        zip_code_location = Location.objects.filter(zip_code=self.cleaned_data.get('zip_code'))[0]
+        if not zip_code_location:
+            raise forms.ValidationError('Invalid zip code returned.', code='invalid_zip_code')
 
-        if possible_locations:
-            for location in possible_locations:
-                if location.state == self.state:
-                    # This is the location will we store in the DB
-                    self.cleaned_data['location'] = location
-                    return
+        city, state = map(lambda x: x.strip(), self.cleaned_data.get('location').split(','))
 
-        # If the entered city does not map to a zipcode, then the user entered an invalid location
-        raise forms.ValidationError('Invalid location entered.', code='invalid_location')
+        try:
+            city_state_location = map_citystate_to_location(city, state)
+        except LocationMatchingException as e:
+            logging.error(e.msg + 'location_raw: {} and zip_code: {}'.format(self.cleaned_data.get('location'),
+                                                                             self.cleaned_data('zip_code'),
+                                                                             exc_info=True, stack_info=True))
+
+
+            raise forms.ValidationError('Something is wrong with that location!', code='invalid_location')
+
+        if city_state_location != zip_code_location:
+            logging.error('The zipcode returned from the client mapped to a different location than the raw city and'
+                          'state returned from the client. \n'
+                          'location_raw: {} \n'
+                          'location matched with zip_code: {} \n'
+                          'location matched with city and state: {}'.format(self.cleaned_data.get('location'),
+                                                                            zip_code_location,
+                                                                            city_state_location,
+                                                                            exc_info=True, stack_info=True))
+            forms.ValidationError('Something is wrong with that location!', code='invalid_location')
+

@@ -48,6 +48,7 @@ $(document).ready(function ($) {
         $.get(window.additional_parameters.submit_ticket_form_url, function (data) {
             $('#modal-submit-ticket-form-content').html(data);
             initialize_bootstrap_validator_submit_ticket();
+            initialize_typeahead_submit_ticket();
         });
     });
 

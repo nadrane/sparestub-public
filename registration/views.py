@@ -1,15 +1,14 @@
-# Core Modules
+# Standard Imports
 import json
 import logging
 
-# Django core modules
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseForbidden, HttpResponse
+# Django Core Imports
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
-from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 
-# SpareStub modules
+# SpareStub Imports
 from .models import User
 from .settings import signup_form_settings, login_form_settings
 from .forms import SignupForm, LoginForm

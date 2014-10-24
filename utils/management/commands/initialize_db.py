@@ -4,20 +4,15 @@ from datetime import date
 
 from django.core.management.base import BaseCommand
 
-from .empty_db import recreate_empty_database
 from registration.models import User
 from reviews.models import Review
 from locations.models import Location
 from django.core.management import call_command
-from locations.management.commands import process_zip_codes
 
 class Command(BaseCommand):
-
     def handle(self, *args, **kwargs):
-        import pdb
-        pdb.set_trace()
         # Recreate the tables in the database according to our models
-        recreate_empty_database()
+        call_command('empty_db', interactive=False)
         self.create_users()
         self.create_reviews()
 

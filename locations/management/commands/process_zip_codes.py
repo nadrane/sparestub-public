@@ -21,49 +21,57 @@ class Command(BaseCommand):
 
     option_list = BaseCommand.option_list + (
         make_option('-i', '--inputfile',
+                    type='string',
                     dest='input_file',
                     default=settings.DEFAULT_ZIP_CODE_CSV,
                     help="The file path to the csv containing zipcode information"),
 
-        make_option('-o', '--outputfile',
-                    dest='output_file',
-                    default=settings.DEFAULT_ZIP_CODE_JSON,
-                    help="The file path to the to the JSON file the script produces."),
-
         make_option('-c', '--commit',
+                    action='store_true',
                     dest='commit_to_db',
-                    default='False',
                     help="Should we commit the locations in the file to the database?"),
 
         make_option('-d', '--distance',
+                    action='store_true',
                     dest='calculate_distance',
-                    default='False',
                     help="Should we calculate distances between cities and populate them in the JSON file?"),
 
+        make_option('--distance_file',
+                    type='string',
+                    dest='distance_json_file',
+                    default=settings.DEFAULT_ZIP_CODE_JSON,
+                    help="The file path to the to the JSON file the script produces."),
+
         make_option('-y', '--city',
+                    action='store_true',
                     dest='calculate_cities',
-                    default='True',
                     help="Should we determine all existing cities and populate them in the JSON file?"),
+
+                make_option('--city_file',
+                            type='string',
+                            dest='city_list_json_file',
+                            default=settings.DEFAULT_CITY_LIST_JSON,
+                            help="The file path to the to the JSON file the city list will be stored in."),
     )
 
     def handle(self, *args, **options):
-        import pdb
-        pdb.set_trace()
         self.input_file = options.get('input_file')
-        self.output_file = options.get('output_file')
-        self.calculate_distance = options.get('calculate_distance').lower().find('true')
-        self.commit_to_db = options.get('commit_to_db').lower().find('true')
-        self.calculate_cities = options.get('calculate_cities').lower().find('true')
+        self.distance_json_file = options.get('distance_json_file')
+        self.calculate_distance = options.get('calculate_distance')
+        self.commit_to_db = options.get('commit_to_db')
+        self.calculate_cities = options.get('calculate_cities')
+        self.city_list_json_file = options.get('city_list_json_file')
 
-        if self.calculate_distance and not (self.output_file and self.input_file):
+        if self.calculate_distance and not (self.distance_json_file and self.input_file):
+            raise Exception('An output file is needed to calculate distances for storage.')
+
+        if self.calculate_cities and not (self.city_list_json_file and self.input_file):
             raise Exception('An output file is needed to calculate distances for storage.')
 
         location_list, alias_list = self.read_zip_codes()
 
-        output_dict = {}
-
         if self.calculate_cities:
-            output_dict = self.make_city_list(location_list, alias_list, output_dict)
+            self.make_city_list(location_list, alias_list)
 
         #TODO why is this getting set as a string at the command prompt
 
@@ -71,19 +79,41 @@ class Command(BaseCommand):
             self.update_db(location_list, alias_list)
 
         if self.calculate_distance:
-            output_dict = self.calculate_distances(location_list)
+            self.calculate_distances(location_list)
 
-        if output_dict:
-            self.write_json_file(output_dict)
+    def make_city_list(self, location_list, alias_list):
+        output = {}
+        formatted_output = []
+        #location_set = set([(location.primary_city, location.state) for location in location_list])
+        #alias_set = set([(alias.name, alias.state) for alias in alias_list])
+        for loc in location_list:
+            if (loc.primary_city, loc.state) not in output:
+                output[(loc.primary_city, loc.state)] = [loc.estimated_population, loc.zip_code]
+                logging.debug('Adding location {}'.format(loc))
+            else:
+                if loc.estimated_population > output[(loc.primary_city, loc.state)][0]:
+                    logging.debug('Replacing location city/state {} - {} with {}'
+                                  .format((loc.primary_city, loc.state),
+                                          output[(loc.primary_city, loc.state)], loc))
+                    output[(loc.primary_city, loc.state)] = [loc.estimated_population, loc.zip_code]
 
-    def make_city_list(self, location_list, alias_list, output_dict):
-        output_dict['city'] = []
-        location_set = set([(location.primary_city, location.state) for location in location_list])
-        alias_set = set([(alias.name, alias.state) for alias in alias_list])
-        for place in location_set.union(alias_set):
-            output_dict['city'].append(place)
+        for loc in alias_list:
+            if (loc.name, loc.state) not in output:
+                output[(loc.name, loc.state)] = [loc.estimated_population, loc.zip_code]
+                logging.debug('Adding location {}'.format(loc))
+            else:
+                if loc.estimated_population > output[(loc.name, loc.state)][0]:
+                    logging.debug('Replacing location city/state {} - {} with {}'
+                                  .format((loc.name, loc.state),
+                                           output[(loc.name, loc.state)], loc))
+                    output[(loc.name, loc.state)] = [loc.estimated_population, loc.zip_code]
 
-        return output_dict
+        # Format this into something JSON can understand.
+        # Above, we have dicts with tuple keys. JSON only supports string keys
+        for k1, k2 in output:
+            formatted_output.append([k1, k2, output[(k1, k2)][0], output[(k1, k2)][1]])
+
+        self.write_json_file(formatted_output, self.city_list_json_file)
 
     def read_zip_codes(self):
         location_list = []
@@ -91,7 +121,7 @@ class Command(BaseCommand):
         same_city_state = []
         Location = namedtuple('Location', ['line_no', 'zip_code', 'latitude', 'longitude', 'primary_city', 'state',
                                            'estimated_population'])
-        Alias = namedtuple('Alias', ['zip_code', 'name', 'state'])
+        Alias = namedtuple('Alias', ['zip_code', 'name', 'state', 'estimated_population'])
 
         city_state_combos = {}
         try:
@@ -137,10 +167,17 @@ class Command(BaseCommand):
                 if not county:
                     logging.debug('line #{}: county not present.'.format(reader.line_num))
 
+
+                if estimated_population:
+                    estimated_population = int(estimated_population)
+                else:
+                    logging.debug('line #{}: estimated populated not present. Marking as 0'.format(reader.line_num))
+                    estimated_population = 0
+
                 if aliases:
-                    aliases = [city.strip() for city in aliases.split()]
+                    aliases = [city.strip() for city in aliases.split(',')]
                     for name in aliases:
-                        alias = Alias(zip_code, name, state)
+                        alias = Alias(zip_code, name, state, estimated_population=estimated_population)
                         alias_list.append(alias)
 
                 location = Location(reader.line_num, zip_code, latitude, longitude,
@@ -173,7 +210,6 @@ class Command(BaseCommand):
 
         return location_list, alias_list
 
-    @staticmethod
     def calculate_distances(self, location_list):
         '''
         We allow users to look for tickets that are within x miles of their location.
@@ -211,7 +247,7 @@ class Command(BaseCommand):
 
             logging.debug('Evaluating zip code {} with {}'.format(location1.zip_code, location2.zip_code))
 
-        return distance_dict
+        self.write_json_file(distance_dict, self.output_file)
 
     @staticmethod
     def update_db(locations, aliases):
@@ -242,9 +278,10 @@ class Command(BaseCommand):
                                  exc_info=True,
                                  stack_info=True)
 
-    def write_json_file(self, output_dict):
+    @staticmethod
+    def write_json_file(output_dict, fp):
         try:
-            json_handler = open(self.output_file, 'wt')
+            json_handler = open(fp, 'wt')
             json.dump(output_dict, json_handler)
         except Exception:
             pass

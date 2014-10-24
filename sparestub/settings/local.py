@@ -39,4 +39,5 @@ DATABASES = {
 # The sparestub-staging and sparestub-production buckets are used for staging and production, respectively
 AWS_BUCKET_NAME = 'sparestub'
 
-logging.basicConfig(level=logging.ERROR)
+LOG_FILENAME = os.path.join(BASE_DIR, 'logging.txt')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
