@@ -2,6 +2,8 @@ venv
 *.pyc
 static_root
 media_root
+bower_components
 .env
 .idea
 *.csv
+.DS_Store
