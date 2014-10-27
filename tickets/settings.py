@@ -10,7 +10,7 @@ ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                                           ('O', 'Other'),
                                           ),
                          'PAYMENT_METHODS': (('G', 'Good Faith'),
-                                             ('P', 'Paypal'),
+                                             ('S', 'Secure'),
                                              ),
                          }
 
@@ -29,6 +29,8 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
                                'PRICE_NOTEMPTY_MESSAGE': 'Please enter a ticket price',
                                'PRICE_NUMERIC_SEPARATOR': '.',
                                'PRICE_NUMERIC_MESSAGE': 'Please enter a number',
+                               'PRICE_MIN_VALUE': '0.00',
+                               'PRICE_MAX_VALUE': '1000000.00',
 
                                'START_DATE_NOTEMPTY_MESSAGE': 'Please enter the date event starts',
                                'START_DATE_DATE_FORMAT': 'MM/DD/YYYY',
@@ -45,3 +47,5 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
                                'PAYMENT_METHODS': ticket_model_settings.get('PAYMENT_METHODS'),
                                'PAYMENT_METHOD_NOTEMPTY_MESSAGE': 'Please select a payment method',
                             }
+
+email_submit_ticket_subject = 'SpareStub has received your ticket submission!'

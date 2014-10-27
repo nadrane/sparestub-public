@@ -92,6 +92,15 @@ function initialize_bootstrap_validator_submit_ticket() {
         pickDate: false
     });
 
+
+    // Configure the ticket price to work as a currency
+    $('#submit-ticket-price').autoNumeric('init')
+        // autoNumeric completely breaks bootstrap validator. Just make sure the field is validated when we lose focus.
+                             .blur(function () { $('#submit-ticket-form').bootstrapValidator('revalidateField', 'price'); });
+
+
+
+
     $('#submit-ticket-form').bootstrapValidator({
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
@@ -147,7 +156,7 @@ function initialize_bootstrap_validator_submit_ticket() {
     // back to the server when this events triggers, otherwise we won't be able to access the location object
     // (and thus the zipcode) again.
     $('#submit-ticket-form').bind('typeahead:selected', function (e, suggestion, dataset) {
-        $('#submit-ticket-zipcode').val(e.zip_code);
+        $('#submit-ticket-zipcode').attr('value', suggestion.zip_code);
     });
 }
 

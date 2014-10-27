@@ -1,13 +1,18 @@
-__author__ = 'nicholasdrane'
+# Standard Imports
 import logging
 from datetime import date
+import datetime
 
+# Django Imports
 from django.core.management.base import BaseCommand
+from django.core.management import call_command
 
+# SpareStub Imports
 from registration.models import User
 from reviews.models import Review
 from locations.models import Location
-from django.core.management import call_command
+from tickets.models import Ticket
+
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
@@ -15,6 +20,7 @@ class Command(BaseCommand):
         call_command('empty_db', interactive=False)
         self.create_users()
         self.create_reviews()
+        self.create_tickets()
 
     @staticmethod
     def create_users():
@@ -52,6 +58,19 @@ class Command(BaseCommand):
                                       birth_date=date(1989,1,28)
                                       )
         return
+
+    @staticmethod
+    def create_tickets():
+        Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
+                                     price=213.0,
+                                     title='Dallas cowboys at Giants stadium this weekend! Looking for Dallas fans only!',
+                                     start_datetime=datetime.datetime.today(),
+                                     location_raw='Dallas, TX',
+                                     location=Location.objects.filter(city='dallas')[0],
+                                     ticket_type='S',
+                                     payment_method='G',
+                                     about='stuff stuff stuff dallas sucks stuff stuff stuff'
+                                     )
 
     @staticmethod
     def create_reviews():

@@ -111,7 +111,8 @@ class Command(BaseCommand):
         # Format this into something JSON can understand.
         # Above, we have dicts with tuple keys. JSON only supports string keys
         for k1, k2 in output:
-            formatted_output.append([k1, k2, output[(k1, k2)][0], output[(k1, k2)][1]])
+            # Capitalize cities and upper case states. This is how the data will appear to the user.
+            formatted_output.append([k1.capitalize(), k2.upper(), output[(k1, k2)][0], output[(k1, k2)][1]])
 
         self.write_json_file(formatted_output, self.city_list_json_file)
 
@@ -120,12 +121,11 @@ class Command(BaseCommand):
         alias_list = []
         same_city_state = []
         Location = namedtuple('Location', ['line_no', 'zip_code', 'latitude', 'longitude', 'primary_city', 'state',
-                                           'estimated_population'])
+                                           'estimated_population', 'timezone'])
         Alias = namedtuple('Alias', ['zip_code', 'name', 'state', 'estimated_population'])
 
         city_state_combos = {}
         try:
-            # get a csv reader
             reader = csv.reader(open(self.input_file))
             for (zip_code, mail_type, primary_city, aliases, unacceptable_cities, state, county, timezone, area_codes,
                  latitude, longitude, world_region, country, decommissioned, estimated_population, notes) in reader:
@@ -143,6 +143,9 @@ class Command(BaseCommand):
                 if state not in states_abbreviation_list:
                     logging.debug('line #{}: state equal to {}'.format(reader.line_num, state))
                     continue
+                else:
+                    # All strings in the database are lowercase. Let's work with lowercase from the beginning.
+                    state = state.lower()
 
                 if latitude:
                     latitude = float(latitude)
@@ -157,16 +160,17 @@ class Command(BaseCommand):
                     logging.error('line #{}: zipcode not present.'.format(reader.line_num))
 
                 if primary_city:
-                    primary_city = primary_city.strip()
+                    # All strings in the database are lowercase. Let's work with lowercase from the beginning.
+                    primary_city = primary_city.strip().lower()
                 else:
                     logging.error('line #{}: primary_city not present.'.format(reader.line_num))
-
-                if not state:
-                    logging.error('line #{}: state not present.'.format(reader.line_num))
 
                 if not county:
                     logging.debug('line #{}: county not present.'.format(reader.line_num))
 
+                if not timezone:
+                    logging.error('line #{}: timezone not present for zipcode {}'.format(reader.line_num, zip_code))
+                    continue
 
                 if estimated_population:
                     estimated_population = int(estimated_population)
@@ -175,13 +179,13 @@ class Command(BaseCommand):
                     estimated_population = 0
 
                 if aliases:
-                    aliases = [city.strip() for city in aliases.split(',')]
+                    aliases = [city.strip().lower() for city in aliases.split(',')]
                     for name in aliases:
                         alias = Alias(zip_code, name, state, estimated_population=estimated_population)
                         alias_list.append(alias)
 
                 location = Location(reader.line_num, zip_code, latitude, longitude,
-                                    primary_city, state, estimated_population)
+                                    primary_city, state, estimated_population, timezone)
                 location_list.append(location)
 
                 if not (primary_city, state) in city_state_combos:
@@ -190,7 +194,7 @@ class Command(BaseCommand):
                     location1 = city_state_combos[(primary_city, state)]
                     location2 = Location(line_no=reader.line_num, latitude=latitude, longitude=longitude,
                                          primary_city=primary_city, state=state, zip_code=zip_code,
-                                         estimated_population=estimated_population)
+                                         estimated_population=estimated_population, timezone=timezone)
 
                     if (location1.latitude, location1.longitude) != (location2.latitude, location2.longitude):
 
@@ -257,7 +261,8 @@ class Command(BaseCommand):
                                           longitude=location.longitude,
                                           city=location.primary_city,
                                           state=location.state,
-                                          population=location.estimated_population
+                                          population=location.estimated_population,
+                                          timezone=location.timezone
                                           )
             logging.debug('Saving {} to the database'.format(location))
             new_location_entry.save()

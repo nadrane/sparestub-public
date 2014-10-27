@@ -26,3 +26,16 @@ def ajax_http(contents, status=200, **kwargs):
                         content_type='application/json',
                         status=status
                         )
+
+
+def get_client_ip(request):
+    '''
+    Return the request user's ip address using the HTTP header.
+    We will mostly use this function for logging to detect repeated attempts at intrusion from the same user.
+    '''
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

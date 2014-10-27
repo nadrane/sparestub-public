@@ -7,3 +7,4 @@ bower_components
 .idea
 *.csv
 .DS_Store
+logging.txt

@@ -11,7 +11,7 @@
   </div>
 
   <form id="submit-ticket-form" class="form-horizontal" action="{% url "tickets.views.submit_ticket" %}"> {% csrf_token %}
-    <input id='submit-ticket-zipcode' type="hidden" name="zipcode">
+    <input id='submit-ticket-zipcode' type="hidden" name="zip_code">
     <div class="container-fluid">
       <div class="modal-body">
         <div class="row">
@@ -33,17 +33,25 @@
         </div> <!-- row -->
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-4 col-xs-12">
+            <!-- TODO do not allow numbers with values in the .001 range. consider using step attribute -->
             <div class="form-group">
-              <label for="submit-ticket-location" class="control-label sr-only"></label>
-              <input id="submit-ticket-location" type="text" class="form-control" name="location"
-                     placeholder="Location (city, state)" required
-                     data-bv-notempty-message="{{ form_settings.LOCATION_NOTEMPTY_MESSAGE }}">
-              </input>
-            </div>  <!-- form group -->
-          </div> <!-- col-md-4 -->
+              <div class="input-group">
+                <label for="submit-ticket-price" class="control-label input-group-addon auto">Price</label>
+                    <input id="submit-ticket-price" type="text" class="form-control currency-field"
+                           name="price" placeholder="$0.00" required
+                           data-a-sign="$ "
+                           data-a-dec="."
+                           data-a-sep=","
+                           data-v-min="{{ form_settings.PRICE_MIN_VALUE }}"
+                           data-v-max="{{ form_settings.PRICE_MAX_VALUE }}"
 
-          <div class="col-md-4">
+                           data-bv-notempty-message="{{ form_settings.PRICE_NOTEMPTY_MESSAGE }}">
+              </div> <!-- input-group-->
+            </div>  <!-- form-group -->
+          </div> <!-- column -->
+
+          <div class="col-md-4 col-xs-12">
             <div class="form-group large-feedback-icon-shift">
               <div class='input-group date' id='submit-ticket-date-picker'>
                 <label for="submit-ticket-start-date" class="control-label sr-only"></label>
@@ -63,9 +71,9 @@
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
               </div>
             </div> <!-- form group -->
-          </div> <!-- col-md-4 -->
+          </div> <!-- column -->
 
-          <div class="col-md-4">
+          <div class="col-md-4 col-xs-12">
             <div class="form-group large-feedback-icon-shift">
               <div class='input-group date' id='submit-ticket-time-picker'>
                 <label for="submit-ticket-start-time" class="control-label sr-only"></label>
@@ -79,26 +87,21 @@
                 <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
               </div>
             </div>
-          </div> <!-- col-md-4 -->
+          </div> <!-- column -->
         </div> <!-- row -->
 
         <div class="row">
-          <div class="col-md-4">
-            <!-- TODO do not allow numbers with values in the .001 range. consider using step attribute -->
+          <div class="col-md-4 col-xs-12">
             <div class="form-group">
-              <label for="submit-ticket-price"  class="control-label sr-only"></label>
-              <input id="submit-ticket-price" type="number" min="0" class="form-control"  name="price"
-                     placeholder="Ticket price" required
-
-                     data-bv-notempty-message="{{ form_settings.PRICE_NOTEMPTY_MESSAGE }}"
-
-                     data-bv-numeric="true"
-                     data-bv-numeric-separator="{{ form_settings.PRICE_NUMERIC_SEPARATOR}}"
-                     data-bv-numeric-message="{{ form_settings.PRICE_NUMERIC_MESSAGE }}">
+              <label for="submit-ticket-location" class="control-label sr-only"></label>
+              <input id="submit-ticket-location" type="text" class="form-control" name="location_raw"
+                     placeholder="Location (city, state)" required
+                     data-bv-notempty-message="{{ form_settings.LOCATION_NOTEMPTY_MESSAGE }}">
+              </input>
             </div>  <!-- form group -->
-          </div> <!-- col-md-4 -->
+          </div> <!-- column -->
 
-          <div class="col-md-4">
+          <div class="col-md-4 col-xs-12">
             <div class="form-group small-feedback-icon-shift">
               <label for="submit-ticket-type" class="control-label sr-only"></label>
               <select id="submit-ticket-type" type="text" class="form-control" name="type" required
@@ -109,9 +112,9 @@
                 {% endfor %}
               </select>
             </div>  <!-- form group -->
-          </div> <!-- col-md-4 -->
+          </div> <!-- column -->
 
-          <div class="col-md-4 small-feedback-icon-shift">
+          <div class="col-md-4 col-xs-12 small-feedback-icon-shift">
             <div class="form-group">
               <label for="submit-ticket-payment-method" class="control-label sr-only"></label>
               <select id="submit-ticket-payment-method" type="text" class="form-control" name="payment_method" required
@@ -122,7 +125,7 @@
                 {% endfor %}
               </select>
             </div>  <!-- form group -->
-          </div> <!-- col-md-4 -->
+          </div> <!-- column -->
         </div> <!-- row -->
 
         <div class="row">
@@ -132,7 +135,7 @@
               <textarea id="submit-ticket-about" class="form-control" name="about"
                         placeholder="Anything else you'd like to say?"></textarea>
             </div>  <!-- form group -->
-          </div> <!-- col-md-12 -->
+          </div> <!-- column -->
         </div> <!-- row -->
 
       </div> <!-- modal body -->

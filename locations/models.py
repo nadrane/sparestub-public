@@ -42,8 +42,11 @@ class Location(models.Model):
 
     population = models.IntegerField()
 
+    timezone = models.CharField(max_length=50)
+
     def __str__(self):
-        return '{}, {} {} -- {} {}'.format(self.city, self.state, self.zip_code, self.latitude, self.longitude)
+        return '{}, {} {} -- lat: {} long: {} -- population {}'.format(self.city, self.state, self.zip_code,
+                                                                       self.latitude, self.longitude, self.population)
 
 
 class Alias(models.Model):
@@ -54,6 +57,9 @@ class Alias(models.Model):
     alias = models.CharField(max_length=location_settings.get('CITY_MAX_LENGTH'),
                              db_index=True,
                              )
+
+    def __str__(self):
+        return 'alias: {}, location: {}'.format(self.alias, self.location)
 
 
 def map_citystate_to_location(city, state):
@@ -80,41 +86,48 @@ def map_citystate_to_location(city, state):
     returns: The best location match for a city/state combination.
              Raises LocationMatchingExceptom on invalid input
     '''
+    '''
+
+    # The cities and states in the DB are lowercase. Make sure the input is as well.
+    city = city.strip().lower()
+    state = state.strip().lower()
 
     # Filter over location first since it's a large more precise index than state
-    city_match_list = Location.objects.filter(city=city)
+    location_city_match_list = Location.objects.filter(city=city)
 
-    if city_match_list:
-        citystate_match_list = city_match_list.filter(state=state)
+    if location_city_match_list:
+        location_citystate_match_list = location_city_match_list.filter(state=state)
 
         # If we hone in on a single location using just the inputted city and state, we're golden
-        if citystate_match_list.count() == 1:
-            return citystate_match_list[0]
+        if location_citystate_match_list.count() == 1:
+            return location_citystate_match_list[0]
 
         # We we identified a city but the matched location does not match the entered state, then they probably
         # fubbed the state.
-        if city_match_list and not citystate_match_list:
+
+        # But they might have selected an alias from a different state. That alias came into this function as city.
+        if location_city_match_list and not location_citystate_match_list:
             raise LocationMatchingException("The inputted city exists in the database, but \
                                      it does not match the state entered.")
 
     # We didn't match a city, but maybe we'll match an alias
     else:
-        alias_match_list = Alias.objects.filter(name=city).location
+        alias_city_match_list = Alias.objects.filter(alias=city).location
 
-        if alias_match_list:
-            aliasstate_match_list = alias_match_list.filter(state=state)
+        if alias_city_match_list:
+            alias_citystate_match_list = alias_city_match_list.filter(location__state=state)
 
         # If we hone in on a single location using just the inputted city and state, we're golden
-        if aliasstate_match_list.count() == 1:
-            return aliasstate_match_list[0]
+        if alias_citystate_match_list.count() == 1:
+            return alias_citystate_match_list[0]
 
         # We we identified a city but the matched location does not match the entered state, then they probably
         # fubbed the state.
-        if alias_match_list and not aliasstate_match_list:
+        if alias_city_match_list and not alias_citystate_match_list:
             raise LocationMatchingException("The inputted city exists as an alias in the database,"
                                     " but it does not match the state entered.")
 
-    possible_locations = citystate_match_list.append(aliasstate_match_list)
+    possible_locations = location_citystate_match_list.append(alias_citystate_match_list)
 
     # Return the location with the largest population from the set of everything matched
     if possible_locations:
@@ -125,6 +138,54 @@ def map_citystate_to_location(city, state):
         raise LocationMatchingException('City name does not match a single city or alias in the database.')
 
     return
+    '''
+
+    '''
+        This function is designed pretty specifically work with the input that we expect to get from submit_ticket.js on
+        the front end. We might want to use different logic during ticket search. I'll need to ponder that problem.
+        Chances are we won't seeing as were are going to use the same JSON file as input to typeahead in the ticket
+        search section as we do in the ticket submission section.
+    '''
+    # The cities and states in the DB are lowercase. Make sure the input is as well.
+    city = city.strip().lower()
+    state = state.strip().lower()
+    match = None  # The location that we are going to return
+
+    # Filter over location first since it's a large more precise index than state
+    location_city_match_list = Location.objects.filter(city=city)
+
+    # Make sure that every matched city also has the inputted state
+    if location_city_match_list:
+        location_citystate_match_list = location_city_match_list.filter(state=state)
+
+        # We don't need to be working with a query set anymore but rather just a plain old list of Location objects,
+        location_citystate_match_list = [location for location in location_citystate_match_list]
+    else:
+        location_citystate_match_list = []
+
+    # Now repeat the same process for aliases
+    alias_city_match_list = Alias.objects.filter(alias=city)
+
+    if alias_city_match_list:
+        alias_citystate_match_list = alias_city_match_list.filter(location__state=state)
+        alias_citystate_match_locations = [alias.location for alias in alias_citystate_match_list]
+
+        # This list will have duplicates if a location has an alias with the same name as it's primary city.
+        # But duplicates are fine because we only return one.
+        location_citystate_match_list.extend(alias_citystate_match_locations)
+
+    # Return the location with the largest population from the set of everything matched.
+    # This is precisely what the user would have selected ont the front end.
+    if location_citystate_match_list:
+        location_citystate_match_list.sort(key=lambda loc: loc.population)
+        match = location_citystate_match_list[-1]  # Return the last entry seeing as sort is in acsending order!
+
+    else:
+        raise LocationMatchingException('City name does not match a single city or alias in the database.')
+
+    return match
+
+
 
 
 def get_state_name(state_abbreviation):

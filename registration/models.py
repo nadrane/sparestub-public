@@ -14,9 +14,10 @@ from photos.models import Photo
 from utils.models import TimeStampedModel
 from .settings import user_model_settings
 from utils.miscellaneous import get_variable_from_settings
-from utils.email import send_mail, normalize_email
+from utils.email import send_email, normalize_email
 from user_profile.models import UserProfile
 from locations.models import Location
+
 
 class UserManager(BaseUserManager):
 
@@ -29,7 +30,9 @@ class UserManager(BaseUserManager):
             raise ValueError('User does not have an email address.')
 
         user_profile = UserProfile()
-        user_profile.birth_date = extra_fields.get('birth_date','')
+        user_profile.birth_date = extra_fields.pop('birth_date') # Note we want to remove the key from the dict to avoid
+                                                                 # passing birth_date into the user model and causing
+                                                                 # an error
         user_profile.username = UserProfile.make_profile_url(email, first_name, last_name)
         user_profile.save()
 
@@ -40,7 +43,8 @@ class UserManager(BaseUserManager):
                           location=location,
                           is_staff=is_staff,
                           is_superuser=is_superuser,
-                          user_profile=user_profile
+                          user_profile=user_profile,
+                          **extra_fields
                           )
 
         user.set_password(password)
@@ -138,6 +142,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         verbose_name = ('user')
         verbose_name_plural = ('users')
 
+    def timezone(self):
+        return self.location.timezone
+
     def age(self):
         return self.user_profile.age()
 
@@ -179,12 +186,17 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
         return self.first_name.capitalize()
 
-    def email_user(self, subject, message, from_email=None):
+    def send_mail(self, subject, message, **kwargs):
         """
         Sends an email to this User.
         """
 
-        send_mail(subject, message, get_variable_from_settings('DEFAULT_FROM_EMAIL'), [self.email])
+        send_email([self.email],
+                   subject,
+                   message,
+                   get_variable_from_settings('SOCIAL_EMAIL_ADDRESS'),
+                   get_variable_from_settings('SOCIAL_EMAIL_NAME'),
+                   **kwargs)
 
     @staticmethod
     def name_contains_invalid_characters(name):

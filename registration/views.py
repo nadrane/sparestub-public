@@ -4,9 +4,10 @@ import logging
 
 # Django Core Imports
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.template.loader import render_to_string
+from django.utils.timezone import activate
 
 # SpareStub Imports
 from .models import User
@@ -25,7 +26,6 @@ def basic_info(request):
                   'registration/basic_info.html',
                   )
 
-
 def signup(request):
 
     #If the user is already logged in, they're doing something they aren't supposed to. Send them a 405.
@@ -41,7 +41,7 @@ def signup(request):
             email = signup_form.cleaned_data.get('email')
             first_name = signup_form.cleaned_data.get('first_name')
             last_name = signup_form.cleaned_data.get('last_name')
-            zipcode = signup_form.cleaned_data.get('zipcode')
+            location = signup_form.cleaned_data.get('location')
 
             # Email the user to welcome them to out website.
             signup_email_message = render_to_string('registration/signup_email.html')
@@ -58,7 +58,7 @@ def signup(request):
                                                 password=password,
                                                 first_name=first_name,
                                                 last_name=last_name,
-                                                zipcode=zipcode,
+                                                location=location,
                                                 )
 
             #Immediately log the user in after saving them to the database
@@ -68,6 +68,7 @@ def signup(request):
             #Note that we pass in a non-hashed version of the password into authenticate
             user = authenticate(email=email, password=password)
             auth_login(request, user)
+            activate(user.location.timezone)  # Configure time zone
 
             return ajax_http(render_nav_bar, 200, request=request)
 
@@ -103,6 +104,7 @@ def login(request):
             # The code is cleaner this way, despite the extra DB hits.
             user = authenticate(email=email, password=password)
             auth_login(request, user)
+            activate(user.timezone())  # Configure time zone
             return ajax_http(render_nav_bar, 200, request=request)
         else:
             return ajax_http({'isSuccessful': False,
@@ -114,6 +116,32 @@ def login(request):
 
     return render(request,
                   'registration/login.html',
+                  {'form_settings': login_form_settings})
+
+
+def login_redirect(request):
+    #If the user is already logged in, they're doing something they aren't supposed to. Send them a 405.
+    if request.user.is_authenticated():
+        return redirect('/')
+
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            email = request.POST['email']
+            password = request.POST['password']
+            # We actually do this authenticate function twice, once in LoginForm and once here.
+            # The code is cleaner this way, despite the extra DB hits.
+            user = authenticate(email=email, password=password)
+            auth_login(request, user)
+            activate(user.timezone())  # Configure time zone
+            return redirect(request.get('next'))
+        else:
+            return render(request,
+                          'registration/login-redirect.html',
+                          {'form_settings': login_form_settings})
+
+    return render(request,
+                  'registration/login-redirect.html',
                   {'form_settings': login_form_settings})
 
 def logout(request):

@@ -10,9 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Standard Imports
 import os
-import logging
-
 import dj_database_url
+import logging
 
 # SpareStub Imports
 from utils.miscellaneous import get_env_variable
@@ -43,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # Required by allauth and zinnia
+    'haystack',
+    'djrill',
     'contact',
     'registration',
     'user_profile',
@@ -51,7 +52,7 @@ INSTALLED_APPS = (
     'photos',
     'utils',
     'reviews',
-    'djrill',
+
 
     # All needed for zinnia
     #'django_comments',
@@ -108,12 +109,16 @@ DATABASES = {
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
+CURRENT_TIME_ZONE = 'EST'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_THOUSAND_SEPARATOR = True  # We expect currency input to contain thousands separators.
+                               # They are inserted by the utoNumeric library.
+
+USE_TZ = False  # TODO Figure out how to manage times submitted via a user in one TZ for an event in another TZ.
 
 
 # Static files (CSS, JavaScript, Images)
@@ -141,6 +146,7 @@ AWS_ACCESS_KEY_ID = get_env_variable('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = get_env_variable('AWS_SECRET_ACCESS_KEY')
 
 SOCIAL_EMAIL_ADDRESS = 'shout@sparestub.com'
+SOCIAL_EMAIL_NAME = 'SpareStub'
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_root')
 
@@ -150,4 +156,4 @@ DEFAULT_ZIP_CODE_CSV =  os.path.join(ROOT_DIR, 'locations', 'zip_code_database.c
 DEFAULT_ZIP_CODE_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'locations', 'json', 'zip_code_database.json')
 DEFAULT_CITY_LIST_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'locations', 'json', 'cities.json')
 
-LOGIN_REDIRECT_URL = '/registration/login_redirect/'
+LOGIN_URL = '/registration/login_redirect/'

@@ -1,20 +1,11 @@
-# 3rd Party Modules
-import requests
-import logging
-import json
-
-# Django modules
+# Django Core Imports
 from django import forms
 from django.contrib.auth import authenticate
-from django.forms import ValidationError
 
-# Crowd Surfer
-
+# SpareStub Imports
 from .models import User
-from utils.email import send_mail
-
 from .settings import signup_form_settings, login_form_settings
-
+from locations.models import Location
 
 #Form that will be displayed on signup.html to load a person
 class SignupForm(forms.Form):
@@ -38,7 +29,7 @@ class SignupForm(forms.Form):
                                 max_length=signup_form_settings['LAST_NAME_MAX_LENGTH']
                                 )
 
-    zipcode = forms.CharField(required=True,
+    zip_code = forms.CharField(required=True,
                               max_length=signup_form_settings.get('ZIPCODE_MAX_LENGTH')
                               )
 
@@ -53,8 +44,18 @@ class SignupForm(forms.Form):
     def clean_last_name(self):
         return User.valid_name(self.cleaned_data.get('last_name'))
 
-    def clean_zipcode(self):
-        return User.valid_zipcode(self.cleaned_data.get('zipcode'))
+    def clean_zip_code(self):
+        inputted_zip_code = self.cleaned_data.get('zipcode')
+        if not User.valid_zipcode(inputted_zip_code):
+            raise forms.ValidationError('Invalid zip code.', code='invalid_zip_code')
+
+                #TODO is it okay for us to raise forms.ValidationError in here, or should we just return False?
+        location = Location.objects.filter(zip_code=inputted_zip_code)[0]
+        if not location:
+            raise forms.ValidationError('Invalid zip code', code='invalid_zip_code')
+
+        self.cleaned_data['location'] = location
+        return False
 
 
 class LoginForm(forms.Form):

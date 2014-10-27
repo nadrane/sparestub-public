@@ -34,6 +34,14 @@ DATABASES = {
     }
 }
 
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+
 # We really don't want sync_s3 changing the production or staging environents when run using
 # the the dev environment. The only purpose for this bucket is testing the sync_s3 script.
 # The sparestub-staging and sparestub-production buckets are used for staging and production, respectively

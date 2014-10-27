@@ -1,5 +1,18 @@
 @charset "UTF-8";
 
+/* Disable the annoying number spinner for type=number HTML5 input fields in Chrome/Safari/IE*/
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Disable the annoying number spinner for type=number HTML5 input fields in Firefox*/
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+
 /* NAVBAR */
 .navbar {
     background-color: #F0F0F5;
@@ -16,7 +29,6 @@
 #navbar-login-button {
     margin-left: 5px;
 }
-
 /* END NAVBAR */
 
 
@@ -79,6 +91,8 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
     padding: 0;
 }
 
+/* SUBMIT TICKET FORM */
+
 /* Override feedback icon position so they they do not cover other icons
 Only applied to a couple fields that have specific icons before the feedback icons appear
 shifted-feedback-icons is just a class I am using to identify form groups that need adjustment.
@@ -94,6 +108,16 @@ The form-control-feedback class will be attached by BV to certain <i> tags that 
     top: 0!important;
     right: 30px!important;
 }
+/* END SUBMIT TICKET FORM */
+
+/* GENERAL FORM CSS */
+/* A class that can be applied to a span attribute to attach prepend a currency symbol to the left side of an input field */
+.currency {
+    position: absolute;
+    left: 24px;
+    top: 7px;
+}
+  /* END GENERAL FORM CSS */
 
 /* Turns out because we use input groups in the ticket form, we cannot use the same selector for both
 inputs because the ticket form's date input needs more shifting than the contact form's subject input.
@@ -106,8 +130,6 @@ inputs because the ticket form's date input needs more shifting than the contact
 /* STYLE AUTOCOMPLETE/TYPEAHEAD DROPDOWN */
 
 /* TODO Figure out GNU license 2.0 from https://github.com/bassjobsen/typeahead.js-bootstrap-css */
-
-
 span.twitter-typeahead .tt-dropdown-menu {
   position: absolute;
   top: 100%;
@@ -164,3 +186,4 @@ span.twitter-typeahead {
 .input-group.input-group-sm span.twitter-typeahead .tt-dropdown-menu {
   top: 28px !important;
 }
+

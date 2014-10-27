@@ -1,16 +1,14 @@
-import json
-
-from django.shortcuts import render, HttpResponse
+# Django Imports
+from django.shortcuts import render
 from django.template.loader import render_to_string
 
+# SpareStub Imports
 from .forms import ContactForm
 from .settings import contact_form_settings
 from utils.miscellaneous import reverse_category_lookup, get_variable_from_settings
 from utils.networking import ajax_http
 from utils.email import send_email
-
-
-from .settings import social_email_address, auto_response_subject
+from .settings import auto_response_subject
 
 SOCIAL_EMAIL_ADDRESS = get_variable_from_settings('SOCIAL_EMAIL_ADDRESS')
 
