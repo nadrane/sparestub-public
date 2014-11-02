@@ -15,6 +15,7 @@ from locations.models import calculate_distance_between_zip_codes
 
 from locations.settings import TICKET_DISTANCE_CHOICES, states_abbreviation_list
 
+from locations.models import map_citystate_to_location
 
 class Command(BaseCommand):
     help = 'Recalculates the zipcode information using the inputted file or zip_code_database.csv'
@@ -47,11 +48,11 @@ class Command(BaseCommand):
                     dest='calculate_cities',
                     help="Should we determine all existing cities and populate them in the JSON file?"),
 
-                make_option('--city_file',
-                            type='string',
-                            dest='city_list_json_file',
-                            default=settings.DEFAULT_CITY_LIST_JSON,
-                            help="The file path to the to the JSON file the city list will be stored in."),
+        make_option('--city_file',
+                    type='string',
+                    dest='city_list_json_file',
+                    default=settings.DEFAULT_CITY_LIST_JSON,
+                    help="The file path to the to the JSON file the city list will be stored in."),
     )
 
     def handle(self, *args, **options):
@@ -111,8 +112,19 @@ class Command(BaseCommand):
         # Format this into something JSON can understand.
         # Above, we have dicts with tuple keys. JSON only supports string keys
         for k1, k2 in output:
+
+            #If this test passes, we really don't need to include zipcode in the output file seeing as we can just use
+            # map_citystate_to_location to recover the zip.
+            # This will make the file quite a bit shorter
+            #if map_citystate_to_location(k1, k2).zip_code != str(output[(k1, k2)][1]):
+            #    if int(output[(k1, k2)][0]) != 0:
+            #        print(str(map_citystate_to_location(k1, k2).zip_code) + " " + str(output[(k1, k2)][1]))
+
             # Capitalize cities and upper case states. This is how the data will appear to the user.
-            formatted_output.append([k1.capitalize(), k2.upper(), output[(k1, k2)][0], output[(k1, k2)][1]])
+            formatted_output.append([k1.capitalize(), k2.upper(), output[(k1, k2)][0]])
+
+        import pdb
+        pdb.set_trace()
 
         self.write_json_file(formatted_output, self.city_list_json_file)
 

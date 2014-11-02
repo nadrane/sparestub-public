@@ -9,6 +9,11 @@ var has_notification_update = function (response) {
     return (response.notification_type && (response.notification_content || response.notification_header));
 };
 
+var clear_notification = function ($notification_root) {
+    // Completely remove a notification
+    $notification_root.empty();
+};
+
 var set_notification = function ($notification_root, header_message, content_message, message_type) {
    'use strict';
 
@@ -21,7 +26,7 @@ var set_notification = function ($notification_root, header_message, content_mes
                                    '<span class="notification-content"></span>' +
                                   '</div>'
                                  );
-    }
+        }
 
     // These statemements allow us to generically have many notification roots, typically in modal forms for errors.
     $notification_root.find('.notification-header').text(header_message);
@@ -36,6 +41,10 @@ var set_notification = function ($notification_root, header_message, content_mes
 
 var handle_ajax_response = function (response, $notification_root) {
     'use strict';
+    // If we aren't updating the notification root on a modal, then update the site's main notification bar.
+    if (!$notification_root) {
+        $notification_root = $('#notification-root');
+    }
     if (!response) {
         return;
     }
@@ -53,6 +62,7 @@ var handle_ajax_response = function (response, $notification_root) {
             set_notification($notification_root, response.notification_header,
                              response.notification_content, response.notification_type);
         }
+
 
     }
 };

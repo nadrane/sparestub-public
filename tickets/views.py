@@ -8,7 +8,8 @@ from django.template.loader import render_to_string
 from .settings import email_submit_ticket_subject
 from .models import Ticket
 from .forms import SubmitTicketForm
-from utils.networking import ajax_http
+from utils.networking import ajax_http, form_success_notification, form_failure_notification, \
+    non_field_errors_notification
 
 @login_required()
 def submit_ticket(request):
@@ -46,24 +47,17 @@ def submit_ticket(request):
                                                 html=email_submit_ticket_message
                                                 )
 
-            return ajax_http({'isSuccessful': True,
-                              'notification_type': 'alert-success',
-                              'notification_content': 'Your ticket was successfully submitted! It will become visible to others shortly.'
-                              },
-                             )
+            return ajax_http(**form_success_notification('Your ticket was successfully submitted! '
+                                                         'It will become visible to others shortly.'))
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
-        # We don't actually specify what the form error was. This is okay because our app requires JS to be enabled.
-        # If the user managed to send us an aysynch request with JS disabled, they aren't using the site as designed.
+        # We don't actually specify what the form error was (unless it was a non_field error that we couldn't validate
+        # on the front end). This is okay because our app requires JS to be enabled.
+        # If the user managed to send us an aysynch request xwith JS disabled, they aren't using the site as designed.
         # eg., possibly a malicious user. No need to repeat the form pretty validation already done on the front end.
         else:
-            return ajax_http(False, 400)
-
+            return ajax_http(**non_field_errors_notification(submit_ticket_form))
     return render(request,
                   'tickets/submit_ticket.html',
                   {'form_settings': ticket_submit_form_settings}
                   )
-
-
-def search(request):
-

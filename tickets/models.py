@@ -11,12 +11,13 @@ from locations.models import Location
 class TicketManager(models.Manager):
 
     def create_ticket(self, poster, price, title, start_datetime, location_raw, location, ticket_type, payment_method,
-                      is_active, about=None):
+                      is_active, id=None, about=None):
         '''
             Creates a ticket record using the given input
         '''
 
-        ticket = self.model(poster=poster,
+        ticket = self.model(id=id,
+                            poster=poster,
                             bidders=None,  # Bidders cannot exist at ticket creation
                             price=price,
                             title=title,
@@ -59,7 +60,7 @@ class Ticket(TimeStampedModel):
                              default='',
                              max_length=ticket_model_settings.get('CONTENT_MAX_LENGTH'))
 
-    # When does the event start?
+    # When does the event start? Stored in UTC timezone format
     start_datetime = models.DateTimeField(blank=False)
 
     # The city and state that the user originally entered in the form.
@@ -73,15 +74,30 @@ class Ticket(TimeStampedModel):
                                  )
 
     ticket_type = models.CharField(blank=False,
-                            max_length=1,
-                            choices=ticket_model_settings.get('TICKET_TYPES'))
+                                   max_length=1,
+                                   choices=ticket_model_settings.get('TICKET_TYPES'))
 
     payment_method = models.CharField(blank=False,
                                       max_length=1,
                                       choices=ticket_model_settings.get('PAYMENT_METHODS'))
 
-    is_active = models.BooleanField(blank=False)
+    is_active = models.BooleanField(blank=False,
+                                    default=False)
+
+    deactivation_reason = models.CharField(blank=True,
+                                           max_length=1,
+                                           default='',
+                                           choices=ticket_model_settings.get('DEACTIVATION_REASONS'))
 
     objects = TicketManager()
 
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return "/tickets/%id/" % self.id
+
+    # TODO use reverse url once views are defined
+    #from django.core.urlresolvers import reverse
+    #return reverse('people.views.details', args=[str(self.id)])
 

@@ -1,4 +1,5 @@
-<form id="login-form" class="form-horizontal" action="{% url "registration.views.login" %}"> {% csrf_token %}
+<form id="login-form" class="form-horizontal" action="{% url "registration.views.login" %}">
+  {% csrf_token %}
   <div class="modal-body">
     <div class="form-group">
       <label for="login-email" class="control-label sr-only"></label>
@@ -23,4 +24,8 @@
              data-bv-stringlength-message="{{ form_settings.PASSWORD_LENGTH_MESSAGE }}">
     </div>  <!-- form group -->
   </div>  <!-- modal body -->
+  <div class="modal-footer">
+    <button id="login-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Login</button>
+    <button type="button" class="btn btn-default form-submit-button" data-dismiss="modal">Close</button>
+  </div>
 </form>

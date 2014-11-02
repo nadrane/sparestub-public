@@ -1,0 +1,49 @@
+<form id="search-ticket-form" class="navbar-form navbar-left dropdown" method="get"
+      action="{% url "haystack_search" %}" role="search">
+  <label class="control-label sr-only">search</label>
+  <input id="search-ticket-input" name="search_query" type="search" class="form-control"
+         placeholder="Search for Tickets" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button id="search-ticket-submit" class="glyphicon glyphicon-search form-control-feedback" type="submit"></button>
+
+  <ul style="padding: 15px; left: -15px;" class="dropdown-menu" role="menu" aria-labelledby="search-search-input">
+    <li><p>Filter your search using criteria below.</p></li>
+    <li>
+      <div class="form-group">
+        <label for="search-ticket-location" class="control-label sr-only">location</label>
+        <input id="search-ticket-location" type="text" class="form-control location-autocomplete" name="location_raw"
+               placeholder="Location (city, state)">
+      </div>  <!-- .form group -->
+    </li>
+    <li>
+      <div class="form-group has-feedback date-picker">
+        <div class="input-group date">
+          <label for="search-ticket-start-date" class="control-label sr-only">start date</label>
+          <input id="search-ticket-start-date" type="text" class="form-control" name="start_date"
+             placeholder="Start date">
+             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+      </div>  <!-- form group -->
+      <div class="form-group has-feedback date-picker">
+        <div class="input-group date">
+          <label for="search-ticket-end-date" class="control-label sr-only">start date</label>
+          <input id="search-ticket-end-date" type="text" class="form-control" name="end_date"
+             placeholder="End date">
+             <span class="input-group-addon">
+               <span class="glyphicon glyphicon-calendar"></span>
+             </span>
+        </div>
+      </div>  <!-- form group -->
+    </li>
+    <li>
+      <div class="form-group">
+        <label for="search-ticket-type" class="control-label sr-only"></label>
+        <select id="search-ticket-type" type="text" class="form-control" name="type">
+          <option value="" disabled selected>Select the type of event</option>
+          {% for option in TICKET_TYPES %}
+            <option value="{{ option.0 }}">{{ option.1 }}</option>
+          {% endfor %}
+        </select>
+      </div>  <!-- form group -->
+    </li>
+  </ul>
+</form>

@@ -12,6 +12,15 @@ input[type=number] {
     -moz-appearance:textfield;
 }
 
+#search-ticket-submit {
+    /* Position the icon to the right side of the search input box */
+    right: -16px;
+    top: 0px;
+
+    /* Make the cursor turn into a pointer to indicate that the search icon is clickable */
+    cursor: pointer;
+
+}
 
 /* NAVBAR */
 .navbar {
@@ -28,6 +37,10 @@ input[type=number] {
 
 #navbar-login-button {
     margin-left: 5px;
+}
+
+.dropdown .form-group {
+    margin-bottom: 15px;
 }
 /* END NAVBAR */
 
@@ -85,10 +98,6 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
     margin:0 auto;
     display:block;
     max-width: 250px;
-}
-
-.container-fluid {
-    padding: 0;
 }
 
 /* SUBMIT TICKET FORM */

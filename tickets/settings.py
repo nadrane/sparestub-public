@@ -12,6 +12,12 @@ ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                          'PAYMENT_METHODS': (('G', 'Good Faith'),
                                              ('S', 'Secure'),
                                              ),
+
+                         'DEACTIVATION_REASONS': (('C', 'Cancelled'),  # User cancelled ticket
+                                                  ('E', 'Expired'),  # Event date has passed
+                                                  ('S', 'Sold'), # Ticket sold to another user
+                                                  ('D', 'Deactivated') # User account deactivated with active tickets
+                                                  )
                          }
 
 ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',

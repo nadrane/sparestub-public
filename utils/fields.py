@@ -1,9 +1,17 @@
+#3rd Party Imports
+from pytz import timezone
+
 #Django Imports
 from django import forms
-
+from django.utils.timezone import activate
 
 class CurrencyField(forms.FloatField):
 
+
+    '''
+    This field allows us to handle currencies that are submitted in the format $100,000.00
+    Currency symbols, thousands separators, and decimal separators are all removed appropriately
+    '''
     def to_python(self, value):
         '''
         Strip off a $ sign that we would have received from the incoming form data.

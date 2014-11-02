@@ -93,7 +93,6 @@ def login(request):
 
     # If the user tried to access another page without logging in first, store that page here, and redirect them to it after login
     redirect_to_url = request.REQUEST.get('next', '')
-
     # If the form has been submitted by the user
     if request.method == 'POST':
         login_form = LoginForm(request.POST)

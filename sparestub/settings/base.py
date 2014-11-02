@@ -69,6 +69,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.request',       # Required by allauth template tags
   'zinnia.context_processors.version',  # Optional
   'utils.context_processors.environment',
+  'utils.context_processors.ticket_types',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,7 +119,7 @@ USE_L10N = True
 USE_THOUSAND_SEPARATOR = True  # We expect currency input to contain thousands separators.
                                # They are inserted by the utoNumeric library.
 
-USE_TZ = False  # TODO Figure out how to manage times submitted via a user in one TZ for an event in another TZ.
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)

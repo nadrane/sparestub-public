@@ -7,6 +7,7 @@ from .models import User
 from .settings import signup_form_settings, login_form_settings
 from locations.models import Location
 
+
 #Form that will be displayed on signup.html to load a person
 class SignupForm(forms.Form):
 

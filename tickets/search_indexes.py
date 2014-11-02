@@ -3,45 +3,27 @@ from haystack import indexes
 from .models import Ticket
 
 
-class NoteIndex(indexes.SearchIndex, indexes.Indexable):
-    title = indexes.CharField(document=True, use_template=True)
+class TicketIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
 
-    price = indexes.FloatField
+    about = indexes.CharField(model_attr='about')
 
-    title =
+    start_datetime = indexes.DateTimeField(model_attr='start_datetime')
 
+    location = indexes.CharField(model_attr='location')
 
+    ticket_type = indexes.CharField(model_attr='ticket_type')
 
-    about
+    payment_method = indexes.CharField(model_attr='payment_method')
 
+    is_active = indexes.CharField(model_attr='is_active')
 
-
-    # When does the event
-    start_datetime
-
-    # The city and
-    location_raw
-
-    location
-
-
-
-    ticket_type
-
-
-
-    payment_method
-
-
-
-    is_active = mod
-
-    author = indexes.CharField(model_attr='user')
-    pub_date = indexes.DateTimeField(model_attr='pub_date')
+    def build_form(self):
+        return super(TicketIndex, self).build_form({'request': request})
 
     def get_model(self):
         return Ticket
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
-        return self.get_model().objects.filter(pub_date__lte=datetime.datetime.now())
+        return self.get_model().objects.all()
