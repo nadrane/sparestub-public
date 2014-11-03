@@ -31,8 +31,8 @@ class SignupForm(forms.Form):
                                 )
 
     zip_code = forms.CharField(required=True,
-                              max_length=signup_form_settings.get('ZIPCODE_MAX_LENGTH')
-                              )
+                               max_length=signup_form_settings.get('ZIPCODE_MAX_LENGTH')
+                               )
 
     #Make sure that this email address does not already exist in the database
     def clean_email(self):
@@ -46,7 +46,7 @@ class SignupForm(forms.Form):
         return User.valid_name(self.cleaned_data.get('last_name'))
 
     def clean_zip_code(self):
-        inputted_zip_code = self.cleaned_data.get('zipcode')
+        inputted_zip_code = self.cleaned_data.get('zip_code')
         if not User.valid_zipcode(inputted_zip_code):
             raise forms.ValidationError('Invalid zip code.', code='invalid_zip_code')
 

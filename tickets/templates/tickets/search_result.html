@@ -1,6 +1,21 @@
+{% load tz %}
+
 <tr>
-  <td>1</td>
-  <td>Mark</td>
-  <td>Otto</td>
-  <td>@mdo</td>
+  {% comment %}Turn localtimeoff because the events might be in a different timezone than the user. We don't want to
+  convert the event time to the timezone of the user but to the timezone of the event's location.
+  Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
+  <td>{% localtime off %}{{ ticket.object.get_formatted_start_datetime }}{% endlocaltime %}</td>
+  <td>
+    {{ ticket.object.price }} <br>
+    {{ ticket.object.get_payment_method_display }}
+  </td>
+  <td>{{ ticket.location }}</td>
+  <td>{{ ticket.object.title }}</td>
+  <td>
+    {% for x in ticket.object.poster.get_rating %}
+      <span class="glyphicon glyphicon-star"></span>
+    {% endfor %}
+    <br>
+    <a href="{{ ticket.object.poster.user_profile.get_absolute_url }}">{{ ticket.object.poster}}{% if ticket.object.poster.age %}, {{ ticket.object.poster.age }}{% endif %}</a>
+  </td>
 </tr>

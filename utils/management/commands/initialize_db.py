@@ -32,8 +32,7 @@ class Command(BaseCommand):
                                       'nick',
                                       'drane',
                                       location=Location.objects.filter(zip_code='11102')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=1
+                                      birth_date=date(1989, 1, 28),
                                       )
 
         User.objects.create_superuser('nick1@sparestub.com',
@@ -41,8 +40,7 @@ class Command(BaseCommand):
                                       'andy',
                                       'drane',
                                       location=Location.objects.filter(zip_code='11103')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=2
+                                      birth_date=date(1989, 1, 28),
                                       )
 
         User.objects.create_superuser('steph@sparestub.com',
@@ -50,8 +48,8 @@ class Command(BaseCommand):
                                       'Stephanie',
                                       'MacConnell',
                                       location=Location.objects.filter(zip_code='11103')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=3
+                                      birth_date=date(1988, 10, 30),
+
                                       )
 
         User.objects.create_superuser('stephanie2@sparestub.com',
@@ -59,8 +57,8 @@ class Command(BaseCommand):
                                       'chris',
                                       'drane',
                                       location=Location.objects.filter(zip_code='11104')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=4
+                                      birth_date=date(1989, 1, 28),
+
                                       )
 
         User.objects.create_superuser('smmacconnell@gmail.com',
@@ -68,8 +66,8 @@ class Command(BaseCommand):
                                       'Jake',
                                       'Ham',
                                       location=Location.objects.filter(zip_code='94105')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=5
+                                      birth_date=date(1989, 1, 28),
+
                                       )
 
         User.objects.create_superuser('drane128@gmail.com',
@@ -77,8 +75,8 @@ class Command(BaseCommand):
                                       'George',
                                       'Apple',
                                       location=Location.objects.filter(zip_code='94111')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=6
+                                      birth_date=date(1989, 1, 28),
+
                                       )
 
         User.objects.create_superuser('feed1@sparestub.com',
@@ -86,8 +84,8 @@ class Command(BaseCommand):
                                       'Sally',
                                       'Swanson',
                                       location=Location.objects.filter(zip_code='73344')[0],
-                                      birth_date=date(1988,10,30),
-                                      id=7
+                                      birth_date=date(1988, 10, 30),
+
                                       )
 
         User.objects.create_superuser('feed2@sparestub.com',
@@ -95,8 +93,8 @@ class Command(BaseCommand):
                                       'Bob',
                                       'Goldman',
                                       location=Location.objects.filter(zip_code='78701')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=8
+                                      birth_date=date(1989, 1, 28),
+
                                       )
 
         User.objects.create_superuser('feed3@sparestub.com',
@@ -104,8 +102,8 @@ class Command(BaseCommand):
                                       'Jenifer',
                                       'Suarez',
                                       location=Location.objects.filter(zip_code='33130')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=9
+                                      birth_date=date(1989, 1, 28),
+
                                       )
 
         User.objects.create_superuser('feed10@sparestub.com',
@@ -113,8 +111,7 @@ class Command(BaseCommand):
                                       'Maria',
                                       'Lopez',
                                       location=Location.objects.filter(zip_code='33128')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=10
+                                      birth_date=date(1989, 1, 28),
                                       )
 
         User.objects.create_superuser('feed4@sparestub.com',
@@ -122,8 +119,7 @@ class Command(BaseCommand):
                                       'Jay',
                                       'Britt',
                                       location=Location.objects.filter(zip_code='27615')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=11
+                                      birth_date=date(1989, 1, 28),
                                       )
 
         User.objects.create_superuser('feed5@sparestub.com',
@@ -131,8 +127,8 @@ class Command(BaseCommand):
                                       'Don',
                                       'MacLeod',
                                       location=Location.objects.filter(zip_code='27615')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=12
+                                      birth_date=date(1989, 1, 28),
+
                                       )
 
         User.objects.create_superuser('feed6@sparestub.com',
@@ -140,8 +136,8 @@ class Command(BaseCommand):
                                       'April',
                                       'Roman',
                                       location=Location.objects.filter(zip_code='27609')[0],
-                                      birth_date=date(1989,1,28),
-                                      id=13
+                                      birth_date=date(1989, 1, 28),
+
                                       )
 
         User.objects.create_superuser('feed7k@sparestub.com',
@@ -149,8 +145,8 @@ class Command(BaseCommand):
                                       'Jack',
                                       'Richards',
                                       location=Location.objects.filter(zip_code='27622')[0],
-                                      birth_date=date(1988,10,30),
-                                      id=14
+                                      birth_date=date(1988, 10, 30),
+
                                       )
         return
 
@@ -167,7 +163,6 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Come hang!',
                                      is_active=True,
-                                     id=1
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
@@ -180,7 +175,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Going to a cookout beforehand you can join',
                                      is_active=True,
-                                     id=2
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
@@ -194,7 +189,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Will be a good time',
                                      is_active=True,
-                                     id=3
+
                                      )
 
 
@@ -209,7 +204,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='dallas sucks amiright?!',
                                      is_active=True,
-                                     id=4
+
                                      )
 
 
@@ -224,7 +219,7 @@ class Command(BaseCommand):
                                      about='Super excited to see Ben Howard at the Music Hall of Williamsburg. He is'
                                            'my favorite artist and I would love a partner in crime!',
                                      is_active=True,
-                                     id=5
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -237,7 +232,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Madison Sq Gardens',
                                      is_active=True,
-                                     id=6
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
@@ -251,7 +246,7 @@ class Command(BaseCommand):
                                      about='My mom was supposed to come into town but can no longer make it... so I '
                                            'have this extra Book of Mormon ticket. Great seats.',
                                      is_active=True,
-                                     id=7
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
@@ -264,7 +259,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='The Fray is cool but especially going to see Oh Honey.',
                                      is_active=True,
-                                     id=8
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
@@ -277,7 +272,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Great seats, only $25, friend had to travel for work.',
                                      is_active=True,
-                                     id=9
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -286,11 +281,10 @@ class Command(BaseCommand):
                                      start_datetime=timezone.now() + timedelta(days=10, hours=1),
                                      location_raw='New York, NY',
                                      location=map_citystate_to_location('New York', 'NY'),
-                                     ticket_type='S',
-                                     payment_method='C',
+                                     ticket_type='C',
+                                     payment_method='S',
                                      about='Our own table up front',
                                      is_active=True,
-                                     id=10
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
@@ -303,7 +297,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Funniest man alive. Section 3G Row 17 Seats 3 and 4',
                                      is_active=True,
-                                     id=11
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
@@ -316,7 +310,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Third row seats... looking for another lover of Queen Bey and our NY boy',
                                      is_active=True,
-                                     id=12
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
@@ -331,7 +325,7 @@ class Command(BaseCommand):
                                            'birthday but then she broke up with me... Soo, if you want to see it '
                                            'with me and help heal my broken heart, we have pretty good seats.',
                                      is_active=True,
-                                     id=13
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -345,7 +339,7 @@ class Command(BaseCommand):
                                      about='Cowboy hats and cowboy boots are required!! Going to tailgate beforehand. '
                                            'Bring your drinking and your dancing shoes. We will have corn hole!',
                                      is_active=True,
-                                     id=14
+
                                      )
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
                                      price=290.0,
@@ -358,7 +352,7 @@ class Command(BaseCommand):
                                      about='Courtside seats. 2 extra available. Want to get there at least an hour'
                                            'early.',
                                      is_active=True,
-                                     id=15
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
@@ -372,7 +366,7 @@ class Command(BaseCommand):
                                      about='We love Bruce! My husband and I have two extra tickets to see Bruce and'
                                            'we love meeting new people. Come along!',
                                      is_active=True,
-                                     id=16
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
@@ -386,7 +380,7 @@ class Command(BaseCommand):
                                      about='Section 17 Row 3 Seats 14-15. Going with a small group of about 6 friends.'
                                            'Would be great if you want to join.',
                                      is_active=True,
-                                     id=17
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -399,7 +393,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='One extra ticket to see Lady Gaga- row 20 section 10',
                                      is_active=True,
-                                     id=18
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
@@ -413,7 +407,6 @@ class Command(BaseCommand):
                                      about='Call me cheesy, but I would love to see Frozen on ice. I have no girlfriend'
                                            'so just trying to find someone to go with.',
                                      is_active=True,
-                                     id=19
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
@@ -427,7 +420,6 @@ class Command(BaseCommand):
                                      about='I love Frozen! My friend had to go out of town on business so I have an'
                                            'extra ticket. Team Elsa!',
                                      is_active=True,
-                                     id=20
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=5),
@@ -441,7 +433,7 @@ class Command(BaseCommand):
                                      about='I looooooooove Frozen! Friend had to go out of town on business so I have'
                                            'an extra ticket. Team Oloff!',
                                      is_active=True,
-                                     id=21
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=5),
@@ -455,7 +447,7 @@ class Command(BaseCommand):
                                      about='We have pretty good seats, section 32 row 12 seats 16-17. Want to do some'
                                            'tailgating beforehand if you are down.',
                                      is_active=True,
-                                     id=22
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=5),
@@ -469,7 +461,6 @@ class Command(BaseCommand):
                                      about='My friends and I are splitting a box for the game this weekend 4 ways. One'
                                            'of our friends can no longer go so his seat is up for grabs!',
                                      is_active=True,
-                                     id=23,
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=5),
@@ -482,7 +473,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Got tickets, got dumped. Anybody cool looking to go to the game?',
                                      is_active=True,
-                                     id=24
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=6),
@@ -497,7 +488,7 @@ class Command(BaseCommand):
                                            'can no longer go. We love to have a good time and would love to get to'
                                            'know a new friend!',
                                      is_active=True,
-                                     id=25
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=6),
@@ -511,7 +502,7 @@ class Command(BaseCommand):
                                      about='Friend bailed and I still really want to go see John Mayer. Send me a'
                                            'message if you want to go- I will bring anyone!',
                                      is_active=True,
-                                     id=26
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=6),
@@ -525,7 +516,7 @@ class Command(BaseCommand):
                                      about='F.Stokes is coming to UCSF and I bought two tickets thinking my friend'
                                            'could go with me. She bailed so it is available! GA ticket',
                                      is_active=True,
-                                     id=27
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=6),
@@ -540,7 +531,7 @@ class Command(BaseCommand):
                                            'longer go with me. His ticket is up for sale. Would be cool to get'
                                            'dinner beforehand if you want to.',
                                      is_active=True,
-                                     id=28
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=7),
@@ -554,7 +545,7 @@ class Command(BaseCommand):
                                      about='I have two tickets and would love to make a new friend this weekend.'
                                            'Message me if you are interested!',
                                      is_active=True,
-                                     id=29
+
                                     )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=7),
@@ -569,7 +560,6 @@ class Command(BaseCommand):
                                            'figured somebody on here would want to come. It is a riot. Come have some'
                                            'fun with me!',
                                      is_active=True,
-                                     id=30
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=7),
@@ -584,7 +574,7 @@ class Command(BaseCommand):
                                            'Interactive Badge that I got with my company discount to bring someone '
                                            'interested in the event or the presenters. Come join me for a fun few days!',
                                      is_active=True,
-                                     id=31
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=8),
@@ -597,7 +587,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='One extra GA ticket',
                                      is_active=True,
-                                     id=32
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=9),
@@ -610,7 +600,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Extra frozen ticket should be fun come along!',
                                      is_active=True,
-                                     id=33
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=9),
@@ -623,7 +613,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Section 14 Row 2 seats 4-5',
                                      is_active=True,
-                                     id=34
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=9),
@@ -636,7 +626,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Standard Window, weekend 1, $450',
                                      is_active=True,
-                                     id=35
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=10),
@@ -649,7 +639,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Large Balcony room during Holy Ship weekend 1. AMAZING TIME guaranteed!',
                                      is_active=True,
-                                     id=36
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=10),
@@ -662,7 +652,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Standard room, amazing lineup. Friend bailed, I have an extra ticket.',
                                      is_active=True,
-                                     id=37
+
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=11),
@@ -676,7 +666,6 @@ class Command(BaseCommand):
                                      about='Lawn seats, gonna play some games in the parking lot beforehand! Two tickets'
                                            'available to go to the concert with my friend and I',
                                      is_active=True,
-                                     id=38
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=11),
@@ -690,7 +679,6 @@ class Command(BaseCommand):
                                      about='I have two tickets to Carlos Mencia- my work friend was supposed to go with'
                                            'me but cannot go anymore. Would also like to grab dinner before the show.',
                                      is_active=True,
-                                     id=39,
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=11),
@@ -703,7 +691,6 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Friend is not able to go anymore so looking for a buddy to go with.',
                                      is_active=True,
-                                     id=40,
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=12),
@@ -717,7 +704,6 @@ class Command(BaseCommand):
                                      about='Box seats on the Panthers side, split the box with 5 friends. Should be a'
                                            'really good time!',
                                      is_active=True,
-                                     id=41,
                                      )
 
 
@@ -732,7 +718,6 @@ class Command(BaseCommand):
                                      about='Watch the Tarheels destroy the dookies from the 9th row with me. A friend'
                                            'was originally supposed to go, but is not able to anymore. More fun for us!',
                                      is_active=True,
-                                     id=42,
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=13),
@@ -746,7 +731,6 @@ class Command(BaseCommand):
                                      about='Red Hat is an outdoor amphitheater. Oh Honey is the opener but they are'
                                            'awesome. Would like to get dinner beforehand and maybe drinks after?',
                                      is_active=True,
-                                     id=43
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=13),
@@ -759,7 +743,6 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='TEAM ELSA!! My friend bailed so I have an extra ticket in 2wks.',
                                      is_active=True,
-                                     id=44,
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=14),
@@ -772,7 +755,6 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Extra ticket, BYO blanket!',
                                      is_active=True,
-                                     id=45,
                                      )
 
 

@@ -5,6 +5,8 @@ TEMPLATE_DEBUG = True
 
 dirname = os.path.dirname
 
+INSTALLED_APPS += 'debug_toolbar',
+
 STATICFILES_DIRS = (
     ('sparestub/css', os.path.join(BASE_DIR, 'static/css')),
     ('sparestub/js', os.path.join(BASE_DIR, 'static/js')),
@@ -49,3 +51,6 @@ AWS_BUCKET_NAME = 'sparestub'
 
 LOG_FILENAME = os.path.join(BASE_DIR, 'logging.txt')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
+
+# Make indexing happen whenever a model is saved or loaded
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

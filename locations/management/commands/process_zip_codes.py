@@ -121,7 +121,7 @@ class Command(BaseCommand):
             #        print(str(map_citystate_to_location(k1, k2).zip_code) + " " + str(output[(k1, k2)][1]))
 
             # Capitalize cities and upper case states. This is how the data will appear to the user.
-            formatted_output.append([k1.capitalize(), k2.upper(), output[(k1, k2)][0]])
+            formatted_output.append([k1.title(), k2.upper(), output[(k1, k2)][0]])
 
         import pdb
         pdb.set_trace()

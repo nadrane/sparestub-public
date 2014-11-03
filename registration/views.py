@@ -68,7 +68,7 @@ def signup(request):
             #Note that we pass in a non-hashed version of the password into authenticate
             user = authenticate(email=email, password=password)
             auth_login(request, user)
-            activate(user.location.timezone)  # Configure time zone
+            activate('UTC')  # Configure time zone
 
             return ajax_http(render_nav_bar, 200, request=request)
 

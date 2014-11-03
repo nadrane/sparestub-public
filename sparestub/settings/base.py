@@ -53,7 +53,6 @@ INSTALLED_APPS = (
     'utils',
     'reviews',
 
-
     # All needed for zinnia
     #'django_comments',
     #'mptt',

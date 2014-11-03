@@ -27,9 +27,15 @@ class UserProfile(TimeStampedModel):
     profile_views = models.IntegerField(default=0)
 
     birth_date = models.DateField(blank=True,
-                                  default=''
+                                  null=True,
+                                  default=None,
                                   )
 
+    def __str__(self):
+        return self.username
+
+    def get_absolute_url(self):
+        return '/profile/{}'.format(self.username)
 
     def age(self):
         return calculate_age(self.birth_date)
@@ -72,23 +78,27 @@ class UserProfile(TimeStampedModel):
 
     @staticmethod
     def make_profile_url(email, first_name, last_name):
+        # Make sure that everything is lowercase
+        email, first_name, last_name = email.lower(), first_name.lower(), last_name.lower()
+        
         # Try to make the url equal to the users first and last names concatenated together
-        potential_username2 = first_name + last_name
-        if not UserProfile.user_profile_exists(potential_username2):
-            return potential_username2
+        potential_username = first_name + last_name
+        if not UserProfile.user_profile_exists(potential_username):
+            return potential_username
 
         # Try to make the url equal to the non-domain part of the user's email address
         # Emails are case sensitive, but our usernames will be all lowercase
-        potential_username1 = email.split('@')[0].lower()
-        if not UserProfile.user_profile_exists(potential_username1):
-            return potential_username1
+        potential_username = email.split('@')[0].lower()
+        if not UserProfile.user_profile_exists(potential_username):
+            return potential_username
 
         # Make the user's url equal to his email with an appended number
+        #TODO we really need to make sure this returns something
         number_to_append = 100
         while number_to_append < 100000:  # Let's make this finite just for safety
-            potential_username3 = potential_username1 + str(number_to_append)
-            if not UserProfile.user_profile_exists(potential_username3):
-                return potential_username3
+            potential_username = potential_username + str(number_to_append)
+            if not UserProfile.user_profile_exists(potential_username):
+                return potential_username
             number_to_append += 1
 
 

@@ -50,8 +50,8 @@
         </div> <!-- column -->
 
         <div class="col-md-4 col-xs-12">
-          <div class="form-group large-feedback-icon-shift date-picker">
-            <div class='input-group date' id='submit-ticket-date-picker'>
+          <div id="submit-ticket-date-picker" class="form-group large-feedback-icon-shift date-picker">
+            <div class='input-group date'>
               <label for="submit-ticket-start-date" class="control-label sr-only"></label>
               <input id="submit-ticket-start-date" type="text" class="form-control" name="start_date"
                      placeholder="Event date" required
@@ -74,8 +74,8 @@
         </div> <!-- column -->
 
         <div class="col-md-4 col-xs-12">
-          <div class="form-group large-feedback-icon-shift time-picker">
-            <div class="input-group date" id="submit-ticket-time-picker">
+          <div id="submit-ticket-time-picker" class="form-group large-feedback-icon-shift time-picker">
+            <div class="input-group date">
               <label for="submit-ticket-start-time" class="control-label sr-only"></label>
               <input id="submit-ticket-start-time" type="text" class="form-control" name="start_time"
                      placeholder="Event time" required
@@ -104,7 +104,7 @@
         <div class="col-md-4 col-xs-12">
           <div class="form-group small-feedback-icon-shift">
             <label for="submit-ticket-type" class="control-label sr-only"></label>
-            <select id="submit-ticket-type" type="text" class="form-control" name="type" required
+            <select id="submit-ticket-type" type="text" class="form-control" name="ticket_type" required
                     data-bv-notempty-message="{{ form_settings.TICKET_TYPE_NOTEMPTY_MESSAGE }}">
               <option value="" disabled selected>Select the type of event</option>
               {% for option in form_settings.TICKET_TYPES %}

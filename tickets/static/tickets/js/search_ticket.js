@@ -32,3 +32,15 @@ function prepare_ticket_search_dropdown() {
         is_input_search_clicked = false;
     });
 }
+/*
+function format_ticket_type_select() {
+    if
+    ticket_types = [];
+    $('#search-ticket-type option').each(function () {
+        window.additional_parameters.ticket_types.push($(this).attr('value') + '-' + $(this).text());
+    });
+
+              <option value="" selected>All Tickets</option>
+          {% for option in TICKET_TYPES %}
+            <option value="{{ option.0 }}">{{ option.1 }}</option>
+}*/

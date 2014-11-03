@@ -28,5 +28,3 @@ class Review(TimeStampedModel):
     rating = models.IntegerField(max_length=5)
 
     contents = models.TextField(max_length=review_model_settings.get('CONTENT_MAX_LENGTH'))
-
-

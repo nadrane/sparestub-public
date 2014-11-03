@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block css %}
+  {{ block.super }}
+  <link href="{% static "tickets/css/search.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
   <div class="panel panel-primary">
@@ -6,31 +13,33 @@
       <h3 class="panel-title">Search Results:</h3>
     </div>
     <div class="panel-body">
+    {% comment %}
       <div class="row">
-        {% if request.GET.search_query %}
+        {% if request.GET.q %}
           <div class="col-xs-12 col-sm-6 col-md-3">
-            Search Query: {{ request.GET.search_query }}
+            Search Query: {{ request.GET.q }}
           </div>
         {% endif %}
         {% if request.GET.location_raw %}
           <div class="col-xs-12 col-sm-6 col-md-3">
-            location: {{ request.GET.location_raw }}
+            Location: {{ request.GET.location_raw }}
           </div>
         {% endif %}
-        {% if request.GET.type %}
+        {% if request.GET.ticket_type %}
           <div class="col-xs-12 col-sm-6 col-md-3">
-            ticket type {{ request.GET.type }}
+            Ticket Type: {{ request.GET.ticket_type }}
           </div>
         {% endif %}
-        {% if request.GET.start_date or request.GET.end_date %}%}
+        {% if request.GET.start_date or request.GET.end_date %}
           <div class="col-xs-12 col-sm-6 col-md-3">
-            {% if request.GET.start_date %} from: {{ request.GET.start_date }} {% endif %}
-            {% if request.GET.end_date %} until: {{ request.GET.end_date }} {% endif %}
+            {% if request.GET.start_date %} Date From: {{ request.GET.start_date }} {% endif %}
+            {% if request.GET.end_date %} Date To: {{ request.GET.end_date }} {% endif %}
           </div>
         {% endif %}
       </div>
     </div>
   </div>
+  {% endcomment %}
 
   <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
@@ -46,8 +55,8 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="search-ticket-navbar">
-        <p style="display: inline-block; margin-top:auto; margin-bottom: auto;">Filter by: </p>
-        <ul style="float: None; display: inline-block;" class="nav navbar-nav pagination">
+        <p class="pull-left">Filter by: </p>
+        <ul class="nav navbar-nav pagination pull-left">
           <li><a>Event Type</a></li>
           <li><a>Price</a></li>
           <li><a>Distance from Location</a></li>
@@ -60,14 +69,14 @@
 
   <div class="table-responsive">
     <table class="table table-striped">
-      {% if query %}
+      {% if page.object_list %}
         <thead>
           <tr>
             <th>Date</th>
             <th>Price</th>
-            <th>Artist/Team Location</th>
+            <th>Location</th>
             <th>Title</th>
-            <th>User Info.</th>
+            <th>User Info</th>
           </tr>
         </thead>
         <tbody>
@@ -78,5 +87,11 @@
       {% endif %}
     </table>
   </div>
+</div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  {{ block.super }}
 
 {% endblock %}

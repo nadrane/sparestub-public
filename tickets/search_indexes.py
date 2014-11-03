@@ -10,6 +10,8 @@ class TicketIndex(indexes.SearchIndex, indexes.Indexable):
 
     start_datetime = indexes.DateTimeField(model_attr='start_datetime')
 
+    start_date = indexes.DateField(model_attr='start_date')
+
     location = indexes.CharField(model_attr='location')
 
     ticket_type = indexes.CharField(model_attr='ticket_type')

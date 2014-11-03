@@ -4,7 +4,8 @@ import datetime
 
 #3rd Party Imports
 from pytz import timezone as pytz_timezone
-from haystack.forms import FacetedSearchForm
+from haystack.forms import SearchForm
+from haystack.query import EmptySearchQuerySet
 
 # Django Imports
 from django import forms
@@ -15,6 +16,73 @@ from django.utils import timezone as dj_timezone
 from .settings import ticket_submit_form_settings
 from locations.models import Location, Alias, map_citystate_to_location, LocationMatchingException
 from utils.fields import CurrencyField
+
+
+class SearchTicketForm(SearchForm):
+    ticket_type = forms.ChoiceField(required=False,
+                                    choices=ticket_submit_form_settings.get('TICKET_TYPES')
+                                    )
+
+    location_raw = forms.CharField(required=False,
+                                   max_length=200
+                                   )
+
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(SearchTicketForm, self).__init__(*args, **kwargs)
+
+    def search(self):
+        # First, store the SearchQuerySet received from other processing.
+        sqs = super(SearchTicketForm, self).search()
+
+        if not self.is_valid():
+            return self.no_query_found()
+
+        # If the default search returned an empty query set, it simply means that no query string q was entered.
+        # There are other things we can search on, though, like location, dates, and ticket type.
+        # Grab the original sqs filtered by is_active and ordered by date and filter over it.
+        if isinstance(sqs, EmptySearchQuerySet):
+            if self.cleaned_data['location_raw'] or self.cleaned_data['ticket_type'] or self.cleaned_data['start_date'] or self.cleaned_data['end_date']:
+                sqs = self.searchqueryset
+
+        # Check to see if a location was chosen. Make sure search results are from that location
+        # TODO Make this location date sensitive and search nearby zip_codes
+        # Should also filter down nearby city list to exclude zip codes that can never be chosen because they have
+        # a city/state combo that has less population than another identical city/state combo
+        if self.cleaned_data['location_raw']:
+            location = self.get_location()
+            if location:
+                sqs = sqs.filter(location=location)
+
+        if self.cleaned_data['ticket_type']:
+            sqs = sqs.filter(ticket_type=self.cleaned_data.get('ticket_type'))
+
+        if self.cleaned_data['start_date']:
+            sqs = sqs.filter(start_date__gte=self.cleaned_data['start_date'])
+
+        if self.cleaned_data['end_date']:
+            sqs = sqs.filter(start_date__lte=self.cleaned_data['end_date'])
+
+        return sqs
+
+    def get_location(self):
+        city, state = map(lambda x: x.strip().lower(), self.cleaned_data.get('location_raw').split(','))
+
+        try:
+            city_state_location = map_citystate_to_location(city, state)
+        except LocationMatchingException as e:
+            logging.error(e.msg + 'location_raw - {} did not match a location in the DB'
+                          .format(self.cleaned_data.get('location_raw'),
+                                  exc_info=True,
+                                  stack_info=True,
+                                  )
+                          )
+
+            raise forms.ValidationError('Something is wrong with that location!', code='invalid_location')
+
+        return city_state_location
 
 
 class SubmitTicketForm(forms.Form):
@@ -39,8 +107,8 @@ class SubmitTicketForm(forms.Form):
                                  input_formats=['%I:%M %p']
                                  )
 
-    type = forms.ChoiceField(required=True,
-                             choices=ticket_submit_form_settings.get('TICKET_TYPES'))
+    ticket_type = forms.ChoiceField(required=True,
+                                    choices=ticket_submit_form_settings.get('TICKET_TYPES'))
 
     payment_method = forms.ChoiceField(required=True,
                                        choices=ticket_submit_form_settings.get('PAYMENT_METHODS'))
@@ -88,22 +156,11 @@ class SubmitTicketForm(forms.Form):
             logging.error('Event start date before current date')
             raise forms.ValidationError('Cannot submit ticket for event that has already started', code='expired_date')
 
+        utc_tz_aware_datetime.replace(second=0, microsecond=0)  # We don't want to start sorting
+                                                                # by time submitted accidentally
         self.cleaned_data['start_datetime'] = utc_tz_aware_datetime
         return
 
     def clean(self):
         self.handle_location()
         self.handle_datetime()
-
-
-class SearchTicketForm(FacetedSearchForm):
-    search_query = forms.CharField(required=True)
-
-    def search(self):
-        # First, store the SearchQuerySet received from other processing.
-        sqs = super(FacetedSearchForm, self).search()
-
-        if not self.is_valid():
-            return self.no_query_found()
-
-        return sqs

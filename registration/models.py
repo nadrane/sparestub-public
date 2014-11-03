@@ -22,17 +22,23 @@ from locations.models import Location
 class UserManager(BaseUserManager):
 
     @transaction.atomic()  # We definitely do not want to create a User record without a UserProfile
-    def _create_user(self, email, password, first_name, last_name, location, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, email, password, first_name, last_name, location, is_staff, is_superuser, **kwargs):
+        """
+        Creates and saves a User with the given email and password.
+        """
 
-        '''Creates and saves a User with the given email and password.'''
+        # Make sure that everything is lowercase
+        email, first_name, last_name = email.lower(), first_name.lower(), last_name.lower()
 
         if not email:
             raise ValueError('User does not have an email address.')
 
         user_profile = UserProfile()
-        user_profile.birth_date = extra_fields.pop('birth_date') # Note we want to remove the key from the dict to avoid
-                                                                 # passing birth_date into the user model and causing
-                                                                 # an error
+        if 'birth_date' in kwargs:
+            user_profile.birth_date = kwargs.pop('birth_date')  # Note we want to remove the key from the dict to
+                                                                # avoid passing birth_date into the user model and
+                                                                # causing an error
+
         user_profile.username = UserProfile.make_profile_url(email, first_name, last_name)
         user_profile.save()
 
@@ -44,7 +50,7 @@ class UserManager(BaseUserManager):
                           is_staff=is_staff,
                           is_superuser=is_superuser,
                           user_profile=user_profile,
-                          **extra_fields
+                          **kwargs
                           )
 
         user.set_password(password)
@@ -52,7 +58,7 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_user(self, email, password, first_name, last_name, location, **extra_fields):
+    def create_user(self, email, password, first_name, last_name, location, **kwargs):
         return self._create_user(email,
                                  password,
                                  first_name,
@@ -60,10 +66,10 @@ class UserManager(BaseUserManager):
                                  location,
                                  False,
                                  False,
-                                 **extra_fields
+                                 **kwargs
                                  )
 
-    def create_superuser(self, email, password, first_name, last_name, location, **extra_fields):
+    def create_superuser(self, email, password, first_name, last_name, location, **kwargs):
         return self._create_user(email,
                                  password,
                                  first_name,
@@ -71,7 +77,7 @@ class UserManager(BaseUserManager):
                                  location,
                                  True,
                                  True,
-                                 **extra_fields
+                                 **kwargs
                                  )
 
 
@@ -81,7 +87,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     Email and password are required. Other fields are optional.
     """
-
 
     email = models.EmailField('email address',
                               max_length=user_model_settings.get('EMAIL_MAX_LENGTH'),
@@ -119,7 +124,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     is_staff = models.BooleanField('staff status',
                                    default=False,
-                                   help_text=('Designates whether the user can log into this admin site.')
+                                   help_text='Designates whether the user can log into this admin site.'
                                    )
 
     # Why was this account marked as inactive. Cannot be part of UserPostableModel becomes choices will be different
@@ -132,15 +137,14 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                            default=None,
                                            )
 
-
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     class Meta:
-        verbose_name = ('user')
-        verbose_name_plural = ('users')
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
 
     def timezone(self):
         return self.location.timezone
@@ -149,20 +153,27 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return self.user_profile.age()
 
     def most_recent_review(self):
-
-        from reviews.models import Review # Avoid a circular dependency between Review has foreign keys to User
+        from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
         return Review.objects.filter(reviewee=self.id).order_by('creation_timestamp')[0]
 
     def get_rating(self):
-        from reviews.models import Review # Avoid a circular dependency between Review has foreign keys to User
+        from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
         reviews = Review.objects.filter(reviewee=self.id)
-        return int(sum([review.rating for review in reviews]) / reviews.count())
+
+        # Avoid divide by 0 if the user hasn't been reviewed before
+        if reviews:
+            average = range(int(sum([review.rating for review in reviews]) / reviews.count()))
+        else:
+            average = range(4)
+
+        return average
 
     @staticmethod
     def user_exists(email):
         """
         Since the email is unique for every user, we can check for the existence of a user by querying by email
         """
+
         # Note that the non-domain part of an email address is case sensitive, so we need email__exact
         if User.objects.filter(email__iexact=email):
             return True
@@ -207,7 +218,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     @staticmethod
     def valid_name(name):
-        '''
+        """
         Description: To be used during form validation!!!
                      Takes a input name string and
                         __init__() got an unexpected keyword argument. Removes multiple consecutive spaces.
@@ -215,7 +226,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         Parameter:
             name - an input string
         Returns: The input name parameter with consecutive spaces removed and all words capitalized
-        '''
+        """
 
         word_list = re.split(' ', name)  # Remove consecutive spaces from the name
         new_name = " ".join([word for word in word_list])
@@ -227,18 +238,20 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return new_name
 
     def equal_to_current_password(self, password_input):
-        '''
+        """
         Check to see if an inputted password matches the user's password
-        '''
+        """
         return self.password == password_input
 
     @staticmethod
     def valid_email(email):
-        '''
+        """
         Make sure that this email address does not already exist in the database
-        '''
+        """
+
         email = normalize_email(email)
-        # Even though the database only contains lowercase emails, consider case-sensitivity. Just as an extra error check
+        # Even though the database only contains lowercase emails, consider case-sensitivity.
+        # Just as an extra error check
         if User.user_exists(email):
             raise ValidationError('That email address is already registered', code="email_exists")
         #Store the normalized email in the database
@@ -252,11 +265,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     @staticmethod
     def facebook_user_id_exists(fb_uid):
-        '''
+        """
         Allow each facebook account to be linked to a single Crowdsurfer account. Enforce this here.
         This means that if we ban a user account, we are also banning his entire social network.
         This makes cheating the system extremely risky.
-        '''
+        """
         if User.objects.filter(facebook_user_id=fb_uid):
             return True
         return False
@@ -270,9 +283,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     @staticmethod
     def get_user_by_fb_uid(fb_uid):
-        '''
+        """
         A helper function to look up users based on their unique facebook user ID
-        '''
+        """
         user = User.objects.filter(facebook_user_id__exact=fb_uid)
         if user:
             return user[0]
@@ -297,9 +310,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     @staticmethod
     def get_user_by_email(email):
-        '''
+        """
         A helper function to look up users based on their unique email address
-        '''
+        """
+
         user = User.objects.filter(email__exact=email)
         if user:
             return user[0]

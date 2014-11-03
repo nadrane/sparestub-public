@@ -1,0 +1,27 @@
+@charset "Utf-8";
+
+/* Center the label that says "filter by" that is next to all of the different filters */
+/* TODO we probably need a better solution than just copying the pagination class height*/
+#search-ticket-navbar p {
+    height: 34px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    /* We need a little space between the filter label and the actual filters */
+    margin-right: 10px;
+
+    /* Center the text within the div */
+    display: flex;
+    align-items: center;
+    display: -webkit-flex;
+    -webkit-align-items: center;
+    display: -moz-box;
+    -moz-box-align: center;
+
+}
+
+/* Do not allow the filters to float to the left of their label */
+#search-ticket-navbar ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

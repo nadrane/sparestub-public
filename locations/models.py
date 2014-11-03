@@ -45,8 +45,7 @@ class Location(models.Model):
     timezone = models.CharField(max_length=50)
 
     def __str__(self):
-        return '{}, {} {} -- lat: {} long: {} -- population {}'.format(self.city, self.state, self.zip_code,
-                                                                       self.latitude, self.longitude, self.population)
+        return '{}, {}'.format(self.city.title(), self.state.upper(), self.zip_code)
 
 
 class Alias(models.Model):

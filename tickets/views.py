@@ -23,7 +23,7 @@ def submit_ticket(request):
             location_raw = submit_ticket_form.cleaned_data.get('location_raw')
             location = submit_ticket_form.cleaned_data.get('location')
             start_datetime = submit_ticket_form.cleaned_data.get('start_datetime')
-            ticket_type = submit_ticket_form.cleaned_data.get('type')
+            ticket_type = submit_ticket_form.cleaned_data.get('ticket_type')
             payment_method = submit_ticket_form.cleaned_data.get('payment_method')
             about = submit_ticket_form.cleaned_data.get('about') or ''  # Might be empty
 
