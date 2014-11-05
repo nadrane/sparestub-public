@@ -28,6 +28,7 @@ input[type=number] {
     border-style: none;
     padding-left: 10px;
     padding-right: 10px;
+    margin-bottom: 0px;
 }
 
 /* Make sure that every link in the navbar changes the cursor to a hand */
@@ -42,13 +43,29 @@ input[type=number] {
 .dropdown .form-group {
     margin-bottom: 15px;
 }
+
+/* Create spacing between the user profile button and the logout button and the inbox icon.
+5px is the same amount between the login and signup buttons */
+#navigation-bar-right-div button {
+    margin-left: 5px;
+}
+
+/* Make the inbox icon have the same spacing as the user profile and logout buttons next to it */
+#inbox-icon a {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 /* END NAVBAR */
 
 
 #notification-root {
-    margin-bottom: 10px; /* The alert bar should have minimal spacing around it to conserve vertical screen space */
     text-align: center;   /* Center the text for the notification bar */
 }
+
+#notification-style {
+    margin-bottom: 10px; /* The alert bar should have minimal spacing around it to conserve vertical screen space */
+}
+
 /*If the margin appears inside the notification root, then the inner div will push the boundaries of
 notifcation-root outwards, and they will not collapse with top margins of elements below notification-root */
 #notification-root div{

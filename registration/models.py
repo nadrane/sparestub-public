@@ -114,6 +114,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                               default=''
                               )
 
+    rating = models.IntegerField(null=True,
+                                 blank=True
+                                 )
+
     profile_picture = models.OneToOneField(Photo,
                                            null=True,
                                            blank=True,
@@ -149,6 +153,13 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     def timezone(self):
         return self.location.timezone
 
+    def message_count(self):
+        """
+        Get the total number of unread messages for a given user
+        """
+        from messages.models import Message  # Import here to prevent circular import
+        return Message.objects.filter(receiver=self.id).filter(is_read=False).count()
+
     def age(self):
         return self.user_profile.age()
 
@@ -156,15 +167,15 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
         return Review.objects.filter(reviewee=self.id).order_by('creation_timestamp')[0]
 
-    def get_rating(self):
+    def calculate_rating(self):
         from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
         reviews = Review.objects.filter(reviewee=self.id)
 
-        # Avoid divide by 0 if the user hasn't been reviewed before
-        if reviews:
-            average = range(int(sum([review.rating for review in reviews]) / reviews.count()))
-        else:
-            average = range(4)
+        # Protect ourselves from divide by 0 if there are no reviews
+        try:
+            average = int(sum([review.rating for review in reviews]) / reviews.count())
+        except ZeroDivisionError:
+            average = 0
 
         return average
 

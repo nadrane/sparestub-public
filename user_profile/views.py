@@ -43,8 +43,8 @@ def view_or_edit_profile(request, current_username):
                  'age': request.user.age(),
                  'city': user_location.city,
                  'state': user_location.state,
-                 'rating': range(request.user.get_rating())  # Django templates don't support ranges,
-                                                             # so much sure we have an iterable list here
+                 'rating': request.user.rating  # Django templates don't support ranges,
+                                                # so much sure we have an iterable list here
                  }
 
     if most_recent_review:

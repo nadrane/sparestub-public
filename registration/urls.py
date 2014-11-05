@@ -1,6 +1,7 @@
-# Django modules
+# Django Imports
 from django.conf.urls import patterns, url
 
+# SpareStub Imports
 from .views import signup, login, logout, login_redirect
 
 urlpatterns = patterns('',

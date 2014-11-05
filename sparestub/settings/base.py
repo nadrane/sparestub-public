@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # Required by allauth and zinnia
     'haystack',
@@ -52,6 +51,7 @@ INSTALLED_APPS = (
     'photos',
     'utils',
     'reviews',
+    'messages',
 
     # All needed for zinnia
     #'django_comments',

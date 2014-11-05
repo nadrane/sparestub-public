@@ -7,6 +7,12 @@
   <link href="{% static "tickets/css/search.css" %}" rel="stylesheet">
 {% endblock %}
 
+<style>
+  .popover {
+    width: 200px;
+  }
+</style>
+styl
 {% block content %}
   <div class="panel panel-primary">
     <div class="panel-heading">
@@ -56,12 +62,12 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="search-ticket-navbar">
         <p class="pull-left">Filter by: </p>
-        <ul class="nav navbar-nav pagination pull-left">
-          <li><a>Event Type</a></li>
-          <li><a>Price</a></li>
-          <li><a>Distance from Location</a></li>
-          <li><a>User Rating</a></li>
-          <li><a>Payment Type</a></li>
+        <ul id="filter-list" class="nav navbar-nav pagination pull-left">
+          <li><a id="filter-ticket-type" href="#" tabindex="0" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus" data-content="stuff">Event Type</a></li>
+          <li><a id="filter-price" href="#" tabindex="1" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus">Price</a></li>
+          <li><a id="filter-distance" href="#" tabindex="2" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus">Distance from Location</a></li>
+          <li><a id="filter-rating" href="#" tabindex="3" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus">User Rating</a></li>
+          <li><a id="filter-payment-method" href="#" tabindex="4" role="button" data-placement="bottom" data-toggle="popover" data-html='true'>Payment Method</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -91,7 +97,11 @@
   </div>
 {% endblock %}
 
-{% block js %}
+{% block core_js%}
   {{ block.super }}
+{% endblock %}
 
+{% block js %}
+  <script type="text/javascript" src="{% static "tickets/js/search_results.js"%}"></script>
+  {{ block.super }}
 {% endblock %}

@@ -54,4 +54,8 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
                                'PAYMENT_METHOD_NOTEMPTY_MESSAGE': 'Please select a payment method',
                             }
 
+search_results_settings = {'TICKET_TYPES': ticket_model_settings.get('TICKET_TYPES'),
+                           'PAYMENT_METHODS': ticket_model_settings.get('PAYMENT_METHODS')
+                           }
+
 email_submit_ticket_subject = 'SpareStub has received your ticket submission!'

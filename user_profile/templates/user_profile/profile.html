@@ -9,14 +9,13 @@
 
 {% block content %}
   <div id="profile-header" class="row">
-    <div id="user-picture" class="col-md-2">
-      <img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/v/t1.0-1/c0.0.480.480/p480x480/10308285_10152489553738156_1129484635342981777_n.jpg?oh=f0bd580da152ef9b472d1b5477f307cf&oe=54B22CA9&__gda__=1421064665_bd82ac82e3d67c50c53301b0fa31607c"
-           height="175px">
+    <div id="user-picture" class="col-xs-12 col-sm-2">
+      <img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/v/t1.0-1/c0.0.480.480/p480x480/10308285_10152489553738156_1129484635342981777_n.jpg?oh=f0bd580da152ef9b472d1b5477f307cf&oe=54B22CA9&__gda__=1421064665_bd82ac82e3d67c50c53301b0fa31607c">
     </div>
-    <div id="user-info" class="col-md-5">
+    <div id="user-info" class="col-xs-3 col-sm-3">
       <div id="name">
         <!-- This h3 tag has been overridden to render inline so that stars are on the same line as it -->
-        <h3>{{ user_info.name }} {% if user_info.age %} - {{ user_info.age }} {% endif %}</h3>
+        <h3>{{ user_info.name | title}} {% if user_info.age %} - {{ user_info.age }} {% endif %}</h3>
         <span id="user-rating">
           <span class="glyphicon glyphicon-star"></span>
           <span class="glyphicon glyphicon-star"></span>
@@ -25,31 +24,22 @@
         </span>
       </div>
       <div id="location">
-        {{ user_info.city }}, {{ user_info.state }}
+        {{ user_info.city | title }}, {{ user_info.state | upper }}
       </div>
     </div>
-  </div>
-  <div id="profile-thumbnails" class="row">
-    <div class="col-md-2 pic-thumbnail">
-      <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10702170_868780333162282_3403674862512828788_n.jpg?oh=4de3f320d9ec68d183cb05cb5373b0db&oe=54F19AFD&__gda__=1421781281_003ba4f167434c863dd69f9037be25ee">
-    </div>
-    <div class="col-md-2 pic-thumbnail">
-      <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10702170_868780333162282_3403674862512828788_n.jpg?oh=4de3f320d9ec68d183cb05cb5373b0db&oe=54F19AFD&__gda__=1421781281_003ba4f167434c863dd69f9037be25ee">
-    </div>
-    <div class="col-md-2 pic-thumbnail">
-      <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10702170_868780333162282_3403674862512828788_n.jpg?oh=4de3f320d9ec68d183cb05cb5373b0db&oe=54F19AFD&__gda__=1421781281_003ba4f167434c863dd69f9037be25ee">
-    </div>
-    <div class="col-md-2 pic-thumbnail">
-      <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10702170_868780333162282_3403674862512828788_n.jpg?oh=4de3f320d9ec68d183cb05cb5373b0db&oe=54F19AFD&__gda__=1421781281_003ba4f167434c863dd69f9037be25ee">
-    </div>
-    <div class="col-md-2 pic-thumbnail">
-      <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10702170_868780333162282_3403674862512828788_n.jpg?oh=4de3f320d9ec68d183cb05cb5373b0db&oe=54F19AFD&__gda__=1421781281_003ba4f167434c863dd69f9037be25ee">
-    </div>
-    <div class="col-md-2 pic-thumbnail">
-      <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10702170_868780333162282_3403674862512828788_n.jpg?oh=4de3f320d9ec68d183cb05cb5373b0db&oe=54F19AFD&__gda__=1421781281_003ba4f167434c863dd69f9037be25ee">
-    </div>
-    <div class="col-md-2 pic-thumbnail">
-      <img src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/10702170_868780333162282_3403674862512828788_n.jpg?oh=4de3f320d9ec68d183cb05cb5373b0db&oe=54F19AFD&__gda__=1421781281_003ba4f167434c863dd69f9037be25ee">
+    <div class="col-xs-9 col-sm-7">
+      <div id="last-review" class="col-md-12">
+        <strong id="recent-review-header">Most Recent Review:
+        {% for x in most_recent_review_info.rating %}
+          <span class="glyphicon glyphicon-star"></span>
+        {% endfor %}
+        </strong>
+        <span>
+          "{{ most_recent_review_info.contents }}"
+        </span><br>
+        <span>{{ most_recent_review_info.name }}, {{ most_recent_review_info.age }} | </span>
+        <span>{{ most_recent_review_info.city | title }}, {{ most_recent_review_info.state | upper }}</span>
+      </div>
     </div>
   </div>
   <div id="profile-body" class="row">
@@ -65,57 +55,47 @@
         <div id="tickets" class="col-md-12 side-bar-element">
           <span class="glyphicon glyphicon-tags"></span><a class="side-bar-title">Tickets</a>
         </div>
-          <div id="last-review" class="col-md-12 side-bar-element">
-            <h5>Most Recent Review:</h5>
-            <span>
-              "{{ most_recent_review_info.contents }}"
-            </span><br>
-            <span>{{ most_recent_review_info.name }} - {{ most_recent_review_info.age }}</span><br>
-            <span>{{ most_recent_review_info.city }}, {{ most_recent_review_info.state }}</span><br>
-            {% for x in most_recent_review_info.rating %}
-              <span class="glyphicon glyphicon-star"></span>
-            {% endfor %}
-          </div>
       </div>
     </div>
     <div id="profile-main" class="col-md-10">
-      <div class="row profile-content-pair">
-        <div class="col-md-2">
-          <h4 class="question">A little about me...</h4>
-        </div>
-        <div class="col-lg-10">
-          <textarea class="answer">
-            Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei. Pro no volutpat imperdiet conceptam. Pri eros iudico ancillae no, ei choro dicant nusquam sit. Ad his vocibus voluptua hendrerit, congue interesset liberavisse sit at. Nisl soleat voluptua an sit, ex cum veniam saperet.
-          </textarea>
-        </div>
-      </div>
-      <div class="row profile-content-pair">
-        <div class="col-md-2">
-          <h4 class="question">If I were a unicorn...</h4>
-        </div>
-        <div class="col-lg-10">
-          <textarea class="answer">
-            If I were a unicorn, I would start by shitting pellets of ecstasy. No science refutes this is how unicorns dispose of waste.
-            Then I would hit up a new major EDM concert eat week with little shit pellets. The guards wouldn't know they were ectasy, so I would be able to sneak them in.
-            Convincing the first guy to buy one would be tough because you know, it looks like shit. But once he started tripping,
-            I'd be rich.
-          </textarea>
-        </div>
-      </div>
-      <div class="row profile-content-pair">
-        <div class="col-md-2">
-          <h4 class="question">The beach is a place where...</h4>
-        </div>
-        <div class="col-lg-10">
-          <textarea class="answer">Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei</textarea>
-        </div>
-      </div>
-      <div class="row profile-content-pair">
-        <div class="col-md-2">
-          <h4 class="question">If I could quit my job however, I'd start by...</h4>
-        </div>
-        <div class="col-lg-10">
-          <textarea class="answer">Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei</textarea>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row profile-content-pair">
+            <div class="col-xs-2">
+              <h4 class="question">A little about me...</h4>
+            </div>
+            <div class="col-xs-8">
+              <textarea class="answer">
+                Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei. Pro no volutpat imperdiet conceptam. Pri eros iudico ancillae no, ei choro dicant nusquam sit. Ad his vocibus voluptua hendrerit, congue interesset liberavisse sit at. Nisl soleat voluptua an sit, ex cum veniam saperet.
+              </textarea>
+            </div>
+          </div>
+          <div class="row profile-content-pair">
+            <div class="col-md-2">
+              <h4 class="question">If I were a unicorn...</h4>
+            </div>
+            <div class="col-lg-10">
+              <textarea class="answer">
+                Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei. Pro no volutpat imperdiet conceptam. Pri eros iudico ancillae no, ei choro dicant nusquam sit. Ad his vocibus voluptua hendrerit, congue interesset liberavisse sit at. Nisl soleat voluptua an sit, ex cum veniam saperet.
+              </textarea>
+            </div>
+          </div>
+          <div class="row profile-content-pair">
+            <div class="col-md-2">
+              <h4 class="question">The beach is a place where...</h4>
+            </div>
+            <div class="col-lg-10">
+              <textarea class="answer">Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei</textarea>
+            </div>
+          </div>
+          <div class="row profile-content-pair">
+            <div class="col-md-2">
+              <h4 class="question">If I could quit my job however, I'd start by...</h4>
+            </div>
+            <div class="col-lg-10">
+              <textarea class="answer">Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei</textarea>
+            </div>
+          </div>
         </div>
       </div>
     </div>

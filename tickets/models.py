@@ -21,6 +21,8 @@ class TicketManager(models.Manager):
         ticket_timezone = timezone(location.timezone)
         start_date = ticket_timezone.normalize(start_datetime.astimezone(ticket_timezone)).date()
 
+        rating = poster.rating
+
         ticket = self.model(poster=poster,
                             bidders=None,  # Bidders cannot exist at ticket creation
                             price=price,
@@ -33,6 +35,7 @@ class TicketManager(models.Manager):
                             ticket_type=ticket_type,
                             payment_method=payment_method,
                             is_active=is_active,
+                            rating=rating,
                             )
 
         ticket.save(using=self._db)
@@ -101,6 +104,14 @@ class Ticket(TimeStampedModel):
                                            max_length=1,
                                            default='',
                                            choices=ticket_model_settings.get('DEACTIVATION_REASONS'))
+
+    # The rating of the user that posted the ticket. Do not use this field!! Reference the poster rating instead.
+    # Yes, they should always be the same, but let's just be safe. This field exists solely because Haystack cannot
+    # let us index tickets on a field of the poster even though that's exactly what we need to do.
+    rating = models.IntegerField(blank=True,
+                                 null=True,
+                                 default=None,
+                                 )
 
     objects = TicketManager()
 

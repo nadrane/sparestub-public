@@ -97,8 +97,10 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
 
-    {% block js %}
-      {% if environment == 'production' or environment == 'staging' %}
+    {% comment %} Load JS files in this block that a lot of things will be dependencies of. Will likely just appear as
+    block.super in files that extend base.html {% endcomment %}
+    {% block core_js %}
+        {% if environment == 'production' or environment == 'staging' %}
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>  <!--TODO get a local copy configure based on what checks we use. -->
@@ -134,20 +136,22 @@
         <!-- Bootstrap linter -->
         <!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>-->
       {% endif %}
+    {% endblock %}
+    {% block js %}
       <script type="text/javascript" src="{% static "sparestub/js/autoNumeric.js" %}"></script>
       <script type="text/javascript" src="{% static "sparestub/js/lz-string-1.3.3.js" %}"></script>
       <script type="text/javascript" src="{% static "sparestub/js/utils.js" %}"></script>
       <script type="text/javascript" src="{% static "contact/js/contact.js" %}"></script>
-      <script type="text/javascript" src={% static "tickets/js/search_ticket.js"%}></script>
+      <script type="text/javascript" src="{% static "tickets/js/search_ticket.js" %}"></script>
 
       {% comment %} Depends on initialize_bootstrap_validation, which is defined in contact.js
        Also depends on search_ticket.js{% endcomment %}
       <script type="text/javascript" src="{% static "sparestub/js/base.js" %}"></script>
 
       <script type="text/javascript" src="{% static "registration/js/signup.js" %}"></script>
-      <script type="text/javascript" src={% static "registration/js/login.js"%}></script>
+      <script type="text/javascript" src="{% static "registration/js/login.js" %}"></script>
 
-      <script type="text/javascript" src={% static "tickets/js/submit_ticket.js"%}></script>
+      <script type="text/javascript" src="{% static "tickets/js/submit_ticket.js" %}" d></script>
     {% endblock %}
 
      <!-- TODO aria-labeledby we need to set this appropriately -->

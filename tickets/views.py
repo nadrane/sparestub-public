@@ -4,8 +4,11 @@ from .settings import ticket_submit_form_settings
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
+# 3rd Party Imports
+from haystack.views import FacetedSearchView
+
 #SpareStub imports
-from .settings import email_submit_ticket_subject
+from .settings import email_submit_ticket_subject, search_results_settings
 from .models import Ticket
 from .forms import SubmitTicketForm
 from utils.networking import ajax_http, form_success_notification, form_failure_notification, \
@@ -61,3 +64,7 @@ def submit_ticket(request):
                   'tickets/submit_ticket.html',
                   {'form_settings': ticket_submit_form_settings}
                   )
+
+
+class SearchResults(FacetedSearchView):
+    template = 'search/search_results.html'

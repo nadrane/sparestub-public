@@ -4,7 +4,7 @@ import datetime
 
 #3rd Party Imports
 from pytz import timezone as pytz_timezone
-from haystack.forms import SearchForm
+from haystack.forms import FacetedSearchForm
 from haystack.query import EmptySearchQuerySet
 
 # Django Imports
@@ -18,7 +18,7 @@ from locations.models import Location, Alias, map_citystate_to_location, Locatio
 from utils.fields import CurrencyField
 
 
-class SearchTicketForm(SearchForm):
+class SearchTicketForm(FacetedSearchForm):
     ticket_type = forms.ChoiceField(required=False,
                                     choices=ticket_submit_form_settings.get('TICKET_TYPES')
                                     )

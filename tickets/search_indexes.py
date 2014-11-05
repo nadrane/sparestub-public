@@ -20,8 +20,11 @@ class TicketIndex(indexes.SearchIndex, indexes.Indexable):
 
     is_active = indexes.CharField(model_attr='is_active')
 
-    def build_form(self):
-        return super(TicketIndex, self).build_form({'request': request})
+    poster_rating = indexes.IntegerField(model_attr='rating',
+                                         null=True,
+                                         )
+
+    price = indexes.IntegerField(model_attr='price')
 
     def get_model(self):
         return Ticket

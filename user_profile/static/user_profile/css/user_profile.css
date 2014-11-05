@@ -11,21 +11,30 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );
     height: 100px;
     padding: 0px;
+    padding-top: 10px;
 }
 
 /* Space the profile picture away from the left of the screen slightly */
 #user-picture {
-    padding-left: 40px; /* notice that 40px is way bigger than what happens... something eats some of the pixels. */
-    margin-right: 10px;
+    padding-left: 10px; /* notice that 40px is way bigger than what happens... something eats some of the pixels. */
+    padding-right: 20px;
 }
 
-/* rounded corners */
-#user-picture img {
+
+#user-picture > img {
+    /* rounded corners */
     border: none;
     border-radius: 20px;
     -moz-border-radius: 20px;
     -khtml-border-radius: 20px;
     -webkit-border-radius: 20px;
+
+    height: auto;
+    width: 100%;
+}
+
+#recent-review-header {
+    display: block;
 }
 
 /* THUMBNAIL GALLERY */
@@ -34,16 +43,10 @@
 }
 
 .pic-thumbnail {
-    width: auto;
     padding-left: 2px;
     padding-right: 2px;
 }
 /* END THUMBNAIL GALLERY */
-
-/* USER HEADER */
-#profile-header {
-    padding-top: 25px;
-}
 
 /* center the user rating with the user's name */
 #user-rating {
