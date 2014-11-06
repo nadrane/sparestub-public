@@ -5,15 +5,15 @@ from django.http.response import HttpResponseRedirect
 
 # SpareStub modfules
 from user_profile.forms import EditUserProfileForm, PasswordChangeForm
-
+from user_profile.models import UserProfile, ProfileQuestion, ProfileAnswer
+from reviews.models import Review
+from tickets.models import Ticket
 
 @transaction.atomic()
 # We want updates to the user profile.html and user models to be atomic.
 # I honestly cannot at the moment think of a scenario where updating one without the other would cause data integrity issues,
 # but I am still wary of future changes to these models changing this fact.
-def view_or_edit_profile(request, current_username):
-    new_username = current_username # If a user changes their username, we actually redirect them to a different URL
-                                    # than the URL they came from since the username is a piece of the URL
+def user_profile(request, username):
     if request.method == 'POST':
         edit_user_profile_form = EditUserProfileForm(request.POST)
         if edit_user_profile_form.is_valid():
@@ -35,16 +35,25 @@ def view_or_edit_profile(request, current_username):
     else:
         edit_user_profile_form = EditUserProfileForm() # An unbound form
 
-    user_location = request.user.location
+    # Look up the user record who corresponds to this profile
+    user = UserProfile.get_user_profile_from_username(username).user
 
-    most_recent_review = request.user.most_recent_review()
+    # If the user looking at this profile is its owner, then we want to render a couple edit buttons
+    if request.user == user:
+        is_owner = True
+    else:
+        is_owner = False
 
-    user_info = {'name': request.user,
-                 'age': request.user.age(),
+    user_location = user.location
+
+    most_recent_review = user.most_recent_review()
+
+    user_info = {'name': user,
+                 'age': user.age(),
                  'city': user_location.city,
                  'state': user_location.state,
-                 'rating': request.user.rating  # Django templates don't support ranges,
-                                                # so much sure we have an iterable list here
+                 'rating': range(user.rating)  # Django templates don't support ranges,
+                                               # so much sure we have an iterable list here
                  }
 
     if most_recent_review:
@@ -59,11 +68,47 @@ def view_or_edit_profile(request, current_username):
                                                                                # so much sure we have an iterable list
                                                                                # here
                                    }
+    else:
+        most_recent_review_info = None
 
+    # Get the profile questions and the user's answers, if they exist.
+    profile_questions = ProfileQuestion.objects.all()
+    profile_answers = (ProfileAnswer.get_answer(question, user) for question in profile_questions)
+    import pdb
+    pdb.set_trace()
+    profile_question_answer_pairs = zip(profile_questions.question, profile_answers.answer)
 
     return render(request,
                   'user_profile/profile.html',
                   {'user_info': user_info,
+                   'is_owner': is_owner,
+                   'profile_question_answer_pairs': profile_question_answer_pairs,
                    'most_recent_review_info': most_recent_review_info},
-                   content_type='text/html',
-                   )
+                  content_type='text/html',
+                  )
+
+
+def user_reviews(request, username):
+    # Look up the user record who corresponds to this profile
+    user = UserProfile.get_user_profile_from_username(username).user
+
+    reviews = Review.objects.filter(reviewee=user.id)
+
+    return render(request,
+                  'user_profile/reviews.html',
+                  {'reviews', reviews},
+                  content_type='j',
+                  )
+
+
+def user_tickets(request, username):
+    # Look up the user record who corresponds to this profile
+    user = UserProfile.get_user_profile_from_username(username).user
+
+    tickets = Ticket.objects.filter(poster=user.id)
+
+    return render(request,
+                  'user_profile/tickets.html',
+                  {'tickets', tickets},
+                  content_type='text/html',
+                  )

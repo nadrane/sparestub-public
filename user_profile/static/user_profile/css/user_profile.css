@@ -1,16 +1,14 @@
 @charset "UTF-8";
 
 #profile-header {
-    background: rgba(226, 226, 226, 1);
-    background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 15%, rgba(209,209,209,1) 88%, rgba(254,254,254,1) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(226,226,226,1)), color-stop(15%, rgba(219,219,219,1)), color-stop(88%, rgba(209,209,209,1)), color-stop(100%, rgba(254,254,254,1)));
-    background: -webkit-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 15%, rgba(209,209,209,1) 88%, rgba(254,254,254,1) 100%);
-    background: -o-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 15%, rgba(209,209,209,1) 88%, rgba(254,254,254,1) 100%);
-    background: -ms-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 15%, rgba(209,209,209,1) 88%, rgba(254,254,254,1) 100%);
-    background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 15%, rgba(209,209,209,1) 88%, rgba(254,254,254,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );
-    height: 100px;
-    padding: 0px;
+    background: rgba(139,158,166,1);
+    background: -moz-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(1%, rgba(139,158,166,1)), color-stop(35%, rgba(177,186,190,1)), color-stop(63%, rgba(209,209,209,1)), color-stop(68%, rgba(197,206,200,1)), color-stop(98%, rgba(125,186,144,1)), color-stop(100%, rgba(254,254,254,1)));
+    background: -webkit-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
+    background: -o-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
+    background: -ms-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
+    background: linear-gradient(to bottom, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8b9ea6', endColorstr='#fefefe', GradientType=0 );    padding: 0px;
     padding-top: 10px;
 }
 
@@ -18,8 +16,11 @@
 #user-picture {
     padding-left: 10px; /* notice that 40px is way bigger than what happens... something eats some of the pixels. */
     padding-right: 20px;
-}
 
+    /* Needed to position the edit pencil inside the profile picture */
+    position: relative;
+    cursor: pointer;
+}
 
 #user-picture > img {
     /* rounded corners */
@@ -31,31 +32,84 @@
 
     height: auto;
     width: 100%;
+    max-width: 400px;
+}
+
+#edit-profile-icon {
+    position: absolute;
+    top: auto; /* Bottom property refuses to work without this */
+    right: 30px;
+    bottom: 10px;
+    color: gainsboro;
+    font-size: 1.8em;
+}
+
+#edit-profile-text {
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
+    color: gainsboro;
 }
 
 #recent-review-header {
     display: block;
 }
 
-/* THUMBNAIL GALLERY */
-.pic-thumbnail img {
-    height: 100px;
-}
-
-.pic-thumbnail {
-    padding-left: 2px;
-    padding-right: 2px;
-}
-/* END THUMBNAIL GALLERY */
-
-/* center the user rating with the user's name */
-#user-rating {
-    padding-bottom: -8px;
-}
-
 #user-info {
     padding-left: 0px;
 }
+
+@media (max-width: 768px) {
+    #user-info {
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    #user-info {
+        padding-top: 30px;
+    }
+
+    #last-review {
+        padding-top: 30px;
+    }
+}
+
+/* from http://www.bootply.com/120604 TODO check licensing*/
+@media (max-width: 900px) {
+    .navbar-header {
+        float: none;
+    }
+    .navbar-left,.navbar-right {
+        float: none !important;
+    }
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-fixed-top {
+		top: 0;
+		border-width: 0 0 1px;
+	}
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+		margin-top: 7.5px;
+	}
+	.navbar-nav>li {
+        float: none;
+    }
+    .collapse.in{
+  		display:block !important;
+	}
+}
+
 #user-info h3{
     margin-top: 0px;
     display: inline;
@@ -65,17 +119,36 @@
 /* LEFT SIDE BAR */
 
 #left-side-bar {
-    padding-left: 40px;
+    padding-left: 10px;
+}
+
+#left-side-bar-content {
+    width: 100%;
+    margin: 0;
 }
 
 #left-side-bar-content:first-child {
     margin-top: 20px;
 }
 
+
+#left-side-bar-content:last-child {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #f0e8e8;
+}
 .side-bar-element {
+    position: relative;
     border-top-width: 1px;
     border-top-style: solid;
     border-top-color: #f0e8e8;
+}
+
+/* Position the glyphicons on the left nav bar to the left of the labels */
+.side-bar-element .glyphicon {
+    position: absolute;
+    top: 16px;
+    left: 3px;
 }
 
 /* Make sure to use a pointer hand for links */
@@ -83,32 +156,23 @@
     cursor: pointer;
 }
 
-
 .side-bar-title {
+    /* Make the h tags inline-block so that we can place glyphcons next to them */
+    color: #837e7e;
+    font-size: 15pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 10px;
 }
 
-#left-side-bar-content:last-child {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #f0e8e8;
-}
 
 /* Don't just end when the text entered ends */
 body {
     padding-bottom: 100px;
 }
 
-/* Make the h tags inline-block so that we can place glyphcons next to them */
-#left-side-bar-content a {
-    color: #837e7e;
-    font-size: 16pt;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    display: inline-block;
-    padding-top: 10px;
-    padding-bottom: 10px;
-
-}
 /* END LEFT SIDE BAR */
 
 /* PROFILE CONTENT */
@@ -123,6 +187,6 @@ body {
     height: 10em;
 }
 
-.glyphicon-star {
-    color: gold;
+.question {
+    color: #837e7e;
 }

@@ -10,6 +10,50 @@ from django.forms import ValidationError
 # SpareStub imports
 from .utils import calculate_age
 from utils.models import TimeStampedModel
+from .settings import profile_question_model_settings, profile_answer_model_settings
+
+
+class UserProfilerManager(models.Manager):
+
+    def create_user_profile(self, first_name=None, last_name=None, birth_date=None, profile_views=0):
+        """
+        Creates a user profile given a particular first and last name.
+        The way the system exists now, birth_date and profile_views will never have a value when the profile is created.
+        """
+
+        username = self.make_username(first_name, last_name)
+
+        user_profile = self.model(username=username,
+                                  birth_date=birth_date,
+                                  profile_views=profile_views,
+                                  )
+
+        user_profile.save(using=self._db)
+        return user_profile
+
+
+    @staticmethod
+    def make_username(first_name, last_name):
+        # Make sure that everything is lowercase
+        first_name, last_name = first_name.lower(), last_name.lower()
+
+        # Try to make the url equal to the users first and last names concatenated together
+        potential_username = first_name + last_name
+        if not UserProfile.user_profile_exists(potential_username):
+            return potential_username
+
+        # Make the user's url equal to his email with an appended number
+        #TODO we really need to make sure this returns something
+        number_to_append = 100
+        while number_to_append < 100000:  # Let's make this finite just for safety
+            potential_username = potential_username + str(number_to_append)
+            if not UserProfile.user_profile_exists(potential_username):
+                return potential_username
+            number_to_append += 1
+
+        logging.error("profile.html url did not generate properly for input user profile {} {}".
+                     format(first_name, last_name))
+        return None
 
 
 class UserProfile(TimeStampedModel):
@@ -30,6 +74,8 @@ class UserProfile(TimeStampedModel):
                                   null=True,
                                   default=None,
                                   )
+
+    objects = UserProfilerManager()
 
     def __str__(self):
         return self.username
@@ -71,56 +117,73 @@ class UserProfile(TimeStampedModel):
         return False
 
     @staticmethod
-    def get_user_profile_from_url(username):
+    def get_user_profile_from_username(username):
         username = username.lower()
         return UserProfile.objects.filter(username=username)[0]
 
 
-    @staticmethod
-    def make_profile_url(email, first_name, last_name):
-        # Make sure that everything is lowercase
-        email, first_name, last_name = email.lower(), first_name.lower(), last_name.lower()
-        
-        # Try to make the url equal to the users first and last names concatenated together
-        potential_username = first_name + last_name
-        if not UserProfile.user_profile_exists(potential_username):
-            return potential_username
+class ProfileQuestionManager(models.Manager):
 
-        # Try to make the url equal to the non-domain part of the user's email address
-        # Emails are case sensitive, but our usernames will be all lowercase
-        potential_username = email.split('@')[0].lower()
-        if not UserProfile.user_profile_exists(potential_username):
-            return potential_username
+    def create_profile_question(self, question):
+        """
+        Creates a profile question record using the given input
+        """
 
-        # Make the user's url equal to his email with an appended number
-        #TODO we really need to make sure this returns something
-        number_to_append = 100
-        while number_to_append < 100000:  # Let's make this finite just for safety
-            potential_username = potential_username + str(number_to_append)
-            if not UserProfile.user_profile_exists(potential_username):
-                return potential_username
-            number_to_append += 1
-
-
-        logger = logging(__name__)
-        logger.error("profile.html url did not generate properly for profile.html %s", email)
-        return None
+        profile_question = self.model(question=question)
+        profile_question.save(using=self._db)
+        return profile_question
 
 
 class ProfileQuestion(models.Model):
     question = models.CharField(blank=False,
-                                max_length=254,
+                                max_length=profile_question_model_settings.get('QUESTION_MAX_LENGTH'),
                                 )
+
+    objects = ProfileQuestionManager()
+
+
+class ProfileAnswerManager(models.Manager):
+
+    def create_profile_answer(self, user, question, answer):
+        """
+        Creates a profile answer record using the given input
+        """
+
+        # If a User model was passed in instead of a UserProfile model, do the conversion
+        try:
+            user = user.user_profile
+        except AttributeError:
+            pass
+
+        profile_answer = self.model(user_profile=user,
+                                    question=question,
+                                    answer=answer)
+
+        profile_answer.save(using=self._db)
+        return profile_answer
 
 
 class ProfileAnswer(models.Model):
-    user = models.ForeignKey(UserProfile,
-                             blank=False,
-                             )
+    user_profile = models.ForeignKey(UserProfile,
+                                     blank=False,
+                                     null=False,
+                                     )
 
-    question = models.ForeignKey(ProfileQuestion)
+    question = models.ForeignKey(ProfileQuestion,
+                                 blank=False,
+                                 null=False
+                                 )
 
-    content = models.TextField(blank=True,
-                               max_length=5000,
-                               default=''
-                               )
+    answer = models.TextField(blank=False,
+                              null=False,
+                              max_length=profile_answer_model_settings.get('ANSWER_MAX_LENGTH'),
+                              )
+
+    objects = ProfileAnswerManager()
+
+    @staticmethod
+    def get_answer(user, question):
+        """
+        Gets a particular user's answer to a specific question.
+        """
+        return ProfileQuestion.objects.filter(user=user.user_profile, question=question)

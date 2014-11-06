@@ -1,24 +1,3 @@
-{% comment %}
-<ul class="nav navbar-nav navbar-right" id="navigation-bar-right-div" >
-  {% if request.user.is_authenticated %}
-    <li>
-      <a href={% url "messages.views.inbox" %}>Messages <span class="badge">42</span></a>
-    </li>
-    <li>
-      <a href="{% url "user_profile.views.view_or_edit_profile" current_username=user.user_profile.username %}" class="btn btn-primary" type="button">{{ user | title }}</a>
-    </li>
-    <li>
-      <a href="{% url "registration.views.logout" %}" class="btn btn-default" id="logout-button" type="button">Logout</a>
-    </li>
-  {% else %} <!-- If the user is not authenticated, allow them the opportunity to log in -->
-    <li><button class="btn navbar-btn btn-primary signup-form-button" type="button" data-toggle="modal" data-target="#modal-signup-root">Sign Up</button></li>
-    {% comment %} interesting post - http://www.gkogan.co/blog/stop-asking-me-to-sign-up/ {% endcomment %}
-{% comment %}
-<li><button class="btn navbar-btn btn-default login-form-button" id="navbar-login-button" type="button" data-toggle="modal" data-target="#modal-login-root">Login</button></li>
-  {% endif %}
-</ul>
-{% endcomment %}
-
 <ul class="nav navbar-nav navbar-right" id="navigation-bar-right-div">
   {% if request.user.is_authenticated %}
     <li id="inbox-icon">
@@ -27,8 +6,8 @@
     <!-- Render both an button with the name of the user that links to their user page and a logout button -->
     <li>
       <!-- using a form tag is a small hack to get buttons to display with links in the navbar -->
-      <form action="{% url "user_profile.views.view_or_edit_profile" current_username=user.user_profile.username %}">
-        <button id="user-profile-button" class="btn navbar-btn btn-primary" type="submit">{{ user | title }}</button>
+      <form action="{% url "user_profile" username=user.user_profile.username %}">
+        <button id="user-profile-button" class="btn navbar-btn btn-primary" type="submit">{{ user.first_name | title }}</button>
       </form>
     </li>
 
@@ -42,5 +21,6 @@
     <li><button class="btn navbar-btn btn-primary signup-form-button" type="button" data-toggle="modal" data-target="#modal-signup-root">Sign Up</button></li>
     <li><button class="btn navbar-btn btn-default login-form-button" id="navbar-login-button" type="button" data-toggle="modal" data-target="#modal-login-root">Login</button></li>
   {% endif %}
+
 </ul>
 

@@ -1,5 +1,25 @@
 @charset "UTF-8";
 
+/* Pad the body so that it does not overlap the navbar */
+body {
+    padding-top: 50px;
+}
+
+textarea {
+    /* Do not allow resize handles to appear on textarea elements */
+    resize: none;
+
+    /* rounded corners */
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.glyphicon-star {
+    color: gold;
+}
+
+
 /* Disable the annoying number spinner for type=number HTML5 input fields in Chrome/Safari/IE*/
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -49,6 +69,12 @@ input[type=number] {
 #navigation-bar-right-div button {
     margin-left: 5px;
 }
+
+/* Don't let the logout and user login buttons push up against the edge of the page. */
+#navigation-bar-right-div:last-child {
+    margin-right: 15px;
+}
+
 
 /* Make the inbox icon have the same spacing as the user profile and logout buttons next to it */
 #inbox-icon a {

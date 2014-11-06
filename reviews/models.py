@@ -31,7 +31,8 @@ class ReviewManager(models.Manager):
 
         # Needs to do after the submitted review so that it is included in the calculation.
         # TODO - Does it matter that this whole thing is atomic? Will that cause calculate rating to miss this review?
-        new_rating, reviewee.rating = reviewee.calculate_rating()
+        new_rating = reviewee.calculate_rating()
+        reviewee.rating = new_rating
         reviewee.save(using=self._db)
 
         # The ticket also contains the rating of it's poster. Make sure to update all active tickets for this user.

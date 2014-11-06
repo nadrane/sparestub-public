@@ -12,7 +12,7 @@ from registration.models import User
 from reviews.models import Review
 from locations.models import Location, map_citystate_to_location
 from tickets.models import Ticket
-
+from user_profile.models import ProfileQuestion, ProfileAnswer
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
@@ -21,6 +21,8 @@ class Command(BaseCommand):
         self.create_users()
         self.create_reviews()
         self.create_tickets()
+        self.create_profile_questions()
+        self.create_profile_answers()
         call_command('rebuild_index')
 
     @staticmethod
@@ -760,21 +762,28 @@ class Command(BaseCommand):
 
     @staticmethod
     def create_reviews():
-        reviewer = User.objects.all()[2]
-        reviewee = User.objects.all()[0]
-        x = Review(reviewer=reviewer,
-                   reviewee=reviewee,
-                   rating=3,
-                   contents='terrible. This was the single worst gig buddy I have ever had.')
-        x.save()
+        x = Review.objects.create_review(reviewer=User.objects.all()[5],
+                                         reviewee=User.objects.all()[0],
+                                         rating=3,
+                                         contents='terrible. This was the single worst gig buddy I have ever had.'
+                                         )
+
+        x = Review.objects.create_review(reviewer=User.objects.all()[3],
+                                         reviewee=User.objects.all()[0],
+                                         rating=5,
+                                         contents='What a cool person!! This Nick guy rocks!'
+                                         )
 
 
-        reviewer = User.objects.all()[2]
-        reviewee = User.objects.all()[0]
-        x = Review(reviewer=reviewer,
-                   reviewee=reviewee,
-                   rating=5,
-                   contents='Amazing')
-        x.save()
+    @staticmethod
+    def create_profile_questions():
+        ProfileQuestion.objects.create_profile_question(question='Tell a little about yourself..')
+        ProfileQuestion.objects.create_profile_question(question='Describe your ideal Sunday...')
 
 
+    @staticmethod
+    def create_profile_answers():
+        ProfileAnswer.objects.create_profile_answer(User.objects.get(pk=1),
+                                                    ProfileQuestion.objects.get(pk=1),
+                                                    answer='I like long walks on the beach'
+                                                    )

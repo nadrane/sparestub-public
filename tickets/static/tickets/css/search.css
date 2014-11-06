@@ -1,5 +1,10 @@
 @charset "Utf-8";
 
+/* Pad the top so that the body does not overlap the 50px navar and so that there is room in between them*/
+body {
+    padding-top: 70px;
+}
+
 /* Center the label that says "filter by" that is next to all of the different filters */
 /* TODO we probably need a better solution than just copying the pagination class height*/
 #search-ticket-navbar p {

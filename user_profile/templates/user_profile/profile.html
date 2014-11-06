@@ -8,96 +8,65 @@
 {% endblock %}
 
 {% block content %}
-  <div id="profile-header" class="row">
+  <div id="profile-header" class="row wave">
     <div id="user-picture" class="col-xs-12 col-sm-2">
       <img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/v/t1.0-1/c0.0.480.480/p480x480/10308285_10152489553738156_1129484635342981777_n.jpg?oh=f0bd580da152ef9b472d1b5477f307cf&oe=54B22CA9&__gda__=1421064665_bd82ac82e3d67c50c53301b0fa31607c">
+      {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
+                       <span style="display: none;" id="edit-profile-text">Edit Profile</span>
+      {% endif %}
     </div>
-    <div id="user-info" class="col-xs-3 col-sm-3">
+    <div id="user-info" class="col-xs-12 col-sm-4">
       <div id="name">
         <!-- This h3 tag has been overridden to render inline so that stars are on the same line as it -->
-        <h3>{{ user_info.name | title}} {% if user_info.age %} - {{ user_info.age }} {% endif %}</h3>
-        <span id="user-rating">
-          <span class="glyphicon glyphicon-star"></span>
-          <span class="glyphicon glyphicon-star"></span>
-          <span class="glyphicon glyphicon-star"></span>
-          <span class="glyphicon glyphicon-star"></span>
-        </span>
+        <h3>{{ user_info.name | title}}{% if user_info.age %}, {{ user_info.age }}{% endif %}</h3>
+        <div id="user-rating">
+          <h3>
+            {% for x in user_info.rating %}
+              <span class="glyphicon glyphicon-star"></span>
+            {% endfor %}
+          </h3>
+        </div>
       </div>
       <div id="location">
         {{ user_info.city | title }}, {{ user_info.state | upper }}
       </div>
     </div>
-    <div class="col-xs-9 col-sm-7">
-      <div id="last-review" class="col-md-12">
-        <strong id="recent-review-header">Most Recent Review:
+    <div id="last-review" class="col-sm-6 hidden-xs">
+      <strong id="recent-review-header">Most Recent Review:</strong>
+      {% if most_recent_review_info.rating %}
         {% for x in most_recent_review_info.rating %}
-          <span class="glyphicon glyphicon-star"></span>
+          <strong><span class="glyphicon glyphicon-star"></span></strong>
         {% endfor %}
-        </strong>
         <span>
           "{{ most_recent_review_info.contents }}"
         </span><br>
         <span>{{ most_recent_review_info.name }}, {{ most_recent_review_info.age }} | </span>
         <span>{{ most_recent_review_info.city | title }}, {{ most_recent_review_info.state | upper }}</span>
-      </div>
+      {% else %}
+        <i>This user hasn't been reviewed yet!</i>
+      {% endif %}
+      </strong>
     </div>
   </div>
   <div id="profile-body" class="row">
     <!--Note that the columns spanned by this div need to equal the columns spanned by the profile picture div-->
-    <div id="left-side-bar" class="col-md-2">
+    <div id="left-side-bar" class="col-xs-12 col-sm-2">
       <div id="left-side-bar-content" class="row">
-        <div id="profile" class="col-md-12 side-bar-element">
+        <div id="profile" class="col-xs-4 col-sm-12 side-bar-element">
           <span class="glyphicon glyphicon-user"></span><a class="side-bar-title">Profile</a>
         </div>
-        <div id="reviews" class="col-md-12 side-bar-element">
+        <div id="reviews" class="col-xs-4 col-sm-12 side-bar-element">
           <span class="glyphicon glyphicon-star"></span><a class="side-bar-title">Reviews</a>
         </div>
-        <div id="tickets" class="col-md-12 side-bar-element">
+        <div id="tickets" class="col-xs-4 col-sm-12 side-bar-element">
           <span class="glyphicon glyphicon-tags"></span><a class="side-bar-title">Tickets</a>
         </div>
       </div>
     </div>
-    <div id="profile-main" class="col-md-10">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="row profile-content-pair">
-            <div class="col-xs-2">
-              <h4 class="question">A little about me...</h4>
-            </div>
-            <div class="col-xs-8">
-              <textarea class="answer">
-                Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei. Pro no volutpat imperdiet conceptam. Pri eros iudico ancillae no, ei choro dicant nusquam sit. Ad his vocibus voluptua hendrerit, congue interesset liberavisse sit at. Nisl soleat voluptua an sit, ex cum veniam saperet.
-              </textarea>
-            </div>
-          </div>
-          <div class="row profile-content-pair">
-            <div class="col-md-2">
-              <h4 class="question">If I were a unicorn...</h4>
-            </div>
-            <div class="col-lg-10">
-              <textarea class="answer">
-                Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei. Pro no volutpat imperdiet conceptam. Pri eros iudico ancillae no, ei choro dicant nusquam sit. Ad his vocibus voluptua hendrerit, congue interesset liberavisse sit at. Nisl soleat voluptua an sit, ex cum veniam saperet.
-              </textarea>
-            </div>
-          </div>
-          <div class="row profile-content-pair">
-            <div class="col-md-2">
-              <h4 class="question">The beach is a place where...</h4>
-            </div>
-            <div class="col-lg-10">
-              <textarea class="answer">Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei</textarea>
-            </div>
-          </div>
-          <div class="row profile-content-pair">
-            <div class="col-md-2">
-              <h4 class="question">If I could quit my job however, I'd start by...</h4>
-            </div>
-            <div class="col-lg-10">
-              <textarea class="answer">Labore contentiones ne nam, et minim ceteros mel. Ea congue adolescens quo. Assum clita ei sed, no aperiri iuvaret mei</textarea>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div id="profile-main" class="col-xs-12 col-sm-10">
+      {% for pair in profile_question_answer_pairs %}
+        {% include "user_profile/question_answer_pair.html" %}
+      {% endfor %}
     </div>
   </div>
 
@@ -106,4 +75,14 @@
 {% block js %}
   {{ block.super }}
   <script type="text/javascript" src="{% static "user_profile/js/user_profile.js" %}"></script>
+{% endblock %}
+
+{% block modals %}
+   <!-- TODO aria-labeledby we need to set this appropriately -->
+  <div id="modal-profile-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" id="modal-profile-form-content">
+      </div>
+    </div>
+  </div>
 {% endblock %}

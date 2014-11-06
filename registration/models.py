@@ -35,12 +35,11 @@ class UserManager(BaseUserManager):
 
         user_profile = UserProfile()
         if 'birth_date' in kwargs:
-            user_profile.birth_date = kwargs.pop('birth_date')  # Note we want to remove the key from the dict to
-                                                                # avoid passing birth_date into the user model and
-                                                                # causing an error
+            birth_date = kwargs.pop('birth_date')  # Note we want to remove the key from the dict to
+                                                   # avoid passing birth_date into the user model and
+                                                   # causing an error
 
-        user_profile.username = UserProfile.make_profile_url(email, first_name, last_name)
-        user_profile.save()
+        user_profile = UserProfile.objects.create_user_profile(first_name, last_name, birth_date=birth_date)
 
         email = self.normalize_email(email)
         user = self.model(email=email,
@@ -114,8 +113,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                               default=''
                               )
 
-    rating = models.IntegerField(null=True,
-                                 blank=True
+    rating = models.IntegerField(null=False,
+                                 blank=True,
+                                 default=0,
                                  )
 
     profile_picture = models.OneToOneField(Photo,
@@ -165,7 +165,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     def most_recent_review(self):
         from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
-        return Review.objects.filter(reviewee=self.id).order_by('creation_timestamp')[0]
+        reviews = Review.objects.filter(reviewee=self.id)
+        if reviews:
+            return reviews.order_by('creation_timestamp')[0]
+        else:
+            return None
 
     def calculate_rating(self):
         from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
