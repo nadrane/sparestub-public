@@ -8,11 +8,12 @@ import logging
 from django.http import HttpResponse
 
 
-def ajax_http(contents, status=200, **kwargs):
+def ajax_http(contents, status=200, extra_json={}, **kwargs):
     '''
     Returns an HTTP response that we can use for asynchronous requests
     '''
 
+    # contents should be a dictionary
     if callable(contents):
         contents = contents(**kwargs)
 
@@ -21,6 +22,8 @@ def ajax_http(contents, status=200, **kwargs):
 
     if contents == False:
         contents = form_failure_notification('Uh Oh. Something went wrong over here.')
+
+    contents.update(extra_json)
 
     return HttpResponse(json.dumps(contents),
                         content_type='application/json',

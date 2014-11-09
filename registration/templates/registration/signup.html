@@ -22,7 +22,7 @@
            pattern="{{ form_settings.FIRST_NAME_REGEXP }}"
            data-bv-regexp-message="{{ form_settings.FIRST_NAME_REGEXP_MESSAGE }}"
 
-           data-bv-stringlength="true"
+           data-bv-stringlength=true
            data-bv-stringlength-max="{{ form_settings.FIRST_NAME_MAX_LENGTH }}"
            data-bv-stringlength-message="{{ form_settings.FIRST_NAME_LENGTH_MESSAGE }}">
       </div>
@@ -36,7 +36,7 @@
           pattern="{{ form_settings.LAST_NAME_REGEXP }}"
           data-bv-regexp-message="{{ form_settings.LAST_NAME_REGEXP_MESSAGE }}"
 
-          data-bv-stringlength="true"
+          data-bv-stringlength=true
           data-bv-stringlength-max="{{ form_settings.LAST_NAME_MAX_LENGTH }}"
           data-bv-stringlength-message="{{ form_settings.LAST_NAME_LENGTH_MESSAGE }}">
       </div>  <!-- form group -->
@@ -48,9 +48,13 @@
           data-bv-notempty-message="{{ form_settings.EMAIL_NOTEMPTY_MESSAGE }}"
           data-bv-emailaddress-message="{{ form_settings.EMAIL_EMAILADDRESS_MESSAGE }}"
 
-          data-bv-stringlength="true"
+          data-bv-stringlength=true
           data-bv-stringlength-max="{{ form_settings.EMAIL_MAXLENGTH }}"
-          data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}">
+          data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}"
+
+          data-bv-remote=true
+          data-bv-remote-url="{{ form_settings.EMAIL_REMOTE_URL }}"
+          data-bv-remote-message="{{ form_settings.EMAIL_REMOTE_MESSAGE }}">
       </div>
 
       <div class="form-group">
@@ -59,27 +63,32 @@
 
           data-bv-notempty-message="{{ form_settings.PASSWORD_NOTEMPTY_MESSAGE }}"
 
-          data-bv-stringlength="true"
+          data-bv-stringlength=true
           data-bv-stringlength-min="{{ form_settings.PASSWORD_MIN_LENGTH }}"
           data-bv-stringlength-max="{{ form_settings.PASSWORD_MAX_LENGTH }}"
           data-bv-stringlength-message="{{ form_settings.PASSWORD_LENGTH_MESSAGE }}">
       </div>  <!-- form group -->
 
       <div class="form-group last-form-group">
-        <label for="signup-password" class="control-label sr-only"></label>
+        <label for="signup-zipcode" class="control-label sr-only"></label>
         <input type="text" class="form-control" id="signup-zipcode" name="zip_code" placeholder="Zip Code" required
 
-          data-bv-notempty-message="{{ form_settings.ZIPCODE_NOTEMPTY_MESSAGE }}"
+          data-bv-notempty-message="{{ form_settings.ZIP_CODE_NOTEMPTY_MESSAGE }}"
 
-          data-bv-stringlength="true"
-          data-bv-stringlength-min="{{ form_settings.ZIPCODE_MIN_LENGTH }}"
-          data-bv-stringlength-max="{{ form_settings.ZIPCODE_MAX_LENGTH }}"
-          data-bv-stringlength-message="{{ form_settings.ZIPCODE_LENGTH_MESSAGE }}"
+          data-bv-stringlength=true
+          data-bv-stringlength-min="{{ form_settings.ZIP_CODE_MIN_LENGTH }}"
+          data-bv-stringlength-max="{{ form_settings.ZIP_CODE_MAX_LENGTH }}"
+          data-bv-stringlength-message="{{ form_settings.ZIP_CODE_LENGTH_MESSAGE }}"
 
-          pattern="{{ form_settings.ZIPCODE_REGEXP }}"
-          data-bv-regexp-message="{{ form_settings.ZIPCODE_REGEXP_MESSAGE}}"
+          pattern="{{ form_settings.ZIP_CODE_REGEXP }}"
+          data-bv-regexp-message="{{ form_settings.ZIP_CODE_REGEXP_MESSAGE}}"
 
-          data-bv-verbose="false">
+          data-bv-remote=true
+          data-bv-remote-url="{{ form_settings.ZIP_CODE_REMOTE_URL }}"
+          data-bv-remote-message="{{ form_settings.ZIP_CODE_REMOTE_MESSAGE }}"
+
+          {% comment %} No reason to hit the server if the not remote validators fail {% endcomment %}
+          data-bv-verbose=false>
       </div>  <!-- form group -->
     </div>  <!-- modal body -->
 

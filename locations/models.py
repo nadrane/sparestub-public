@@ -1,10 +1,12 @@
 # Standard imports
 import math
 import logging
+import re
 
 # Django core imports
 from django.db import models
 from .settings import location_settings
+from django.forms import ValidationError
 
 # SpareStub imports
 from utils.miscellaneous import reverse_category_lookup
@@ -24,7 +26,11 @@ class LocationMatchingException(Exception):
 
 
 class Location(models.Model):
-    zip_code = models.CharField(max_length=5)  # TODO Maybe specify min length too
+    zip_code = models.CharField(primary_key=True,
+                                max_length=5,
+                                db_index=True,
+                                unique=True,
+                                )
 
     latitude = models.DecimalField(max_digits=5,
                                    decimal_places=2
@@ -46,6 +52,15 @@ class Location(models.Model):
 
     def __str__(self):
         return '{}, {}'.format(self.city.title(), self.state.upper(), self.zip_code)
+
+    @staticmethod
+    def valid_zipcode(zip_code):
+        if not re.match('^\d{5}$', zip_code):
+            raise ValidationError('That zipcode is not formatted correctly', code="invalid_zipcode_format")
+        zip_code = Location.objects.filter(zip_code=zip_code)
+        if not zip_code:
+            raise ValidationError('The submitted zip code does not match a real zip code', code="invalid_zipcode")
+        return zip_code
 
 
 class Alias(models.Model):

@@ -17,5 +17,6 @@ urlpatterns = patterns('',
     url(r'^tickets/', include('tickets.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^messages/', include('messages.urls')),
+    url(r'^utils/', include('utils.urls')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

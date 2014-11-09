@@ -6,7 +6,7 @@
     <!-- Render both an button with the name of the user that links to their user page and a logout button -->
     <li>
       <!-- using a form tag is a small hack to get buttons to display with links in the navbar -->
-      <form action="{% url "user_profile" username=user.user_profile.username %}">
+      <form action="{% url "view_profile" username=user.user_profile.username %}">
         <button id="user-profile-button" class="btn navbar-btn btn-primary" type="submit">{{ user.first_name | title }}</button>
       </form>
     </li>

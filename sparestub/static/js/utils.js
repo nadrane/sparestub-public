@@ -50,7 +50,7 @@ var handle_ajax_response = function (response, $notification_root) {
     }
     if (!!response.is_redirect && response.is_redirect === true) {
         if (!!response.redirect_href) {
-            window.location.href(response.redirect_href);
+            window.location.href = response.redirect_href;
         }
     // If it's not a complete redirect, then we are replacing specific elements of the DOM.  Do that here.
     } else {

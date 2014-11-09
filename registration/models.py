@@ -190,7 +190,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         """
 
         # Note that the non-domain part of an email address is case sensitive, so we need email__exact
-        if User.objects.filter(email__iexact=email):
+        if User.objects.filter(email__exact=email):
             return True
         return False
 
@@ -258,25 +258,28 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         """
         return self.password == password_input
 
-    @staticmethod
-    def valid_email(email):
+    def valid_email(self, email):
         """
         Make sure that this email address does not already exist in the database
         """
 
         email = normalize_email(email)
-        # Even though the database only contains lowercase emails, consider case-sensitivity.
-        # Just as an extra error check
+
+        # If this the submitted email is the user's current email, everything is good since the current email was
+        # already validated. This is will often be the case when a user edits his profile information.
+        try:
+            if self.email == email:
+                return email
+        # This is going to fail for AnonymousUser objects (aka every time during sign up. That's fine).
+        except AttributeError:
+            pass
+
+        # consider case-sensitivity. It is valid for a domain provider to allow case insensitive emails.
         if User.user_exists(email):
             raise ValidationError('That email address is already registered', code="email_exists")
-        #Store the normalized email in the database
+        # Store the normalized email in the database
         return email
 
-    @staticmethod
-    def valid_zipcode(zipcode):
-        if not re.match('^\d{5}$', zipcode):
-            raise ValidationError('That zipcode is not valid', code="invalid_zipcode_format")
-        return zipcode
 
     @staticmethod
     def facebook_user_id_exists(fb_uid):

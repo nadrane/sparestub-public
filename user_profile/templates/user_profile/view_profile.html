@@ -9,7 +9,8 @@
 
 {% block content %}
   <div id="profile-header" class="row wave">
-    <div id="user-picture" class="col-xs-12 col-sm-2">
+  {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
+    <div id="user-picture" class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
       <img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/v/t1.0-1/c0.0.480.480/p480x480/10308285_10152489553738156_1129484635342981777_n.jpg?oh=f0bd580da152ef9b472d1b5477f307cf&oe=54B22CA9&__gda__=1421064665_bd82ac82e3d67c50c53301b0fa31607c">
       {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
                        <span style="display: none;" id="edit-profile-text">Edit Profile</span>
@@ -64,7 +65,7 @@
       </div>
     </div>
     <div id="profile-main" class="col-xs-12 col-sm-10">
-      {% for pair in profile_question_answer_pairs %}
+      {% for pair in question_answer_pairs %}
         {% include "user_profile/question_answer_pair.html" %}
       {% endfor %}
     </div>
@@ -73,15 +74,20 @@
 {% endblock %}
 
 {% block js %}
+  <script type="text/javascript">
+    window.additional_parameters.is_owner = {% if is_owner %}true{% else %}false{% endif %}; // Is the current viewer of the profile the owner of it?
+  </script>
+
   {{ block.super }}
   <script type="text/javascript" src="{% static "user_profile/js/user_profile.js" %}"></script>
 {% endblock %}
 
 {% block modals %}
    <!-- TODO aria-labeledby we need to set this appropriately -->
-  <div id="modal-profile-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content" id="modal-profile-form-content">
+  <div id="modal-edit-profile-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content" id="modal-edit-profile-form-content">
       </div>
     </div>
   </div>

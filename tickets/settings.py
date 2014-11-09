@@ -3,6 +3,7 @@ from locations.settings import states
 
 ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                          'CONTENT_MAX_LENGTH': 10000,
+                         'VENUE_MAX_LENGTH': 300,
                          'TICKET_TYPES': (('M', 'Music'),
                                           ('S', 'Sports'),
                                           ('T', 'Theatre'),
@@ -52,6 +53,9 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
 
                                'PAYMENT_METHODS': ticket_model_settings.get('PAYMENT_METHODS'),
                                'PAYMENT_METHOD_NOTEMPTY_MESSAGE': 'Please select a payment method',
+
+                               'VENUE_NOTEMPTY_MESSAGE': 'Please enter the venue where this event takes place',
+                               'VENUE_LENGTH_MESSAGE': 'The venue cannot exceed {} characters'.format(ticket_model_settings.get('VENUE_MAX_LENGTH'))
                             }
 
 search_results_settings = {'TICKET_TYPES': ticket_model_settings.get('TICKET_TYPES'),

@@ -1,15 +1,3 @@
-$(document).ready(function ($) {
-    'use strict';
-    resize_header();  // Do this once when the page initially loads
-
-    // And then every time the page is resized
-    $(window).resize(function () {
-        resize_header($);
-    });
-
-    editable_profile();
-}(window.jQuery));
-
 function resize_header() {
     var $header = $('#profile-header');
     var $thumbnail = $('#user-picture > img');
@@ -25,7 +13,13 @@ function resize_header() {
     });
 }
 
+function validate_username() {
+    /* Make sure that the username does not already exist */
+
+}
+
 function editable_profile() {
+    /* Make the profile picture have animations that indicate that it is editable */
     $('#user-picture').hover(function () {
         $('#edit-profile-icon').animate({fontSize: "1.2em"}, 200);
         $('#edit-profile-text').fadeIn(200);
@@ -34,3 +28,89 @@ function editable_profile() {
         $('#edit-profile-text').fadeOut(200);
     });
 }
+
+
+function initialize_bootstrap_validator_edit_profile() {
+    'use strict';
+    $('#edit-profile-form').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        submitButtons: $('#edit-profile-form-submit-button'),
+        excluded: [] // Do not exclude hidden/not displayed fields. This allows us to run an initial round of
+                     // validation on the user's current data while the form is closed. Otherwise every field would
+                     // just get skipped.
+    }).on('success.form.bv', function (e) {
+        // Prevent form submission
+        e.preventDefault();
+
+        // Get the form instance
+        var $form = $(e.target);
+
+        $.post($form.attr('action'), $form.serialize(), 'json')
+            .done(function (data, textStatus, xhr) {
+                // It's probably redundant to check the json value for true seeing as the server returned a 200 status
+                // code, but an extra check never hurts.
+                if (data.isSuccessful) {
+                    handle_ajax_response(data);
+
+                    $('#modal-edit-profile-root').modal('hide');
+                }
+            })
+            .fail(function (data, textStatus, xhr) {
+                // Obviously there are cases were we never reached the server (internet down or incredibly high loads
+                // resulting in the web server turning people away), so we cannot check the JSON object that might or
+                // might not have been returned by the application level.
+                if (has_notification_update(data.responseJSON)) {
+                    handle_ajax_response(data.responseJSON, $('#edit-profile-notification-root'));
+                }
+                else {
+                    set_notification($('#edit-profile-notification-root'), 'Uh oh!',
+                                       "Something went wrong. Try again in a bit!", 'alert-danger');
+                }
+            })
+            .always(function () {
+                $form.data('bootstrapValidator').resetForm(true);
+            });
+    });
+}
+
+$(document).ready(function ($) {
+    'use strict';
+    resize_header();  // Do this once when the page initially loads
+
+    // And then every time the page is resized
+    $(window).resize(function () {
+        resize_header($);
+    });
+
+    // Do not let a user edit a different user's profile
+    if (window.additional_parameters.is_owner) {
+        editable_profile();
+        $('#user-picture').on('click', function () {
+            // If the modal content has already been loaded, don't do it again
+            if ($('#modal-edit-profile-form-content').children().length > 0) {
+                return;
+            }
+
+            $.get(window.additional_parameters.edit_profile_form_url, function (data) {
+                $('#modal-edit-profile-form-content').html(data);
+                initialize_bootstrap_validator_edit_profile();
+
+                // The form comes with the user's current information filled inside it.
+                // Validate the form so that all fields do not need to be changed to resumbit the form.
+                // As it stands, a field will only be validated if it's changed, and all fields must be validated.
+                // We to have to do every field individually because BV actually submits the form to the
+                // server using it's validate method, which we obviously don't want.
+                var $edit_profile_form = $('#edit-profile-form');
+                $edit_profile_form.bootstrapValidator('revalidateField', 'first_name');
+                $edit_profile_form.bootstrapValidator('revalidateField', 'last_name');
+                $edit_profile_form.bootstrapValidator('revalidateField', 'zip_code');
+                $edit_profile_form.bootstrapValidator('revalidateField', 'email');
+                $edit_profile_form.bootstrapValidator('revalidateField', 'username');
+            });
+        });
+    }
+}(window.jQuery));

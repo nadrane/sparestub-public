@@ -121,6 +121,4 @@ $(document).ready(function ($) {
     // Initialize when the page loads so that ticker search autocomplete woks
     initialize_location_autocomplete();
 
-    format_ticket_type_select();
-
 }(window.jQuery));

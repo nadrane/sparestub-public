@@ -1,6 +1,5 @@
 # Python core modules
 import logging
-from urllib.parse import urlparse
 import re
 
 # Django core modules
@@ -10,7 +9,7 @@ from django.forms import ValidationError
 # SpareStub imports
 from .utils import calculate_age
 from utils.models import TimeStampedModel
-from .settings import profile_question_model_settings, profile_answer_model_settings
+from .settings import profile_question_model_settings, profile_answer_model_settings, user_profile_model_settings
 
 
 class UserProfilerManager(models.Manager):
@@ -34,8 +33,8 @@ class UserProfilerManager(models.Manager):
 
     @staticmethod
     def make_username(first_name, last_name):
-        # Make sure that everything is lowercase
-        first_name, last_name = first_name.lower(), last_name.lower()
+        # Make the username's in title case
+        first_name, last_name = first_name.title(), last_name.title()
 
         # Try to make the url equal to the users first and last names concatenated together
         potential_username = first_name + last_name
@@ -62,7 +61,8 @@ class UserProfile(TimeStampedModel):
 
     # This is set in the User manager as opposed to here. This is because we need user email/name info. to create the username,
     # but the UserProfile needs to be created before the User because the User.user_profile cannot be null.
-    username = models.CharField(max_length=254,  # This length comes from the max_length of an email address
+    username = models.CharField(max_length=user_profile_model_settings.get('USERNAME_MAX_LENGTH'),
+                                # and last name
                                 db_index=True,
                                 unique=True,
                                 )
@@ -86,39 +86,30 @@ class UserProfile(TimeStampedModel):
     def age(self):
         return calculate_age(self.birth_date)
 
-    @staticmethod
-    def valid_username(username):
+    def valid_username(self, username):
+        # Make sure that the inputted username is in the correct format
         if not re.match(UserProfile.username_regex, username):
             raise ValidationError("Your username can only contain letters and numbers.", code="bad username format")
 
-    @staticmethod
-    def contains_valid_scheme(parsed_url):
-        if parsed_url.scheme != 'HTTP' and parsed_url.scheme != 'HTTPS' and parsed_url != '':
-            return False
+        # If the submitted username is the same as the current one, then validation is complete since the current
+        # username has been validated before. But do the regex check first anyway to save DB hits on username changes.
+        if self.username == username:
+            return username
 
-    @staticmethod
-    def valid_website(website_url):
-        '''
-        Validate that a correctly formatted URL was submitted. Place some restrictions on protocol.
-        Return a slightly cleaner version of the url submitted. Strip of query parameters and add a protocol.
-        '''
-        parsed_url = urlparse(website_url)
-        if not UserProfile.contains_valid_scheme(parsed_url):
-            raise ValidationError('The website URL must be HTTP or HTTPS.', code='invalid protocol')
-        if parsed_url.scheme == '':
-            parsed_url.scheme == "HTTP"
-        return ''.join(parsed_url.scheme, '://', parsed_url.netloc)
+        # Make sure that another user does not already have this username
+        if UserProfile.user_profile_exists(username):
+            raise ValidationError('Username already exists. Please choose another')
+
+        return username
 
     @staticmethod
     def user_profile_exists(username):
-        username = username.lower()
         if UserProfile.objects.filter(username=username):
             return True
         return False
 
     @staticmethod
     def get_user_profile_from_username(username):
-        username = username.lower()
         return UserProfile.objects.filter(username=username)[0]
 
 
@@ -140,6 +131,9 @@ class ProfileQuestion(models.Model):
                                 )
 
     objects = ProfileQuestionManager()
+
+    def __str__(self):
+        return self.question
 
 
 class ProfileAnswerManager(models.Manager):
@@ -186,4 +180,10 @@ class ProfileAnswer(models.Model):
         """
         Gets a particular user's answer to a specific question.
         """
-        return ProfileQuestion.objects.filter(user=user.user_profile, question=question)
+        answer = ProfileAnswer.objects.filter(user_profile=user.user_profile, question=question)
+        if answer:
+            return answer[0].answer
+        return ''
+
+    def __str__(self):
+        return "Question: {} | Answer: {}".format(self.question.id, self.answer)

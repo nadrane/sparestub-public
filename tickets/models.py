@@ -14,9 +14,9 @@ from locations.models import Location
 class TicketManager(models.Manager):
 
     def create_ticket(self, poster, price, title, start_datetime, location_raw, location, ticket_type, payment_method,
-                      is_active, about=None):
+                      is_active, venue, about=None):
         """
-            Creates a ticket record using the given input
+        Creates a ticket record using the given input
         """
         ticket_timezone = timezone(location.timezone)
         start_date = ticket_timezone.normalize(start_datetime.astimezone(ticket_timezone)).date()
@@ -32,6 +32,7 @@ class TicketManager(models.Manager):
                             start_date=start_date,
                             location_raw=location_raw,
                             location=location,
+                            venue=venue,
                             ticket_type=ticket_type,
                             payment_method=payment_method,
                             is_active=is_active,
@@ -88,6 +89,11 @@ class Ticket(TimeStampedModel):
     location = models.ForeignKey(Location,    # We are going to map the inputted city, state to a zipcode
                                  blank=False
                                  )
+
+    venue = models.CharField(max_length=ticket_model_settings.get('VENUE_MAX_LENGTH'),
+                             blank=False,
+                             null=False,
+                             )
 
     ticket_type = models.CharField(blank=False,
                                    max_length=1,

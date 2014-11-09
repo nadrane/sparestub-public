@@ -14,7 +14,9 @@ from locations.models import Location, map_citystate_to_location
 from tickets.models import Ticket
 from user_profile.models import ProfileQuestion, ProfileAnswer
 
+
 class Command(BaseCommand):
+
     def handle(self, *args, **kwargs):
         # Recreate the tables in the database according to our models
         call_command('empty_db', interactive=False)
@@ -157,13 +159,15 @@ class Command(BaseCommand):
         # timedelta(weeks=40, days=84, hours=23, minutes=50, seconds=600)
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
                                      price=213.0,
-                                     title="Dallas cowboys at Giants stadium this weekend! Looking for Dallas fans only!",
+                                     title="Dallas cowboys at Giants stadium this weekend!"
+                                           " Looking for Dallas fans only!",
                                      start_datetime=timezone.now() + timedelta(days=3, hours=1),
                                      location_raw='New York, NY',
                                      location=map_citystate_to_location('New York', 'NY'),
                                      ticket_type='S',
                                      payment_method='S',
                                      about='Come hang!',
+                                     venue="MetLife Stadium",
                                      is_active=True,
                                      )
 
@@ -176,8 +180,8 @@ class Command(BaseCommand):
                                      ticket_type='S',
                                      payment_method='S',
                                      about='Going to a cookout beforehand you can join',
+                                     venue="MetLife Stadium",
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
@@ -190,25 +194,23 @@ class Command(BaseCommand):
                                      ticket_type='S',
                                      payment_method='G',
                                      about='Will be a good time',
+                                     venue="MetLife Stadium",
                                      is_active=True,
-
                                      )
-
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
                                      price=150.0,
-                                     title="Friend bailed on me! Just ended up with 2 tickets to see the Giant's this weekend. "
-                                           "Hit me up if you're ready to see Eli stomp on Romo.",
+                                     title="Friend bailed on me! Just ended up with 2 tickets to see the Giant's this"
+                                           " weekend. Hit me up if you're ready to see Eli stomp on Romo.",
                                      start_datetime=timezone.now() + timedelta(days=80, hours=11),
                                      location_raw='New York, NY',
                                      location=map_citystate_to_location('New York', 'NY'),
                                      ticket_type='S',
                                      payment_method='G',
                                      about='dallas sucks amiright?!',
+                                     venue="MetLife Stadium",
                                      is_active=True,
-
                                      )
-
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
                                      price=35.0,
@@ -220,8 +222,8 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Super excited to see Ben Howard at the Music Hall of Williamsburg. He is'
                                            'my favorite artist and I would love a partner in crime!',
+                                     venue='Music Hall of Williamsburg',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -233,8 +235,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='S',
                                      about='Madison Sq Gardens',
+                                     venue='Madison Sq Gardens',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
@@ -247,8 +249,8 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='My mom was supposed to come into town but can no longer make it... so I '
                                            'have this extra Book of Mormon ticket. Great seats.',
+                                     venue='Broadway theatre',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
@@ -260,8 +262,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='G',
                                      about='The Fray is cool but especially going to see Oh Honey.',
+                                     venue='Awesome Brooklyn Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
@@ -273,8 +275,8 @@ class Command(BaseCommand):
                                      ticket_type='T',
                                      payment_method='S',
                                      about='Great seats, only $25, friend had to travel for work.',
+                                     venue='Met Opera House',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -286,6 +288,7 @@ class Command(BaseCommand):
                                      ticket_type='C',
                                      payment_method='S',
                                      about='Our own table up front',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -298,8 +301,8 @@ class Command(BaseCommand):
                                      ticket_type='C',
                                      payment_method='G',
                                      about='Funniest man alive. Section 3G Row 17 Seats 3 and 4',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
@@ -311,8 +314,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='S',
                                      about='Third row seats... looking for another lover of Queen Bey and our NY boy',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
@@ -326,8 +329,8 @@ class Command(BaseCommand):
                                      about='Have two tickets to the Lion King I bought for my girlfriend for her'
                                            'birthday but then she broke up with me... Soo, if you want to see it '
                                            'with me and help heal my broken heart, we have pretty good seats.',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -340,8 +343,8 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Cowboy hats and cowboy boots are required!! Going to tailgate beforehand. '
                                            'Bring your drinking and your dancing shoes. We will have corn hole!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
                                      price=290.0,
@@ -353,8 +356,8 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Courtside seats. 2 extra available. Want to get there at least an hour'
                                            'early.',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=4),
@@ -367,8 +370,8 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='We love Bruce! My husband and I have two extra tickets to see Bruce and'
                                            'we love meeting new people. Come along!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=1),
@@ -381,8 +384,8 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Section 17 Row 3 Seats 14-15. Going with a small group of about 6 friends.'
                                            'Would be great if you want to join.',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=2),
@@ -394,8 +397,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='G',
                                      about='One extra ticket to see Lady Gaga- row 20 section 10',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=3),
@@ -408,6 +411,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Call me cheesy, but I would love to see Frozen on ice. I have no girlfriend'
                                            'so just trying to find someone to go with.',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -421,6 +425,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='I love Frozen! My friend had to go out of town on business so I have an'
                                            'extra ticket. Team Elsa!',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -434,8 +439,8 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='I looooooooove Frozen! Friend had to go out of town on business so I have'
                                            'an extra ticket. Team Oloff!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=5),
@@ -448,8 +453,8 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='We have pretty good seats, section 32 row 12 seats 16-17. Want to do some'
                                            'tailgating beforehand if you are down.',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=5),
@@ -462,6 +467,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='My friends and I are splitting a box for the game this weekend 4 ways. One'
                                            'of our friends can no longer go so his seat is up for grabs!',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -474,8 +480,8 @@ class Command(BaseCommand):
                                      ticket_type='S',
                                      payment_method='G',
                                      about='Got tickets, got dumped. Anybody cool looking to go to the game?',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=6),
@@ -489,8 +495,8 @@ class Command(BaseCommand):
                                      about='Third row seats in section 2, going with a few girlfriends and one of them'
                                            'can no longer go. We love to have a good time and would love to get to'
                                            'know a new friend!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=6),
@@ -503,8 +509,8 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Friend bailed and I still really want to go see John Mayer. Send me a'
                                            'message if you want to go- I will bring anyone!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=6),
@@ -517,6 +523,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='F.Stokes is coming to UCSF and I bought two tickets thinking my friend'
                                            'could go with me. She bailed so it is available! GA ticket',
+                                     venue='Awesome Theater',
                                      is_active=True,
 
                                      )
@@ -532,8 +539,8 @@ class Command(BaseCommand):
                                      about='I have two tickets to the Dane Cook show next week and my buddy can no'
                                            'longer go with me. His ticket is up for sale. Would be cool to get'
                                            'dinner beforehand if you want to.',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=7),
@@ -546,9 +553,9 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='I have two tickets and would love to make a new friend this weekend.'
                                            'Message me if you are interested!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
-                                    )
+                                     )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=7),
                                      price=20.0,
@@ -561,6 +568,7 @@ class Command(BaseCommand):
                                      about='Awesome show going on at Last Gas comedy club. I bought two tickets and'
                                            'figured somebody on here would want to come. It is a riot. Come have some'
                                            'fun with me!',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -575,8 +583,8 @@ class Command(BaseCommand):
                                      about='SXSW (South by Southwest) in Austin is a huge event. I have an extra '
                                            'Interactive Badge that I got with my company discount to bring someone '
                                            'interested in the event or the presenters. Come join me for a fun few days!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=8),
@@ -588,8 +596,8 @@ class Command(BaseCommand):
                                      ticket_type='S',
                                      payment_method='G',
                                      about='One extra GA ticket',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=9),
@@ -601,6 +609,7 @@ class Command(BaseCommand):
                                      ticket_type='T',
                                      payment_method='G',
                                      about='Extra frozen ticket should be fun come along!',
+                                     venue='Awesome Theater',
                                      is_active=True,
 
                                      )
@@ -614,8 +623,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='S',
                                      about='Section 14 Row 2 seats 4-5',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=9),
@@ -627,8 +636,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='G',
                                      about='Standard Window, weekend 1, $450',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=10),
@@ -640,8 +649,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='S',
                                      about='Large Balcony room during Holy Ship weekend 1. AMAZING TIME guaranteed!',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=10),
@@ -653,8 +662,8 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='S',
                                      about='Standard room, amazing lineup. Friend bailed, I have an extra ticket.',
+                                     venue='Awesome Theater',
                                      is_active=True,
-
                                      )
 
         Ticket.objects.create_ticket(poster=User.objects.get(pk=11),
@@ -667,6 +676,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Lawn seats, gonna play some games in the parking lot beforehand! Two tickets'
                                            'available to go to the concert with my friend and I',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -680,6 +690,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='I have two tickets to Carlos Mencia- my work friend was supposed to go with'
                                            'me but cannot go anymore. Would also like to grab dinner before the show.',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -692,6 +703,7 @@ class Command(BaseCommand):
                                      ticket_type='S',
                                      payment_method='G',
                                      about='Friend is not able to go anymore so looking for a buddy to go with.',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -705,6 +717,7 @@ class Command(BaseCommand):
                                      payment_method='S',
                                      about='Box seats on the Panthers side, split the box with 5 friends. Should be a'
                                            'really good time!',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -719,6 +732,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Watch the Tarheels destroy the dookies from the 9th row with me. A friend'
                                            'was originally supposed to go, but is not able to anymore. More fun for us!',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -732,6 +746,7 @@ class Command(BaseCommand):
                                      payment_method='G',
                                      about='Red Hat is an outdoor amphitheater. Oh Honey is the opener but they are'
                                            'awesome. Would like to get dinner beforehand and maybe drinks after?',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -744,6 +759,7 @@ class Command(BaseCommand):
                                      ticket_type='T',
                                      payment_method='S',
                                      about='TEAM ELSA!! My friend bailed so I have an extra ticket in 2wks.',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -756,6 +772,7 @@ class Command(BaseCommand):
                                      ticket_type='M',
                                      payment_method='G',
                                      about='Extra ticket, BYO blanket!',
+                                     venue='Awesome Theater',
                                      is_active=True,
                                      )
 
@@ -779,6 +796,8 @@ class Command(BaseCommand):
     def create_profile_questions():
         ProfileQuestion.objects.create_profile_question(question='Tell a little about yourself..')
         ProfileQuestion.objects.create_profile_question(question='Describe your ideal Sunday...')
+        ProfileQuestion.objects.create_profile_question(question='Tell us about your most embarassing'
+                                                                 ' life experience...')
 
 
     @staticmethod

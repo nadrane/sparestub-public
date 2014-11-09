@@ -8,17 +8,17 @@ dirname = os.path.dirname
 INSTALLED_APPS += 'debug_toolbar',
 
 STATICFILES_DIRS = (
-    ('sparestub/css', os.path.join(BASE_DIR, 'static/css')),
-    ('sparestub/js', os.path.join(BASE_DIR, 'static/js')),
-    ('sparestub/fonts', os.path.join(BASE_DIR, 'static/fonts')),
-    ('sparestub/logos', os.path.join(BASE_DIR, 'static/logos')),
+    (os.path.join('sparestub', 'css'), os.path.join(BASE_DIR, 'static', 'css')),
+    (os.path.join('sparestub', 'js'), os.path.join(BASE_DIR, 'static', 'js')),
+    (os.path.join('sparestub', 'fonts'), os.path.join(BASE_DIR, 'static', 'fonts')),
+    (os.path.join('sparestub', 'logos'), os.path.join(BASE_DIR, 'static', 'logos')),
 )
 
 # Serve from the local machine during development
 STATIC_URL = '/static_root/'
 
 # Serve from the local machine during development
-MEDIA_URL = MEDIA_ROOT + '/'
+MEDIA_URL = '/media_root/'
 
 # This setting is for the syncs3.py management script.
 # Safari does not know how to accept files ending in .gz, so we use .jgz instead.

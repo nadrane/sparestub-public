@@ -1,58 +1,26 @@
-__author__ = 'Nick'
-
 # Django core modules
 from django import forms
 
-# Crowd Surfer modules
-from registration.models import User
-from registration.settings import user_model_settings
-from .models import UserProfile
+# SpareStub modules
+from registration.forms import UserInfoForm
+from .settings import edit_profile_form_settings
 
 
-class EditUserProfileForm(forms.Form):
-
-    email = forms.EmailField(required=True,
-                             max_length=user_model_settings['EMAIL_MAX_LENGTH'],
-                             widget=forms.EmailInput(),
-                             )
-
-    first_name = forms.CharField(max_length=user_model_settings['FIRST_NAME_MAX_LENGTH'],
-                                 widget=forms.TextInput(attrs={'placeholder': 'First Name'}),
-                                 validators=[User.valid_name],
-                                 )
-
-    last_name = forms.CharField(max_length=user_model_settings['LAST_NAME_MAX_LENGTH'],
-                                widget=forms.TextInput(attrs={'placeholder': 'Last Name'}),
-                                validators=[User.valid_name],
-                                )
-
-    about = forms.CharField(required=False,
-                            widget=forms.Textarea(attrs={'placeholder': 'Write a little bit about yourself...',
-                                                         'maxlength': 500
-                                                         }
-                                                  )
-                            )
+class EditProfileForm(UserInfoForm):
 
     username = forms.CharField(required=True,
-                               validators=[UserProfile.valid_username],
+                               max_length=edit_profile_form_settings.get('USERNAME_MAX_LENGTH')
                                )
 
-    website = forms.CharField(required=False)
+    profile_picture = forms.ImageField(required=True)
 
-    def clean_website(self):
-        '''
-        Validate that a correctly formatted URL was submitted. Place some restrictions on protocol.
-        Return a slightly cleaner version of the url submitted. Strip of query parameters and add a protocol.
-        '''
-        return UserProfile.valid_website(self.cleaned_data['website'])
+    def clean_username(self):
+        """
+        Make sure that the submitted username is unique.
+        """
+        return self.request.user.user_profile.valid_username(self.cleaned_data.get('username'))
 
-    def clean_email(self):
-        '''
-        Make sure that this email address does not already exist in the database
-        '''
-        return User.valid_email((self.cleaned_data['email']))
-
-
+'''
 class PasswordChangeForm(forms.Form):
 
     current_password = forms.CharField(min_length=user_model_settings['PASSWORD_MIN_LENGTH'],
@@ -83,3 +51,4 @@ class PasswordChangeForm(forms.Form):
 
         if new_password and confirm and (new_password != confirm):
             raise forms.ValidationError('Password do not match. Please re-enter your new password.')
+'''

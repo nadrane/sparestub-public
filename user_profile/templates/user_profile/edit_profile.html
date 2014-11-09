@@ -1,0 +1,140 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Profile</h4>
+    <div id="edit-profile-notification-root">
+      <div class="notification-style" style="display: None">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong class="notification-header"></strong>
+        <span class="notification-content"></span>
+      </div>
+    </div>
+  </div>
+
+  <form id="edit-profile-form" class="form-horizontal" method="post"
+        action="{% url "edit_profile" username=user.user_profile.username %}"
+        enctype="multipart/form-data"> {% csrf_token %}
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label for="edit-profile-picture" class="col-xs-12 col-sm-3 control-label">Profile Picture: </label>
+        {% comment %} TODO add silhouette jansys site says how to  {% endcomment %}
+        <div class="fileinput fileinput-new col-xs-12 col-sm-9" data-provides="fileinput">
+          <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+          <div>
+            <span class="btn btn-default btn-file"><span class="fileinput-new">Select Picture</span><span class="fileinput-exists">Change</span><input id="edit-profile-picture" class="form-control" name="profile_picture" type="file"></span>
+            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="edit-profile-first-name" class="col-xs-12 col-sm-3 control-label">First Name: </label>
+        <div class="col-xs-12 col-sm-9">
+          <input id="edit-profile-first-name" type="text" class="form-control" name="first_name" required
+                 value="{{ user.first_name | title }}"
+
+                 data-bv-notempty-message="{{ form_settings.FIRST_NAME_NOTEMPTY_MESSAGE }}"
+
+                 pattern="{{ form_settings.FIRST_NAME_REGEXP }}"
+                 data-bv-regexp-message="{{ form_settings.FIRST_NAME_REGEXP_MESSAGE }}"
+
+                 data-bv-stringlength=true
+                 data-bv-stringlength-max="{{ form_settings.FIRST_NAME_MAX_LENGTH }}"
+                 data-bv-stringlength-message="{{ form_settings.FIRST_NAME_LENGTH_MESSAGE }}">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <label for="edit-profile-last-name"  class="col-xs-12 col-sm-3 control-label">Last Name: </label>
+        <div class="col-xs-12 col-sm-9">
+          <input id="edit-profile-last-name" type="text" class="form-control"  name="last_name" required
+                 value="{{ user.last_name | title}}"
+
+                 data-bv-notempty-message="{{ form_settings.LAST_NAME_NOTEMPTY_MESSAGE }}"
+
+                 pattern="{{ form_settings.LAST_NAME_REGEXP }}"
+                 data-bv-regexp-message="{{ form_settings.LAST_NAME_REGEXP_MESSAGE }}"
+
+                 data-bv-stringlength=true
+                 data-bv-stringlength-max="{{ form_settings.LAST_NAME_MAX_LENGTH }}"
+                 data-bv-stringlength-message="{{ form_settings.LAST_NAME_LENGTH_MESSAGE }}">
+        </div>
+      </div>  <!-- form group -->
+
+      <div class="row form-group">
+        <label for="edit-profile-email" class="col-xs-12 col-sm-3 control-label">Email: </label>
+        <div class="col-xs-12 col-sm-9">
+          <input type="email" class="form-control" id="edit-profile-email" name="email"
+                 required value="{{ user.email }}"
+
+                 data-bv-notempty-message="{{ form_settings.EMAIL_NOTEMPTY_MESSAGE }}"
+                 data-bv-emailaddress-message="{{ form_settings.EMAIL_EMAILADDRESS_MESSAGE }}"
+
+                 data-bv-stringlength=true
+                 data-bv-stringlength-max="{{ form_settings.EMAIL_MAXLENGTH }}"
+                 data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}"
+
+                 data-bv-remote=true
+                 data-bv-remote-url="{{ form_settings.EMAIL_REMOTE_URL }}"
+                 data-bv-remote-message="{{ form_settings.EMAIL_REMOTE_MESSAGE }}">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <label for="edit-profile-zip-code" class="col-xs-12 col-sm-3 control-label">Zip Code: </label>
+        <div class="col-xs-12 col-sm-9">
+          <input type="text" class="form-control" id="edit-profile-zip-code" name="zip_code"
+                 required value="{{ user.location.zip_code }}"
+
+                 data-bv-notempty-message="{{ form_settings.ZIP_CODE_NOTEMPTY_MESSAGE }}"
+
+                 data-bv-stringlength=true
+                 data-bv-stringlength-min="{{ form_settings.ZIP_CODE_MIN_LENGTH }}"
+                 data-bv-stringlength-max="{{ form_settings.ZIP_CODE_MAX_LENGTH }}"
+                 data-bv-stringlength-message="{{ form_settings.ZIP_CODE_LENGTH_MESSAGE }}"
+
+                 pattern="{{ form_settings.ZIP_CODE_REGEXP }}"
+                 data-bv-regexp-message="{{ form_settings.ZIP_CODE_REGEXP_MESSAGE}}"
+
+                 data-bv-remote=true
+                 data-bv-remote-url="{{ form_settings.ZIP_CODE_REMOTE_URL }}"
+                 data-bv-remote-message="{{ form_settings.ZIP_CODE_REMOTE_MESSAGE }}"
+
+                 {% comment %} No reason to hit the server if the not remote validators fail {% endcomment %}
+                 data-bv-verbose=false>
+        </div>
+      </div>  <!-- form group -->
+
+      <div class="row form-group last-form-group">
+        <label for="edit-profile-username" class="col-xs-12 col-sm-3 control-label">Username: </label>
+        <div class="col-xs-12 col-sm-9">
+          <input type="text" class="col-xs-10 form-control" id="edit-profile-username" name="username"
+                 required value="{{ user.user_profile.username }}"
+
+                 data-bv-notempty-message="{{ form_settings.USERNAME_NOTEMPTY_MESSAGE }}"
+
+                 pattern="{{ form_settings.USERNAME_REGEXP }}"
+                 data-bv-regexp-message="{{ form_settings.USERNAME_REGEXP_MESSAGE }}"
+
+                 data-bv-stringlength=true
+                 data-bv-stringlength-max="{{ form_settings.USERNAME_MAX_LENGTH }}"
+                 data-bv-stringlength-message="{{ form_settings.USERNAME_LENGTH_MESSAGE }}"
+
+                 data-bv-remote=true
+                 data-bv-remote-url="{{ form_settings.USERNAME_REMOTE_URL }}"
+                 data-bv-remote-message="{{ form_settings.USERNAME_REMOTE_MESSAGE }}"
+
+                 {% comment %} No reason to hit the server if the not remote validators fail {% endcomment %}
+                 data-bv-verbose=false>
+        </div>
+      </div>  <!-- form group -->
+
+    </div>  <!-- modal body -->
+
+    <div class="modal-footer">
+        <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
+        <button id="edit-profile-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Save Profile</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </form>  <!-- .edit-profile-form -->
+</div>

@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.template.loader import render_to_string
 from django.utils.timezone import activate
+from django.core.urlresolvers import reverse
 
 # SpareStub Imports
 from .models import User
@@ -26,15 +27,15 @@ def basic_info(request):
                   'registration/basic_info.html',
                   )
 
-def signup(request):
 
+def signup(request):
     #If the user is already logged in, they're doing something they aren't supposed to. Send them a 405.
     if request.user.is_authenticated():
         return HttpResponseNotAllowed(['POST'])
 
     # If the form has been submitted by the user
     if request.method == 'POST':
-        signup_form = SignupForm(request.POST)
+        signup_form = SignupForm(request.POST, request=request)
         #Determine which form the user submitted.
         if signup_form.is_valid():
             password = signup_form.cleaned_data.get('password')
@@ -79,6 +80,10 @@ def signup(request):
         else:
             return ajax_http(False, 400)
 
+    # These need to go here instead of in the settings file to avoid circular dependencies
+    signup_form_settings['ZIP_CODE_REMOTE_URL'] = reverse('valid_zip_code')
+    signup_form_settings['EMAIL_REMOTE_URL'] = reverse('valid_email')
+
     return render(request,
                   'registration/signup.html',
                   {'form_settings': signup_form_settings})
@@ -104,7 +109,9 @@ def login(request):
             user = authenticate(email=email, password=password)
             auth_login(request, user)
             activate(user.timezone())  # Configure time zone
-            return ajax_http(render_nav_bar, 200, request=request)
+            return ajax_http(render_nav_bar,
+                             status=200,
+                             request=request)
         else:
             return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
