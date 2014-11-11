@@ -68,11 +68,11 @@
 
 @media (min-width: 768px) {
     #user-info {
-        padding-top: 30px;
+        padding-top: 20px;
     }
 
     #last-review {
-        padding-top: 30px;
+        padding-top: 20px;
     }
 }
 
@@ -182,6 +182,12 @@ body {
     margin-right: 20px;
 }
 
+.tickets-review-panel {
+    margin-top: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
 .answer {
     width: 100%;
     height: 10em;
@@ -189,4 +195,9 @@ body {
 
 .question {
     color: #837e7e;
+}
+/* END PROFILE CONTENT */
+
+.review {
+    margin-bottom: 15px;
 }

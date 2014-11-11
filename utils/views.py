@@ -48,7 +48,7 @@ def valid_email(request):
     email = request.GET.get('email')
     user = request.user
     try:
-        user.valid_email(email)
+        User.valid_email(email, user)
         valid = True
     except ValidationError:
         valid = False

@@ -29,6 +29,37 @@ function editable_profile() {
     });
 }
 
+function update_question_form() {
+    $('.question-update-form').submit(function (e) {
+        e.preventDefault();
+
+        // Get the form instance
+        var $form = $(e.target);
+
+        $.post($form.attr('action'), $form.serialize(), 'json')
+            .done(function (data, textStatus, xhr) {
+                // It's probably redundant to check the json value for true seeing as the server returned a 200 status
+                // code, but an extra check never hurts.
+                if (data.isSuccessful) {
+                    handle_ajax_response(data);
+                    set_notification($('#notification-root'), 'Success!',
+                                       "You're ready to use SpareStub!", 'alert-success');
+                }
+            })
+            .fail(function (data, textStatus, xhr) {
+                // Obviously there are cases were we never reached the server (internet down or incredibly high loads
+                // resulting in the web server turning people away), so we cannot check the JSON object that might or
+                // might not have been returned by the application level.
+                if (has_notification_update(data.responseJSON)) {
+                    handle_ajax_response(data.responseJSON, $('#login-notification-root'));
+                }
+                else {
+                    set_notification($('#login-notification-root'), 'Uh oh!',
+                                       "Something went wrong. Try again in a bit!", 'alert-danger');
+                }
+            })
+    });
+}
 
 function initialize_bootstrap_validator_edit_profile() {
     'use strict';
@@ -42,44 +73,12 @@ function initialize_bootstrap_validator_edit_profile() {
         excluded: [] // Do not exclude hidden/not displayed fields. This allows us to run an initial round of
                      // validation on the user's current data while the form is closed. Otherwise every field would
                      // just get skipped.
-    }).on('success.form.bv', function (e) {
-        // Prevent form submission
-        e.preventDefault();
-
-        // Get the form instance
-        var $form = $(e.target);
-
-        $.post($form.attr('action'), $form.serialize(), 'json')
-            .done(function (data, textStatus, xhr) {
-                // It's probably redundant to check the json value for true seeing as the server returned a 200 status
-                // code, but an extra check never hurts.
-                if (data.isSuccessful) {
-                    handle_ajax_response(data);
-
-                    $('#modal-edit-profile-root').modal('hide');
-                }
-            })
-            .fail(function (data, textStatus, xhr) {
-                // Obviously there are cases were we never reached the server (internet down or incredibly high loads
-                // resulting in the web server turning people away), so we cannot check the JSON object that might or
-                // might not have been returned by the application level.
-                if (has_notification_update(data.responseJSON)) {
-                    handle_ajax_response(data.responseJSON, $('#edit-profile-notification-root'));
-                }
-                else {
-                    set_notification($('#edit-profile-notification-root'), 'Uh oh!',
-                                       "Something went wrong. Try again in a bit!", 'alert-danger');
-                }
-            })
-            .always(function () {
-                $form.data('bootstrapValidator').resetForm(true);
-            });
     });
 }
 
 $(document).ready(function ($) {
     'use strict';
-    resize_header();  // Do this once when the page initially loads
+    update_question_form();
 
     // And then every time the page is resized
     $(window).resize(function () {
@@ -113,4 +112,10 @@ $(document).ready(function ($) {
             });
         });
     }
+}(window.jQuery));
+
+
+$(window).load(function ($) {
+    resize_header();  // Do this once when the page initially loads, but we need to make sure the
+                      // profile picture has loaded. This is why we use window.load instead of document.ready.
 }(window.jQuery));

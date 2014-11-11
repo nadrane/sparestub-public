@@ -33,11 +33,9 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('User does not have an email address.')
 
-        user_profile = UserProfile()
-        if 'birth_date' in kwargs:
-            birth_date = kwargs.pop('birth_date')  # Note we want to remove the key from the dict to
-                                                   # avoid passing birth_date into the user model and
-                                                   # causing an error
+        birth_date = kwargs.pop('birth_date', None)  # Note we want to remove the key from the dict to
+                                                     # avoid passing birth_date into the user model and
+                                                     # causing an error
 
         user_profile = UserProfile.objects.create_user_profile(first_name, last_name, birth_date=birth_date)
 
@@ -258,7 +256,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         """
         return self.password == password_input
 
-    def valid_email(self, email):
+
+    @staticmethod
+    def valid_email(email, user):
         """
         Make sure that this email address does not already exist in the database
         """
@@ -268,7 +268,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         # If this the submitted email is the user's current email, everything is good since the current email was
         # already validated. This is will often be the case when a user edits his profile information.
         try:
-            if self.email == email:
+            if user.email == email:
                 return email
         # This is going to fail for AnonymousUser objects (aka every time during sign up. That's fine).
         except AttributeError:

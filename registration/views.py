@@ -55,12 +55,12 @@ def signup(request):
                        )
 
             # Creates the user profile as well. Saves both objects to the database.
-            new_user = User.objects.create_user(email=email,
-                                                password=password,
-                                                first_name=first_name,
-                                                last_name=last_name,
-                                                location=location,
-                                                )
+            User.objects.create_user(email=email,
+                                     password=password,
+                                     first_name=first_name,
+                                     last_name=last_name,
+                                     location=location,
+                                     )
 
             #Immediately log the user in after saving them to the database
             #Even though we know the username_or_email and password are valid since we just got them, we MUST authenticate anyway.
@@ -150,18 +150,9 @@ def login_redirect(request):
                   'registration/login-redirect.html',
                   {'form_settings': login_form_settings})
 
+
 def logout(request):
     auth_logout(request)
 
     # TODO This is going to need to redirect to the page the user was on, provided that page does not require authorization
     return HttpResponseRedirect('/')
-
-
-def email_valid(request):
-    '''
-    Used during form validation to verify that an inputted email address has not been used.
-    '''
-
-    if request.method == 'GET':
-        email = request.GET.get('email')
-        return HttpResponse(json.dumps(User.valid_email(email)))

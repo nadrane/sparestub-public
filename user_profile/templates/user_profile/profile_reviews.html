@@ -1,0 +1,35 @@
+{% extends "user_profile/base_profile.html" %}
+{% load misc_filters %}
+
+{% block profile_body %}
+  {% if reviews %}
+    <div class="panel panel-primary tickets-review-panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">User Reviews: </h3>
+      </div>
+      <div class="panel-body">
+        {% for review in reviews %}
+          <div class="row review">
+            <div class="col-xs-2 user-info">
+              {% comment %}TODO add images to reviews <img class="pull-left" src="{{ review.reviewer.profile_picture.search_thumbnail.url }}">{% endcomment %}
+              <div style="clear: left">
+                <span>{{ review.reviewer.first_name | title }}, {{ review.reviewer.age }} </span><br>
+                <span>{{ review.reviewer.location.city | title }}, {{ review.reviewer.location.state | upper }}</span><br>
+                <span>{{ review.creation_date }}</span>
+              </div>
+            </div>
+            <div class="col-xs-9 content">
+              {% for x in review.rating|get_range %}
+                <strong><span class="glyphicon glyphicon-star"></span></strong>
+              {% endfor %}<br>
+              <span>"{{ review.contents }}"</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <i>This user has not been reviewed yet!</i>
+  {% endif %}
+
+{% endblock %}

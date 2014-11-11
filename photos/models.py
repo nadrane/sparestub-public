@@ -15,23 +15,19 @@ from django.conf import settings
 from PIL import Image
 
 # SpareStub Imports
-from .settings import PHOTO_THUMBAIL_WIDTH, PHOTO_LISTING_DETAIL_WIDTH
-
-
-def random_photo():
-    return Photo.objects.order_by('?')[0]
+from .settings import PROFILE_THUMBNAIL_HEIGHT, SEARCH_THUMBNAIL_HEIGHT
 
 
 def generate_original_file_name(instance, filename):
-    return os.path.join('photos/original/', generate_file_name(instance, filename))
+    return os.path.join('photos', 'original', generate_file_name(instance, filename))
 
 
 def generate_search_thumbnail_name(instance, filename):
-    return os.path.join('photos/search/', generate_file_name(instance, filename))
+    return os.path.join('photos', 'search', generate_file_name(instance, filename))
 
 
 def generate_profile_thumbnail_file_name(instance, filename):
-    return os.path.join('photos/profile/', generate_file_name(instance, filename))
+    return os.path.join('photos', 'profile', generate_file_name(instance, filename))
 
 
 def generate_file_name(instance, filename):
@@ -71,11 +67,10 @@ def convert_image_string(image_byte_string, file_path=None):
         return None
 
     original_file = convert_image_to_django_uploadable(image_byte_string)
-    profile_thumbnail_bytes = make_thumbnail(image_byte_string)
+    profile_thumbnail_bytes = make_profile_thumbnail(image_byte_string)
     profile_thumbnail_file = convert_image_to_django_uploadable(profile_thumbnail_bytes)
-    search_thumbnail_bytes = make_detail_photo(image_byte_string)
+    search_thumbnail_bytes = make_search_thumbnail(image_byte_string)
     search_thumbnail_file = convert_image_to_django_uploadable(search_thumbnail_bytes)
-
 
     original_file.seek(0)
     profile_thumbnail_file.seek(0)
@@ -85,9 +80,9 @@ def convert_image_string(image_byte_string, file_path=None):
 
 
 def convert_to_jpeg(image_bytes, file_path=None):
-    '''
+    """
     Take an image of any format and convert it to a jpeg
-    '''
+    """
 
     if not image_bytes:
         return None
@@ -154,28 +149,28 @@ def resize(image_bytes, new_width, new_height):
     return thumbnail_bytes
 
 
-def make_thumbnail(image_bytes):
-    '''
-    Takes an Image and scales its size such that the width is equal to PHOTO_THUMBAIL_WIDTH
-    '''
+def make_profile_thumbnail(image_bytes):
+    """
+    Takes an Image and scales its size such that the width is equal to PROFILE_THUMBNAIL_HEIGHT
+    """
 
     # The height and width values to scale the thumbnail to
-    new_width_function = lambda width, height: PHOTO_THUMBAIL_WIDTH
-    new_height_function = lambda width, height : int(height * (new_width_function(width, height) / width))
+    new_width_function = lambda width, height: int(width * (new_height / height))
+    new_height = PROFILE_THUMBNAIL_HEIGHT
 
-    return resize(image_bytes, new_width_function, new_height_function)
+    return resize(image_bytes, new_width_function, new_height)
 
 
-def make_detail_photo(image_bytes):
-    '''
-    Takes an Image and scales its size such that the width is equal to PHOTO_LSITING_DETAIL_WIDTH
-    '''
+def make_search_thumbnail(image_bytes):
+    """
+    Takes an Image and scales its size such that the width is equal to SEARCH_THUMBNAIL_HEIGHT
+    """
 
-    # The height and width values to scale the new photo to
-    new_width_function = lambda width, height: PHOTO_LISTING_DETAIL_WIDTH if width > PHOTO_LISTING_DETAIL_WIDTH else width
-    new_height_function = lambda width, height : int(height * (new_width_function(width, height) / width))
+    # The height and width values to scale the thumbnail to
+    new_width_function = lambda width, height: int(width * (new_height / height))
+    new_height = SEARCH_THUMBNAIL_HEIGHT
 
-    return resize(image_bytes, new_width_function, new_height_function)
+    return resize(image_bytes, new_width_function, new_height)
 
 
 def get_photo_height(image_bytes):
@@ -199,6 +194,25 @@ def get_photo_height(image_bytes):
     return PIL_image.size[1]
 
 
+class PhotoManager(models.Manager):
+
+    def create_photo(self, original_photo):
+        """
+        Creates a ticket record using the given input
+        """
+
+        original_file, profile_thumbnail_file, search_thumbnail_file = convert_image_string(original_photo)
+
+        photo = self.model(search_thumbnail=search_thumbnail_file,
+                           profile_thumbnail=profile_thumbnail_file,
+                           original_file=original_file,
+                           )
+
+        photo.save(using=self._db)
+
+        return photo
+
+
 class Photo(TimeStampedModel):
     search_thumbnail = models.ImageField(upload_to=generate_search_thumbnail_name,  # So that we can use variable in custom methods
                                          null=False,
@@ -214,6 +228,8 @@ class Photo(TimeStampedModel):
                                       null=False,
                                       blank=False,
                                       )
+
+    objects = PhotoManager()
 
     #TODO Compress the original photo when it is initially stored to something managable. An arbitrrary size won't work.
 

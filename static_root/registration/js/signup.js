@@ -11,8 +11,7 @@ function initialize_bootstrap_validator_signup() {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
-        submitButtons: $('#signup-form-submit-button'),
-        live: 'disabled'
+        submitButtons: $('#signup-form-submit-button')
         // TODO figure out how we want to handle email validation given that triggers are field specific, not validator specific.
     }).on('success.form.bv', function (e) {
         // Prevent form submission

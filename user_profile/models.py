@@ -28,6 +28,11 @@ class UserProfilerManager(models.Manager):
                                   )
 
         user_profile.save(using=self._db)
+
+        # Make sure a blank profile answer object exists for every question
+        for profile_question in ProfileQuestion.objects.all():
+            ProfileAnswer.objects.create_profile_answer(user_profile, profile_question, '')
+
         return user_profile
 
 
@@ -110,7 +115,10 @@ class UserProfile(TimeStampedModel):
 
     @staticmethod
     def get_user_profile_from_username(username):
-        return UserProfile.objects.filter(username=username)[0]
+        profile = UserProfile.objects.filter(username=username)
+        if profile:
+            return profile[0]
+        return None
 
 
 class ProfileQuestionManager(models.Manager):
@@ -170,6 +178,7 @@ class ProfileAnswer(models.Model):
 
     answer = models.TextField(blank=False,
                               null=False,
+                              default='',
                               max_length=profile_answer_model_settings.get('ANSWER_MAX_LENGTH'),
                               )
 
@@ -180,10 +189,13 @@ class ProfileAnswer(models.Model):
         """
         Gets a particular user's answer to a specific question.
         """
+
         answer = ProfileAnswer.objects.filter(user_profile=user.user_profile, question=question)
+        # This should always be true since the create_user_profile function creates answers for every question for
+        # every user_profile created.
         if answer:
-            return answer[0].answer
-        return ''
+            return answer[0]
+        return None
 
     def __str__(self):
         return "Question: {} | Answer: {}".format(self.question.id, self.answer)

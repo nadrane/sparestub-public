@@ -66,7 +66,7 @@ var handle_ajax_response = function (response, $notification_root) {
 
     }
 };
-
+/*
 var store_in_local = function (key, data_to_store, is_data_json) {
     'use strict';
     if (Modernizr.localstorage) {
@@ -88,4 +88,4 @@ var retrieve_from_local = function (key, is_data_json){
         data = JSON.parse(data);
     }
     return data;
-};
+};*/

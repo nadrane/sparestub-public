@@ -37,8 +37,7 @@ class UserInfoForm(forms.Form):
 
     #Make sure that this email address does not already exist in the database
     def clean_email(self):
-        #TODO also check this on the front end via ajax
-        return self.request.user.valid_email(self.cleaned_data.get('email', None))
+        return User.valid_email(self.cleaned_data.get('email', None), self.request.user)
 
     def clean_first_name(self):
         return User.valid_name(self.cleaned_data.get('first_name'))

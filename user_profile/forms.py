@@ -3,7 +3,12 @@ from django import forms
 
 # SpareStub modules
 from registration.forms import UserInfoForm
-from .settings import edit_profile_form_settings
+from .settings import edit_profile_form_settings, profile_answer_form_settings
+
+
+class ProfileAnswerForm(forms.Form):
+    answer = forms.CharField(required=False,
+                             max_length=profile_answer_form_settings.get('ANSWER_MAX_LENGTH'))
 
 
 class EditProfileForm(UserInfoForm):
@@ -12,7 +17,7 @@ class EditProfileForm(UserInfoForm):
                                max_length=edit_profile_form_settings.get('USERNAME_MAX_LENGTH')
                                )
 
-    profile_picture = forms.ImageField(required=True)
+    profile_picture = forms.ImageField(required=False)
 
     def clean_username(self):
         """

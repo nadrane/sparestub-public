@@ -14,6 +14,7 @@ from .forms import SubmitTicketForm
 from utils.networking import ajax_http, form_success_notification, form_failure_notification, \
     non_field_errors_notification
 
+
 @login_required()
 def submit_ticket(request):
     # If the form has been submitted by the user

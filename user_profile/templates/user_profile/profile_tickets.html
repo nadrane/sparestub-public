@@ -1,0 +1,97 @@
+{% extends "user_profile/base_profile.html" %}
+
+{% block profile_body %}
+  <div class="panel panel-primary tickets-review-panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">Available Tickets: </h3>
+    </div>
+    <div class="panel-body">
+      {% if available_tickets %}
+        <div class="table-responsive">
+          <table class="table table-striped rowlink table-hover">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Title</th>
+                <th>User Info</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ticket in available_tickets %}
+                {% include "tickets/search_result.html" %} <!-- Defining ticket is not necessary, but I think it's more clear -->
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% elif is_owner %}
+          You do not have any available tickets.
+      {% else %}
+          This user has no available tickets.
+      {% endif %}
+    </div>
+  </div>
+  {% if is_owner %}
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">In Progress Tickets: </h3>
+      </div>
+      <div class="panel-body">
+        {% if in_progress_tickets %}
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Price</th>
+                  <th>Location</th>
+                  <th>Title</th>
+                  <th>User Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ticket in in_progress_tickets %}
+                  {% include "tickets/search_result.html" %} <!-- Defining ticket is not necessary, but I think it's more clear -->
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          You do not have any tickets in progress!
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+  {% if is_owner %}
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Past Tickets: </h3>
+      </div>
+      <div class="panel-body">
+        {% if past_tickets %}
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Price</th>
+                  <th>Location</th>
+                  <th>Title</th>
+                  <th>User Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ticket in past_tickets %}
+                  {% include "tickets/search_result.html" %} <!-- Defining ticket is not necessary, but I think it's more clear -->
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          You have not been to any events yet!
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

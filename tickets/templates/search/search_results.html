@@ -87,7 +87,7 @@ styl
         </thead>
         <tbody>
            {% for ticket in page.object_list %}
-            {% include "tickets/search_result.html" with ticket=ticket %} <!-- Defining ticket is not necessary, but I think it's more clear -->
+            {% include "tickets/search_result.html" with ticket=ticket.object %} <!-- Defining ticket is not necessary, but I think it's more clear -->
           {% endfor %}
         </tbody>
       {% endif %}

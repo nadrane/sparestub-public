@@ -7,7 +7,10 @@ from registration.models import user_model_settings
 
 profile_question_model_settings = {'QUESTION_MAX_LENGTH': 254}
 
-profile_answer_model_settings = {'CONTENT_MAX_LENGTH': 5000}
+profile_answer_model_settings = {'ANSWER_MAX_LENGTH': 10000}
+
+profile_answer_form_settings = {}
+profile_answer_form_settings.update(profile_answer_model_settings)
 
 user_profile_model_settings = {'USERNAME_MAX_LENGTH': user_model_settings.get("FIRST_NAME_MAX_LENGTH") +
                                                       user_model_settings.get('LAST_NAME_MAX_LENGTH') + 40
