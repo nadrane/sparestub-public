@@ -1,6 +1,7 @@
 __author__ = 'Nick'
 
 from .base import *
+import dj_database_url
 
 # Keep these in here always. regardless of what base.py says. Just be safe.
 DEBUG = False
@@ -15,15 +16,9 @@ MIDDLEWARE_CLASSES += (#'htmlmin.middleware.HTMLMinMiddleware',
 STATIC_URL = 'https://s3.amazonaws.com/sparestub-production/'
 MEDIA_URL = ''
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sparestub',
-        'USER': 'postgres',
-        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
-        'HOST': get_env_variable('DATABASE_URL')
-    }
-}
+
+DATABASES['default'] = dj_database_url.config()
+
 
 #ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
 
