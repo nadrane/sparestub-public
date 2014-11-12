@@ -1,10 +1,12 @@
 __author__ = 'Nick'
 
 from .base import *
+from urllib import parse
+
 
 # Keep these in here always. regardless of what base.py says. Just be safe.
 DEBUG = True
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 
 # Put on hold until https://github.com/cobrateam/django-htmlmin is migrated to python 3.
 # Or, more likely, migrate part of the project myself.
@@ -28,3 +30,22 @@ DATABASES = {
 #ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
 
 AWS_BUCKET_NAME = 'sparestub-staging'
+
+
+es = parse(os.environ.get('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
+
+port = es.port or 80
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': es.scheme + '://' + es.hostname + ':' + str(port),
+        'INDEX_NAME': 'haystack',
+    },
+}
+
+if es.username:
+    HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": es.username + ':' + es.password}
+
+# Make indexing happen whenever a model is saved or loaded
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
