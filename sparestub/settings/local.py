@@ -56,7 +56,7 @@ if es.username:
 # We really don't want sync_s3 changing the production or staging environents when run using
 # the the dev environment. The only purpose for this bucket is testing the sync_s3 script.
 # The sparestub-staging and sparestub-production buckets are used for staging and production, respectively
-AWS_BUCKET_NAME = 'sparestub'
+AWS_BUCKET_NAME = 'sparestub-staging'
 
 LOG_FILENAME = os.path.join(BASE_DIR, 'logging.txt')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)

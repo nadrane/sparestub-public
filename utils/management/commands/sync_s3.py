@@ -295,9 +295,10 @@ class Command(BaseCommand):
             if os.path.isdir(filename):
                 continue  # Don't try to upload directories
 
-            file_key = filename[len(root_directory):]
+            # Join the last folder in the filepath (static_root or media_root) with the rest of the file name
+            file_key = os.path.join(os.path.basename(root_directory[:-1]), filename[len(root_directory):])
             if self.prefix:
-                file_key = '%s/%s' % (self.prefix, file_key)
+                file_key = os.path.join(self.prefix, file_key)
 
             # Check if file on S3 is older than local file, if so, upload
             if not self.do_force:
