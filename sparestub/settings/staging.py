@@ -2,7 +2,6 @@ __author__ = 'Nick'
 
 from .base import *
 from urllib.parse import urlparse
-import dj_database_url
 
 # Keep these in here always. regardless of what base.py says. Just be safe.
 DEBUG = True

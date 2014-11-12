@@ -26,7 +26,12 @@ class Command(BaseCommand):
 
     def recreate_empty_database(self):
         database = settings.DATABASES['default']
-        with psycopg2.connect(database=database['NAME'], user=database['USER'], password=database['PASSWORD']) as conn:  #http://stackoverflow.com/questions/19426448/creating-a-postgresql-db-using-psycopg2
+        with psycopg2.connect(database=database['NAME'],
+                              user=database['USER'],
+                              password=database['PASSWORD'],
+                              host=database['HOST'],
+                              port=database['PORT']
+                              ) as conn:  #http://stackoverflow.com/questions/19426448/creating-a-postgresql-db-using-psycopg2
             with conn.cursor() as cur:
                 conn.autocommit = True   #  Explains why we do this - we cannot drop or create from within a DB transaction. http://initd.org/psycopg/docs/connection.html#connection.autocommit
                 try:
