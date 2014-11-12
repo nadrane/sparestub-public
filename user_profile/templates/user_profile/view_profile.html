@@ -2,7 +2,7 @@
 
 {% block profile_body %}
   {% for pair in question_answer_pairs %}
-    {% if is_owner %}<form class="question-update-form" method="post" action="{% url "update_question" username=request.user.user_profile.username question_id=pair.1.id %}">
+    {% if is_owner %}<form class="question-update-form" method="post" action="{% url "update_question" username=user_info.username question_id=pair.1.id %}">
     {% csrf_token %}{% endif %}
     <div class="row profile-content-pair">
       <div class="col-xs-12 col-md-2">

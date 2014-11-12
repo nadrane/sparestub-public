@@ -80,7 +80,8 @@ $(document).ready(function ($) {
     'use strict';
     update_question_form();
 
-    // And then every time the page is resized
+    // Resize the header every time the width of the screen adjusts.
+    // CSS will change the profile picture height, so we need to change the header height as well.
     $(window).resize(function () {
         resize_header($);
     });
