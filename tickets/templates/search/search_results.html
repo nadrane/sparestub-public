@@ -74,7 +74,7 @@ styl
   </nav>
 
   <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped table-hover">
       {% if page.object_list %}
         <thead>
           <tr>
@@ -85,7 +85,7 @@ styl
             <th>User Info</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody data-link="row" class="rowlink">
            {% for ticket in page.object_list %}
             {% include "tickets/search_result.html" with ticket=ticket.object %} <!-- Defining ticket is not necessary, but I think it's more clear -->
           {% endfor %}

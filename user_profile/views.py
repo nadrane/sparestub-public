@@ -254,6 +254,70 @@ def profile_tickets(request, username):
                   )
 
 
+def view_ticket(request, username, ticket_id):
+    """
+    View the details for a particular ticket. This view allows us to message the user or buy the ticket from him.
+    """
+    import pdb
+    pdb.set_trace()
+
+     # Look up the user record who corresponds to this profile
+    profile = UserProfile.get_user_profile_from_username(username)
+    if profile:
+        user = profile.user
+    else:
+        raise Http404('The username {} does not exist'.format(username))
+
+    ticket = Ticket.objects.get(pk=ticket_id)
+    # Make sure that the username entered is the actual poster of this ticket
+    if not ticket or ticket.poster != user:
+        raise Http404('That ticket does not exist for this user')
+
+    # If the user looking at this profile is its owner, then we want to render a couple edit buttons
+    if request.user == user:
+        is_owner = True
+    else:
+        is_owner = False
+
+    user_location = user.location
+
+    most_recent_review = user.most_recent_review()
+
+    user_info = {'name': user,
+                 'age': user.age(),
+                 'city': user_location.city,
+                 'state': user_location.state,
+                 'rating': user.rating,
+                 'username': username,
+                 }
+
+    if user.profile_picture:
+        user_info['profile_picture'] = user.profile_picture
+
+    if most_recent_review:
+        reviewer_location = most_recent_review.reviewer.location
+        reviewer_city, reviewer_state = reviewer_location.city, reviewer_location.state
+        most_recent_review_info = {'name': most_recent_review.reviewer.get_short_name(),
+                                   'age': most_recent_review.reviewer.age(),
+                                   'city': reviewer_city,
+                                   'state': reviewer_state,
+                                   'contents': most_recent_review.contents,
+                                   'rating': most_recent_review.rating
+                                   }
+    else:
+        most_recent_review_info = None
+
+    return render(request,
+                  'user_profile/profile_tickets.html',
+                  {'user_info': user_info,
+                   'is_owner': is_owner,
+                   'ticket': ticket,
+                   'most_recent_review_info': most_recent_review_info,
+                   'form_settings': profile_answer_form_settings,
+                   },
+                  content_type='text/html',
+                  )
+
 def update_question(request, username, question_id):
     """
     Update a single answer for a particular profile question of a particular user

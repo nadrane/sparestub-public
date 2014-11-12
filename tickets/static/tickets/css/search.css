@@ -30,3 +30,7 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.user-col {
+    text-align: right;
+}

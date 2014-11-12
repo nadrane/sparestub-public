@@ -5,12 +5,15 @@ boto==2.32.1
 dj-database-url==0.3.0
 django-blog-zinnia==0.14.2
 django-contrib-comments==1.5
+django-debug-toolbar==1.2.2
+django-haystack==2.3.1
 django-mptt==0.6.1
 django-storages==1.1.8
 django-tagging==0.3.2
 django-xmlrpc==0.1.5
 djrill==1.2.0
 docopt==0.4.0
+elasticsearch==1.2.0
 gunicorn==19.1.1
 htmlmin==0.1.5
 mandrill==1.0.56
@@ -23,6 +26,8 @@ pytz==2014.7
 requests==2.4.1
 requests-oauthlib==0.4.1
 six==1.8.0
+sqlparse==0.1.13
 static3==0.5.1
 unittest2py3k==0.5.1
+urllib3==1.9.1
 yuicompressor==2.4.8
