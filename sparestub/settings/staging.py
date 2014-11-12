@@ -1,7 +1,7 @@
 __author__ = 'Nick'
 
 from .base import *
-from urllib import parse
+from urllib.parse import urlparse
 
 
 # Keep these in here always. regardless of what base.py says. Just be safe.
@@ -31,8 +31,7 @@ DATABASES = {
 
 AWS_BUCKET_NAME = 'sparestub-staging'
 
-
-es = parse(os.environ.get('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
+es = urlparse(os.environ.get('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
 
 port = es.port or 80
 

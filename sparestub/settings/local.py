@@ -1,4 +1,5 @@
 from .base import *
+from urllib.parse import urlparse
 
 DEBUG = True
 TEMPLATE_DEBUG = True
@@ -36,13 +37,21 @@ DATABASES = {
     }
 }
 
+
+es = urlparse(os.environ.get('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
+
+port = es.port or 80
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
+        'URL': es.scheme + '://' + es.hostname + ':' + str(port),
         'INDEX_NAME': 'haystack',
     },
 }
+
+if es.username:
+    HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": es.username + ':' + es.password}
 
 # We really don't want sync_s3 changing the production or staging environents when run using
 # the the dev environment. The only purpose for this bucket is testing the sync_s3 script.
