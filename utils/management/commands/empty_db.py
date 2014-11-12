@@ -5,9 +5,10 @@ import logging
 import psycopg2
 
 from django.core.management import call_command
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from utils.miscellaneous import get_variable_from_settings
+from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -24,7 +25,8 @@ class Command(BaseCommand):
         self.recreate_empty_database()
 
     def recreate_empty_database(self):
-        with psycopg2.connect(database="sparestub", user="postgres", password=self.password) as conn:  #http://stackoverflow.com/questions/19426448/creating-a-postgresql-db-using-psycopg2
+        database = settings.DATABASES['default']
+        with psycopg2.connect(database=database['NAME'], user=database['USER'], password=database['PASSWORD']) as conn:  #http://stackoverflow.com/questions/19426448/creating-a-postgresql-db-using-psycopg2
             with conn.cursor() as cur:
                 conn.autocommit = True   #  Explains why we do this - we cannot drop or create from within a DB transaction. http://initd.org/psycopg/docs/connection.html#connection.autocommit
                 try:

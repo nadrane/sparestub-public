@@ -16,10 +16,6 @@ MIDDLEWARE_CLASSES += (#'htmlmin.middleware.HTMLMinMiddleware',
 STATIC_URL = 'https://s3.amazonaws.com/sparestub-production/'
 MEDIA_URL = ''
 
-
-DATABASES['default'] = dj_database_url.config()
-
-
 #ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
 
 AWS_BUCKET_NAME = 'sparestub-production'
