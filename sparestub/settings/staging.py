@@ -14,8 +14,8 @@ MIDDLEWARE_CLASSES += (#'htmlmin.middleware.HTMLMinMiddleware',
                        #'htmlmin.middleware.MarkRequestMiddleware',
                        )
 
-STATIC_URL = 'https://s3.amazonaws.com/sparestub-staging/'
-MEDIA_URL = 'https://s3.amazonaws.com/sparestub-staging/'
+STATIC_URL = 'https://s3.amazonaws.com/sparestub-staging/static_root/'
+MEDIA_URL = 'https://s3.amazonaws.com/sparestub-staging/media_root/'
 
 DATABASES = {
     'default': {
