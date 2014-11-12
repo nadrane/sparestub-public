@@ -5,6 +5,8 @@ import logging
 import json
 from optparse import make_option
 from collections import namedtuple
+import boto
+from io import StringIO
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -56,6 +58,10 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
+        self.AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
+        self.AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+        self.AWS_BUCKET_NAME = settings.AWS_BUCKET_NAME
+
         self.input_file = options.get('input_file')
         self.distance_json_file = options.get('distance_json_file')
         self.calculate_distance = options.get('calculate_distance')
@@ -73,8 +79,6 @@ class Command(BaseCommand):
 
         if self.calculate_cities:
             self.make_city_list(location_list, alias_list)
-
-        #TODO why is this getting set as a string at the command prompt
 
         if self.commit_to_db:
             self.update_db(location_list, alias_list)
@@ -132,97 +136,111 @@ class Command(BaseCommand):
         location_list = []
         alias_list = []
         same_city_state = []
+
+        # Note that these shadow the imported Alias and Location objects form within this function scope!
         Location = namedtuple('Location', ['line_no', 'zip_code', 'latitude', 'longitude', 'primary_city', 'state',
                                            'estimated_population', 'timezone'])
         Alias = namedtuple('Alias', ['zip_code', 'name', 'state', 'estimated_population'])
 
         city_state_combos = {}
+
         try:
             reader = csv.reader(open(self.input_file))
-            for (zip_code, mail_type, primary_city, aliases, unacceptable_cities, state, county, timezone, area_codes,
-                 latitude, longitude, world_region, country, decommissioned, estimated_population, notes) in reader:
-
-                # Do not handle any zip codes outside of the US
-                if country != 'US':
-                    logging.debug('line #{}: country equal to {}'.format(reader.line_num, country))
-                    continue
-
-                # Do not handle military zip codes
-                if mail_type == 'MILITARY':
-                    logging.debug('line #{}: country equal to {}'.format(reader.line_num, mail_type))
-                    continue
-
-                if state not in states_abbreviation_list:
-                    logging.debug('line #{}: state equal to {}'.format(reader.line_num, state))
-                    continue
-                else:
-                    # All strings in the database are lowercase. Let's work with lowercase from the beginning.
-                    state = state.lower()
-
-                if latitude:
-                    latitude = float(latitude)
-                else:
-                    logging.error('line #{}: Latitude not present.'.format(reader.line_num))
-                if longitude:
-                    longitude = float(longitude)
-                else:
-                    logging.error('line #{}: longitude not present.'.format(reader.line_num))
-
-                if not zip_code:
-                    logging.error('line #{}: zipcode not present.'.format(reader.line_num))
-
-                if primary_city:
-                    # All strings in the database are lowercase. Let's work with lowercase from the beginning.
-                    primary_city = primary_city.strip().lower()
-                else:
-                    logging.error('line #{}: primary_city not present.'.format(reader.line_num))
-
-                if not county:
-                    logging.debug('line #{}: county not present.'.format(reader.line_num))
-
-                if not timezone:
-                    logging.error('line #{}: timezone not present for zipcode {}'.format(reader.line_num, zip_code))
-                    continue
-
-                if estimated_population:
-                    estimated_population = int(estimated_population)
-                else:
-                    logging.debug('line #{}: estimated populated not present. Marking as 0'.format(reader.line_num))
-                    estimated_population = 0
-
-                if aliases:
-                    aliases = [city.strip().lower() for city in aliases.split(',')]
-                    for name in aliases:
-                        alias = Alias(zip_code, name, state, estimated_population=estimated_population)
-                        alias_list.append(alias)
-
-                location = Location(reader.line_num, zip_code, latitude, longitude,
-                                    primary_city, state, estimated_population, timezone)
-                location_list.append(location)
-
-                if not (primary_city, state) in city_state_combos:
-                    city_state_combos[(primary_city, state)] = location
-                else:
-                    location1 = city_state_combos[(primary_city, state)]
-                    location2 = Location(line_no=reader.line_num, latitude=latitude, longitude=longitude,
-                                         primary_city=primary_city, state=state, zip_code=zip_code,
-                                         estimated_population=estimated_population, timezone=timezone)
-
-                    if (location1.latitude, location1.longitude) != (location2.latitude, location2.longitude):
-
-                            distance_apart = calculate_distance_between_zip_codes(location1, location2)
-
-                            if distance_apart > 10:
-                                same_city_state.append((distance_apart, location1, location2))
-
-            if same_city_state:
-                same_city_state = sorted(same_city_state, key=lambda loc: loc[0])
-                for match in same_city_state:
-                    logging.critical('{distance:.2f}\n     {loc1}\n     {loc2}\n\n'.format(distance=match[0],
-                                                                                           loc1=match[1],
-                                                                                           loc2=match[2]))
+        # If the file isn't available locally, get it from s3
         except:
-            logging.error('major error', exc_info=True, stack_info=True)
+            bucket, key = self.open_s3()
+            key.key = 'static_root/locations/csv/zip_code_database.csv'
+
+            # Handle everything in memory
+            csv_file = key.get_contents_as_string().decode("utf-8")  #get_contents_as_string() is actually returning a bytes object
+            reader = csv.reader(StringIO(csv_file)) # csv.reader cannot take a string! It needs a file object
+
+        for (zip_code, mail_type, primary_city, aliases, unacceptable_cities, state, county, timezone, area_codes,
+             latitude, longitude, world_region, country, decommissioned, estimated_population, notes) in reader:
+
+            # Skip the line containing the column definitions
+            if reader.line_num == 1:
+                continue
+
+            # Do not handle any zip codes outside of the US
+            if country != 'US':
+                logging.debug('line #{}: country equal to {}'.format(reader.line_num, country))
+                continue
+
+            # Do not handle military zip codes
+            if mail_type == 'MILITARY':
+                logging.debug('line #{}: country equal to {}'.format(reader.line_num, mail_type))
+                continue
+
+            if state not in states_abbreviation_list:
+                logging.debug('line #{}: state equal to {}'.format(reader.line_num, state))
+                continue
+            else:
+                # All strings in the database are lowercase. Let's work with lowercase from the beginning.
+                state = state.lower()
+
+            if latitude:
+                latitude = float(latitude)
+            else:
+                logging.error('line #{}: Latitude not present.'.format(reader.line_num))
+            if longitude:
+                longitude = float(longitude)
+            else:
+                logging.error('line #{}: longitude not present.'.format(reader.line_num))
+
+            if not zip_code:
+                logging.error('line #{}: zipcode not present.'.format(reader.line_num))
+
+            if primary_city:
+                # All strings in the database are lowercase. Let's work with lowercase from the beginning.
+                primary_city = primary_city.strip().lower()
+            else:
+                logging.error('line #{}: primary_city not present.'.format(reader.line_num))
+
+            if not county:
+                logging.debug('line #{}: county not present.'.format(reader.line_num))
+
+            if not timezone:
+                logging.error('line #{}: timezone not present for zipcode {}'.format(reader.line_num, zip_code))
+                continue
+
+            if estimated_population:
+                estimated_population = int(estimated_population)
+            else:
+                logging.debug('line #{}: estimated populated not present. Marking as 0'.format(reader.line_num))
+                estimated_population = 0
+
+            if aliases:
+                aliases = [city.strip().lower() for city in aliases.split(',')]
+                for name in aliases:
+                    alias = Alias(zip_code, name, state, estimated_population=estimated_population)
+                    alias_list.append(alias)
+
+            location = Location(reader.line_num, zip_code, latitude, longitude,
+                                primary_city, state, estimated_population, timezone)
+            location_list.append(location)
+
+            if not (primary_city, state) in city_state_combos:
+                city_state_combos[(primary_city, state)] = location
+            else:
+                location1 = city_state_combos[(primary_city, state)]
+                location2 = Location(line_no=reader.line_num, latitude=latitude, longitude=longitude,
+                                     primary_city=primary_city, state=state, zip_code=zip_code,
+                                     estimated_population=estimated_population, timezone=timezone)
+
+                if (location1.latitude, location1.longitude) != (location2.latitude, location2.longitude):
+
+                        distance_apart = calculate_distance_between_zip_codes(location1, location2)
+
+                        if distance_apart > 10:
+                            same_city_state.append((distance_apart, location1, location2))
+
+        if same_city_state:
+            same_city_state = sorted(same_city_state, key=lambda loc: loc[0])
+            for match in same_city_state:
+                logging.critical('{distance:.2f}\n     {loc1}\n     {loc2}\n\n'.format(distance=match[0],
+                                                                                       loc1=match[1],
+                                                                                       loc2=match[2]))
 
         return location_list, alias_list
 
@@ -303,3 +321,16 @@ class Command(BaseCommand):
         except Exception:
             pass
 
+    def open_s3(self):
+        """
+        Opens connection to S3 returning bucket and key
+        """
+        conn = boto.connect_s3(
+            self.AWS_ACCESS_KEY_ID,
+            self.AWS_SECRET_ACCESS_KEY,
+            )
+        try:
+            bucket = conn.get_bucket(self.AWS_BUCKET_NAME)
+        except boto.exception.S3ResponseError:
+            bucket = conn.create_bucket(self.AWS_BUCKET_NAME)
+        return bucket, boto.s3.key.Key(bucket)

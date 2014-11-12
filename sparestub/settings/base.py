@@ -143,7 +143,8 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_root')
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_root')
 
-DEFAULT_ZIP_CODE_CSV = os.path.join(ROOT_DIR, 'locations', 'zip_code_database.csv')
+# These files will actually be read from a socket stream on the PRD and STG servers since the CSV file won't exist locally
+DEFAULT_ZIP_CODE_CSV = os.path.join(ROOT_DIR, 'locations', 'static', 'locations', 'csv', 'zip_code_database.csv')
 DEFAULT_ZIP_CODE_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'locations', 'json', 'zip_code_database.json')
 DEFAULT_CITY_LIST_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'locations', 'json', 'cities.json')
 
