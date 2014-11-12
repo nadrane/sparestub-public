@@ -23,7 +23,7 @@ DATABASES = {
         'NAME': 'sparestub',
         'USER': 'postgres',
         'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
-        'HOST': '127.0.0.1'
+        'HOST': get_env_variable('DATABASE_URL')
     }
 }
 
@@ -31,7 +31,7 @@ DATABASES = {
 
 AWS_BUCKET_NAME = 'sparestub-staging'
 
-es = urlparse(os.environ.get('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
+es = urlparse(get_env_variable('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
 
 port = es.port or 80
 

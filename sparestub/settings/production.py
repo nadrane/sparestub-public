@@ -21,7 +21,7 @@ DATABASES = {
         'NAME': 'sparestub',
         'USER': 'postgres',
         'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
-        'HOST': '127.0.0.1'
+        'HOST': get_env_variable('DATABASE_URL')
     }
 }
 
