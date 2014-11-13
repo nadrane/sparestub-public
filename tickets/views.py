@@ -41,6 +41,7 @@ def submit_ticket(request):
                                          ticket_type=ticket_type,
                                          payment_method=payment_method,
                                          is_active=True,
+                                         venue='blank'
                                          )
 
             email_submit_ticket_message = render_to_string('tickets/email_ticket_submit_message.html')
