@@ -2,12 +2,12 @@
 {% load misc_filters %}
 
 {% block profile_body %}
-  {% if reviews %}
-    <div class="panel panel-primary tickets-review-panel">
-      <div class="panel-heading">
-        <h3 class="panel-title">User Reviews: </h3>
-      </div>
-      <div class="panel-body">
+  <div class="panel panel-primary tickets-review-panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">User Reviews: </h3>
+    </div>
+    <div class="panel-body">
+      {% if reviews %}
         {% for review in reviews %}
           <div class="row review">
             <div class="col-xs-2 user-info">
@@ -26,10 +26,9 @@
             </div>
           </div>
         {% endfor %}
-      </div>
+      {% else %}
+        <i>This user has not been reviewed yet!</i>
+      {% endif %}
     </div>
-  {% else %}
-    <i>This user has not been reviewed yet!</i>
-  {% endif %}
-
+  </div>
 {% endblock %}
