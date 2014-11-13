@@ -180,6 +180,8 @@ def profile_reviews(request, username):
                                    'contents': most_recent_review.contents,
                                    'rating': most_recent_review.rating
                                    }
+    else:
+        most_recent_review_info = None
 
     return render(request,
                   'user_profile/profile_reviews.html',
