@@ -12,7 +12,8 @@
   <div id="profile-header" class="row wave">
   {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
     <div id="user-picture" class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
-      <img src="{{ user_info.profile_picture.profile_thumbnail.url }}">
+      {% comment %}<img src="{{ user_info.profile_picture.profile_thumbnail.url }}"> {% endcomment %}
+      <img src="https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xaf1/t31.0-8/10387106_10152489553738156_1129484635342981777_o.jpg">
       {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
                        <span style="display: none;" id="edit-profile-text">Edit Profile</span>
       {% endif %}
