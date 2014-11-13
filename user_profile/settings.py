@@ -23,8 +23,8 @@ edit_profile_form_settings = {'USERNAME_NOTEMPTY_MESSAGE': 'Please enter your us
                               'USERNAME_MAX_LENGTH': user_profile_model_settings.get('USERNAME_MAX_LENGTH'),
                               'USERNAME_LENGTH_MESSAGE': 'Please keep your first name fewer than {} characters'
                               .format(user_profile_model_settings.get('USERNAME_MAX_LENGTH')),
-                              'USERNAME_REGEXP': '^[a-zA-Z1-9]+$', # Note that this is javascript. If this changes,
-                                                                # the serverside validator MUST change as well.
+                              'USERNAME_REGEXP': '^[a-zA-Z0-9]+$',  # Note that this is javascript. If this changes,
+                                                                    # the serverside validator MUST change as well.
                               'USERNAME_REGEXP_MESSAGE': 'Your first name can only contain alphabetical characters and spaces',
 
                               # The actual remote URL is added in views.py for circular dependency reasons
