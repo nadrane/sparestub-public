@@ -232,3 +232,11 @@ body {
     width: 250px;
     height: 200px;
 }
+
+#fileinput-preview-button-holder span, #fileinput-preview-button-holder button, #fileinput-preview-button-holder a {
+    font-size: 12px;
+}
+
+.modal-md {
+    width: 625px;
+}

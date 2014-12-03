@@ -13,14 +13,14 @@
       <div class="form-group">
         <label for="search-ticket-location" class="control-label sr-only">location</label>
         <input id="search-ticket-location" type="text" class="form-control location-autocomplete" name="location_raw"
-               placeholder="Location (city, state)" value="{{ request.GET.location_raw }}">
+               autocomplete="off" placeholder="Location (city, state)" value="{{ request.GET.location_raw }}">
       </div>  <!-- .form group -->
     </li>
     <li>
       <div class="form-group has-feedback date-picker">
         <div class="input-group date">
           <label for="search-ticket-start-date" class="control-label sr-only">start date</label>
-          <input id="search-ticket-start-date" type="text" class="form-control" name="start_date"
+          <input id="search-ticket-start-date" type="text" class="form-control" name="start_date" autocomplete="off"
                  placeholder="Start date" value="{{ request.GET.start_date }}">
              <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
         </div>
@@ -28,7 +28,7 @@
       <div class="form-group has-feedback date-picker">
         <div class="input-group date">
           <label for="search-ticket-end-date" class="control-label sr-only">start date</label>
-          <input id="search-ticket-end-date" type="text" class="form-control" name="end_date"
+          <input id="search-ticket-end-date" type="text" class="form-control" name="end_date" autocomplete="off"
                  placeholder="End date" value="{{ request.GET.end_date }}">
              <span class="input-group-addon">
                <span class="glyphicon glyphicon-calendar"></span>
@@ -50,6 +50,9 @@
           {% endfor %}
         </select>
       </div>  <!-- .form group -->
+    </li>
+    <li>
+      <button style="width: 100%;" class="btn btn-primary" type="submit">Search</button>
     </li>
   </ul>
 </form>

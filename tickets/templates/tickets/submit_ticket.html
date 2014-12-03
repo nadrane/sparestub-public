@@ -53,7 +53,7 @@
           <div id="submit-ticket-date-picker" class="form-group large-feedback-icon-shift date-picker">
             <div class='input-group date'>
               <label for="submit-ticket-start-date" class="control-label sr-only"></label>
-              <input id="submit-ticket-start-date" type="text" class="form-control" name="start_date"
+              <input id="submit-ticket-start-date" type="text" class="form-control" name="start_date" autocomplete="off"
                      placeholder="Event date" required
 
                      data-bv-notempty-message="{{ form_settings.START_DATE_NOTEMPTY_MESSAGE }}"
@@ -77,7 +77,7 @@
           <div id="submit-ticket-time-picker" class="form-group large-feedback-icon-shift time-picker">
             <div class="input-group date">
               <label for="submit-ticket-start-time" class="control-label sr-only"></label>
-              <input id="submit-ticket-start-time" type="text" class="form-control" name="start_time"
+              <input id="submit-ticket-start-time" type="text" class="form-control" name="start_time" autocomplete="off"
                      placeholder="Event time" required
 
                      data-bv-notempty-message="{{ form_settings.START_TIME_NOTEMPTY_MESSAGE }}"
@@ -94,9 +94,22 @@
         <div class="col-md-4 col-xs-12">
           <div class="form-group">
             <label for="submit-ticket-location" class="control-label sr-only"></label>
-            <input id="submit-ticket-location" class="form-control location-autocomplete" type="text"
+            <input id="submit-ticket-location" class="form-control location-autocomplete" type="text" autocomplete="off"
                    name="location_raw" placeholder="Location (city, state)" required
                    data-bv-notempty-message="{{ form_settings.LOCATION_NOTEMPTY_MESSAGE }}">
+            </input>
+          </div>  <!-- form group -->
+        </div> <!-- column -->
+        <div class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="submit-ticket-venue" class="control-label sr-only"></label>
+            <input id="submit-ticket-venue" class="form-control" type="text"
+                   name="venue" placeholder="Venue" required
+                   data-bv-notempty-message="{{ form_settings.VENUE_NOTEMPTY_MESSAGE }}"
+
+                   data-bv-stringlength="true"
+                   data-bv-stringlength-max="{{ form_settings.VENUE_MAX_LENGTH }}"
+                   data-bv-stringlength-message="{{ form_settings.VENUE_LENGTH_MESSAGE }}">
             </input>
           </div>  <!-- form group -->
         </div> <!-- column -->
@@ -113,7 +126,7 @@
             </select>
           </div>  <!-- form group -->
         </div> <!-- column -->
-
+        {% comment %} Removing for lean launch
         <div class="col-md-4 col-xs-12 small-feedback-icon-shift">
           <div class="form-group">
             <label for="submit-ticket-payment-method" class="control-label sr-only"></label>
@@ -126,6 +139,7 @@
             </select>
           </div>  <!-- form group -->
         </div> <!-- column -->
+        {% endcomment %}
       </div> <!-- row -->
 
       <div class="row">

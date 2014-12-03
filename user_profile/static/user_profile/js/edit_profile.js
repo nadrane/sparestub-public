@@ -29,6 +29,8 @@ function initialize_remove_photo() {
 }
 
 function initialize_crop_button() {
+    'use strict';
+    var $original_image = $('.fileinput-preview>img');
     $('#crop').click(function () {
         if (jcrop_api.getOptions().disabled) {
             jcrop_api.enable();
@@ -44,20 +46,33 @@ function initialize_crop_button() {
     });
 }
 
-function store_crop (e) {
-    var profile_picture_preview = $('.jcrop-holder');
-    $('#x').val(e.x);
-    $('#x2').val(e.x2);
-    $('#y').val(e.y);
-    $('#y2').val(e.y2);
-    $('#w').val(profile_picture_preview.css('width').replace('px', ''));
-    $('#h').val(profile_picture_preview.css('height').replace('px', ''));
+function initialize_rotation_buttons() {
+    var $original_image = $('.fileinput-preview img');
+    $('#rotate-left').on('click', function () {
+        $original_image.cropper('rotate', -90);
+    });
+    $('#rotate-right').on('click', function () {
+        $original_image.cropper('rotate', 90);
+    });
 }
+
+function store_crop(e) {
+    'use strict';
+    var original_image = $('.fileinput-preview>img');
+    //$('#x').val(e.x);
+    //$('#x2').val(e.x2);
+    //$('#y').val(e.y);
+    //$('#y2').val(e.y2);
+    //$('#w').val(profile_picture_preview.css('width').replace('px', ''));
+    //$('#h').val(profile_picture_preview.css('height').replace('px', ''));
+}
+
 
 function resize_profile_picture_preview() {
     /* When an image is previewed for cropping, we need to ensure that it's is scaled to an appropraite size without
        distorting it's aspect ratio. This function sets a mutation observer that does just that.
     */
+    'use strict';
     $('.modal-body').on('change.bs.fileinput', function (e, files) {
         var original_image = $('.fileinput-preview>img')[0];
         var width = original_image.naturalWidth;
@@ -92,6 +107,9 @@ function resize_profile_picture_preview() {
         $(original_image).cropper({aspectRatio : 1.0,
                                    done : store_crop
                                    });
+
+        // This needs to be done once the img tags exist.
+        initialize_rotation_buttons();
 
 
     });

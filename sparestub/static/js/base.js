@@ -142,16 +142,22 @@ $(document).ready(function ($) {
     });
 
     $('.submit-ticket-form-button').on('click', function () {
+
         if (!window.additional_parameters.is_authenticated) {
             load_login_modal(true);
             return;
         }
+
+        var $modal_submit_ticket_form_content = $('#modal-submit-ticket-form-content');
+
         // If the modal content has already been loaded, don't do it again
-        if ($('#modal-submit-ticket-form-content').children().length > 0) {
+        if ($modal_submit_ticket_form_content.children().length > 0) {
+            $('#modal-submit-ticket-root').modal('show');
             return;
         }
+
         $.get(window.additional_parameters.submit_ticket_form_url, function (data) {
-            $('#modal-submit-ticket-form-content').html(data);
+            $modal_submit_ticket_form_content.html(data);
             initialize_bootstrap_validator_submit_ticket();
 
             // Initialize when the submit-ticket forms loads in addition to when the main page loads.

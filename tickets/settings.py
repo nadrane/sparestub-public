@@ -58,6 +58,8 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
                                'VENUE_LENGTH_MESSAGE': 'The venue cannot exceed {} characters'.format(ticket_model_settings.get('VENUE_MAX_LENGTH'))
                             }
 
+ticket_submit_form_settings.update(ticket_model_settings)
+
 search_results_settings = {'TICKET_TYPES': ticket_model_settings.get('TICKET_TYPES'),
                            'PAYMENT_METHODS': ticket_model_settings.get('PAYMENT_METHODS')
                            }

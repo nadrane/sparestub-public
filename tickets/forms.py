@@ -100,6 +100,10 @@ class SubmitTicketForm(forms.Form):
                                    max_length=200
                                    )
 
+    venue = forms.CharField(required=True,
+                            max_length=ticket_submit_form_settings.get('VENUE_MAX_LENGTH')
+                            )
+
     start_date = forms.DateField(required=True)
     start_time = forms.TimeField(required=True,
                                  # Notice that we use %I instead of %H. This is so that the AM/PM affects the hour value.
@@ -110,8 +114,9 @@ class SubmitTicketForm(forms.Form):
     ticket_type = forms.ChoiceField(required=True,
                                     choices=ticket_submit_form_settings.get('TICKET_TYPES'))
 
-    payment_method = forms.ChoiceField(required=True,
-                                       choices=ticket_submit_form_settings.get('PAYMENT_METHODS'))
+    # Disabling for lean launch
+    #payment_method = forms.ChoiceField(required=True,
+    #                                   choices=ticket_submit_form_settings.get('PAYMENT_METHODS'))
 
     def handle_location(self):
         city, state = map(lambda x: x.strip().lower(), self.cleaned_data.get('location_raw').split(','))

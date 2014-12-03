@@ -26,9 +26,11 @@ def submit_ticket(request):
             price = submit_ticket_form.cleaned_data.get('price')
             location_raw = submit_ticket_form.cleaned_data.get('location_raw')
             location = submit_ticket_form.cleaned_data.get('location')
+            venue = submit_ticket_form.cleaned_data.get('venue')
             start_datetime = submit_ticket_form.cleaned_data.get('start_datetime')
             ticket_type = submit_ticket_form.cleaned_data.get('ticket_type')
-            payment_method = submit_ticket_form.cleaned_data.get('payment_method')
+            payment_method = submit_ticket_form.cleaned_data.get('payment_method', 'G')  # Assume good faith since
+                                                                                         # lean launch won't have secure
             about = submit_ticket_form.cleaned_data.get('about') or ''  # Might be empty
 
             Ticket.objects.create_ticket(poster=request.user,
@@ -41,7 +43,7 @@ def submit_ticket(request):
                                          ticket_type=ticket_type,
                                          payment_method=payment_method,
                                          is_active=True,
-                                         venue='blank'
+                                         venue=venue,
                                          )
 
             email_submit_ticket_message = render_to_string('tickets/email_ticket_submit_message.html')
