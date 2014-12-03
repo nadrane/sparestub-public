@@ -13,16 +13,37 @@
   <form id="edit-profile-form" class="form-horizontal" method="post"
         action="{% url "edit_profile" username=user.user_profile.username %}"
         enctype="multipart/form-data"> {% csrf_token %}
+    {% comment %}Validity of a photo is determined entirely by whether it has been cropped yet or not.
+                 Nevertheless, when the edit profile activity is opened, the current photo, whether it be an old one or
+                 simply a non-existent one, will always be valid.{% endcomment %}
+    <input id="is_valid-photo" type="hidden" name="is_valid_photo" value=true>
+    {% comment %}Regardless of the validity of the input, we aren't going to actually send the existing profile picture
+                 to the server a second time. It's already stored in the DB.If the user has a photo and makes no changes
+                  to their photo, indicate this server side and make no changes. {% endcomment %}
+    <input id="use-old-photo" type="hidden" name="use_old_photo" value={% if user_info.profile_pictures %}true{% else %}false{% endif %}>
+    <input id="x" type="hidden" name="x" value="">
+    <input id="x2" type="hidden" name="x2" value="">
+    <input id="y" type="hidden" name="y" value="">
+    <input id="y2" type="hidden" name="y2" value="">
+    <input id="w" type="hidden" name="w" value="">
+    <input id="h" type="hidden" name="h" value="">
     <div class="modal-body">
-
-      <div class="form-group">
-        <label for="edit-profile-picture" class="col-xs-12 col-sm-3 control-label">Profile Picture: </label>
+      <div class="form-group feedback-icon-shift">
+        <label for="edit-profile-picture" class="col-xs-12 col-sm-3 control-label">Profile Picture:<br><span style="font-size: 10pt;font-weight: normal;text-align: left;">Select photo, Crop it, Click Save Profile</span></label>
         {% comment %} TODO add silhouette jansys site says how to  {% endcomment %}
         <div class="fileinput fileinput-new col-xs-12 col-sm-9" data-provides="fileinput">
-          <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
-          <div>
-            <span class="btn btn-default btn-file"><span class="fileinput-new">Select Picture</span><span class="fileinput-exists">Change</span><input id="edit-profile-picture" class="form-control" name="profile_picture" type="file"></span>
-            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+          <div class="fileinput-preview thumbnail">
+            <img src="{{ user_info.profile_picture.profile_thumbnail.url }}">
+          </div>
+          <div id="fileinput-preview-button-holder">
+            <span id="select-photo" class="btn btn-default btn-file"><span class="fileinput-new">Select Picture</span><span class="fileinput-exists">New Photo</span><input id="edit-profile-picture" class="form-control" name="profile_picture" type="file"
+                                                                                                                                                                            data-bv-callback="true"
+                                                                                                                                                                            data-bv-callback-callback="valid_photo"
+                                                                                                                                                                            data-bv-callback-message="Don't forget to crop your photo!"></span>
+            <a id="remove-photo" href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            <button id="crop" type="button" class="btn btn-default fileinput-exists">Crop</button>
+            <button id="rotate-left" type="button" class="btn btn-default fileinput-exists">Rotate Left</button>
+            <button id="rotate-right" type="button" class="btn btn-default fileinput-exists">Rotate Right</button>
           </div>
         </div>
       </div>

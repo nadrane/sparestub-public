@@ -149,3 +149,4 @@ DEFAULT_ZIP_CODE_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'locations
 DEFAULT_CITY_LIST_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'locations', 'json', 'cities.json')
 
 LOGIN_URL = '/registration/login_redirect/'
+LOGIN_REDIRECT_URL = '/'

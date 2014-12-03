@@ -9,6 +9,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, auth
 from django.template.loader import render_to_string
 from django.utils.timezone import activate
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 # SpareStub Imports
 from .models import User
@@ -96,8 +97,6 @@ def login(request):
                          status=400
                          )
 
-    # If the user tried to access another page without logging in first, store that page here, and redirect them to it after login
-    redirect_to_url = request.REQUEST.get('next', '')
     # If the form has been submitted by the user
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
@@ -109,7 +108,11 @@ def login(request):
             user = authenticate(email=email, password=password)
             auth_login(request, user)
             activate(user.timezone())  # Configure time zone
-            return ajax_http(render_nav_bar,
+
+            redirect_url = request.REQUEST.get('next', settings.LOGIN_REDIRECT_URL)
+
+            return ajax_http({'isSuccessful': True,
+                              'redirect_href': redirect_url},
                              status=200,
                              request=request)
         else:

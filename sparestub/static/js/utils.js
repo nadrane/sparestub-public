@@ -48,15 +48,13 @@ var handle_ajax_response = function (response, $notification_root) {
     if (!response) {
         return;
     }
-    if (!!response.is_redirect && response.is_redirect === true) {
-        if (!!response.redirect_href) {
-            window.location.href = response.redirect_href;
-        }
+    if (!!response.redirect_href) {
+        window.location.href = response.redirect_href;
     // If it's not a complete redirect, then we are replacing specific elements of the DOM.  Do that here.
     } else {
         // Right now, this div shows login and signup buttons. Show username and logout buttons instead.
         if (response.navigation_bar_right_div) {
-            $('#navigation-bar-right-div').html((response.navigation_bar_right_div));
+            $('#navigation-bar-right-div').replaceWith((response.navigation_bar_right_div));
         }
         if (has_notification_update(response)) {
             set_notification($notification_root, response.notification_header,
@@ -66,6 +64,21 @@ var handle_ajax_response = function (response, $notification_root) {
 
     }
 };
+
+function add_success_checkmark($target) {
+    /* Remove the old glyphicon associated with a element and add a success checkmark */
+    'use strict';
+    $target.empty();
+    $target.append('<span class="glyphicon glyphicon-ok">');
+
+}
+
+function add_failure_x($target) {
+    /* Remove the old glyphicon associated with a element and add a failure x */
+    'use strict';
+    $target.empty();
+    $target.append('<span class="glyphicon glyphicon-remove">');
+}
 /*
 var store_in_local = function (key, data_to_store, is_data_json) {
     'use strict';

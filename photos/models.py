@@ -4,6 +4,7 @@ import io
 import random
 import os
 import logging
+import math
 
 #Django Imports
 from utils.models import TimeStampedModel
@@ -50,26 +51,28 @@ def convert_image_to_django_uploadable(image):
         return None
 
     # If we are dealing with a type of PIL.Image
-    if isinstance(image, io.BytesIO):
-        return InMemoryUploadedFile(image, None, 'temp.jpg', 'image/jpeg', len(image.getvalue()), None)
+    return InMemoryUploadedFile(image, None, 'temp.jpg', 'image/jpeg', len(image.getvalue()), None)
 
-    else:
-        return InMemoryUploadedFile(io.BytesIO(image.tobytes()), None, 'temp.jpg', 'image/jpeg', len(image.tobytes()), None)
-
-
-def convert_image_string(image_byte_string, file_path=None):
+def convert_image_string(image_byte_string, crop_coords=None, crop_width=None, crop_height=None):
+    import pdb
+    pdb.set_trace()
     if not image_byte_string:
         return None
 
-    image_byte_string = convert_to_jpeg(image_byte_string, file_path)
-
-    if not image_byte_string:
+    try:
+        pil_image = Image.open(image_byte_string)
+    # If Image.open fails, we raise this exception
+    except IOError:
+        logging.error('Could not convert image %s to jpeg', exc_info=True, stack_info=True)
         return None
 
-    original_file = convert_image_to_django_uploadable(image_byte_string)
-    profile_thumbnail_bytes = make_profile_thumbnail(image_byte_string)
+    pil_image = crop_photo(pil_image, crop_coords, crop_width, crop_height)
+    image_bytes = convert_to_jpeg(pil_image)
+
+    original_file = convert_image_to_django_uploadable(image_bytes)
+    profile_thumbnail_bytes = make_profile_thumbnail(image_bytes)
     profile_thumbnail_file = convert_image_to_django_uploadable(profile_thumbnail_bytes)
-    search_thumbnail_bytes = make_search_thumbnail(image_byte_string)
+    search_thumbnail_bytes = make_search_thumbnail(image_bytes)
     search_thumbnail_file = convert_image_to_django_uploadable(search_thumbnail_bytes)
 
     original_file.seek(0)
@@ -79,34 +82,52 @@ def convert_image_string(image_byte_string, file_path=None):
     return original_file, profile_thumbnail_file, search_thumbnail_file
 
 
-def convert_to_jpeg(image_bytes, file_path=None):
+def crop_photo(pil_image, inputted_crop_coords, crop_width, crop_height):
+    if not pil_image:
+        return None
+
+    # If the photo was croppped on the front end, the actual photo was not cropped but rather a shrunken down version of
+    # it with the same aspect ratio. We need to convert the inputted coordinates to the coordinates on the actual photo.
+    if crop_width and crop_height:
+        actual_width, actual_height = pil_image.size
+
+        # The jansy preview system should change the size of the uploaded photo by its aspect ratio to match the
+        # width of the modal. Width is 100% and height is auto. So we check here if the photo increased or decreased in
+        # size. It will almost always certainly be decrease in size.
+        if actual_width > crop_width:
+            height_ratio = actual_height / crop_height
+            width_ratio = actual_width / crop_width
+        else:
+            height_ratio = crop_height / actual_height
+            width_ratio = crop_width / actual_width
+
+        # We round up to ensure that none of the picels the user cropped are lost.
+        # The thumbnail image we ultimately create will be the right size since we resize the photo later.
+        new_x = int(math.ceil(inputted_crop_coords[0] * width_ratio))
+        new_y = int(math.ceil(inputted_crop_coords[1] * height_ratio))
+        new_x2 = int(math.ceil(inputted_crop_coords[2] * width_ratio))
+        new_y2 = int(math.ceil(inputted_crop_coords[3] * height_ratio))
+
+        crop_coords = (new_x, new_y, new_x2, new_y2)
+    else:
+        new_x, new_y, new_x2, new_y2 = crop_coords = inputted_crop_coords
+
+    cropped_image = pil_image.crop(crop_coords)
+    return Image.frombytes('RGB', (new_x2 - new_x, new_y2 - new_y), cropped_image.load())
+
+
+def convert_to_jpeg(pil_image):
     """
     Take an image of any format and convert it to a jpeg
     """
 
-    if not image_bytes:
+    if not pil_image:
         return None
 
-    try:
-        # Make sure that we are reading from the beginning of the file, otherwise Image.open will
-        # not be able to determine the file type and will fail.
-        image_bytes.seek(0)
-        PIL_image = Image.open(image_bytes)
-
-        PIL_image = PIL_image.convert('RGB')
-        image_bytes = io.BytesIO()
-        PIL_image.save(image_bytes, 'JPEG')
-        return image_bytes
-
-    # If Image.open fails, we raise this exception
-    except IOError:
-        logger = logging.getLogger(__name__)
-        #TODO make far more robust error
-        if file_path:
-            logger.error('Could not convert image %s to jpeg', file_path)
-        else:
-            logger.error('Could not convert image to jpeg', file_path)
-        return None
+    pil_image = pil_image.convert('RGB')
+    image_bytes = io.BytesIO()
+    pil_image.save(io.BytesIO(), 'JPEG')
+    return image_bytes
 
 
 def resize(image_bytes, new_width, new_height):
@@ -122,9 +143,7 @@ def resize(image_bytes, new_width, new_height):
 
     # If Image.open fails, we raise this exception
     except IOError:
-        logger = logging.getLogger(__name__)
-        #TODO make far more robust error
-        logger.error('Could not make resize image')
+        logging.error('Could not make resize image', exc_info=True, stack_info=True)
         return None
 
     current_width, current_height = PIL_image.size
@@ -196,12 +215,13 @@ def get_photo_height(image_bytes):
 
 class PhotoManager(models.Manager):
 
-    def create_photo(self, original_photo):
+    def create_photo(self, original_photo, crop_coords, crop_width, crop_height):
         """
         Creates a ticket record using the given input
         """
 
-        original_file, profile_thumbnail_file, search_thumbnail_file = convert_image_string(original_photo)
+        original_file, profile_thumbnail_file, search_thumbnail_file = convert_image_string(original_photo, crop_coords,
+                                                                                            crop_width, crop_height)
 
         photo = self.model(search_thumbnail=search_thumbnail_file,
                            profile_thumbnail=profile_thumbnail_file,

@@ -93,9 +93,12 @@
     </div>  <!-- modal body -->
 
     <div class="modal-footer">
-        <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
-        <button id="signup-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Sign up</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <div id="disclosure-message">
+        By signing up, you agree to the <a href="{% url "tos" %}" target="_blank"> Terms of Service</a> and <a href="{% url "privacy policy" %}" target="_blank">Privacy Policy</a>, including <a href="{% url "cookie use" %}" target="_blank">Cookie Use</a>.
+      </div>
+      <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
+      <button id="signup-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Sign up</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
   </form>  <!-- signup form -->
 </div>

@@ -17,4 +17,6 @@ MEDIA_URL = ''
 
 #ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
 
-AWS_BUCKET_NAME = 'sparestub-production'
+# File Storage Backend Settings
+DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
+AWS_STORAGE_BUCKET_NAME = 'sparestub-production'

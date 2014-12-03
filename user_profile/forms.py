@@ -1,10 +1,10 @@
 # Django core modules
 from django import forms
+from django.forms import ValidationError
 
 # SpareStub modules
 from registration.forms import UserInfoForm
 from .settings import edit_profile_form_settings, profile_answer_form_settings
-
 
 class ProfileAnswerForm(forms.Form):
     answer = forms.CharField(required=False,
@@ -19,11 +19,40 @@ class EditProfileForm(UserInfoForm):
 
     profile_picture = forms.ImageField(required=False)
 
+    # Did the user change their profile picture or not?
+    use_old_photo = forms.BooleanField(required=False,  # A boolean field cannot be required because an inputted value
+                                                        # of False will cause it to fail every time.
+                                       initial=False)
+
+    # These are required when use_old_photo is false.
+    # They are the coordinates of the cropped photo with respect to the inset in the edit profile activity.
+    x = forms.IntegerField(required=False)
+    x2 = forms.IntegerField(required=False)
+    y = forms.IntegerField(required=False)
+    y2 = forms.IntegerField(required=False)
+    w = forms.IntegerField(required=False)   # Height
+    h = forms.IntegerField(required=False)   # Width
+
     def clean_username(self):
         """
         Make sure that the submitted username is unique.
         """
+
         return self.request.user.user_profile.valid_username(self.cleaned_data.get('username'))
+
+    def clean(self):
+
+        #If we are not using the old photo, then the cropping coordinates must be present.
+        if not self.cleaned_data.get('use_old_photo'):
+            if not all(self.cleaned_data.get(attr) for attr in ['x', 'x2', 'y', 'y2', 'w', 'h']):
+                raise ValidationError('The new photo submitted that was not cropped')
+
+        # Make sure the the aspect ratio of the submitted photo is 1.
+        if (self.cleaned_data.get('x2') - self.cleaned_data.get('x')) /\
+                (self.cleaned_data.get('y2') - self.cleaned_data.get('y')) != 1:
+            raise ValidationError('The aspect ratio of the new photo is not 1.')
+
+        return
 
 '''
 class PasswordChangeForm(forms.Form):

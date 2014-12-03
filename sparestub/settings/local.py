@@ -56,10 +56,14 @@ if es.username:
 # We really don't want sync_s3 changing the production or staging environents when run using
 # the the dev environment. The only purpose for this bucket is testing the sync_s3 script.
 # The sparestub-staging and sparestub-production buckets are used for staging and production, respectively
-AWS_BUCKET_NAME = 'sparestub-staging'
+# File Storage Backend Settings
+AWS_STORAGE_BUCKET_NAME = 'sparestub'
 
 LOG_FILENAME = os.path.join(BASE_DIR, 'logging.txt')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
 
 # Make indexing happen whenever a model is saved or loaded
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# File Storage Backend Settings
+DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'

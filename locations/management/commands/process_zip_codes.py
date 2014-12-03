@@ -60,7 +60,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
         self.AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
-        self.AWS_BUCKET_NAME = settings.AWS_BUCKET_NAME
+        self.AWS_STORAGE_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
 
         self.input_file = options.get('input_file')
         self.distance_json_file = options.get('distance_json_file')
@@ -330,7 +330,7 @@ class Command(BaseCommand):
             self.AWS_SECRET_ACCESS_KEY,
             )
         try:
-            bucket = conn.get_bucket(self.AWS_BUCKET_NAME)
+            bucket = conn.get_bucket(self.AWS_STORAGE_BUCKET_NAME)
         except boto.exception.S3ResponseError:
-            bucket = conn.create_bucket(self.AWS_BUCKET_NAME)
+            bucket = conn.create_bucket(self.AWS_STORAGE_BUCKET_NAME)
         return bucket, boto.s3.key.Key(bucket)

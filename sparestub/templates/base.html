@@ -62,7 +62,7 @@
         <div class="navbar-collapse collapse" id="navbar-collapse" style="height: 1px">
           <ul class="nav navbar-nav">
             <li><a class="contact-form-button" data-toggle="modal" data-target="#modal-contact-root">Contact</a></li>
-            <li><a class="submit-ticket-form-button" data-toggle="modal" data-target="#modal-submit-ticket-root">Submit Ticket</a></li>
+            <li><a class="submit-ticket-form-button">Submit Ticket</a></li>
           </ul>
 
           {% include "tickets/search_ticket.html" %}
@@ -83,8 +83,10 @@
 
     {% comment %} Define a couple constants using the Django templating language {% endcomment %}
     <script type="text/javascript">
+    console.log("{{user.is_authenticated}}");
     window.additional_parameters =
     {
+        'is_authenticated' : "{{ user.is_authenticated }}" === "True",
         'contact_form_url' : "{% url "contact.views.submit" %}",
         'signup_form_url' : "{% url "registration.views.signup" %}",
         'login_form_url' : "{% url "registration.views.login" %}",
@@ -101,39 +103,40 @@
     {% comment %} Load JS files in this block that a lot of things will be dependencies of. Will likely just appear as
     block.super in files that extend base.html {% endcomment %}
     {% block core_js %}
-        {% if environment == 'production' or environment == 'staging' %}
+      {% if environment == 'production' or environment == 'staging' %}
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>  <!--TODO get a local copy configure based on what checks we use. -->
-
-        <!-- Bootstrap validator Javascript -->
-        <script type="text/javascript" src="{% static "sparestub/js/bootstrapValidator.js" %}"></script>
 
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.min.js"></script>
         <!-- Google analytics -->
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-          ga('create', 'UA-55020709-1', 'auto');
-          ga('send', 'pageview');
-        </script>
+
+        {% if environment == 'production'%}
+          <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-55020709-1', 'auto');
+            ga('send', 'pageview');
+          </script>
+        {% endif %}
       {% else %}
         <script type="text/javascript" src="{% static "sparestub/js/jquery-1.11.1.js" %}"></script>
-        <script type="text/javascript" src="{% static "sparestub/js/bootstrap.js" %}"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.js"></script>
-
-        <!-- Bootstrap validator Javascript -->
-        <script type="text/javascript" src="{% static "sparestub/js/bootstrapValidator.js" %}"></script>
 
         <!-- Bootstrap linter -->
         <!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>-->
       {% endif %}
     {% endblock %}
     {% block js %}
+      <!-- Bootstrap -->
+      <script type="text/javascript" src="{% static "sparestub/js/bootstrap.js" %}"></script>
+
+      <!-- Bootstrap validator  -->
+      <script type="text/javascript" src="{% static "sparestub/js/bootstrapValidator.js" %}"></script>
+
       <script type="text/javascript" src="{% static "sparestub/js/typeahead.bundle.js" %}"></script>
-      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
+      <script type="text/javascript" src="{% static "sparestub/js/jasny-bootstrap.js" %}"></script>
 
       <!-- Bootstrap datetime picker -->
       <script type="text/javascript" src="{% static "sparestub/js/bootstrap-datetimepicker.js" %}"></script>
@@ -150,7 +153,7 @@
       <script type="text/javascript" src="{% static "registration/js/signup.js" %}"></script>
       <script type="text/javascript" src="{% static "registration/js/login.js" %}"></script>
 
-      <script type="text/javascript" src="{% static "tickets/js/submit_ticket.js" %}" d></script>
+      <script type="text/javascript" src="{% static "tickets/js/submit_ticket.js" %}"></script>
     {% endblock %}
 
      <!-- TODO aria-labeledby we need to set this appropriately -->

@@ -1,4 +1,5 @@
 {% extends "user_profile/base_profile.html" %}
+{% load static %}
 
 {% block profile_body %}
   {% for pair in question_answer_pairs %}
@@ -10,9 +11,16 @@
       </div>
       <div class="col-xs-12 col-md-10">
         <textarea class="answer" name="answer"{% if not is_owner %}readonly="true" {% endif %}>{{ pair.0.answer }}</textarea>
-        {% if is_owner %}<button type="submit" class="btn btn-primary pull-left">Save</button>{% endif %}
+        {% if is_owner %}<button type="submit" class="btn btn-primary pull-left answer-button">Save<div class="answer-button-status"></div></button>{% endif %}
       </div>
     </div>
     {% if is_owner %}</form>{% endif %}
   {% endfor %}
+{% endblock %}
+
+{% block js %}
+  <!-- The spin wheel used when updating profile question/answer information
+       Needs to be loaded before user_profile.js since user_profile.js calls spin.()-->
+  <script type="text/javascript" src="{% static "sparestub/js/spin.js" %}"></script>
+  {{ block.super }}
 {% endblock %}

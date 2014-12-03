@@ -193,6 +193,23 @@ body {
     height: 10em;
 }
 
+.answer-button {
+    position: relative; /* Needed to position spinners relative to the save buttons */
+}
+
+.answer-button-status {
+    position: absolute;
+    left: 75px;
+    top: 50%;
+}
+
+.answer-button-status .glyphicon {
+    position: absolute;
+    left: -10px;
+    top: -5px;
+    font-size: 16pt;
+}
+
 .question {
     color: #837e7e;
 }
@@ -200,4 +217,18 @@ body {
 
 .review {
     margin-bottom: 15px;
+}
+
+#edit-profile-picture {
+    cursor: pointer;
+}
+
+#edit-profile-form .feedback-icon-shift .form-control-feedback {
+    top: 0!important;
+    left: 250px!important;
+}
+
+.fileinput-preview {
+    width: 250px;
+    height: 200px;
 }

@@ -19,6 +19,14 @@ textarea {
     color: gold;
 }
 
+.glyphicon-ok {
+    color: green;
+}
+
+.glyphicon-remove {
+    color: 'red;
+}
+
 
 /* Disable the annoying number spinner for type=number HTML5 input fields in Chrome/Safari/IE*/
 input[type=number]::-webkit-outer-spin-button,
@@ -60,9 +68,32 @@ input[type=number] {
     margin-left: 5px;
 }
 
-.dropdown .form-group {
-    margin-bottom: 15px;
+#login-form-signup-link {
+    cursor: pointer;
 }
+
+/* SEARCH TICKET */
+#search-ticket-dropdown {
+    padding: 15px;
+    left: -15px;
+}
+
+#search-ticket-dropdown .form-group {
+    margin-bottom: 15px;
+    width: 100%!important;
+}
+
+#search-ticket-type {
+    width: 100%;
+}
+
+#search-ticket-location {
+    width: 100%;
+}
+
+
+/* END SEARCH TICKET */
+
 
 /* Create spacing between the user profile button and the logout button and the inbox icon.
 5px is the same amount between the login and signup buttons */
@@ -170,6 +201,11 @@ The form-control-feedback class will be attached by BV to certain <i> tags that 
     top: 7px;
 }
   /* END GENERAL FORM CSS */
+
+#disclosure-message {
+    text-align: left;
+    padding-bottom: 15px; /* 15px to match the padding at the top of the modal-footer class. */
+}
 
 /* Turns out because we use input groups in the ticket form, we cannot use the same selector for both
 inputs because the ticket form's date input needs more shifting than the contact form's subject input.

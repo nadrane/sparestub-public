@@ -35,11 +35,15 @@ def edit_profile(request, username):
         if edit_profile_form.is_valid():
             user = request.user
 
-            uploaded_photo = request.FILES.get('profile_picture')
+            use_old_photo = edit_profile_form.cleaned_data.get('use_old_photo')
 
-            if uploaded_photo:
-                profile_picture = Photo.objects.create_photo(uploaded_photo)
-
+            if not use_old_photo:
+                uploaded_photo = request.FILES.get('profile_picture')
+                coords = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),\
+                         edit_profile_form.cleaned_data.get('x2'), edit_profile_form.cleaned_data.get('y2')
+                width = edit_profile_form.cleaned_data.get('w')
+                height = edit_profile_form.cleaned_data.get('h')
+                profile_picture = Photo.objects.create_photo(uploaded_photo, coords, width, height)
                 user.profile_picture = profile_picture
 
             email = edit_profile_form.cleaned_data.get('email')
@@ -53,11 +57,15 @@ def edit_profile(request, username):
             user.email = email
             user.location = location
 
-            # Make sure the picture does not get saved without first attaching it to a profile.
-            # It would be lost be good otherwise.
-            with transaction.atomic():
-                profile_picture.save()
-                user.profile_picture = profile_picture
+            # No need to handle the profile picture if we are using the old one.
+            if not use_old_photo:
+                # Make sure the picture does not get saved without first attaching it to a profile.
+                # It would be lost be good otherwise.
+                with transaction.atomic():
+                    profile_picture.save()
+                    user.profile_picture = profile_picture
+                    user.save()
+            else:
                 user.save()
 
 
@@ -77,7 +85,9 @@ def edit_profile(request, username):
 
     return render(request,
                   'user_profile/edit_profile.html',
-                  {'form_settings': edit_profile_form_settings}
+                  {'form_settings': edit_profile_form_settings,
+                   'user_info': user
+                   }
                   )
 
 
