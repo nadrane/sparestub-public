@@ -12,17 +12,17 @@ function resize_header() {
     });
 }
 
-$(document).ready(function ($) {
+$(document).on('ready', function () {
     'use strict';
     // Resize the header every time the width of the screen adjusts.
     // CSS will change the profile picture height, so we need to change the header height as well.
     $(window).resize(function () {
-        resize_header($);
+        resize_header();
     });
-}(window.jQuery));
+});
 
 
-$(window).load(function ($) {
+$(window).on('load', function () {
     resize_header();  // Do this once when the page initially loads, but we need to make sure the
                       // profile picture has loaded. This is why we use window.load instead of document.ready.
-}(window.jQuery));
+});

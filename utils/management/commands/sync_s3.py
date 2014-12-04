@@ -82,7 +82,7 @@ class Command(BaseCommand):
     # Extra variables to avoid passing these around
     AWS_ACCESS_KEY_ID = ''
     AWS_SECRET_ACCESS_KEY = ''
-    AWS_BUCKET_NAME = ''
+    AWS_STORAGE_BUCKET_NAME = ''
     AWS_CLOUDFRONT_DISTRIBUTION = ''
     SYNC_S3_RENAME_GZIP_EXT = ''
 
@@ -157,12 +157,12 @@ class Command(BaseCommand):
             self.AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
             self.AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
 
-        if not hasattr(settings, 'AWS_BUCKET_NAME'):
-            raise CommandError('Missing bucket name from settings file. Please add the AWS_BUCKET_NAME to your settings file.')
+        if not hasattr(settings, 'AWS_STORAGE_BUCKET_NAME'):
+            raise CommandError('Missing bucket name from settings file. Please add the AWS_STORAGE_BUCKET_NAME to your settings file.')
         else:
-            if not settings.AWS_BUCKET_NAME:
-                raise CommandError('AWS_BUCKET_NAME cannot be empty.')
-        self.AWS_BUCKET_NAME = settings.AWS_BUCKET_NAME
+            if not settings.AWS_STORAGE_BUCKET_NAME:
+                raise CommandError('AWS_STORAGE_BUCKET_NAME cannot be empty.')
+        self.AWS_STORAGE_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
 
         if not hasattr(settings, 'MEDIA_ROOT'):
             raise CommandError('MEDIA_ROOT must be set in your settings.')
@@ -388,8 +388,8 @@ class Command(BaseCommand):
             self.AWS_SECRET_ACCESS_KEY,
             **self.get_s3connection_kwargs())
         try:
-            bucket = conn.get_bucket(self.AWS_BUCKET_NAME)
+            bucket = conn.get_bucket(self.AWS_STORAGE_BUCKET_NAME)
         except boto.exception.S3ResponseError:
-            bucket = conn.create_bucket(self.AWS_BUCKET_NAME)
+            bucket = conn.create_bucket(self.AWS_STORAGE_BUCKET_NAME)
         return bucket, boto.s3.key.Key(bucket)
 
