@@ -16,13 +16,16 @@
 #user-picture {
     padding-left: 10px; /* notice that 40px is way bigger than what happens... something eats some of the pixels. */
     padding-right: 20px;
+}
 
+#user-picture div {
     /* Needed to position the edit pencil inside the profile picture */
     position: relative;
     cursor: pointer;
+    display: inline-block; /* Width and height of child img element */
 }
 
-#user-picture > img {
+#user-picture img {
     /* rounded corners */
     border: none;
     border-radius: 20px;
@@ -38,7 +41,7 @@
 #edit-profile-icon {
     position: absolute;
     top: auto; /* Bottom property refuses to work without this */
-    right: 30px;
+    right: 10px;
     bottom: 10px;
     color: gainsboro;
     font-size: 1.8em;
@@ -47,7 +50,7 @@
 #edit-profile-text {
     position: absolute;
     bottom: 10px;
-    left: 15px;
+    left: 10px;
     color: gainsboro;
 }
 
@@ -219,8 +222,15 @@ body {
     margin-bottom: 15px;
 }
 
+
 #edit-profile-picture {
+    /* This doesen't appear to work. The select profile button still has a non-pointer cursor on this element */
     cursor: pointer;
+
+    /* Set the width and height to 1 px so that the element is still clickable,
+    but the non-pointer cursor is almost never displayed */
+    width: 1px;
+    height: 1px;
 }
 
 #edit-profile-form .feedback-icon-shift .form-control-feedback {
@@ -238,5 +248,5 @@ body {
 }
 
 .modal-md {
-    width: 625px;
+    width: 639px;
 }

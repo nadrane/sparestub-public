@@ -14,11 +14,13 @@
 {% block content %}
   <div id="profile-header" class="row wave">
   {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
-    <div id="user-picture" class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
-      <img src="{{ user_info.profile_picture.profile_thumbnail.url }}">
-      {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
-                       <span style="display: none;" id="edit-profile-text">Edit Profile</span>
-      {% endif %}
+    <div id="user-picture"class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
+      <div>
+        <img src="{{ user_info.profile_picture.profile_thumbnail.url }}">
+        {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
+                         <span style="display: none;" id="edit-profile-text">Edit Profile</span>
+        {% endif %}
+      </div>
     </div>
     <div id="user-info" class="col-xs-12 col-sm-4">
       <div id="name">

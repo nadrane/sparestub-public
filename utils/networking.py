@@ -4,8 +4,12 @@ __author__ = 'nicholasdrane'
 import json
 import logging
 
+#3rd Part Imports
+import boto
+
 # Django Imports
 from django.http import HttpResponse
+from django.conf import settings
 
 
 def ajax_http(contents, status=200, extra_json={}, **kwargs):
@@ -75,3 +79,20 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+def open_s3():
+        """
+        Opens connection to S3 returning bucket and key
+        """
+
+        access_key = settings.AWS_ACCESS_KEY_ID
+        secret_key = settings.AWS_SECRET_ACCESS_KEY
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+
+        conn = boto.connect_s3(access_key, secret_key)
+        try:
+            bucket = conn.get_bucket(bucket_name)
+        except boto.exception.S3ResponseError:
+            bucket = conn.create_bucket(bucket_name)
+        return bucket, boto.s3.key.Key(bucket)

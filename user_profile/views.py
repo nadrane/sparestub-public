@@ -38,12 +38,15 @@ def edit_profile(request, username):
             use_old_photo = edit_profile_form.cleaned_data.get('use_old_photo')
 
             if not use_old_photo:
+                # Check to see if there is an existing photo and delete it if there is. This will delete it from S3
+                if user.profile_picture:
+                    user.profile_picture.delete()
+
                 uploaded_photo = request.FILES.get('profile_picture')
-                coords = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),\
-                         edit_profile_form.cleaned_data.get('x2'), edit_profile_form.cleaned_data.get('y2')
-                width = edit_profile_form.cleaned_data.get('w')
-                height = edit_profile_form.cleaned_data.get('h')
-                profile_picture = Photo.objects.create_photo(uploaded_photo, coords, width, height)
+                x, y = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),
+                x2, y2 = x + edit_profile_form.cleaned_data.get('w'), y + edit_profile_form.cleaned_data.get('h')
+                crop_coords = x, y, x2, y2
+                profile_picture = Photo.objects.create_photo(uploaded_photo, crop_coords)
                 user.profile_picture = profile_picture
 
             email = edit_profile_form.cleaned_data.get('email')
@@ -63,7 +66,6 @@ def edit_profile(request, username):
                 # It would be lost be good otherwise.
                 with transaction.atomic():
                     profile_picture.save()
-                    user.profile_picture = profile_picture
                     user.save()
             else:
                 user.save()
@@ -270,8 +272,6 @@ def view_ticket(request, username, ticket_id):
     """
     View the details for a particular ticket. This view allows us to message the user or buy the ticket from him.
     """
-    import pdb
-    pdb.set_trace()
 
      # Look up the user record who corresponds to this profile
     profile = UserProfile.get_user_profile_from_username(username)
@@ -329,6 +329,7 @@ def view_ticket(request, username, ticket_id):
                    },
                   content_type='text/html',
                   )
+
 
 def update_question(request, username, question_id):
     """

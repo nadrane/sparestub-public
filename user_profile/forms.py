@@ -6,6 +6,7 @@ from django.forms import ValidationError
 from registration.forms import UserInfoForm
 from .settings import edit_profile_form_settings, profile_answer_form_settings
 
+
 class ProfileAnswerForm(forms.Form):
     answer = forms.CharField(required=False,
                              max_length=profile_answer_form_settings.get('ANSWER_MAX_LENGTH'))
@@ -27,9 +28,7 @@ class EditProfileForm(UserInfoForm):
     # These are required when use_old_photo is false.
     # They are the coordinates of the cropped photo with respect to the inset in the edit profile activity.
     x = forms.IntegerField(required=False)
-    x2 = forms.IntegerField(required=False)
     y = forms.IntegerField(required=False)
-    y2 = forms.IntegerField(required=False)
     w = forms.IntegerField(required=False)   # Height
     h = forms.IntegerField(required=False)   # Width
 
@@ -44,12 +43,12 @@ class EditProfileForm(UserInfoForm):
 
         #If we are not using the old photo, then the cropping coordinates must be present.
         if not self.cleaned_data.get('use_old_photo'):
-            if not all(self.cleaned_data.get(attr) for attr in ['x', 'x2', 'y', 'y2', 'w', 'h']):
+            # We need to >= in the case that x or y (actually it will be both) is equal to 0.
+            if not all(self.cleaned_data.get(attr) >= 0 for attr in ['x', 'y', 'w', 'h']):
                 raise ValidationError('The new photo submitted that was not cropped')
 
         # Make sure the the aspect ratio of the submitted photo is 1.
-        if (self.cleaned_data.get('x2') - self.cleaned_data.get('x')) /\
-                (self.cleaned_data.get('y2') - self.cleaned_data.get('y')) != 1:
+        if self.cleaned_data.get('w') != self.cleaned_data.get('h'):
             raise ValidationError('The aspect ratio of the new photo is not 1.')
 
         return

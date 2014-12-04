@@ -11,12 +11,14 @@ from utils.models import TimeStampedModel
 from django.db import models
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.conf import settings
+from django.utils.encoding import smart_bytes
 
 # 3rd Party Imports
 from PIL import Image
 
 # SpareStub Imports
 from .settings import PROFILE_THUMBNAIL_HEIGHT, SEARCH_THUMBNAIL_HEIGHT
+from utils.networking import open_s3
 
 
 def generate_original_file_name(instance, filename):
@@ -53,9 +55,8 @@ def convert_image_to_django_uploadable(image):
     # If we are dealing with a type of PIL.Image
     return InMemoryUploadedFile(image, None, 'temp.jpg', 'image/jpeg', len(image.getvalue()), None)
 
-def convert_image_string(image_byte_string, crop_coords=None, crop_width=None, crop_height=None):
-    import pdb
-    pdb.set_trace()
+
+def convert_image_string(image_byte_string, crop_coords):
     if not image_byte_string:
         return None
 
@@ -66,13 +67,19 @@ def convert_image_string(image_byte_string, crop_coords=None, crop_width=None, c
         logging.error('Could not convert image %s to jpeg', exc_info=True, stack_info=True)
         return None
 
-    pil_image = crop_photo(pil_image, crop_coords, crop_width, crop_height)
-    image_bytes = convert_to_jpeg(pil_image)
+    # Keep the original, uncropped image. Still convert it to a jpeg.
 
-    original_file = convert_image_to_django_uploadable(image_bytes)
-    profile_thumbnail_bytes = make_profile_thumbnail(image_bytes)
+    original_bytes = convert_to_jpeg(pil_image)
+    original_file = convert_image_to_django_uploadable(original_bytes)
+
+    # Crop the photo and convert the cropped photo to a jpeg.
+    # These cropped image is just an intermediary used to produce the profile and search thumbnails. It is not saved.
+    cropped_image = crop_photo(pil_image, crop_coords)
+    cropped_image_bytes = convert_to_jpeg(cropped_image)
+
+    profile_thumbnail_bytes = make_profile_thumbnail(cropped_image_bytes)
     profile_thumbnail_file = convert_image_to_django_uploadable(profile_thumbnail_bytes)
-    search_thumbnail_bytes = make_search_thumbnail(image_bytes)
+    search_thumbnail_bytes = make_search_thumbnail(cropped_image_bytes)
     search_thumbnail_file = convert_image_to_django_uploadable(search_thumbnail_bytes)
 
     original_file.seek(0)
@@ -82,38 +89,17 @@ def convert_image_string(image_byte_string, crop_coords=None, crop_width=None, c
     return original_file, profile_thumbnail_file, search_thumbnail_file
 
 
-def crop_photo(pil_image, inputted_crop_coords, crop_width, crop_height):
+def crop_photo(pil_image, crop_coords):
     if not pil_image:
         return None
 
-    # If the photo was croppped on the front end, the actual photo was not cropped but rather a shrunken down version of
-    # it with the same aspect ratio. We need to convert the inputted coordinates to the coordinates on the actual photo.
-    if crop_width and crop_height:
-        actual_width, actual_height = pil_image.size
+    if not crop_coords:
+        return pil_image
 
-        # The jansy preview system should change the size of the uploaded photo by its aspect ratio to match the
-        # width of the modal. Width is 100% and height is auto. So we check here if the photo increased or decreased in
-        # size. It will almost always certainly be decrease in size.
-        if actual_width > crop_width:
-            height_ratio = actual_height / crop_height
-            width_ratio = actual_width / crop_width
-        else:
-            height_ratio = crop_height / actual_height
-            width_ratio = crop_width / actual_width
-
-        # We round up to ensure that none of the picels the user cropped are lost.
-        # The thumbnail image we ultimately create will be the right size since we resize the photo later.
-        new_x = int(math.ceil(inputted_crop_coords[0] * width_ratio))
-        new_y = int(math.ceil(inputted_crop_coords[1] * height_ratio))
-        new_x2 = int(math.ceil(inputted_crop_coords[2] * width_ratio))
-        new_y2 = int(math.ceil(inputted_crop_coords[3] * height_ratio))
-
-        crop_coords = (new_x, new_y, new_x2, new_y2)
-    else:
-        new_x, new_y, new_x2, new_y2 = crop_coords = inputted_crop_coords
+    new_x, new_y, new_x2, new_y2 = crop_coords
 
     cropped_image = pil_image.crop(crop_coords)
-    return Image.frombytes('RGB', (new_x2 - new_x, new_y2 - new_y), cropped_image.load())
+    return Image.frombytes('RGB', (new_x2 - new_x, new_y2 - new_y), cropped_image.tobytes())
 
 
 def convert_to_jpeg(pil_image):
@@ -126,7 +112,7 @@ def convert_to_jpeg(pil_image):
 
     pil_image = pil_image.convert('RGB')
     image_bytes = io.BytesIO()
-    pil_image.save(io.BytesIO(), 'JPEG')
+    pil_image.save(image_bytes, 'JPEG')
     return image_bytes
 
 
@@ -215,17 +201,20 @@ def get_photo_height(image_bytes):
 
 class PhotoManager(models.Manager):
 
-    def create_photo(self, original_photo, crop_coords, crop_width, crop_height):
+    def create_photo(self, original_photo, crop_coords):
         """
         Creates a ticket record using the given input
         """
 
-        original_file, profile_thumbnail_file, search_thumbnail_file = convert_image_string(original_photo, crop_coords,
-                                                                                            crop_width, crop_height)
+        original_file, profile_thumbnail_file, search_thumbnail_file = convert_image_string(original_photo, crop_coords)
 
         photo = self.model(search_thumbnail=search_thumbnail_file,
                            profile_thumbnail=profile_thumbnail_file,
                            original_file=original_file,
+                           crop_x=crop_coords[0],
+                           crop_y=crop_coords[1],
+                           crop_x2=crop_coords[2],
+                           crop_y2=crop_coords[3]
                            )
 
         photo.save(using=self._db)
@@ -234,20 +223,43 @@ class PhotoManager(models.Manager):
 
 
 class Photo(TimeStampedModel):
+
+    # This file was created from a intermediate cropped image using crop_x, crop_y, crop_width, and crop_height
     search_thumbnail = models.ImageField(upload_to=generate_search_thumbnail_name,  # So that we can use variable in custom methods
                                          null=False,
                                          blank=False,
                                          )
 
+    # This file was created from a intermediate cropped image using crop_x, crop_y, crop_width, and crop_height
     profile_thumbnail = models.ImageField(upload_to=generate_profile_thumbnail_file_name,
                                           null=False,
                                           blank=False,
                                           )
 
-    original_file = models.ImageField(upload_to=generate_original_file_name,    # Keep the original file around in case we want to store more photo sizes later.
+    # Keep the original file around in case we want to store more photo sizes later.
+    # The original file is the entire file that was actually uploaded (post client-side rotation if it happened)
+    original_file = models.ImageField(upload_to=generate_original_file_name,
                                       null=False,
                                       blank=False,
                                       )
+
+    # These are the coordinates that the user inputted to crop their photo.
+    # They can be applied to the original_file to yield a cropped image.
+    crop_x = models.PositiveIntegerField(null=False,
+                                         blank=False,
+                                         )
+
+    crop_y = models.PositiveIntegerField(null=False,
+                                         blank=False,
+                                         )
+
+    crop_x2 = models.PositiveIntegerField(null=False,
+                                          blank=False,
+                                          )
+
+    crop_y2 = models.PositiveIntegerField(null=False,
+                                          blank=False,
+                                          )
 
     objects = PhotoManager()
 
@@ -255,29 +267,39 @@ class Photo(TimeStampedModel):
 
     #Override the queryset delete method to delete the actual photo files from the file system
     def delete(self):
-        #Prevent trying to access undefined variable error if the files truly do not exist on the server
-        absolute_original_path = None
-        absolute_thumbnail_path = None
-        
-        #If we are going to delete the file from the database, we need to remove the file from the file system.
-        #We need to remove both the thumbnail and the original photo
-        if self.thumbnail_file:
-            absolute_thumbnail_path = os.path.join(settings.MEDIA_ROOT, str(self.thumbnail_file))
-            #Make sure all of the separators (the forward and backward slashes) are aligned correctly
-            absolute_thumbnail_path = os.path.normpath(absolute_thumbnail_path)
-        if self.original_file:
-            absolute_original_path = os.path.join(settings.MEDIA_ROOT, str(self.original_file))
-            #Make sure all of the separators (the forward and backward slashes) are aligned correctly
-            absolute_original_path = os.path.normpath(absolute_original_path)
-        
-        if absolute_thumbnail_path and os.path.isfile(absolute_thumbnail_path):
-            os.remove(absolute_thumbnail_path)
-        
-        if absolute_original_path and os.path.isfile(absolute_original_path): 
-            os.remove(absolute_original_path)
+        if settings.DEFAULT_FILE_STORAGE == 'utils.backends.s3_boto.S3BotoStorage':
+            bucket, key = open_s3()
+            bucket.delete_key(smart_bytes(str(self.original_file)))
+            bucket.delete_key(smart_bytes(str(self.profile_thumbnail)))
+            bucket.delete_key(smart_bytes(str(self.search_thumbnail)))
+        #TODO needs work
+        else:
+            #Prevent trying to access undefined variable error if the files truly do not exist on the server
+            absolute_original_path = None
+            absolute_thumbnail_path = None
+
+            #If we are going to delete the file from the database, we need to remove the file from the file system.
+            #We need to remove both the thumbnail and the original photo
+            if self.thumbnail_file:
+                absolute_thumbnail_path = os.path.join(settings.MEDIA_ROOT, str(self.thumbnail_file))
+                #Make sure all of the separators (the forward and backward slashes) are aligned correctly
+                absolute_thumbnail_path = os.path.normpath(absolute_thumbnail_path)
+            if self.original_file:
+                absolute_original_path = os.path.join(settings.MEDIA_ROOT, str(self.original_file))
+                #Make sure all of the separators (the forward and backward slashes) are aligned correctly
+                absolute_original_path = os.path.normpath(absolute_original_path)
+
+            if absolute_thumbnail_path and os.path.isfile(absolute_thumbnail_path):
+                os.remove(absolute_thumbnail_path)
+
+            if absolute_original_path and os.path.isfile(absolute_original_path):
+                os.remove(absolute_original_path)
         
         #Actually delete the Photo object from the DB
         super(Photo, self).delete()
 
+
     def __str__(self):
         return 'Photo: {}'.format(self.user)
+
+

@@ -22,9 +22,7 @@
                   to their photo, indicate this server side and make no changes. {% endcomment %}
     <input id="use-old-photo" type="hidden" name="use_old_photo" value={% if user_info.profile_pictures %}true{% else %}false{% endif %}>
     <input id="x" type="hidden" name="x" value="">
-    <input id="x2" type="hidden" name="x2" value="">
     <input id="y" type="hidden" name="y" value="">
-    <input id="y2" type="hidden" name="y2" value="">
     <input id="w" type="hidden" name="w" value="">
     <input id="h" type="hidden" name="h" value="">
     <div class="modal-body">
@@ -40,7 +38,7 @@
                                                                                                                                                                             data-bv-callback="true"
                                                                                                                                                                             data-bv-callback-callback="valid_photo"
                                                                                                                                                                             data-bv-callback-message="Don't forget to crop your photo!"></span>
-            <a id="remove-photo" href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            <button id="remove-photo" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</button>
             <button id="crop" type="button" class="btn btn-default fileinput-exists">Crop</button>
             <button id="rotate-left" type="button" class="btn btn-default fileinput-exists">Rotate Left</button>
             <button id="rotate-right" type="button" class="btn btn-default fileinput-exists">Rotate Right</button>

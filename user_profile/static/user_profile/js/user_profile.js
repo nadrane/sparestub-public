@@ -1,8 +1,6 @@
-var jcrop_api;
-
 function resize_header() {
     var $header = $('#profile-header');
-    var $thumbnail = $('#user-picture > img');
+    var $thumbnail = $('#user-picture img');
     /* Resize the profile header to be the same size as the thumbnail image */
     $header.css('height', function () {
         var $this = $(this);
@@ -10,7 +8,6 @@ function resize_header() {
                            parseInt($this.css('padding-top').replace('px', ''), 10) +
                            parseInt($this.css('padding-bottom').replace('px', ''), 10) +
                            parseInt($this.css('margin-top').replace('px', ''), 10) + 10;
-        total_height = total_height.toString() + 'px';
         return total_height;
     });
 }

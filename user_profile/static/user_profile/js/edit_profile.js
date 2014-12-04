@@ -1,6 +1,8 @@
+var $cropper_image = undefined;
+
 function editable_profile() {
     /* Make the profile picture have animations that indicate that it is editable */
-    $('#user-picture').hover(function () {
+    $('#user-picture>div').hover(function () {
         $('#edit-profile-icon').animate({fontSize: "1.2em"}, 200);
         $('#edit-profile-text').fadeIn(200);
     }, function () {
@@ -30,41 +32,47 @@ function initialize_remove_photo() {
 
 function initialize_crop_button() {
     'use strict';
-    var $original_image = $('.fileinput-preview>img');
     $('#crop').click(function () {
-        if (jcrop_api.getOptions().disabled) {
-            jcrop_api.enable();
+        // Has the image been cropped yet?
+        if ($('.cropper-disabled').length > 0) {
+            $cropper_image.cropper('enable');
             $('#crop').text('Crop');
             $('#is_valid-photo').val(false);
-            $('#edit-profile-form').bootstrapValidator('revalidateField', 'profile_picture');
+
+            // The user can once again use the rotate buttons since they undid cropping
+            // The cropper API takes care of preventing the actual image rotation
+            $('#rotate-left, #rotate-right').css('cursor', 'pointer');
+        // If the image has not been cropped yet
         } else {
-            jcrop_api.disable();
+            $cropper_image.cropper('disable');
             $('#crop').text('Uncrop');
-            $('#is_valid-photo').val(true)
-            $('#edit-profile-form').bootstrapValidator('revalidateField', 'profile_picture')
+            $('#is_valid-photo').val(true);
+            store_crop();
+
+            // The user cannot use the rotate buttons after cropping
+            // The cropper API takes care of preventing the actual image rotation
+            $('#rotate-left, #rotate-right').css('cursor', 'not-allowed');
         }
+        $('#edit-profile-form').bootstrapValidator('revalidateField', 'profile_picture');
     });
 }
 
 function initialize_rotation_buttons() {
-    var $original_image = $('.fileinput-preview img');
     $('#rotate-left').on('click', function () {
-        $original_image.cropper('rotate', -90);
+        $cropper_image.cropper('rotate', -90);
     });
     $('#rotate-right').on('click', function () {
-        $original_image.cropper('rotate', 90);
+        $cropper_image.cropper('rotate', 90);
     });
 }
 
-function store_crop(e) {
+function store_crop() {
     'use strict';
-    var original_image = $('.fileinput-preview>img');
-    //$('#x').val(e.x);
-    //$('#x2').val(e.x2);
-    //$('#y').val(e.y);
-    //$('#y2').val(e.y2);
-    //$('#w').val(profile_picture_preview.css('width').replace('px', ''));
-    //$('#h').val(profile_picture_preview.css('height').replace('px', ''));
+    var data = $cropper_image.cropper('getData');
+    $('#x').val(data.x);
+    $('#y').val(data.y);
+    $('#w').val(data.width);
+    $('#h').val(data.height);
 }
 
 
@@ -103,15 +111,15 @@ function resize_profile_picture_preview() {
         // We need to edit the container of the image to avoid restricting the image size
         $('.fileinput-preview').css('width', 'auto').css('height', 'auto');
 
+        // The croppoer demo only does this once... it seems like more img tags are produced by the API as it operates
+        $cropper_image = $(".fileinput-preview img");
+
         // Enable the cropper once an image is selected
-        $(original_image).cropper({aspectRatio : 1.0,
-                                   done : store_crop
-                                   });
+        $(original_image).cropper({aspectRatio : 1.0});
 
-        // This needs to be done once the img tags exist.
+        // These need to be done once the img tags exist.
         initialize_rotation_buttons();
-
-
+        initialize_crop_button();
     });
 }
 
@@ -205,7 +213,6 @@ $(document).ready(function ($) {
             $edit_profile_form.bootstrapValidator('revalidateField', 'profile_picture');
 
             resize_profile_picture_preview();
-            initialize_crop_button();
             initialize_select_photo();
             initialize_remove_photo();
         });
