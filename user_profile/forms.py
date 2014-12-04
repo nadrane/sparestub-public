@@ -27,10 +27,12 @@ class EditProfileForm(UserInfoForm):
 
     # These are required when use_old_photo is false.
     # They are the coordinates of the cropped photo with respect to the inset in the edit profile activity.
-    x = forms.IntegerField(required=False)
-    y = forms.IntegerField(required=False)
-    w = forms.IntegerField(required=False)   # Height
-    h = forms.IntegerField(required=False)   # Width
+    x = forms.IntegerField(required=False)   # Pixels from left side of image where crop begins
+    y = forms.IntegerField(required=False)   # Pixels from top of image where crop begins
+    w = forms.IntegerField(required=False)   # Height of crop
+    h = forms.IntegerField(required=False)   # Width of crop
+
+    rotate_degrees = forms.IntegerField(required=False)
 
     def clean_username(self):
         """
@@ -38,6 +40,16 @@ class EditProfileForm(UserInfoForm):
         """
 
         return self.request.user.user_profile.valid_username(self.cleaned_data.get('username'))
+
+    def clean_rotation(self):
+        if 'rotate_degrees' in self.cleaned_data:
+            # Format the degrees such that it's less than 360.
+            rotate_degrees = self.cleaned_data['rotate_degrees'] % 360
+
+            # The number of degrees rotated must be a multiple of 90
+            if rotate_degrees % 90 != 0:
+                raise ValidationError('Image was rotated {} degrees, which is not a multiple of 90'. format(rotate_degrees))
+        return rotate_degrees
 
     def clean(self):
 

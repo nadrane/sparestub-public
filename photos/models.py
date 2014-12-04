@@ -89,17 +89,18 @@ def convert_image_string(image_byte_string, crop_coords):
     return original_file, profile_thumbnail_file, search_thumbnail_file
 
 
-def crop_photo(pil_image, crop_coords):
+def rotate_image(pil_image, rotate_degrees=0):
+    """
+    Take a pil image and rotate it the number of degrees specified by rotate_degrees. Return a new pil image.
+    """
+
     if not pil_image:
         return None
 
-    if not crop_coords:
+    if rotate_degrees == 0:
         return pil_image
 
-    new_x, new_y, new_x2, new_y2 = crop_coords
-
-    cropped_image = pil_image.crop(crop_coords)
-    return Image.frombytes('RGB', (new_x2 - new_x, new_y2 - new_y), cropped_image.tobytes())
+    return pil_image.rotate(rotate_degrees)
 
 
 def convert_to_jpeg(pil_image):
@@ -114,6 +115,18 @@ def convert_to_jpeg(pil_image):
     image_bytes = io.BytesIO()
     pil_image.save(image_bytes, 'JPEG')
     return image_bytes
+
+def crop_photo(pil_image, crop_coords):
+    if not pil_image:
+        return None
+
+    if not crop_coords:
+        return pil_image
+
+    new_x, new_y, new_x2, new_y2 = crop_coords
+
+    cropped_image = pil_image.crop(crop_coords)
+    return Image.frombytes('RGB', (new_x2 - new_x, new_y2 - new_y), cropped_image.tobytes())
 
 
 def resize(image_bytes, new_width, new_height):
@@ -201,12 +214,15 @@ def get_photo_height(image_bytes):
 
 class PhotoManager(models.Manager):
 
-    def create_photo(self, original_photo, crop_coords):
+    def create_photo(self, original_photo, crop_coords, rotate_degrees):
         """
         Creates a ticket record using the given input
         """
 
-        original_file, profile_thumbnail_file, search_thumbnail_file = convert_image_string(original_photo, crop_coords)
+        original_file, profile_thumbnail_file, search_thumbnail_file = convert_image_string(original_photo,
+                                                                                            crop_coords,
+                                                                                            rotate_degrees
+                                                                                            )
 
         photo = self.model(search_thumbnail=search_thumbnail_file,
                            profile_thumbnail=profile_thumbnail_file,
@@ -214,7 +230,8 @@ class PhotoManager(models.Manager):
                            crop_x=crop_coords[0],
                            crop_y=crop_coords[1],
                            crop_x2=crop_coords[2],
-                           crop_y2=crop_coords[3]
+                           crop_y2=crop_coords[3],
+                           rotate_degrees=rotate_degrees,
                            )
 
         photo.save(using=self._db)
@@ -260,6 +277,11 @@ class Photo(TimeStampedModel):
     crop_y2 = models.PositiveIntegerField(null=False,
                                           blank=False,
                                           )
+
+    rotate_degrees = models.PositiveIntegerField(null=False,
+                                                 blank=False,
+                                                 default=0,
+                                                 )
 
     objects = PhotoManager()
 

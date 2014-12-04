@@ -101,8 +101,8 @@ def login(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
-            email = request.POST['email']
-            password = request.POST['password']
+            email = login_form.cleaned_data.get('email')
+            password = login_form.cleaned_data.get('password')
             # We actually do this authenticate function twice, once in LoginForm and once here.
             # The code is cleaner this way, despite the extra DB hits.
             user = authenticate(email=email, password=password)
@@ -118,7 +118,9 @@ def login(request):
         else:
             return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
-                              'notification_content': 'Wrong username or password!'
+                              'notification_content': 'Wrong username or password! Click to <a href="{}">'
+                                                      'reset your password</a>'.format(reverse('forgot_password'),
+                                                                                                args=login_form.cleaned_data.get('email'))
                               },
                              status=400
                              )
@@ -159,3 +161,8 @@ def logout(request):
 
     # TODO This is going to need to redirect to the page the user was on, provided that page does not require authorization
     return HttpResponseRedirect('/')
+
+
+def forgot_password(request):
+    if request.method == 'GET':
+        return User.generate_forgot_password_link()

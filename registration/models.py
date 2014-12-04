@@ -337,5 +337,28 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
             return user[0]
         return None
 
+    @staticmethod
+    def generate_forgot_password_link(email):
+        pass
+
     def __str__(self):
         return self.get_full_name()
+
+
+class ForgotPasswordLink(models.Model):
+
+    email = models.EmailField(max_length=user_model_settings.get('EMAIL_MAX_LENGTH'),
+                              blank=False,
+                              null=False
+                              )
+
+    user_profile = models.URLField(blank=False,
+                                   null=False,
+                                   unique=True
+                                   )
+
+
+class ForgotPasswordLinkManager():
+    """
+    Represents a URL that a user can use to reset his password during the login workflow
+    """

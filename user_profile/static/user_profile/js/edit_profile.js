@@ -1,6 +1,8 @@
 var $cropper_image = undefined;
 
 function editable_profile() {
+    'use strict';
+
     /* Make the profile picture have animations that indicate that it is editable */
     $('#user-picture>div').hover(function () {
         $('#edit-profile-icon').animate({fontSize: "1.2em"}, 200);
@@ -13,6 +15,8 @@ function editable_profile() {
 
 /* RELATED TO EDIT PROFILE ACTIVITY */
 function initialize_select_photo() {
+    'use strict';
+
     $('#select-photo').on('click', function () {
         $('#is_valid-photo').val(false); // A new photo has not yet been cropped, so it must be invalid.
         $('use-old-photo').val(true);    // This will never be set to true unless the user had a photo when the edit
@@ -32,6 +36,7 @@ function initialize_remove_photo() {
 
 function initialize_crop_button() {
     'use strict';
+
     $('#crop').click(function () {
         // Has the image been cropped yet?
         if ($('.cropper-disabled').length > 0) {
@@ -42,6 +47,7 @@ function initialize_crop_button() {
             // The user can once again use the rotate buttons since they undid cropping
             // The cropper API takes care of preventing the actual image rotation
             $('#rotate-left, #rotate-right').css('cursor', 'pointer');
+
         // If the image has not been cropped yet
         } else {
             $cropper_image.cropper('disable');
@@ -58,16 +64,41 @@ function initialize_crop_button() {
 }
 
 function initialize_rotation_buttons() {
+    'use strict';
+
+    var $rotate_degrees = $('#rotate-degrees');
     $('#rotate-left').on('click', function () {
         $cropper_image.cropper('rotate', -90);
+        /*
+        var current_rotation_degrees = $rotate_degrees.val();
+
+        // We need this conditional because parseInt on "" returns NaN
+        if (current_rotation_degrees === "") {
+            $rotate_degrees.val(-90);
+        } else {
+            $rotate_degrees.val(((parseInt($rotate_degrees.val(), 10)) - 90) % 360);
+
+        }
+        */
     });
     $('#rotate-right').on('click', function () {
         $cropper_image.cropper('rotate', 90);
+        /*
+        var current_rotation_degrees = $rotate_degrees.val();
+
+        // We need this conditional because parseInt on "" returns NaN
+        if (current_rotation_degrees === "") {
+            $rotate_degrees.val(90);
+        } else {
+            $rotate_degrees.val(((parseInt($rotate_degrees.val(), 10)) + 90) % 360);
+        }
+        */
     });
 }
 
 function store_crop() {
     'use strict';
+
     var data = $cropper_image.cropper('getData');
     $('#x').val(data.x);
     $('#y').val(data.y);
@@ -81,6 +112,7 @@ function resize_profile_picture_preview() {
        distorting it's aspect ratio. This function sets a mutation observer that does just that.
     */
     'use strict';
+
     $('.modal-body').on('change.bs.fileinput', function (e, files) {
         var original_image = $('.fileinput-preview>img')[0];
         var width = original_image.naturalWidth;

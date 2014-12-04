@@ -46,7 +46,8 @@ def edit_profile(request, username):
                 x, y = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),
                 x2, y2 = x + edit_profile_form.cleaned_data.get('w'), y + edit_profile_form.cleaned_data.get('h')
                 crop_coords = x, y, x2, y2
-                profile_picture = Photo.objects.create_photo(uploaded_photo, crop_coords)
+                rotate_degrees = edit_profile_form_settings.cleaned_data.get('rotate_degrees', 0)
+                profile_picture = Photo.objects.create_photo(uploaded_photo, crop_coords, rotate_degrees)
                 user.profile_picture = profile_picture
 
             email = edit_profile_form.cleaned_data.get('email')
