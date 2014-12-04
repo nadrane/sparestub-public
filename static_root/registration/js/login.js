@@ -26,8 +26,6 @@ function initialize_bootstrap_validator_login() {
                 if (data.isSuccessful) {
                     handle_ajax_response(data);
                     $('#modal-login-root').modal('hide');
-                    set_notification($('#notification-root'), 'Success!',
-                                       "You're ready to use SpareStub!", 'alert-success');
                 }
             })
             .fail(function (data, textStatus, xhr) {

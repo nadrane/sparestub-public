@@ -16,14 +16,13 @@
       {% if environment == 'production' or environment == 'staging' %}
           <!-- Bootstrap core CSS -->
           <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-          <!-- Boostrap Validator CSS -->
-          <link href="https://s3.amazonaws.com/sparestub/static/css/bootstrapValidator.min.css" rel="stylesheet">
       {% else %}
           <!-- Bootstrap core CSS -->
           <link href="{% static "sparestub/css/bootstrap.css" %}" rel="stylesheet">
-          <!-- Boostrap Validator CSS -->
-          <link href="{% static "sparestub/css/bootstrapValidator.css" %}" rel="stylesheet">
       {% endif %}
+
+      <!-- Boostrap Validator CSS -->
+      <link href="{% static "sparestub/css/bootstrapValidator.css" %}" rel="stylesheet">
 
       <!-- Bootstrap datetime picker -->
       <link href="{% static "sparestub/css/bootstrap-datetimepicker.css" %}" rel="stylesheet">

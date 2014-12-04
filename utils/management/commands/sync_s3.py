@@ -256,6 +256,7 @@ class Command(BaseCommand):
         Walks the media/static directories and syncs files to S3
         """
         bucket, key = self.open_s3()
+        print('uploading files to {}'.format(bucket))
         for root_directory in self.DIRECTORIES:
             for current_directory, sub_directories, files in os.walk(root_directory):
                 #os.walk returns a tuple containing 3 items:
