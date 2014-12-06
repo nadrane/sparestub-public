@@ -11,14 +11,17 @@
     {{ ticket.get_payment_method_display }}
   </td>
   <td class="col-xs-1">{{ ticket.location }}<br>{{ ticket.venue }}</td>
-  <td class="col-xs-3">{{ ticket.title }}</td>
-  <td class="col-xs-2">
-    {% comment %} <img class="pull-right" src="{{ ticket.poster.profile_picture.search_thumbnail.url }}"> {% endcomment %}
-    <a href="{{ ticket.poster.user_profile.get_absolute_url }}">{{ ticket.poster}}{% if ticket.poster.age %}, {{ ticket.poster.age }}{% endif %}</a>
-    <span>
-      {% for x in ticket.poster.rating|get_range %}
-        <span class="glyphicon glyphicon-star"></span>
-      {% endfor %}
-    </span>
+  <td class="col-xs-3">{{ ticket.title | truncatechars:200}}</td>
+  <td class="col-xs-3">
+    <img style="height: 100%; max-height: 75px;" class="pull-left" src="{{ ticket.poster.profile_picture.search_thumbnail.url }}">
+    <div style="padding-left: 10px;" class="pull-left">
+      <a href="{{ ticket.poster.user_profile.get_absolute_url }}">{{ ticket.poster}}{% if ticket.poster.age %}, {{ ticket.poster.age }}{% endif %}</a>
+      <br>
+      <span>
+        {% for x in ticket.poster.rating|get_range %}
+          <span class="glyphicon glyphicon-star"></span>
+        {% endfor %}
+      </span>
+    </div>
   </td>
 </tr>
