@@ -9,7 +9,18 @@
     <div class="panel-body">
       {% if reviews %}
         {% for review in reviews %}
-          <div class="row review">
+          {% comment %}
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>User Info</th>
+                  <th>Date</th>
+                  <th>Review</th>
+                </tr>
+              </thead>
+            <tbody data-link="row" class="rowlink">{% endcomment %}
+              <div class="row review">
             <div class="col-xs-2 user-info">
               {% comment %}TODO add images to reviews <img class="pull-left" src="{{ review.reviewer.profile_picture.search_thumbnail.url }}">{% endcomment %}
               <div style="clear: left">

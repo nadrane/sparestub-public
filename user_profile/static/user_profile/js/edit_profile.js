@@ -31,6 +31,14 @@ function initialize_remove_photo() {
 
         // When an image is selected, we change this width to auto so that the div scales to the child img dimensions
         $('.fileinput-preview').width('250px').height('200px');
+
+        // We need this since events are attached to the image when it is initially uploaded.
+        $('#rotate-right, #rotate-left, #crop').off('click');
+
+        // Handle the case where the remove button was clicked after cropping occurred.
+        $('#crop').text('Crop');
+        $('#is_valid-photo').val(false);
+        $('#rotate-left, #rotate-right').css('cursor', 'pointer');
     });
 }
 
@@ -69,7 +77,7 @@ function initialize_rotation_buttons() {
     var $rotate_degrees = $('#rotate-degrees');
     $('#rotate-left').on('click', function () {
         $cropper_image.cropper('rotate', -90);
-        /*
+
         var current_rotation_degrees = $rotate_degrees.val();
 
         // We need this conditional because parseInt on "" returns NaN
@@ -77,13 +85,12 @@ function initialize_rotation_buttons() {
             $rotate_degrees.val(-90);
         } else {
             $rotate_degrees.val(((parseInt($rotate_degrees.val(), 10)) - 90) % 360);
-
         }
-        */
+
     });
     $('#rotate-right').on('click', function () {
         $cropper_image.cropper('rotate', 90);
-        /*
+
         var current_rotation_degrees = $rotate_degrees.val();
 
         // We need this conditional because parseInt on "" returns NaN
@@ -92,7 +99,7 @@ function initialize_rotation_buttons() {
         } else {
             $rotate_degrees.val(((parseInt($rotate_degrees.val(), 10)) + 90) % 360);
         }
-        */
+
     });
 }
 
@@ -147,7 +154,8 @@ function resize_profile_picture_preview() {
         $cropper_image = $(".fileinput-preview img");
 
         // Enable the cropper once an image is selected
-        $(original_image).cropper({aspectRatio : 1.0});
+        $(original_image).cropper({aspectRatio : 1.0,
+                                   zoomable: false});
 
         // These need to be done once the img tags exist.
         initialize_rotation_buttons();

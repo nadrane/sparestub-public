@@ -21,6 +21,9 @@ class ReviewManager(models.Manager):
             Creates a review record using the given input
         """
 
+        if reviewee == reviewer:
+            return None
+
         review = self.model(reviewer=reviewer,
                             reviewee=reviewee,
                             contents=contents,
@@ -63,3 +66,10 @@ class Review(TimeStampedModel):
     contents = models.TextField(max_length=review_model_settings.get('CONTENT_MAX_LENGTH'))
 
     objects = ReviewManager()
+
+    def __str__(self):
+        return 'id: {} | reviewee: {} | reviewer: {} | {} stars'.format(self.id,
+                                                                        User.objects.get(pk=self.reviewee.id),
+                                                                        User.objects.get(pk=self.reviewer.id),
+                                                                        self.rating,
+                                                                        )

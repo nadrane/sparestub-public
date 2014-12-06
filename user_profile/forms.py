@@ -32,7 +32,9 @@ class EditProfileForm(UserInfoForm):
     w = forms.IntegerField(required=False)   # Height of crop
     h = forms.IntegerField(required=False)   # Width of crop
 
-    rotate_degrees = forms.IntegerField(required=False)
+    rotate_degrees = forms.IntegerField(required=False,
+                                        initial=0
+                                        )
 
     def clean_username(self):
         """
@@ -41,14 +43,18 @@ class EditProfileForm(UserInfoForm):
 
         return self.request.user.user_profile.valid_username(self.cleaned_data.get('username'))
 
-    def clean_rotation(self):
-        if 'rotate_degrees' in self.cleaned_data:
-            # Format the degrees such that it's less than 360.
-            rotate_degrees = self.cleaned_data['rotate_degrees'] % 360
+    def clean_rotate_degrees(self):
+        rotate_degrees = self.cleaned_data.get('rotate_degrees', 0)
 
-            # The number of degrees rotated must be a multiple of 90
-            if rotate_degrees % 90 != 0:
-                raise ValidationError('Image was rotated {} degrees, which is not a multiple of 90'. format(rotate_degrees))
+        # Handle the case where rotate_degrees is None. If the client passes up '', this will be the case
+        if not rotate_degrees:
+            rotate_degrees = 0
+
+        rotate_degrees %= 360
+
+        # The number of degrees rotated must be a multiple of 90
+        if rotate_degrees % 90 != 0:
+            raise ValidationError('Image was rotated {} degrees, which is not a multiple of 90'. format(rotate_degrees))
         return rotate_degrees
 
     def clean(self):

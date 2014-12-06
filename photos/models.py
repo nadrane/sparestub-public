@@ -56,7 +56,7 @@ def convert_image_to_django_uploadable(image):
     return InMemoryUploadedFile(image, None, 'temp.jpg', 'image/jpeg', len(image.getvalue()), None)
 
 
-def convert_image_string(image_byte_string, crop_coords):
+def convert_image_string(image_byte_string, crop_coords, rotate_degrees):
     if not image_byte_string:
         return None
 
@@ -67,14 +67,15 @@ def convert_image_string(image_byte_string, crop_coords):
         logging.error('Could not convert image %s to jpeg', exc_info=True, stack_info=True)
         return None
 
-    # Keep the original, uncropped image. Still convert it to a jpeg.
+    # Keep the original, uncropped image. Still convert it to a jpeg. But rotate it.
+    rotated_pil_image = rotate_image(pil_image, rotate_degrees)
 
-    original_bytes = convert_to_jpeg(pil_image)
+    original_bytes = convert_to_jpeg(rotated_pil_image)
     original_file = convert_image_to_django_uploadable(original_bytes)
 
     # Crop the photo and convert the cropped photo to a jpeg.
     # These cropped image is just an intermediary used to produce the profile and search thumbnails. It is not saved.
-    cropped_image = crop_photo(pil_image, crop_coords)
+    cropped_image = crop_photo(rotated_pil_image, crop_coords)
     cropped_image_bytes = convert_to_jpeg(cropped_image)
 
     profile_thumbnail_bytes = make_profile_thumbnail(cropped_image_bytes)
@@ -95,8 +96,13 @@ def rotate_image(pil_image, rotate_degrees=0):
     """
 
     if not pil_image:
-        return None
+        return
 
+    # Handle the case where rotate_degrees is ''
+    if not rotate_degrees:
+        return pil_image
+
+    rotate_degrees = rotate_degrees % 360
     if rotate_degrees == 0:
         return pil_image
 
