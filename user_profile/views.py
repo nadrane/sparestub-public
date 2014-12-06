@@ -5,6 +5,7 @@ from django.db import transaction
 from django.shortcuts import redirect
 from django.http import Http404
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 # SpareStub Imports
 from user_profile.models import UserProfile, ProfileQuestion, ProfileAnswer
@@ -38,17 +39,20 @@ def edit_profile(request, username):
             use_old_photo = edit_profile_form.cleaned_data.get('use_old_photo')
 
             if not use_old_photo:
+
                 # Check to see if there is an existing photo and delete it if there is. This will delete it from S3
-                if user.profile_picture:
-                    user.profile_picture.delete()
+                try:
+                    profile_picture = user.profile_picture
+                    profile_picture.delete()
+                except ObjectDoesNotExist:
+                    pass
 
                 uploaded_photo = request.FILES.get('profile_picture')
                 x, y = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),
                 x2, y2 = x + edit_profile_form.cleaned_data.get('w'), y + edit_profile_form.cleaned_data.get('h')
                 crop_coords = x, y, x2, y2
                 rotate_degrees = edit_profile_form.cleaned_data.get('rotate_degrees', 0)
-                profile_picture = Photo.objects.create_photo(uploaded_photo, crop_coords, rotate_degrees)
-                user.profile_picture = profile_picture
+                profile_picture = Photo.objects.create_photo(user, uploaded_photo, crop_coords, rotate_degrees)
 
             email = edit_profile_form.cleaned_data.get('email')
             first_name = edit_profile_form.cleaned_data.get('first_name')
@@ -63,11 +67,8 @@ def edit_profile(request, username):
 
             # No need to handle the profile picture if we are using the old one.
             if not use_old_photo:
-                # Make sure the picture does not get saved without first attaching it to a profile.
-                # It would be lost be good otherwise.
-                with transaction.atomic():
-                    profile_picture.save()
-                    user.save()
+                profile_picture.save()
+                user.save()
             else:
                 user.save()
 
@@ -120,8 +121,10 @@ def view_profile(request, username):
                  'username': username,
                  }
 
-    if user.profile_picture:
+    try:
         user_info['profile_picture'] = user.profile_picture
+    except ObjectDoesNotExist:
+        pass
 
     if most_recent_review:
         reviewer_location = most_recent_review.reviewer.location
@@ -177,8 +180,10 @@ def profile_reviews(request, username):
                  'username': username,
                  }
 
-    if user.profile_picture:
+    try:
         user_info['profile_picture'] = user.profile_picture
+    except ObjectDoesNotExist:
+        pass
 
     reviews = Review.objects.filter(reviewee=user.id).order_by('creation_timestamp')
 
@@ -234,8 +239,10 @@ def profile_tickets(request, username):
                  'username': username,
                  }
 
-    if user.profile_picture:
+    try:
         user_info['profile_picture'] = user.profile_picture
+    except ObjectDoesNotExist:
+        pass
 
     if most_recent_review:
         reviewer_location = most_recent_review.reviewer.location
@@ -304,8 +311,10 @@ def view_ticket(request, username, ticket_id):
                  'username': username,
                  }
 
-    if user.profile_picture:
+    try:
         user_info['profile_picture'] = user.profile_picture
+    except ObjectDoesNotExist:
+        pass
 
     if most_recent_review:
         reviewer_location = most_recent_review.reviewer.location

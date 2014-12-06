@@ -10,7 +10,6 @@ from django.forms import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 # SpareStub modules
-from photos.models import Photo
 from utils.models import TimeStampedModel
 from .settings import user_model_settings
 from utils.miscellaneous import get_variable_from_settings
@@ -115,12 +114,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                  blank=True,
                                  default=0,
                                  )
-
-    profile_picture = models.OneToOneField(Photo,
-                                           null=True,
-                                           blank=True,
-                                           default=None,
-                                           )
 
     location = models.ForeignKey(Location)
 

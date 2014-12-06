@@ -19,6 +19,7 @@ from PIL import Image
 # SpareStub Imports
 from .settings import PROFILE_THUMBNAIL_HEIGHT, SEARCH_THUMBNAIL_HEIGHT
 from utils.networking import open_s3
+from registration.models import User
 
 
 def generate_original_file_name(instance, filename):
@@ -220,7 +221,7 @@ def get_photo_height(image_bytes):
 
 class PhotoManager(models.Manager):
 
-    def create_photo(self, original_photo, crop_coords, rotate_degrees):
+    def create_photo(self, user, original_photo, crop_coords, rotate_degrees):
         """
         Creates a ticket record using the given input
         """
@@ -230,7 +231,8 @@ class PhotoManager(models.Manager):
                                                                                             rotate_degrees
                                                                                             )
 
-        photo = self.model(search_thumbnail=search_thumbnail_file,
+        photo = self.model(user=user,
+                           search_thumbnail=search_thumbnail_file,
                            profile_thumbnail=profile_thumbnail_file,
                            original_file=original_file,
                            crop_x=crop_coords[0],
@@ -246,6 +248,12 @@ class PhotoManager(models.Manager):
 
 
 class Photo(TimeStampedModel):
+
+    user = models.OneToOneField(User,
+                                null=False,
+                                blank=False,
+                                related_name='profile_picture',  # How we access Photos from the User object
+                                )
 
     # This file was created from a intermediate cropped image using crop_x, crop_y, crop_width, and crop_height
     search_thumbnail = models.ImageField(upload_to=generate_search_thumbnail_name,  # So that we can use variable in custom methods
@@ -301,6 +309,7 @@ class Photo(TimeStampedModel):
             bucket.delete_key(smart_bytes(str(self.profile_thumbnail)))
             bucket.delete_key(smart_bytes(str(self.search_thumbnail)))
         #TODO needs work
+        '''
         else:
             #Prevent trying to access undefined variable error if the files truly do not exist on the server
             absolute_original_path = None
@@ -322,6 +331,7 @@ class Photo(TimeStampedModel):
 
             if absolute_original_path and os.path.isfile(absolute_original_path):
                 os.remove(absolute_original_path)
+        '''
         
         #Actually delete the Photo object from the DB
         super(Photo, self).delete()

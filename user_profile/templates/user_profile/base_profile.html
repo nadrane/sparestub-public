@@ -45,7 +45,8 @@
           <strong><span class="glyphicon glyphicon-star"></span></strong>
         {% endfor %}
         <span>
-          "{{ most_recent_review_info.contents }}"
+          {% comment %}TODO come up with a truncating solution that varies by screen size. Right now it's for the tiniest screen possible {% endcomment %}
+          "{{ most_recent_review_info.contents | truncatechars:140}}"
         </span><br>
         <span>{{ most_recent_review_info.name }}, {{ most_recent_review_info.age }} | </span>
         <span>{{ most_recent_review_info.city | title }}, {{ most_recent_review_info.state | upper }}</span>
