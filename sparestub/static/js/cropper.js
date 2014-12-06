@@ -2,6 +2,9 @@
   if (typeof define === "function" && define.amd) {
     // AMD. Register as anonymous module.
     define(["jquery"], factory);
+  } else if (typeof exports === "object") {
+    // Node / CommonJS
+    factory(require("jquery"));
   } else {
     // Browser globals.
     factory(jQuery);
@@ -127,6 +130,7 @@
           $this = this.$element,
           element = this.element,
           image = this.image,
+          crossOrigin = "",
           $clone,
           url;
 
@@ -142,11 +146,16 @@
 
       // Reset image rotate degree
       if (this.replaced) {
-        this.replaced = FALSE;
         image.rotate = 0;
       }
 
-      this.$clone = ($clone = $("<img" + ((typeof $this.attr("crossOrigin") !== STRING_UNDEFINED || this.isCrossOriginURL(url)) ? " crossOrigin" : "") + ' src="' + url + '">'));
+      if (this.defaults.checkImageOrigin) {
+        if ($this.prop("crossOrigin") || this.isCrossOriginURL(url)) {
+          crossOrigin = " crossOrigin";
+        }
+      }
+
+      this.$clone = ($clone = $("<img" + crossOrigin + ' src="' + url + '">'));
 
       $clone.one("load", function () {
         image.naturalWidth = this.naturalWidth || $clone.width();
@@ -331,8 +340,8 @@
       var img = '<img src="' + this.url + '">';
 
       this.$preview = $(this.defaults.preview);
-      this.$preview.html(img);
       this.$viewer.html(img);
+      this.$preview.html(img).find("img").css("cssText", "min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;");
     },
 
     initContainer: function () {
@@ -395,7 +404,13 @@
       if (image._width !== cropper.width || image._height !== cropper.height) {
         $.extend(image, defaultImage);
       } else {
-        image = $.extend(defaultImage, image);
+        image = $.extend({}, defaultImage, image);
+
+        // Reset image ratio
+        if (this.replaced) {
+          this.replaced = FALSE;
+          image.ratio = defaultImage.ratio;
+        }
       }
 
       this.image = image;
@@ -523,7 +538,10 @@
 
       // Re-render the dragger
       this.dragger = dragger;
-      this.defaults.done(this.getData());
+
+      if (!this.disabled) {
+        this.defaults.done(this.getData());
+      }
 
       this.$dragger.css({
         width: round(dragger.width),
@@ -1464,6 +1482,7 @@
     resizable: TRUE,
     zoomable: TRUE,
     rotatable: TRUE,
+    checkImageOrigin: TRUE,
 
     // Dimensions
     minWidth: 0,
