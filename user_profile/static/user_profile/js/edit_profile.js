@@ -1,16 +1,43 @@
 var $cropper_image = undefined;
 
+function validate_user_is_18(value) {
+    'use strict';
+    /*
+    This function will be used by bootstrap validator as a callbackto validate the
+    birthdate of the user to ensure that they are over 18 years old.
+    */
+
+    var value_array = value.split('/');
+    var inputted_date = new Date(value_array[2], value_array[0] - 1, value_array[1]);
+    var years_ago_18 = AddDate(new Date(), "-18", "Y");
+    inputted_date.setHours(0);
+    inputted_date.setMinutes(0);
+    inputted_date.setSeconds(0);
+    inputted_date.setMilliseconds(0);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+    if (inputted_date >= years_ago_18) {
+        return false;
+    }
+    return true;
+}
+
 function editable_profile() {
     'use strict';
 
+    var profile_picture = $('#user-picture>div');
+
     /* Make the profile picture have animations that indicate that it is editable */
-    $('#user-picture>div').hover(function () {
+    profile_picture.hover(function () {
         $('#edit-profile-icon').animate({fontSize: "1.2em"}, 200);
         $('#edit-profile-text').fadeIn(200);
     }, function () {
         $('#edit-profile-icon').animate({fontSize: "1.8em"}, 200);
         $('#edit-profile-text').fadeOut(200);
     });
+    profile_picture.css('cursor', 'pointer');
 }
 
 /* RELATED TO EDIT PROFILE ACTIVITY */
@@ -141,10 +168,6 @@ function resize_profile_picture_preview() {
             }
         }
 
-        // There are actually 2 img elements. One in the raw html and the other added by jcrop when it is initialized.
-        // We need to change the one added by jcrop (it hides the original).
-        // The one we already grabbed is the hidden one. The other is not a direct descendant of .fileinput-preview
-        // So grab that now. This will actually edit both img elements, but that's fine since the first is hidden.
         $(original_image).height(new_height).width(new_width);
 
         // We need to edit the container of the image to avoid restricting the image size
@@ -222,7 +245,20 @@ function initialize_bootstrap_validator_edit_profile() {
                      // validation on the user's current data while the form is closed. Otherwise every field would
                      // just get skipped.
     });
+    // Bootstrap validator will break the datetime picker. We need this function to undo the breakage.
+    $('#edit-profile-birthdate').on('dp.change dp.show', function (e) {
+        $('#edit-profile-form').bootstrapValidator('revalidateField', 'birthdate');
+    });
 }
+
+function initialize_birthdate_date_picker() {
+    'use strict';
+    $('.birthdate-date-picker').datetimepicker({
+        pickTime: false,
+        showToday: true
+    });
+}
+
 
 $(document).ready(function ($) {
     'use strict';
@@ -255,6 +291,7 @@ $(document).ready(function ($) {
             resize_profile_picture_preview();
             initialize_select_photo();
             initialize_remove_photo();
+            initialize_birthdate_date_picker();
         });
     });
 });

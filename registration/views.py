@@ -109,10 +109,7 @@ def login(request):
             auth_login(request, user)
             activate(user.timezone())  # Configure time zone
 
-            redirect_url = request.REQUEST.get('next', settings.LOGIN_REDIRECT_URL)
-
-            return ajax_http({'isSuccessful': True,
-                              'redirect_href': redirect_url},
+            return ajax_http({'isSuccessful': True},
                              status=200,
                              request=request)
         else:

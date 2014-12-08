@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/*
+.panel-heading {
+   background: url("http://www.cssmatic.com/img/bg-right-column.jpg");
+}*/
+
 /* Pad the body so that it does not overlap the navbar */
 body {
     padding-top: 50px;
@@ -52,7 +57,7 @@ input[type=number] {
 
 /* NAVBAR */
 .navbar {
-    background-color: #F0F0F5;
+    background-color: #ffffff;
     border-style: none;
     padding-left: 10px;
     padding-right: 10px;

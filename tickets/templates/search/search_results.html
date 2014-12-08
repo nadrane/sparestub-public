@@ -86,7 +86,7 @@ styl
           </tr>
         </thead>
         <tbody data-link="row" class="rowlink">
-           {% for ticket in page.object_list %}
+          {% for ticket in page.object_list %}
             {% include "tickets/search_result.html" with ticket=ticket.object %} <!-- Defining ticket is not necessary, but I think it's more clear -->
           {% endfor %}
         </tbody>

@@ -4,6 +4,7 @@ from pytz import timezone
 # Django
 from utils.models import TimeStampedModel
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # SparStub imports
 from registration.models import User
@@ -125,11 +126,9 @@ class Ticket(TimeStampedModel):
         return self.title
 
     def get_absolute_url(self):
-        return "/tickets/%id/" % self.id
-
-    # TODO use reverse url once views are defined
-    #from django.core.urlresolvers import reverse
-    #return reverse('people.views.details', args=[str(self.id)])
+        return reverse('view_ticket', kwargs={'username': self.poster.user_profile.username,
+                                              'ticket_id': self.id,
+                                              })
 
     def get_formatted_start_datetime(self):
         """

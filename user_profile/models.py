@@ -5,6 +5,7 @@ import re
 # Django core modules
 from django.db import models
 from django.forms import ValidationError
+from django.core.urlresolvers import reverse
 
 # SpareStub imports
 from .utils import calculate_age
@@ -14,7 +15,7 @@ from .settings import profile_question_model_settings, profile_answer_model_sett
 
 class UserProfilerManager(models.Manager):
 
-    def create_user_profile(self, first_name=None, last_name=None, birth_date=None, profile_views=0):
+    def create_user_profile(self, first_name=None, last_name=None, birthdate=None, profile_views=0):
         """
         Creates a user profile given a particular first and last name.
         The way the system exists now, birth_date and profile_views will never have a value when the profile is created.
@@ -23,7 +24,7 @@ class UserProfilerManager(models.Manager):
         username = self.make_username(first_name, last_name)
 
         user_profile = self.model(username=username,
-                                  birth_date=birth_date,
+                                  birthdate=birthdate,
                                   profile_views=profile_views,
                                   )
 
@@ -75,10 +76,10 @@ class UserProfile(TimeStampedModel):
     # The number of times that this person's profile.html has been viewed by others.
     profile_views = models.IntegerField(default=0)
 
-    birth_date = models.DateField(blank=True,
-                                  null=True,
-                                  default=None,
-                                  )
+    birthdate = models.DateField(blank=True,
+                                 null=True,
+                                 default=None,
+                                 )
 
     objects = UserProfilerManager()
 
@@ -86,10 +87,10 @@ class UserProfile(TimeStampedModel):
         return self.username
 
     def get_absolute_url(self):
-        return '/profile/{}'.format(self.username)
+        return reverse('view_profile', kwargs={'username': self.username})
 
     def age(self):
-        return calculate_age(self.birth_date)
+        return calculate_age(self.birthdate)
 
     def valid_username(self, username):
         # Make sure that the inputted username is in the correct format
@@ -119,7 +120,6 @@ class UserProfile(TimeStampedModel):
         if profile:
             return profile[0]
         return None
-
 
 class ProfileQuestionManager(models.Manager):
 

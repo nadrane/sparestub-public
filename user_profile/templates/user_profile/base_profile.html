@@ -2,10 +2,14 @@
 {% load static %}
 {% load misc_filters %}
 
+<script type="text/javascript">
+  window.additional_parameters.is_owner = {{ is_owner }};
+</script>
+
 {% comment %} TODO add gender field. also make header editable {% endcomment %}
 {% block css %}
   {{ block.super }}
-  <link href="{% static "user_profile/css/user_profile.css" %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static "user_profile/css/user_profile.css" %}">
   {% if is_owner %}
     <link rel="stylesheet" href="{% static "sparestub/css/cropper.css" %}"/>
   {% endif %}
@@ -16,7 +20,7 @@
   {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
     <div id="user-picture"class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
       <div>
-        <img src="{{ user_info.profile_picture.profile_thumbnail.url }}">
+        <img src="{% if user_info.profile_picture.profile_thumbnail.url %}{{ user_info.profile_picture.profile_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
         {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
                          <span style="display: none;" id="edit-profile-text">Edit Profile</span>
         {% endif %}

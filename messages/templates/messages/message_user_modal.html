@@ -1,0 +1,42 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title">Message {{ ticket.poster.first_name | title}}</h4>
+    <div id="message-user-notification-root">
+      <div class="notification-style" style="display: None">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong class="notification-header"></strong>
+        <span class="notification-content"></span>
+      </div>
+    </div>
+  </div>
+
+  <form id="message-user-form" class="form-horizontal" action="{% url "send_message" %}">
+        {% csrf_token %}
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="message-user-subject-type" class="control-label sr-only"></label>
+        <input id="message-user-subject-type" class="form-control" type="text" name="subject_type" disabled
+               value="re: {{ ticket.title | truncatechars:30}}">
+      </div>  <!-- form group -->
+
+      <div class="form-group last-form-group">
+        <label for="message-user-body" class="control-label sr-only"></label>
+        <textarea id="message-user-body" class="form-control" name="body" required rows="6"
+                  placeholder="Your message here"
+                  data-bv-notempty-message="{{ form_settings.BODY_NOTEMPTY_MESSAGE }}"
+
+                  data-bv-stringlength="true"
+                  data-bv-stringlength-max="{{ form_settings.BODY_MAXLENGTH }}"
+                  data-bv-stringlength-message="{{ form_settings.BODY_LENGTH_MESSAGE }}"></textarea>
+      </div>  <!-- form group -->
+    </div>  <!-- modal body -->
+
+    <div class="modal-footer">
+      <button id="message-user-form-submit-button" class="btn btn-primary form-submit-button" type="button"
+              data-toggle="modal" data-target="#modal-message-user-root">Message {{ ticket.poster.first_name | title}}</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    </div>
+
+  </form>  <!-- message-user form -->
+</div>

@@ -98,7 +98,24 @@
                  data-bv-remote-url="{{ form_settings.EMAIL_REMOTE_URL }}"
                  data-bv-remote-message="{{ form_settings.EMAIL_REMOTE_MESSAGE }}">
         </div>
-      </div>
+      </div>  <!-- form group -->
+
+      <div class="row form-group">
+        <label for="edit-profile-birthdate" class="col-xs-12 col-sm-3 control-label">Birthdate: </label>
+        <div class="col-xs-12 col-sm-9  birthdate-date-picker">
+          <input type="text" class="form-control" id="edit-profile-birthdate" name="birthdate"
+                 value="{{ user.birthdate }}"
+
+                 data-bv-date="true"
+                 data-bv-date-format="{{ form_settings.BIRTHDATE_DATE_FORMAT }}"
+                 data-bv-date-message="{{ form_settings.BIRTHDATE_DATE_MESSAGE }}"
+                 data-bv-date-separator="{{ form_settings.BIRTHDATE_DATE_SEPARATOR }}"
+
+                 data-bv-callback="true"
+                 data-bv-callback-callback="validate_user_is_18"
+                 data-bv-callback-message="You cannot use this service if you are less than 18 years old.">
+        </div>
+      </div>  <!-- form group -->
 
       <div class="row form-group">
         <label for="edit-profile-zip-code" class="col-xs-12 col-sm-3 control-label">Zip Code: </label>

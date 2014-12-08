@@ -64,6 +64,7 @@ function initialize_date_pickers() {
         showToday: true
     });
 }
+
 function load_login_modal(show_modal) {
     /* Load the login modal content from the server and display that form if requested.
     params: show_modal - true = Display modal login form immediately.
@@ -176,5 +177,4 @@ $(document).ready(function ($) {
 
     // Initialize when the page loads so that ticker search autocomplete woks
     initialize_location_autocomplete();
-
 }($));

@@ -1,15 +1,92 @@
 {% extends "user_profile/base_profile.html" %}
+{% load tz %}
+{% load static %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "user_profile/css/view_ticket.css" %}">
+{% endblock %}
 
 {% block profile_body %}
-  {% comment %}This url would not exist if the user came here from the user
-  profile ticket tab or if they just typed in the URL. {% endcomment %}
-  {% if search_results_url %}
-    <a href="{{ search_results_url }}" class="btn btn-primary">Back to Ticket Search Results</a>
-  {% endif %}
+  <div class="panel panel-primary tickets-review-panel">
+    <div class="panel-heading">
+      <a style="color:#ffffff" href="{% url "profile_tickets" username=user_info.username %}"><span class="glyphicon glyphicon-arrow-left"></span>  See All User's Tickets</a>
+    </div>
+    <div id="ticket-contents" class="panel-body">
+      <div id="row-top" class="row">
+        <div class="col-xs-12">
+          <h2 id="ticket-title">{{ ticket.title}}</h2>
+        </div>
+      </div>
+      <div id="row-middle" class="row">
+        <div id="left-middle" class="col-xs-4 middle-contents">
+          <div class="row">
+            <span class="col-xs-3 middle-label">Where: </span>
+            <span class="col-xs-9 middle-item">{{ ticket.location }}<br>{{ ticket.venue }}</span>
+          </div>
+        </div>
+        <div id="mid-middle" class="col-xs-4 middle-contents">
+          <div class="row">
+            <span class="col-xs-3 middle-label">When: </span>
+              {% comment %}Turn localtimeoff because the events might be in a different timezone than the user. We don't want to
+              convert the event time to the timezone of the user but to the timezone of the event's location.
+              Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
+            <span class="col-xs-9 middle-item">{% localtime off %}{{ ticket.get_formatted_start_datetime.date }} @ {{ ticket.get_formatted_start_datetime.time }}{% endlocaltime %}</span>
 
-  <div class="ticket">{{ ticket.title }}</div>
-  <div class="ticket-contents">
-    
+          </div>
+        </div>
+        <div id="right-middle" class="col-xs-4 middle-contents">
+          <div class="row">
+            <span class="col-xs-3 middle-label">Price: </span>
+              <span class="col-xs-9 middle-item">${{ ticket.price}}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div id="row-bottom" class="row">
+        <div class="col-xs-12">
+          {{ ticket.about }}
+        </div>
+      </div>
+      <div id="buy-or-message-buttons" class="row">
+        <div class="col-xs-12">
+          {% if is_owner %}
+            <button class="btn btn-primary cancel-ticket" onclick="alert('Are you sure you want to completely delete this ticket?')"
+                    type="button">Delete Ticket Posting</button>
+          {% else %}
+            <button class="btn btn-primary buy-ticket" type="button">Request To Buy Ticket</button>
+            <button class="btn btn-default message-user" type="button">Message User</button>
+            {% if ticket.is_buy_it_now_enabled %}
+              <button class="btn btn-default message-user" type="button">Message User</button>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
 
+{% block js %}
+  <script type="text/javascript">
+    window.additional_parameters.message_user_form_url="{% url "message_user_modal" ticket_id=ticket.id %}"
+  </script>
+  {{ block.super }}
+  <script type="text/javascript" src="{% static "user_profile/js/view_ticket.js" %}"></script>
+{% endblock %}
+
+{% block modals %}
+   <!-- TODO aria-labeledby we need to set this appropriately -->
+   <div id="modal-message-user-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" id="modal-message-user-form-content"></div>
+    </div>
+  </div>
+
+  <div id="modal-yes-no-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+        aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" id="modal-yes-no-content"></div>
+    </div>
   </div>
 {% endblock %}

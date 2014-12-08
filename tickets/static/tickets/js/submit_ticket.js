@@ -1,7 +1,7 @@
 var $ = jQuery;
 var document = window.document;
 
-function validate_date_not_before_today(value, validator, $field) {
+function validate_date_not_before_today(value) {
     'use strict';
     /*
     This function will be used by bootstrap validator as a callbackto validate the
@@ -84,8 +84,6 @@ function initialize_bootstrap_validator_submit_ticket() {
                 }
                 $form.data('bootstrapValidator').resetField('start_time', true);
                 $form.data('bootstrapValidator').resetField('location_raw', true);
-            })
-            .always(function () {
             });
     });
 

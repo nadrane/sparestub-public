@@ -82,7 +82,6 @@
 
     {% comment %} Define a couple constants using the Django templating language {% endcomment %}
     <script type="text/javascript">
-    console.log("{{user.is_authenticated}}");
     window.additional_parameters =
     {
         'is_authenticated' : "{{ user.is_authenticated }}" === "True",

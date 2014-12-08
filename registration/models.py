@@ -32,11 +32,11 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('User does not have an email address.')
 
-        birth_date = kwargs.pop('birth_date', None)  # Note we want to remove the key from the dict to
-                                                     # avoid passing birth_date into the user model and
-                                                     # causing an error
+        birthdate = kwargs.pop('birth_date', None)  # Note we want to remove the key from the dict to
+                                                    # avoid passing birth_date into the user model and
+                                                    # causing an error
 
-        user_profile = UserProfile.objects.create_user_profile(first_name, last_name, birth_date=birth_date)
+        user_profile = UserProfile.objects.create_user_profile(first_name, last_name, birthdate=birthdate)
 
         email = self.normalize_email(email)
         user = self.model(email=email,

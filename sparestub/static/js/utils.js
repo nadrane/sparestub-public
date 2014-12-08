@@ -79,6 +79,7 @@ function add_failure_x($target) {
     $target.empty();
     $target.append('<span class="glyphicon glyphicon-remove">');
 }
+
 /*
 var store_in_local = function (key, data_to_store, is_data_json) {
     'use strict';

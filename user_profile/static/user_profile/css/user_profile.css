@@ -3,14 +3,7 @@
 /* USER HEADER */
 
 #profile-header {
-    background: rgba(139,158,166,1);
-    background: -moz-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(1%, rgba(139,158,166,1)), color-stop(35%, rgba(177,186,190,1)), color-stop(63%, rgba(209,209,209,1)), color-stop(68%, rgba(197,206,200,1)), color-stop(98%, rgba(125,186,144,1)), color-stop(100%, rgba(254,254,254,1)));
-    background: -webkit-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
-    background: -o-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
-    background: -ms-linear-gradient(top, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
-    background: linear-gradient(to bottom, rgba(139,158,166,1) 1%, rgba(177,186,190,1) 35%, rgba(209,209,209,1) 63%, rgba(197,206,200,1) 68%, rgba(125,186,144,1) 98%, rgba(254,254,254,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8b9ea6', endColorstr='#fefefe', GradientType=0 );    padding: 0px;
+    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/logos/old_moon.png");
     padding-top: 10px;
 }
 
@@ -23,7 +16,6 @@
 #user-picture div {
     /* Needed to position the edit pencil inside the profile picture */
     position: relative;
-    cursor: pointer;
     display: inline-block; /* Width and height of child img element */
 }
 

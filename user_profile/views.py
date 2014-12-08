@@ -1,7 +1,6 @@
 # Django Imports
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.shortcuts import redirect
 from django.http import Http404
 from django.db.models import Q
@@ -330,7 +329,7 @@ def view_ticket(request, username, ticket_id):
         most_recent_review_info = None
 
     return render(request,
-                  'user_profile/profile_tickets.html',
+                  'user_profile/view_ticket.html',
                   {'user_info': user_info,
                    'is_owner': is_owner,
                    'ticket': ticket,
