@@ -6,7 +6,9 @@ from django.http import Http404
 from .settings import send_message_form_settings
 from .forms import SendMessageForm
 from tickets.models import Ticket
-from messages.models import Message, Conversation
+from messages.models import Message
+from utils.networking import ajax_http, non_field_errors_notification, form_success_notification
+
 
 def message_user_modal(request, ticket_id):
     ticket = Ticket.objects.get(pk=ticket_id)
@@ -30,26 +32,41 @@ def send_message(request, ticket_id):
         sender = request.user
 
         if sender.is_anonymous():
-            raise Http404('You need to be logged in to send a message!')
+            return ajax_http({'isSuccessful': False,
+                              'notification_type': 'alert-danger',
+                              'notification_content': 'You need to be logged in to send a message!'
+                              })
 
         ticket = Ticket.objects.get(pk=ticket_id)
 
         if ticket:
             receiver = ticket.poster
         else:
-            raise Http404('Ticket {} does not exist'.format(ticket_id))
+            return ajax_http({'isSuccessful': False,
+                              'notification_type': 'alert-danger',
+                              'notification_content': 'This ticket does not exist!'
+                              })
 
         # Make sure that the username entered is the actual poster of this ticket
         if sender == receiver:
-            raise Http404('You cannot send a message to yourself!')
+            return ajax_http({'isSuccessful': False,
+                              'notification_type': 'alert-danger',
+                              'notification_content': "You can't send a message to yourself, silly!"
+                              })
 
         if not ticket.is_active:
-            raise Http404('This ticket is no longer active!')
+            return ajax_http({'isSuccessful': False,
+                              'notification_type': 'alert-danger',
+                              'notification_content': 'The poster of this ticket cancelled it in the last few minutes!'
+                              })
 
         send_message_form = SendMessageForm(request.POST)
         if send_message_form.is_valid():
             body = request.POST.get('body')
-            message = Message.objects.create_message(sender, receiver, ticket, body)
+            Message.objects.create_message(sender, receiver, ticket, body)
+            return ajax_http(form_success_notification('Your message was sent successfully!'))
+        else:
+            return ajax_http(non_field_errors_notification(send_message_form))
 
 
 def inbox(request):

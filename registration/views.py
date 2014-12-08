@@ -9,7 +9,6 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, auth
 from django.template.loader import render_to_string
 from django.utils.timezone import activate
 from django.core.urlresolvers import reverse
-from django.conf import settings
 
 # SpareStub Imports
 from .models import User

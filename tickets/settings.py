@@ -65,3 +65,11 @@ search_results_settings = {'TICKET_TYPES': ticket_model_settings.get('TICKET_TYP
                            }
 
 email_submit_ticket_subject = 'SpareStub has received your ticket submission!'
+
+bid_model_settings = {'BID_STATUSES': (('P', 'Pending'),   # User has not yet accepted or rejected the user
+                                       ('E', 'Expired'),   # Event date has passed, or user does not accept or reject within time limit
+                                       ('A', 'Accepted'),  # Ticket sold to this user!
+                                       ('R', 'Rejected'),  # This user was rejected!
+                                       ('C', 'Cancelled'), # The user cancelled their bid.
+                                       )
+                      }

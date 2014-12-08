@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <form id="message-user-form" class="form-horizontal" action="{% url "send_message" %}">
+  <form id="message-user-form" class="form-horizontal" action="{% url "send_message" ticket_id=ticket.id %}">
         {% csrf_token %}
 
     <div class="modal-body">
@@ -33,7 +33,7 @@
     </div>  <!-- modal body -->
 
     <div class="modal-footer">
-      <button id="message-user-form-submit-button" class="btn btn-primary form-submit-button" type="button"
+      <button id="message-user-form-submit-button" class="btn btn-primary form-submit-button" type="submit"
               data-toggle="modal" data-target="#modal-message-user-root">Message {{ ticket.poster.first_name | title}}</button>
       <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
     </div>

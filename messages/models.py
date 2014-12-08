@@ -49,10 +49,20 @@ class Conversation(TimeStampedModel):
                                null=False
                                )
 
+    objects = ConversationManager()
+
+    @staticmethod
+    def conversations_received(user):
+        return Conversation.objects.filter(receiver=user)
+
+    @staticmethod
+    def conversations_started(user):
+        return Conversation.objects.filter(sender=user)
+
 
 class MessageManager(models.Manager):
 
-    @transaction.atomic
+    #@transaction.atomic()  # Keep this atomic so that messages and conversations are always created together.
     def create_message(self, sender, receiver, ticket, body):
         """
         Creates a message record using the given input. If the conversation does not already exists between these
@@ -85,6 +95,7 @@ class Message(TimeStampedModel):
     conversation = models.ForeignKey(Conversation,
                                      blank=False,
                                      null=False,
+                                     related_name='conversation',
                                      )
 
     body = models.TextField(max_length=message_model_settings.get('BODY_MAX_LENGTH'))
@@ -96,4 +107,14 @@ class Message(TimeStampedModel):
     datetime_read = models.DateTimeField(blank=True,
                                          null=True,
                                          default=None)
+
+    objects = MessageManager()
+
+    @staticmethod
+    def messages_received(user):
+        return Message.objects.filter(conversation__receiver=user)
+
+    @staticmethod
+    def messages_sent(user):
+        return Message.objects.filter(conversation__sender=user)
 

@@ -1,3 +1,6 @@
+# Standard Imports
+from itertools import chain
+
 # 3rd Party Imports
 from pytz import timezone
 
@@ -8,7 +11,7 @@ from django.core.urlresolvers import reverse
 
 # SparStub imports
 from registration.models import User
-from .settings import ticket_model_settings
+from .settings import ticket_model_settings, bid_model_settings
 from locations.models import Location
 
 
@@ -104,6 +107,7 @@ class Ticket(TimeStampedModel):
                                       max_length=1,
                                       choices=ticket_model_settings.get('PAYMENT_METHODS'))
 
+    # An active ticket is one that is available to be bid on
     is_active = models.BooleanField(blank=False,
                                     default=False)
 
@@ -138,3 +142,55 @@ class Ticket(TimeStampedModel):
         ticket_timezone = timezone(self.location.timezone)
         return ticket_timezone.normalize(self.start_datetime.astimezone(ticket_timezone))
 
+    @staticmethod
+    def available_tickets(user):
+        """
+        Return a QuerySet of tickets that this user posted that are still active
+        """
+        return Ticket.objects.filter(poster=user, is_active=True)
+
+    @staticmethod
+    def in_progress_ticket(user):
+        """
+        Return a QuerySet of tickets that this user not not post that he has has either messaged another user about or
+        that he has requested to buy.
+        """
+        from messages.models import Conversation      # Avoid circular import
+
+        # Get the tickets that this user has messaged other users about
+        tickets_message_about = Conversation.conversations_started(user).ticket.filter(is_active=True)
+
+        # Get the tickets that this user has bid on that are still pending
+        tickets_requested = Bid.filter(bidder=user).filter(status='P').ticket
+
+        return chain(tickets_message_about, tickets_requested)
+
+    @staticmethod
+    def past_tickets(user):
+        """
+        Returns a QuerySet of tickets that this user either successfully bought or successfully sold
+        """
+        return Ticket.objects.filter(Q(poster=user) | Q(bidders=user)).filter(is_active=False)
+
+
+class Bid(models.Model):
+    """
+    Created when a user requests to buy a ticket. This model that action.
+    """
+
+    bidder = models.ForeignKey(User,
+                               blank=False,
+                               null=False,
+                               )
+
+    ticket = models.ForeignKey(Ticket,
+                               blank=False,
+                               null=False
+                               )
+
+    status = models.CharField(max_length=1,
+                              null=False,
+                              blank=False,
+                              default='',
+                              choices=bid_model_settings.get('BID_STATUSES'),
+                              )

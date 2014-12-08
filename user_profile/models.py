@@ -121,6 +121,7 @@ class UserProfile(TimeStampedModel):
             return profile[0]
         return None
 
+
 class ProfileQuestionManager(models.Manager):
 
     def create_profile_question(self, question):

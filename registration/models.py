@@ -149,7 +149,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         Get the total number of unread messages for a given user
         """
         from messages.models import Message  # Import here to prevent circular import
-        return Message.objects.filter(receiver=self.id).filter(is_read=False).count()
+        return Message.objects.filter(conversation__receiver=self.id).filter(is_read=False).count()
 
     def age(self):
         return self.user_profile.age()

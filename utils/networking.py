@@ -13,9 +13,9 @@ from django.conf import settings
 
 
 def ajax_http(contents, status=200, extra_json={}, **kwargs):
-    '''
+    """
     Returns an HTTP response that we can use for asynchronous requests
-    '''
+    """
 
     # contents should be a dictionary
     if callable(contents):
