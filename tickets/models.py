@@ -155,15 +155,20 @@ class Ticket(TimeStampedModel):
         Return a QuerySet of tickets that this user not not post that he has has either messaged another user about or
         that he has requested to buy.
         """
-        from messages.models import Conversation      # Avoid circular import
+        from messages.models import Message
 
         # Get the tickets that this user has messaged other users about
-        tickets_message_about = Conversation.conversations_started(user).ticket.filter(is_active=True)
+        active_messages = Message.get_messages_received(user).filter(is_active=True)
+
+        # Filter out duplicate tickets. There are lots of messages between two people about one ticket.
+        tickets_messaged_about = set(message.ticket for message in active_messages)
 
         # Get the tickets that this user has bid on that are still pending
-        tickets_requested = Bid.filter(bidder=user).filter(status='P').ticket
+        # TODO include bids once they exist
+        #tickets_requested = Bid.objects.filter(bidder=user).filter(status='P').ticket
+        #return chain(tickets_messaged_about, tickets_requested)
 
-        return chain(tickets_message_about, tickets_requested)
+        return tickets_messaged_about
 
     @staticmethod
     def past_tickets(user):

@@ -22,7 +22,8 @@ class MessageManager(models.Manager):
                              ticket=ticket,
                              body=body,
                              is_read=False,
-                             datetime_read=None
+                             datetime_read=None,
+                             is_active=True,
                              )
 
         message.save(using=self._db)
@@ -61,6 +62,13 @@ class Message(TimeStampedModel):
     datetime_read = models.DateTimeField(blank=True,
                                          null=True,
                                          default=None)
+
+    # Does this message belong to an active conversation about a ticket that has not yet been sold?
+    # TODO probably should mark conversation inactive on rejection
+    is_active = models.BooleanField(blank=False,
+                                    null=False,
+                                    default=False
+                                    )
 
     objects = MessageManager()
 
@@ -113,6 +121,16 @@ class Message(TimeStampedModel):
         return Message.objects.filter(ticket=ticket)\
                               .filter((Q(sender=user1) & Q(receiver=user2)) |
                                        Q(sender=user2) & Q(receiver=user1))
+
+    @staticmethod
+    def get_messages_received(user):
+        """
+        Returns a QuerySet of messages where the inputted user was the receiver
+        """
+
+        # Note that both users may function as both the sender and the receiver. After all, they will both send
+        # and receive messages in a conversation (hopefully).
+        return Message.objects.filter(receiver=user)
 
     @staticmethod
     def get_all_messages_sorted(user):

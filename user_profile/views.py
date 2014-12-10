@@ -257,9 +257,8 @@ def profile_tickets(request, username):
 
     # Grab every ticket that this user has posted or has bid on
     available_tickets = Ticket.available_tickets(user)
-    #in_progress_tickets = Ticket.in_progress_ticket(user)
+    in_progress_tickets = Ticket.in_progress_ticket(user)
     #past_tickets = Ticket.past_tickets(user)
-    in_progress_tickets = None
     past_tickets = None
     return render(request,
                   'user_profile/profile_tickets.html',
