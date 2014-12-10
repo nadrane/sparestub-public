@@ -1,44 +1,1 @@
-{% extends "base.html" %}
-
-{% block content %}
-  {% if environment == 'production' or environment == 'staging' %}
-    <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=601679739925408&version=v2.0";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-  {% endif %}
-
-    <style>
-    .lower-contact-button{
-        margin:0 auto;
-    }
-    .jumbotron{
-        padding-top: 10px;
-    }
-</style>
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
-    <h1 class="cover-heading" style="text-align: center">Imagine this:</h1><br>
-    <p class="lead" style="text-align: center">Joey purchased two tickets to an event, but his friend bails and he has no one to go with.<br> Poor Joey!</p>
-    <p class="lead" style="text-align: center">Across town, Susie wants to go to the event, but has no ticket and no one to go with.<br> Poor Susie!</p>
-    <p class="lead" style="text-align: center"><b>Introducing SpareStub!</b> We will help connect Joey and Susie. After reviewing each other’s profiles and messaging a bit, Susie will not only buy Joey's extra ticket but also accompany him to the event.</p>
-    <h2 class="cover-heading" style="text-align: center"><i>Convenient. Social. SpareStub.</i><br> Coming: Spring 2015</h2><br>
-    <p class="lead" style="font-size: 140%;text-align: center">As we develop SpareStub, we would love ideas, feedback and Beta users! If you would like periodic updates on SpareStub development and release, or would like to be included in helping to design and test the product, click below to send us an email! </p>
-    <p class="lead" style="text-align: center">
-        <a class="contact-form-button btn btn-primary btn-lg lower-contact-button" role="button" data-toggle="modal" data-target="#modal-contact-root"><strong>Send me updates!</strong></a>
-    </p>
-    <div class="pull-left"> 
-        <div class="fb-like" data-href="https://facebook.com/sparestub" data-width="50" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
-    </div>
-
-    <div class="pull-right">
-        <a href="https://twitter.com/SpareStub" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @SpareStub</a>
-    </div>
-  </div>
-{% endblock %}
+﻿{% extends "base.html" %}{% load static %}{% block content %}  <div class="imagebg">    <div id="intro">        <b>Fair-Price Tickets. New Friends.</b><br>        See who has a Spare Stub in your city<br>        <p class="button"><input type="search" class="search-control" style="font-size: 30px" placeholder="Search for Tickets"><br>            </p>    </div>    <div id="intro">            <b>Sell your Spare Stub</b><br>and find a new gig buddy!        <p class="button">            <input type="search" class="search-control" style="font-size: 30px" placeholder="Submit a Stub"><br></p>    </div>    <div id="intro">        <b>Who We Are</b><br>        SpareStub is social.<br>        We bring fans together.<br>        <p class="who">            If you have an extra ticket and are looking for someone to go to an event with, post it on SpareStub.<br>            We <3 fair pricing here... there are plenty of other places to inflate and scalp.<br>            We're the new guy in town, so we're always looking for feedback.<br>            Tell us what you think!        </p>        <p class="button">            <input type="search" class="search-control" style="font-size: 30px" placeholder="Contact Us"><br></p>    </div>    <div id="howitworks">        How It Works    </div>    <div class="founders">        <div class="box1 founder">            <div class="founderimg">            HelloPic1            </div>            <h2>Stephanie MacConnell | CEO</h2>            <ul class="social">                <li>                    <a href="mailto:stephanie@sparestub.com" target="_blank"></a>                    <a href="https://twitter.com/stephmacc" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @stephmacc</a>                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>                    <a href="http://www.linkedin.com/in/stephaniemacconnell"></a>                </li>            </ul>        </div>        <div class="box2 founder">            <div class="founderimg2">            HelloPic2            </div>            <h2>Nick Drane | CTO</h2>            <ul class="social">                <li>                    <a href="mailto:nick@sparestub.com" target="_blank"></a>                    <a href="http://www.linkedin.com/in/nicholasdrane"></a>                </li>            </ul>        </div>    </div>    <div id="bottom">        <span class="left">            Social        </span>    </div>  </div>{% endblock %}{% block css %}  <link rel="stylesheet" href="{% static "sparestub/css/home.css" %}">{% endblock %}
