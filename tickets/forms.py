@@ -33,7 +33,7 @@ class SearchTicketForm(FacetedSearchForm):
     def __init__(self, *args, **kwargs):
         super(SearchTicketForm, self).__init__(*args, **kwargs)
 
-    def search(self):
+    def search(self, user):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(SearchTicketForm, self).search()
 
@@ -64,6 +64,9 @@ class SearchTicketForm(FacetedSearchForm):
 
         if self.cleaned_data['end_date']:
             sqs = sqs.filter(start_date__lte=self.cleaned_data['end_date'])
+
+        # TODO make querysets filter on poster
+        #sqs = sqs.filter(poster=user.id)
 
         return sqs
 

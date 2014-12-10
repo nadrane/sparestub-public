@@ -50,16 +50,6 @@ input[type=number] {
     -moz-appearance:textfield;
 }
 
-#search-ticket-submit {
-    /* Position the icon to the right side of the search input box */
-    right: -16px;
-    top: 0px;
-
-    /* Make the cursor turn into a pointer to indicate that the search icon is clickable */
-    cursor: pointer;
-
-}
-
 /* NAVBAR */
 .navbar {
     background-color: #ffffff;
@@ -82,7 +72,33 @@ input[type=number] {
     cursor: pointer;
 }
 
+/* Allows login/signup buttons and contact/submit Ticket buttons to display text to eachother on mobile. */
+@media (max-width: 834px) {
+    .nav > li {
+        display: inline-block;
+    }
+}
+
+
 /* SEARCH TICKET */
+
+/* Allow the submit button to be on the same line as the search box on small screens. */
+#search-ticket-input {
+    display: inline-block;
+    width: 80%;
+    max-width: 300px;
+}
+
+#search-ticket-submit {
+    /* Position the icon to the right side of the search input box */
+    right: -16px;
+    top: 0px;
+
+    /* Make the cursor turn into a pointer to indicate that the search icon is clickable */
+    cursor: pointer;
+
+}
+
 #search-ticket-dropdown {
     padding: 15px;
     left: -15px;
@@ -160,6 +176,7 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
 {
     margin-bottom: 0;
 }
+
 
 .modal-title
 {
