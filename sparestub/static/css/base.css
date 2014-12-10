@@ -171,6 +171,18 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
     padding-right: 20px;
 }
 
+
+/* YES CANCEL MODAL */
+#modal-yes-cancel-title {
+    margin-top: 0px; /* Make sure the the x button and the title are aligned evenly */
+}
+
+#modal-yes-cancel-body {
+    margin-top: 20px;
+}
+
+/* END YES CANCEL MODAL */
+
 .jumbotron {
     margin-top: 20px;
     background-color: #F0F0F5;

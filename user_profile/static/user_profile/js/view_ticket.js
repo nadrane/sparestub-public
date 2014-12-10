@@ -50,9 +50,18 @@ function load_message_user_modal(show_modal) {
     });
 }
 
+function prepare_delete_ticket_button() {
+    // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
+    // The answer is that this modal is multi-purposed, and another button might use it in the future.
+    $('#delete-ticket').on('click', function () {
+        prepare_yes_cancel_modal('Are you sure you want to permanently delete this ticket listing?', window.additional_parameters.delete_ticket_url);
+    });
+}
+
 $(document).ready(function ($) {
     $('.message-user').on('click', function () {
-        load_message_user_modal(true);  // The show_modal parameter is false because we can expect the data attributes
+        load_message_user_modal(true);
+    });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
-    });
+    prepare_delete_ticket_button();
 });

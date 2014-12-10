@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.http import Http404
-from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
 # SpareStub Imports
@@ -296,7 +295,7 @@ def view_ticket(request, username, ticket_id):
 
     # Make sure that the username entered is the actual poster of this ticket
     if ticket.poster != user:
-        raise Http404('{} did not post that ticket.'.format(user.username))
+        raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
 
     # If the user looking at this profile is its owner, then we want to render a couple edit buttons
     if request.user == user:
@@ -344,6 +343,31 @@ def view_ticket(request, username, ticket_id):
                    },
                   content_type='text/html',
                   )
+
+
+def delete_ticket(request, ticket_id):
+    """
+    Delete the inputted ticket
+    """
+
+    user = request.user
+
+    # Make sure that ticket exists
+    try:
+        ticket = Ticket.objects.get(pk=ticket_id)
+    except Ticket.DoesNotExist:
+        raise Http404()
+
+    # Make sure that the username entered is the actual poster of this ticket
+    if ticket.poster != user:
+        raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
+
+    ticket.delete()
+
+    return redirect(reverse('profile_tickets',
+                            kwargs={'username': user.user_profile.username}
+                                )
+                    )
 
 
 def update_question(request, username, question_id):

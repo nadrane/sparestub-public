@@ -51,8 +51,8 @@
       <div id="buy-or-message-buttons" class="row">
         <div class="col-xs-12">
           {% if is_owner %}
-            <button class="btn btn-primary cancel-ticket" onclick="alert('Are you sure you want to completely delete this ticket?')"
-                    type="button">Delete Ticket Posting</button>
+            <button id="delete-ticket" type=button class="btn btn-primary cancel-ticket" type="button"
+                    data-toggle="modal" data-target="#modal-yes-cancel-root">Delete Ticket</button>
           {% else %}
             <button class="btn btn-primary buy-ticket" type="button">Request To Buy Ticket</button>
             <button class="btn btn-default message-user" type="button">Message User</button>
@@ -68,7 +68,8 @@
 
 {% block js %}
   <script type="text/javascript">
-    window.additional_parameters.message_user_form_url="{% url "message_user_modal" ticket_id=ticket.id %}"
+    window.additional_parameters.message_user_form_url = "{% url "message_user_modal" ticket_id=ticket.id %}"
+    window.additional_parameters.delete_ticket_url = "{% url "delete_ticket" ticket_id=ticket.id %}"
   </script>
   {{ block.super }}
   <script type="text/javascript" src="{% static "user_profile/js/view_ticket.js" %}"></script>

@@ -71,6 +71,7 @@ class EditProfileForm(UserInfoForm):
 
         return
 
+
 '''
 class PasswordChangeForm(forms.Form):
 

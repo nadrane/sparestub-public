@@ -103,3 +103,26 @@ var retrieve_from_local = function (key, is_data_json){
     }
     return data;
 };*/
+
+function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
+    'use strict';
+
+    var $modal_yes = $('#modal-yes');
+
+    // Remove current functionality attached to this button. Who knows how it was last used.
+    $modal_yes.unbind();
+
+    // And assign something new
+    if (typeof modal_yes_function === 'function') {
+        $modal_yes.unbind().on('click', modal_yes_function);
+    }
+
+    $('#modal-yes-cancel-title').text(title);
+
+    if (post_url) {
+        $('#modal-yes-cancel-form').attr('action', post_url);
+        $modal_yes.attr('type', 'submit');
+    } else {
+        $modal_yes.attr('type', 'button');
+    }
+}
