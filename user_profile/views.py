@@ -258,9 +258,10 @@ def profile_tickets(request, username):
 
     # Grab every ticket that this user has posted or has bid on
     available_tickets = Ticket.available_tickets(user)
-    in_progress_tickets = Ticket.in_progress_ticket(user)
-    past_tickets = Ticket.past_tickets(user)
-
+    #in_progress_tickets = Ticket.in_progress_ticket(user)
+    #past_tickets = Ticket.past_tickets(user)
+    in_progress_tickets = None
+    past_tickets = None
     return render(request,
                   'user_profile/profile_tickets.html',
                    {'user_info': user_info,
@@ -285,12 +286,17 @@ def view_ticket(request, username, ticket_id):
     if profile:
         user = profile.user
     else:
-        raise Http404('The username {} does not exist'.format(username))
+        raise Http404('The username {} does not exist.'.format(username))
 
-    ticket = Ticket.objects.get(pk=ticket_id)
+    # Make sure that ticket exists
+    try:
+        ticket = Ticket.objects.get(pk=ticket_id)
+    except Ticket.DoesNotExist:
+        raise Http404()
+
     # Make sure that the username entered is the actual poster of this ticket
-    if not ticket or ticket.poster != user:
-        raise Http404('That ticket does not exist for this user')
+    if ticket.poster != user:
+        raise Http404('{} did not post that ticket.'.format(user.username))
 
     # If the user looking at this profile is its owner, then we want to render a couple edit buttons
     if request.user == user:

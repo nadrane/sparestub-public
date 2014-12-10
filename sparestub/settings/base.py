@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # Required by allauth and zinnia
+    'django.contrib.humanize',
     'haystack',
     'djrill',
     'contact',

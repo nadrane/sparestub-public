@@ -71,6 +71,12 @@ def signup(request):
             auth_login(request, user)
             activate(user.location.timezone)  # Configure time zone
 
+            # If we are signup up from the login_redirect form, do not keep the user on that blank page.
+            if request.GET.get('redirect') == 'true':
+                return ajax_http({'redirect_href': '/'},
+                                 status=200
+                                 )
+
             return ajax_http(render_nav_bar, 200, request=request)
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
@@ -134,21 +140,29 @@ def login_redirect(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
-            email = request.POST['email']
-            password = request.POST['password']
+            email = login_form.cleaned_data.get('email')
+            password = login_form.cleaned_data.get('password')
             # We actually do this authenticate function twice, once in LoginForm and once here.
             # The code is cleaner this way, despite the extra DB hits.
             user = authenticate(email=email, password=password)
             auth_login(request, user)
             activate(user.timezone())  # Configure time zone
-            return redirect(request.get('next'))
+            return ajax_http({'isSuccessful': True,
+                              'redirect_href': '/'},
+                               status=200
+                             )
         else:
-            return render(request,
-                          'registration/login-redirect.html',
-                          {'form_settings': login_form_settings})
+           return ajax_http({'isSuccessful': False,
+                              'notification_type': 'alert-danger',
+                              'notification_content': 'Wrong username or password! Click to <a href="{}">'
+                                                      'reset your password</a>'.format(reverse('forgot_password'),
+                                                                                                args=login_form.cleaned_data.get('email'))
+                            },
+                            status=400,
+                            )
 
     return render(request,
-                  'registration/login-redirect.html',
+                  'registration/login_redirect.html',
                   {'form_settings': login_form_settings})
 
 

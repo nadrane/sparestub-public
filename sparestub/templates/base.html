@@ -65,7 +65,7 @@
           </ul>
 
           {% include "tickets/search_ticket.html" %}
-          {% include "navigation_bar_right.html" %}
+          {% block navigation_bar_right %}{% include "navigation_bar_right.html" %}{% endblock %}
         </div><!-- .nav-collapse -->
       </div> <!-- .navbar -->
 

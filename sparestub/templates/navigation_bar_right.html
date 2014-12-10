@@ -1,7 +1,7 @@
 <ul class="nav navbar-nav navbar-right" id="navigation-bar-right-div">
   {% if request.user.is_authenticated %}
     <li id="inbox-icon">
-      <a href="{% url "messages.views.inbox" %}">Messages <span class="badge">{{ user.message_count }}</span></a>
+      <a href="{% url "inbox" %}">Messages <span class="badge">{{ user.message_count }}</span></a>
     </li>
     <!-- Render both an button with the name of the user that links to their user page and a logout button -->
     <li>

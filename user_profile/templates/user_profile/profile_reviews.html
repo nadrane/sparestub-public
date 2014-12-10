@@ -31,7 +31,7 @@
                     <span>"{{ review.contents }}"</span>
                   </td>
                   <td class="col-xs-3">
-                    <img style="height:100%; max-height: 100px;" class="pull-left" src="{% if user_info.profile_picture.profile_thumbnail.url %}{{ user_info.profile_picture.profile_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
+                    <img style="height:100%; max-height: 100px;" class="pull-left" src="{% if user_info.profile_picture.search_thumbnail.url %}{{ user_info.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
                     <div style="padding-left: 10px;" class="pull-left">
                       <span>{{ review.reviewer.first_name | title }}{% if user_info.age %}, {{ review.reviewer.age }}{% endif %}</span><br>
                       <span>{{ user_info.city | title }}, {{ user_info.state | upper }}</span>

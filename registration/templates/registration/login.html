@@ -2,12 +2,43 @@
   <div class="modal-header">
     <h4 class="modal-title">Login to SpareStub</h4>
     <div id="login-notification-root">
-      <div class="notification-style" style="display: None">
+      <div class="notification-style" style="display: None;">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
         <strong class="notification-header"></strong>
         <span class="notification-content"></span>
       </div>
     </div>
   </div>
-  {% include "registration/login_form.html" %}
+  <form id="login-form" class="form-horizontal" action="{% url "registration.views.login" %}">
+    {% csrf_token %}
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="login-email" class="control-label sr-only"></label>
+        <input id="login-email" type="email" class="form-control" name="email" placeholder="Email Address" required
+           data-bv-notempty-message="{{ form_settings.EMAIL_NOTEMPTY_MESSAGE }}"
+           data-bv-emailaddress-message="{{ form_settings.EMAIL_EMAILADDRESS_MESSAGE }}"
+
+           data-bv-stringlength="true"
+           data-bv-stringlength-max="{{ form_settings.EMAIL_MAXLENGTH }}"
+           data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}">
+      </div>
+
+      <div class="form-group last-form-group">
+        <label for="login-password" class="control-label sr-only"></label>
+        <input id="login-password" type="password" class="form-control" name="password" placeholder="Password" required
+
+               data-by-notempty-message=""{{ form_settings.PASSWORD_NOTEMPTY_MESSAGE }}
+
+               data-bv-stringlength="true"
+               data-bv-stringlength-min="{{ form_settings.PASSWORD_MIN_LENGTH }}"
+               data-bv-stringlength-max="{{ form_settings.PASSWORD_MAX_LENGTH }}"
+               data-bv-stringlength-message="{{ form_settings.PASSWORD_LENGTH_MESSAGE }}">
+      </div>  <!-- form group -->
+    </div>  <!-- modal body -->
+    <div class="modal-footer">
+      <a id="login-form-signup-link" class="pull-left">Create Account</a>
+      <button id="login-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Login</button>
+      <button type="button" class="btn btn-default form-submit-button" data-dismiss="modal">Close</button>
+    </div>
+  </form>
 </div>

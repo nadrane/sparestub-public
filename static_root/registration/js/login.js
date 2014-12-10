@@ -21,12 +21,7 @@ function initialize_bootstrap_validator_login() {
 
         $.post($form.attr('action'), $form.serialize(), 'json')
             .done(function (data, textStatus, xhr) {
-                // It's probably redundant to check the json value for true seeing as the server returned a 200 status
-                // code, but an extra check never hurts.
-                if (data.isSuccessful) {
-                    handle_ajax_response(data);
-                    $('#modal-login-root').modal('hide');
-                }
+                window.location.reload();
             })
             .fail(function (data, textStatus, xhr) {
                 // Obviously there are cases were we never reached the server (internet down or incredibly high loads

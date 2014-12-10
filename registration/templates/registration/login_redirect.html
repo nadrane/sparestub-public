@@ -1,5 +1,64 @@
-{% extends base.html %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "registration/css/login_redirect.css" %}">
+{% endblock %}
+
+{% comment %}There's no ened to show login and and signup buttons if the form is already displayed below.{% endcomment %}
+{% block navigation_bar_right %}
+{% endblock %}
 
 {% block content %}
-  {% include "registration/login_form.html" %}
+  <div class="login-container center-block">
+    <h4 class="header">Login to SpareStub</h4>
+    <div id="login-notification-root">
+      <div class="notification-style" style="display: None;">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong class="notification-header"></strong>
+        <span class="notification-content"></span>
+      </div>
+    </div>
+    <form id="login-form" class="form-horizontal" action="{% url "login_redirect" %}?redirect=True">
+      {% csrf_token %}
+      <div class="body">
+        <div class="form-group">
+          <label for="login-email" class="col-sm-3 col-xs-12 control-label">Email Address:</label>
+          <div class="col-sm-9 col-xs-12">
+            <input id="login-email" type="email" class="form-control" name="email" placeholder="Email Address" required
+               data-bv-notempty-message="{{ form_settings.EMAIL_NOTEMPTY_MESSAGE }}"
+               data-bv-emailaddress-message="{{ form_settings.EMAIL_EMAILADDRESS_MESSAGE }}"
+
+               data-bv-stringlength="true"
+               data-bv-stringlength-max="{{ form_settings.EMAIL_MAXLENGTH }}"
+               data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}">
+          </div>
+        </div>
+
+        <div class="form-group last-form-group">
+          <label for="login-password" class="col-sm-3 col-xs-12 control-label">Password: </label>
+          <div class="col-sm-9 col-xs-12">
+            <input id="login-password" type="password" class="form-control" name="password" placeholder="Password" required
+
+                   data-by-notempty-message=""{{ form_settings.PASSWORD_NOTEMPTY_MESSAGE }}
+
+                   data-bv-stringlength="true"
+                   data-bv-stringlength-min="{{ form_settings.PASSWORD_MIN_LENGTH }}"
+                   data-bv-stringlength-max="{{ form_settings.PASSWORD_MAX_LENGTH }}"
+                   data-bv-stringlength-message="{{ form_settings.PASSWORD_LENGTH_MESSAGE }}">
+          </div>
+        </div>  <!-- form group -->
+      </div> <!-- body -->
+      <div class="footer">
+        <button id="login-form-submit-button" class='btn btn-primary form-submit-button pull-right' type="submit">Login</button>
+        <button id="login-form-signup-link" class="btn btn-default pull-right" type="button">Create Account</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static "registration/js/login_redirect.js" %}"></script>
 {% endblock %}

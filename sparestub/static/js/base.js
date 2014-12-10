@@ -89,10 +89,12 @@ function load_login_modal(show_modal) {
     });
 }
 
-function load_signup_modal(show_modal) {
+function load_signup_modal(show_modal, signup_with_redirect) {
     /* Load the signup modal content from the server and display that form if requested.
     params: show_modal - true = Display modal sign up form immediately.
                          false = Do not display the modal sign up form.
+            signup_with_redirect -  true = redirect the user to '/' after account creation/login
+                                    false = Keep the user on the current page
     */
 
     var $modal_signup_form_content = $('#modal-signup-form-content');
@@ -105,7 +107,7 @@ function load_signup_modal(show_modal) {
     }
     $.get(window.additional_parameters.signup_form_url, function (data) {
         $modal_signup_form_content.html(data);
-        initialize_bootstrap_validator_signup();
+        initialize_bootstrap_validator_signup(signup_with_redirect);
         if (show_modal) {
             $('#modal-signup-root').modal('show');
         }

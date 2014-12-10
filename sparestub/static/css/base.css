@@ -10,6 +10,11 @@ body {
     padding-top: 50px;
 }
 
+/* Button and Input elements won't get this property when we only target the body */
+button, input, body {
+    -webkit-font-smoothing: antialiased;
+}
+
 textarea {
     /* Do not allow resize handles to appear on textarea elements */
     resize: none;
