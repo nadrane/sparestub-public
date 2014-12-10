@@ -194,7 +194,7 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
     margin-top: 0px; /* Make sure the the x button and the title are aligned evenly */
 }
 
-#modal-yes-cancel-body {
+#modal-yes-cancel-form {
     margin-top: 20px;
 }
 

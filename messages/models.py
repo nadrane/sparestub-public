@@ -1,13 +1,13 @@
 # Django Imports
 from django.db import models
-from django.db import transaction
-from django.db.models import Q, Min
+from django.db.models import Q
+from django.template.loader import render_to_string
 
 # SpareStub Imports
 from utils.models import TimeStampedModel
 from registration.models import User
 from tickets.models import Ticket
-from .settings import message_model_settings
+from .settings import message_model_settings, new_message_subject, new_message_template
 
 
 class MessageManager(models.Manager):
@@ -25,6 +25,11 @@ class MessageManager(models.Manager):
                              datetime_read=None,
                              is_active=True,
                              )
+
+        receiver.send_mail(new_message_subject,
+                           render_to_string(new_message_template),
+                           )
+
 
         message.save(using=self._db)
 

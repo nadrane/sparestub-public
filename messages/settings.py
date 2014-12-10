@@ -8,4 +8,5 @@ send_message_form_settings.update(message_model_settings)
 send_message_form_settings['BODY_LENGTH_MESSAGE'] = 'Please keep your message under {} characters'.\
                                                     format(send_message_form_settings.get('BODY_MAX_LENGTH'))
 
-auto_response_subject = 'Thanks From SpareStub!'
+new_message_subject = 'Thanks From SpareStub!'
+new_message_template = ''
