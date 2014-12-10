@@ -48,6 +48,24 @@
           data-bv-stringlength-message="{{ form_settings.LAST_NAME_LENGTH_MESSAGE }}">
       </div>  <!-- form group -->
 
+
+
+      <div class="form-group">
+        <label for="signup-birthdate" class="control-label sr-only"></label>
+        <input type="text" class="form-control" id="edit-profile-birthdate" name="birthdate"
+               placeholder="Birthdate (MM/DD/YYYY)"
+
+               data-bv-date="true"
+               data-bv-date-format="{{ form_settings.BIRTHDATE_DATE_FORMAT }}"
+               data-bv-date-message="{{ form_settings.BIRTHDATE_DATE_MESSAGE }}"
+               data-bv-date-separator="{{ form_settings.BIRTHDATE_DATE_SEPARATOR }}"
+               data-bv-date-max="{{ forms_settings.BIRTHDATE_OVER_18 }}"
+
+               data-bv-callback="true"
+               data-bv-callback-callback="validate_user_is_18"
+               data-bv-callback-message="You cannot use this service if you are less than 18 years old.">
+      </div>  <!-- form group -->
+
       <div class="form-group">
         <label for="signup-email" class="control-label sr-only"></label>
         <input type="email" class="form-control" id="signup-email" name="email" placeholder="Email Address" required

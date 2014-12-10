@@ -29,11 +29,6 @@ edit_profile_form_settings = {'USERNAME_NOTEMPTY_MESSAGE': 'Please enter your us
 
                               # The actual remote URL is added in views.py for circular dependency reasons
                               'USERNAME_REMOTE_MESSAGE': 'That username already exists. Please pick another.',
-
-                              'START_DATE_NOTEMPTY_MESSAGE': 'Please enter your birthdate',
-                              'START_DATE_DATE_FORMAT': 'MM/DD/YYYY',
-                              'START_DATE_DATE_MESSAGE': 'Please click the calendar icon to select a date in correct format (MM/DD/YYYY)',
-                              'START_DATE_DATE_SEPARATOR': '/',
                               }
 
 edit_profile_form_settings.update(user_info_form_settings)

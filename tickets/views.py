@@ -72,10 +72,3 @@ def submit_ticket(request):
 
 class SearchResults(FacetedSearchView):
     template = 'search/search_results.html'
-
-    def get_results(self):
-        """
-        Add the user to the query so that we can exclude tickets he posted from his search results.
-        """
-        if self.query:
-            return self.form.search(self.request.user)

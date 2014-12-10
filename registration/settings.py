@@ -1,4 +1,7 @@
-from django.core.urlresolvers import reverse
+from datetime import timedelta
+from django.utils import timezone
+
+over_18_year_date = timezone.now() - timedelta(years=18)
 
 user_model_settings = {'PASSWORD_MIN_LENGTH': 6,
                        'PASSWORD_MAX_LENGTH': 128,  # Don't edit this. This value is defined in
@@ -53,6 +56,11 @@ user_info_form_settings = {'FIRST_NAME_NOTEMPTY_MESSAGE': 'Please enter your fir
                                                                 # the serverside validator MUST change as well.
                            'LAST_NAME_REGEXP_MESSAGE': 'Your last name can only contain alphabetical characters and spaces',
 
+                           'BIRTHDATE_NOTEMPTY_MESSAGE': 'Please enter your birthdate',
+                           'BIRTHDATE_DATE_FORMAT': 'MM/DD/YYYY',
+                           'BIRTHDATE_DATE_MESSAGE': 'Please enter your birthdate in MM/DD/YYYY format.',
+                           'BIRTHDATE_DATE_SEPARATOR': '/',
+                           'BIRTHDATE_OVER_18': over_18_year_date,
 
                            'ZIP_CODE_NOTEMPTY_MESSAGE': 'Please enter your zipcode',
                            'ZIP_CODE_MAX_LENGTH': user_model_settings.get('ZIP_CODE_MAX_LENGTH'),

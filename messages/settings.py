@@ -9,4 +9,4 @@ send_message_form_settings['BODY_LENGTH_MESSAGE'] = 'Please keep your message un
                                                     format(send_message_form_settings.get('BODY_MAX_LENGTH'))
 
 new_message_subject = 'Thanks From SpareStub!'
-new_message_template = ''
+new_message_template = 'messages/submit_message_email.html'
