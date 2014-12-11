@@ -15,7 +15,7 @@ from .settings import profile_question_model_settings, profile_answer_model_sett
 
 class UserProfilerManager(models.Manager):
 
-    def create_user_profile(self, first_name=None, last_name=None, birthdate=None, profile_views=0):
+    def create_user_profile(self, first_name=None, last_name=None, profile_views=0):
         """
         Creates a user profile given a particular first and last name.
         The way the system exists now, birth_date and profile_views will never have a value when the profile is created.
@@ -24,7 +24,6 @@ class UserProfilerManager(models.Manager):
         username = self.make_username(first_name, last_name)
 
         user_profile = self.model(username=username,
-                                  birthdate=birthdate,
                                   profile_views=profile_views,
                                   )
 

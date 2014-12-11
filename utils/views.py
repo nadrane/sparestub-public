@@ -12,6 +12,7 @@ def valid_username(request):
     """
     Return true if a username is valid and false if it is not. Used exclusively for form validation.
     """
+
     username = request.GET.get('username')
     user = request.user
     try:
@@ -30,6 +31,7 @@ def valid_zip_code(request):
     Return true for 5 digit strings that do map to zip_codes and false otherwise.
     Used exclusively for form validation.
     """
+
     zip_code = request.GET.get('zip_code')
     try:
         Location.valid_zipcode(zip_code)

@@ -48,12 +48,12 @@
           data-bv-stringlength-message="{{ form_settings.LAST_NAME_LENGTH_MESSAGE }}">
       </div>  <!-- form group -->
 
-
-
       <div class="form-group">
         <label for="signup-birthdate" class="control-label sr-only"></label>
-        <input type="text" class="form-control" id="edit-profile-birthdate" name="birthdate"
+        <input type="text" class="form-control" id="signup-birthdate" name="birthdate" required
                placeholder="Birthdate (MM/DD/YYYY)"
+
+               data-bv-notempty-message="{{ form_settings.BIRTHDATE_NOTEMPTY_MESSAGE }}"
 
                data-bv-date="true"
                data-bv-date-format="{{ form_settings.BIRTHDATE_DATE_FORMAT }}"

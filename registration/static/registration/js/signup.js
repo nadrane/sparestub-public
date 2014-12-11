@@ -1,6 +1,27 @@
 var $ = jQuery;
 var document = window.document;
 
+function validate_user_is_18(birthdate) {
+    'use strict';
+    /*
+    This function will be used by bootstrap validator as a callbackto validate the
+    user is 18 years of age.
+     */
+
+    // Don't display that the user is not 18 until they've entered an entire date.
+    if (birthdate.length === 10) {
+        var today = new Date();
+        birthdate = new Date(birthdate);
+        var age = today.getFullYear() - birthdate.getFullYear();
+        var month = today.getMonth() - birthdate.getMonth();
+        if (month < 0 || (month === 0 && today.getDate() < birthdate.getDate())) {
+            age--;
+        }
+        return age >= 18;
+    }
+    return true;
+}
+
 // We need to kick the function off when we finish loading the modal content/
 // It appears as in callback to the ajax request that grabs this content in base.html
 function initialize_bootstrap_validator_signup(redirect) {

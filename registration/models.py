@@ -2,12 +2,16 @@
 import re
 import requests
 import logging
+from datetime import date
+import random
+import string
 
 # Django modules
 from django.utils.http import urlquote
 from django.db import models, transaction
 from django.forms import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.template.loader import render_to_string
 
 # SpareStub modules
 from utils.models import TimeStampedModel
@@ -16,6 +20,9 @@ from utils.miscellaneous import get_variable_from_settings
 from utils.email import send_email, normalize_email
 from user_profile.models import UserProfile
 from locations.models import Location
+
+from .settings import RESET_PASSWORD_SUBJECT
+from .settings import RESET_PASSWORD_TEMPLATE
 
 
 class UserManager(BaseUserManager):
@@ -32,11 +39,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('User does not have an email address.')
 
-        birthdate = kwargs.pop('birth_date', None)  # Note we want to remove the key from the dict to
-                                                    # avoid passing birth_date into the user model and
-                                                    # causing an error
-
-        user_profile = UserProfile.objects.create_user_profile(first_name, last_name, birthdate=birthdate)
+        user_profile = UserProfile.objects.create_user_profile(first_name, last_name)
 
         email = self.normalize_email(email)
         user = self.model(email=email,
@@ -104,11 +107,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                  blank=False
                                  )
 
-    gender = models.CharField(max_length=1,
-                              choices=user_model_settings.get('GENDER_CHOICES'),
-                              blank=True,
-                              default=''
-                              )
+
+    birthdate=models.DateField(null=False,
+                               blank=False
+                               )
 
     rating = models.IntegerField(null=False,
                                  blank=True,
@@ -233,6 +235,8 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
             name - an input string
         Returns: The input name parameter with consecutive spaces removed and all words capitalized
         """
+        if not name:
+            raise ValidationError('Names is blank', code='blank')
 
         word_list = re.split(' ', name)  # Remove consecutive spaces from the name
         new_name = " ".join([word for word in word_list])
@@ -243,10 +247,34 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
         return new_name
 
+    @staticmethod
+    def valid_birthdate(birthdate):
+        """
+        Calculates the age of a user and ensures that they are over 18 years old.
+        """
+
+        if not birthdate:
+            raise ValidationError('Birthdate is blank', code='blank')
+
+        today = date.today()
+        try:
+            birthday = birthdate.replace(year=today.year)
+        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = birthdate.replace(year=today.year, month=birthdate.month+1, day=1)
+        if birthday > today:
+            age = today.year - birthdate.year - 1
+        else:
+            age = today.year - birthdate.year
+        if age < 18:
+            raise ValidationError('User is less than 18 years old', code='under_age')
+        return birthdate
+
+
     def equal_to_current_password(self, password_input):
         """
         Check to see if an inputted password matches the user's password
         """
+
         return self.password == password_input
 
 
@@ -255,6 +283,8 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         """
         Make sure that this email address does not already exist in the database
         """
+        if not email:
+            raise ValidationError('Email is blank', code='blank')
 
         email = normalize_email(email)
 
@@ -338,20 +368,47 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return self.get_full_name()
 
 
-class ForgotPasswordLink(models.Model):
-
-    email = models.EmailField(max_length=user_model_settings.get('EMAIL_MAX_LENGTH'),
-                              blank=False,
-                              null=False
-                              )
-
-    user_profile = models.URLField(blank=False,
-                                   null=False,
-                                   unique=True
-                                   )
-
-
-class ForgotPasswordLinkManager():
+class ForgotPasswordLinkManager(models.Manager):
     """
     Represents a URL that a user can use to reset his password during the login workflow
     """
+
+    @staticmethod
+    def create_link():
+        return ''.join([random.choice(string.ascii_letters + string.digits) for x in range(20)])
+
+    def create_forgot_password_link(self, user):
+        new_link = ForgotPasswordLinkManager.create_link()
+        existing_links = ForgotPasswordLink.filter(link=new_link)
+
+        while existing_links:
+            new_link = ForgotPasswordLinkManager.create_link()
+            existing_links = ForgotPasswordLink.filter(link=new_link)
+
+        forgot_password_link = self.model(user=user,
+                                          link=new_link
+                                          )
+
+        forgot_password_link.save()
+
+        user.send_mail(RESET_PASSWORD_SUBJECT,
+                       render_to_string(RESET_PASSWORD_TEMPLATE),
+                       html=True
+                       )
+
+        return forgot_password_link
+
+
+class ForgotPasswordLink(models.Model):
+
+    user = models.ForeignKey(User,
+                             null=False,
+                             blank=False,
+                             )
+
+    link = models.CharField(max_length=20,
+                            null=False,
+                            blank=False
+                            )
+
+    objects = ForgotPasswordLinkManager()

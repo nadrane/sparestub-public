@@ -3,7 +3,7 @@ import json
 import logging
 
 # Django Core Imports
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.template.loader import render_to_string
@@ -11,7 +11,7 @@ from django.utils.timezone import activate
 from django.core.urlresolvers import reverse
 
 # SpareStub Imports
-from .models import User
+from .models import User, ForgotPasswordLink
 from .settings import signup_form_settings, login_form_settings
 from .forms import SignupForm, LoginForm
 from utils.email import send_email
@@ -42,6 +42,7 @@ def signup(request):
             email = signup_form.cleaned_data.get('email')
             first_name = signup_form.cleaned_data.get('first_name')
             last_name = signup_form.cleaned_data.get('last_name')
+            birthdate = signup_form.cleaned_data.get('birthdate')
             location = signup_form.cleaned_data.get('location')
 
             # Email the user to welcome them to out website.
@@ -60,6 +61,7 @@ def signup(request):
                                      first_name=first_name,
                                      last_name=last_name,
                                      location=location,
+                                     birthdate=birthdate,
                                      )
 
             #Immediately log the user in after saving them to the database
@@ -121,8 +123,7 @@ def login(request):
             return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
                               'notification_content': 'Wrong username or password! Click to <a href="{}">'
-                                                      'reset your password</a>'.format(reverse('forgot_password'),
-                                                                                                args=login_form.cleaned_data.get('email'))
+                                                      'reset your password</a>'.format(reverse('create_forgot_password'))
                               },
                              status=400
                              )
@@ -173,6 +174,23 @@ def logout(request):
     return HttpResponseRedirect('/')
 
 
-def forgot_password(request):
-    if request.method == 'GET':
-        return User.generate_forgot_password_link()
+def create_forgot_password(request):
+    if request.method == 'POST':
+        user = request.user
+        if user.is_anonymous():
+            raise Http404('You can only reset your password when logged out.')
+        ForgotPasswordLink.objects.create_forgot_password_link(user)
+        return ajax_http(True,
+                         status=200)
+    return ajax_http(False,
+                     status=400)
+
+
+def reset_password(request, reset_link):
+    if request.method == 'POST':
+        forgot_password_link = ForgotPasswordLink.filter(link=reset_link)
+        if forgot_password_link:
+            user = forgot_password_link[0].user
+        else:
+            return Http404()
+    return Http404()

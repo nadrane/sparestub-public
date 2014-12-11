@@ -1,7 +1,7 @@
 from datetime import timedelta
 from django.utils import timezone
 
-over_18_year_date = timezone.now() - timedelta(years=18)
+over_18_year_date = None #timezone.now() - timedelta(years=18)
 
 user_model_settings = {'PASSWORD_MIN_LENGTH': 6,
                        'PASSWORD_MAX_LENGTH': 128,  # Don't edit this. This value is defined in
@@ -87,3 +87,6 @@ signup_form_settings.update(password_form_settings)
 login_form_settings = {}
 login_form_settings.update(email_form_settings)
 login_form_settings.update(password_form_settings)
+
+RESET_PASSWORD_SUBJECT = 'SpareStub - Reset your password'
+RESET_PASSWORD_TEMPLATE = 'registration/password_reset'

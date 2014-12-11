@@ -22,6 +22,8 @@ class UserInfoForm(forms.Form):
                                 max_length=user_info_form_settings.get('LAST_NAME_MAX_LENGTH'),
                                 )
 
+    birthdate = forms.DateField(required=True)
+
     zip_code = forms.CharField(required=True,
                                max_length=user_info_form_settings.get('ZIPCODE_MAX_LENGTH')
                                )
@@ -40,10 +42,13 @@ class UserInfoForm(forms.Form):
         return User.valid_email(self.cleaned_data.get('email', None), self.request.user)
 
     def clean_first_name(self):
-        return User.valid_name(self.cleaned_data.get('first_name'))
+        return User.valid_name(self.cleaned_data.get('first_name', ''))
 
     def clean_last_name(self):
-        return User.valid_name(self.cleaned_data.get('last_name'))
+        return User.valid_name(self.cleaned_data.get('last_name', ''))
+
+    def clean_birthdate(self):
+        return User.valid_birthdate(self.cleaned_data.get('birthdate', ''))
 
     def clean_zip_code(self):
         inputted_zip_code = Location.valid_zipcode(self.cleaned_data.get('zip_code'))
