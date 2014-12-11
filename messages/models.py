@@ -27,8 +27,8 @@ class MessageManager(models.Manager):
                              )
 
         receiver.send_mail(new_message_subject,
-                           render_to_string(new_message_template),
-                           html=True,
+                           '',
+                           html=render_to_string(new_message_template),
                            )
 
 

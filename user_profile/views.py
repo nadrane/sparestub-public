@@ -9,9 +9,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from user_profile.models import UserProfile, ProfileQuestion, ProfileAnswer
 from reviews.models import Review
 from tickets.models import Ticket
-from .forms import EditProfileForm, ProfileAnswerForm
+from .forms import EditProfileForm, ProfileAnswerForm, ChangePasswordForm
 from .settings import edit_profile_form_settings, profile_answer_form_settings
-from utils.networking import ajax_http, non_field_errors_notification, form_failure_notification, \
+from registration.settings import password_form_settings
+from utils.networking import ajax_http, form_failure_notification, \
     form_success_notification
 from photos.models import Photo
 
@@ -76,7 +77,7 @@ def edit_profile(request, username):
 
             return redirect(reverse('view_profile', kwargs={'username': username}))
         else:
-            return ajax_http(**non_field_errors_notification(edit_profile_form))
+            raise Http404()
 
     # We cannot put this line of code in the settings file which so many things are dependent on.
     # It raises circular dependency hell because it calls into all of the urls.py modules and consequently all of
@@ -84,6 +85,9 @@ def edit_profile(request, username):
     edit_profile_form_settings['ZIP_CODE_REMOTE_URL'] = reverse('valid_zip_code')
     edit_profile_form_settings['USERNAME_REMOTE_URL'] = reverse('valid_username')
     edit_profile_form_settings['EMAIL_REMOTE_URL'] = reverse('valid_email')
+    edit_profile_form_settings['PASSWORD_REMOTE_URL'] = reverse('correct_password')
+
+    edit_profile_form_settings.update(password_form_settings)
 
     return render(request,
                   'user_profile/edit_profile.html',
@@ -365,7 +369,7 @@ def delete_ticket(request, ticket_id):
 
     return redirect(reverse('profile_tickets',
                             kwargs={'username': user.user_profile.username}
-                                )
+                            )
                     )
 
 
@@ -397,4 +401,27 @@ def update_question(request, username, question_id):
             return ajax_http(form_failure_notification('Answer too long'))
 
 
+def change_password(request, username):
+    if request.method == 'POST':
+        profile = UserProfile.get_user_profile_from_username(username)
+        # Make sure that the profile exists
+        if profile:
+            user = profile.user
+        else:
+            raise Http404('The username {} does not exist'.format(username))
+
+        # Make sure that a user is only able to update his profile and nobody else's.
+        if request.user != user:
+            raise Http404('')
+
+        change_password_form = ChangePasswordForm(request.POST, request=request)
+
+        if change_password_form.is_valid():
+            new_password = change_password_form.cleaned_data.get('new_password')
+            user.set_password(new_password)
+            user.save()
+            return redirect(reverse('view_profile', kwargs={'username': username}))
+        else:
+            raise Http404()
+    raise Http404()
 

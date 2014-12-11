@@ -60,6 +60,31 @@ def valid_email(request):
                      extra_json={'valid': valid})
 
 
+def correct_password(request):
+    """
+    Return true if the email is valid and false otherwise. Used exclusively for form validation.
+    """
+
+    current_password = request.GET.get('current_password')
+
+    # Just say this is valid if the length is less than 6. The password will fail due to other validators.
+    # This avoids showing multiple errors messages to the error simultaneously.
+    # TODO research why verbose is broken and remove me later????
+    if len(current_password) < 6:
+        return ajax_http(True,
+                         extra_json={'valid': True})
+
+    user = request.user
+    try:
+        user.password_correct(current_password)
+        valid = True
+    except ValidationError:
+        valid = False
+
+    return ajax_http(True,
+                     extra_json={'valid': valid})
+
+
 def terms_of_service(request):
     return render(request,
                   'utils/terms_of_service.html',

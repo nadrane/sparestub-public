@@ -15,8 +15,18 @@ button, input, body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Make a button look like an anchor tag */
+.link-button {
+    background:none!important;
+    border:none;
+    display: inline!important;
+    padding:0!important;
+    cursor: pointer;
+    border-bottom:1px solid rgb(169, 68, 66);
+}
+
 textarea {
-    /* Do not allow resize handles to appear on textarea elements */
+    /* Do not allow resize handles to appear on textarea elements*/
     resize: none;
 
     /* rounded corners */

@@ -1,29 +1,5 @@
 var $cropper_image = undefined;
 
-function validate_user_is_18(value) {
-    'use strict';
-    /*
-    This function will be used by bootstrap validator as a callbackto validate the
-    birthdate of the user to ensure that they are over 18 years old.
-    */
-
-    var value_array = value.split('/');
-    var inputted_date = new Date(value_array[2], value_array[0] - 1, value_array[1]);
-    var years_ago_18 = AddDate(new Date(), "-18", "Y");
-    inputted_date.setHours(0);
-    inputted_date.setMinutes(0);
-    inputted_date.setSeconds(0);
-    inputted_date.setMilliseconds(0);
-    today.setHours(0);
-    today.setMinutes(0);
-    today.setSeconds(0);
-    today.setMilliseconds(0);
-    if (inputted_date >= years_ago_18) {
-        return false;
-    }
-    return true;
-}
-
 function editable_profile() {
     'use strict';
 
@@ -245,20 +221,19 @@ function initialize_bootstrap_validator_edit_profile() {
                      // validation on the user's current data while the form is closed. Otherwise every field would
                      // just get skipped.
     });
-    // Bootstrap validator will break the datetime picker. We need this function to undo the breakage.
-    $('#edit-profile-birthdate').on('dp.change dp.show', function (e) {
-        $('#edit-profile-form').bootstrapValidator('revalidateField', 'birthdate');
-    });
 }
 
-function initialize_birthdate_date_picker() {
+function initialize_bootstrap_validator_change_password() {
     'use strict';
-    $('.birthdate-date-picker').datetimepicker({
-        pickTime: false,
-        showToday: true
+    $('#change-password-form').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        submitButtons: $('#change-password-form-submit-button'),
     });
 }
-
 
 $(document).ready(function ($) {
     'use strict';
@@ -274,6 +249,7 @@ $(document).ready(function ($) {
         $.get(window.additional_parameters.edit_profile_form_url, function (data) {
             $('#modal-edit-profile-form-content').html(data);
             initialize_bootstrap_validator_edit_profile();
+            initialize_bootstrap_validator_change_password();
 
             // The form comes with the user's current information filled inside it.
             // Validate the form so that all fields do not need to be changed to resumbit the form.
@@ -291,7 +267,6 @@ $(document).ready(function ($) {
             resize_profile_picture_preview();
             initialize_select_photo();
             initialize_remove_photo();
-            initialize_birthdate_date_picker();
         });
     });
 });

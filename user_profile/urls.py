@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from .views import edit_profile, view_profile, profile_reviews, profile_tickets, view_ticket, update_question, \
-    delete_ticket
+    delete_ticket, change_password
 
 urlpatterns = patterns('',
                        # Matches on any /profile/<username>
@@ -14,6 +14,7 @@ urlpatterns = patterns('',
                        url(r'(?P<username>[a-zA-Z0-9]+)/tickets/$', profile_tickets, name='profile_tickets'),
                        url(r'(?P<username>[a-zA-Z0-9]+)/edit/$', edit_profile, name='edit_profile'),
                        url(r'(?P<username>[a-zA-Z0-9]+)/reviews/$', profile_reviews, name='profile_reviews'),
+                       url(r'(?P<username>[a-zA-Z0-9]+)/change_password/$', change_password, name='change_password'),
                        url(r'(?P<username>[a-zA-Z0-9]+)/$', view_profile, name='view_profile'),
                        )
 

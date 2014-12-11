@@ -29,8 +29,8 @@ var set_notification = function ($notification_root, header_message, content_mes
         }
 
     // These statemements allow us to generically have many notification roots, typically in modal forms for errors.
-    $notification_root.find('.notification-header').text(header_message);
-    $notification_root.find('.notification-content').text(content_message);
+    $notification_root.find('.notification-header').html(header_message);
+    $notification_root.find('.notification-content').html(content_message);
 
     //We need style the notification-style div as opposed to the root div so that styles do not persist after the
     //alert is dismissed and the contents of the notification root are deleted.

@@ -1,12 +1,13 @@
 # Django Core Imports
 from django import forms
 from django.contrib.auth import authenticate
+from django.forms import ValidationError
 
 # SpareStub Imports
 from .models import User
 from .settings import user_info_form_settings, signup_form_settings, login_form_settings
 from locations.models import Location
-
+from utils.email import normalize_email
 
 class UserInfoForm(forms.Form):
     email = forms.EmailField(required=True,
@@ -100,3 +101,16 @@ class LoginForm(forms.Form):
             raise forms.ValidationError('Wrong email or password entered. Please try again.', code="invalid_credentials")
 
         return
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(max_length=login_form_settings['EMAIL_MAX_LENGTH'],
+                             label='email',
+                             )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        email = normalize_email(email)
+        if not User.objects.filter(email=email):
+            raise ValidationError('Email does not exist')
+        return email

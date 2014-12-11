@@ -28,6 +28,9 @@ password_form_settings = {'PASSWORD_NOTEMPTY_MESSAGE': 'Please enter a password.
                                                   (user_model_settings['PASSWORD_MIN_LENGTH'],
                                                    user_model_settings['PASSWORD_MAX_LENGTH'],
                                                    ),
+
+                          'PASSWORD_REMOTE_MESSAGE': "That's not your password!",
+                          'PASSWORD_IDENTICAL_MESSAGE': 'Your passwords do not match!'
                           }
 
 
@@ -88,5 +91,5 @@ login_form_settings = {}
 login_form_settings.update(email_form_settings)
 login_form_settings.update(password_form_settings)
 
-RESET_PASSWORD_SUBJECT = 'SpareStub - Reset your password'
-RESET_PASSWORD_TEMPLATE = 'registration/password_reset'
+PASSWORD_RESET_EMAIL_SUBJECT = 'SpareStub - Reset your password'
+PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/forgot_password_email.html'

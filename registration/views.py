@@ -9,11 +9,12 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, auth
 from django.template.loader import render_to_string
 from django.utils.timezone import activate
 from django.core.urlresolvers import reverse
+from django.template import RequestContext
 
 # SpareStub Imports
 from .models import User, ForgotPasswordLink
 from .settings import signup_form_settings, login_form_settings
-from .forms import SignupForm, LoginForm
+from .forms import SignupForm, LoginForm, ForgotPasswordForm
 from utils.email import send_email
 from utils.miscellaneous import get_variable_from_settings
 from utils.networking import ajax_http
@@ -120,13 +121,13 @@ def login(request):
                              status=200,
                              request=request)
         else:
-            return ajax_http({'isSuccessful': False,
+           return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
-                              'notification_content': 'Wrong username or password! Click to <a href="{}">'
-                                                      'reset your password</a>'.format(reverse('create_forgot_password'))
-                              },
-                             status=400
-                             )
+                              'notification_content': 'Wrong username or password! <a href="{}">Click to reset your password</a>'.format(reverse('create_forgot_password'))
+                             },
+                            status=400,
+                            )
+
 
     return render(request,
                   'registration/login.html',
@@ -155,10 +156,8 @@ def login_redirect(request):
         else:
            return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
-                              'notification_content': 'Wrong username or password! Click to <a href="{}">'
-                                                      'reset your password</a>'.format(reverse('forgot_password'),
-                                                                                                args=login_form.cleaned_data.get('email'))
-                            },
+                              'notification_content': render_to_string('user_profile/forgot_password.html', '', RequestContext(request))
+                             },
                             status=400,
                             )
 
@@ -176,21 +175,29 @@ def logout(request):
 
 def create_forgot_password(request):
     if request.method == 'POST':
-        user = request.user
-        if user.is_anonymous():
-            raise Http404('You can only reset your password when logged out.')
-        ForgotPasswordLink.objects.create_forgot_password_link(user)
-        return ajax_http(True,
-                         status=200)
-    return ajax_http(False,
-                     status=400)
+        forgot_password_form = ForgotPasswordForm(request.POST)
+        if forgot_password_form.is_valid():
+            user = User.objects.filter(email=forgot_password_form.cleaned_data.get('email'))[0]
+            ForgotPasswordLink.objects.create_forgot_password_link(user)
+            return render(request,
+                          'registration/forgot_password_email_sent.html')
+        else:
+            return render(request,
+                          'registration/forgot_password.html',
+                          {'bad_email': True}
+                          )
+    return render(request,
+                  'registration/forgot_password.html')
 
 
 def reset_password(request, reset_link):
     if request.method == 'POST':
-        forgot_password_link = ForgotPasswordLink.filter(link=reset_link)
-        if forgot_password_link:
-            user = forgot_password_link[0].user
-        else:
-            return Http404()
-    return Http404()
+        forgot_password_form = ForgotPasswordForm(request.POST)
+        if forgot_password_form.is_valid():
+            forgot_password_link = ForgotPasswordLink.objects.filter(link=reset_link)
+            if forgot_password_link:
+                user = forgot_password_link[0].user
+            else:
+                return Http404()
+    return render(request,
+                  'registration/reset_password.html')

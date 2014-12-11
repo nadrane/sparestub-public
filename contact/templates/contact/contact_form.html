@@ -1,3 +1,5 @@
+{% load l10n %}
+
 <div class="modal-content">
   <div class="modal-header">
     <h4 class="modal-title">Email Us</h4>
@@ -21,7 +23,7 @@
                data-bv-notempty-message="{{ form_settings.EMAIL_NOTEMPTY_MESSAGE }}"
                data-bv-emailaddress-message="{{ form_settings.EMAIL_EMAILADDRESS_MESSAGE }}"
                data-bv-stringlength="true"
-               data-bv-stringlength-max="{{ form_settings.EMAIL_MAXLENGTH }}"
+               data-bv-stringlength-max="{% localize off %}{{ form_settings.EMAIL_MAXLENGTH }}{% endlocalize %}"
                data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}">
       </div>
 

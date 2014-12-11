@@ -12,6 +12,7 @@ from django.db import models, transaction
 from django.forms import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.template.loader import render_to_string
+from django.contrib.auth import authenticate
 
 # SpareStub modules
 from utils.models import TimeStampedModel
@@ -21,8 +22,8 @@ from utils.email import send_email, normalize_email
 from user_profile.models import UserProfile
 from locations.models import Location
 
-from .settings import RESET_PASSWORD_SUBJECT
-from .settings import RESET_PASSWORD_TEMPLATE
+from .settings import PASSWORD_RESET_EMAIL_SUBJECT
+from .settings import PASSWORD_RESET_EMAIL_TEMPLATE
 
 
 class UserManager(BaseUserManager):
@@ -269,14 +270,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
             raise ValidationError('User is less than 18 years old', code='under_age')
         return birthdate
 
-
-    def equal_to_current_password(self, password_input):
-        """
-        Check to see if an inputted password matches the user's password
-        """
-
-        return self.password == password_input
-
+    def password_correct(self, current_password):
+        if not authenticate(email=self.email, password=current_password):
+            raise ValidationError('Current password incorrect', code="incorrect_password")
+        return current_password
 
     @staticmethod
     def valid_email(email, user):
@@ -375,15 +372,15 @@ class ForgotPasswordLinkManager(models.Manager):
 
     @staticmethod
     def create_link():
-        return ''.join([random.choice(string.ascii_letters + string.digits) for x in range(20)])
+        return ''.join([random.choice(string.ascii_letters + string.digits) for x in range(100)])
 
     def create_forgot_password_link(self, user):
         new_link = ForgotPasswordLinkManager.create_link()
-        existing_links = ForgotPasswordLink.filter(link=new_link)
+        existing_links = ForgotPasswordLink.objects.filter(link=new_link)
 
         while existing_links:
             new_link = ForgotPasswordLinkManager.create_link()
-            existing_links = ForgotPasswordLink.filter(link=new_link)
+            existing_links = ForgotPasswordLink.objects.filter(link=new_link)
 
         forgot_password_link = self.model(user=user,
                                           link=new_link
@@ -391,9 +388,13 @@ class ForgotPasswordLinkManager(models.Manager):
 
         forgot_password_link.save()
 
-        user.send_mail(RESET_PASSWORD_SUBJECT,
-                       render_to_string(RESET_PASSWORD_TEMPLATE),
-                       html=True
+        times_requested = ForgotPasswordLink.objects.filter(user=user).count()
+
+        user.send_mail(PASSWORD_RESET_EMAIL_SUBJECT,
+                       '',
+                       html=render_to_string(PASSWORD_RESET_EMAIL_TEMPLATE, {'new_link': new_link,
+                                                                             'times': times_requested
+                                                                             }),
                        )
 
         return forgot_password_link
@@ -406,7 +407,7 @@ class ForgotPasswordLink(models.Model):
                              blank=False,
                              )
 
-    link = models.CharField(max_length=20,
+    link = models.CharField(max_length=100,
                             null=False,
                             blank=False
                             )

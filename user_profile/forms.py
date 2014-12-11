@@ -4,6 +4,7 @@ from django.forms import ValidationError
 
 # SpareStub modules
 from registration.forms import UserInfoForm
+from registration.settings import password_form_settings
 from .settings import edit_profile_form_settings, profile_answer_form_settings
 
 
@@ -72,35 +73,35 @@ class EditProfileForm(UserInfoForm):
         return
 
 
-'''
-class PasswordChangeForm(forms.Form):
+class ChangePasswordForm(forms.Form):
 
-    current_password = forms.CharField(min_length=user_model_settings['PASSWORD_MIN_LENGTH'],
-                                       max_length=user_model_settings['PASSWORD_MAX_LENGTH'],
-                                       required=True,
-                                       widget=forms.PasswordInput(attrs={'placeholder': 'Current Password'}),
+    current_password = forms.CharField(required=True,
+                                       min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
+                                       max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
                                        )
 
-    new_password = forms.CharField(min_length=user_model_settings['PASSWORD_MIN_LENGTH'],
-                                   max_length=user_model_settings['PASSWORD_MAX_LENGTH'],
-                                   required=True,
-                                   widget=forms.PasswordInput(attrs={'placeholder': 'New Password'}),
+    new_password = forms.CharField(required=True,
+                                   min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
+                                   max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
                                    )
 
-    confirm = forms.CharField(min_length=user_model_settings['PASSWORD_MIN_LENGTH'],
-                              max_length=user_model_settings['PASSWORD_MAX_LENGTH'],
-                              required=True,
-                              widget=forms.PasswordInput(attrs={'placeholder': 'Confirm'}),
-                              )
+    repeat_password = forms.CharField(required=True,
+                                      min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
+                                      max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
+                                      )
+
+    def __init__(self, *args, **kwargs):
+        if 'request' in kwargs:
+            self.request = kwargs.pop('request')
+
+        super(ChangePasswordForm, self).__init__(*args, **kwargs)
 
     def clean_current_password(self):
-        if self.equal_to_current_password(self.cleaned_data['current_password']):
-            forms.ValidationError('Your new password must be different than your old password.')
+        return self.request.user.password_correct(self.cleaned_data.get('current_password'))
 
     def clean(self):
-        new_password = self.cleaned_data['new_password']
-        confirm = self.cleaned_data['confirm']
+        new_password = self.cleaned_data.get('new_password')
+        confirm = self.cleaned_data.get('repeat_password')
 
-        if new_password and confirm and (new_password != confirm):
-            raise forms.ValidationError('Password do not match. Please re-enter your new password.')
-'''
+        if new_password != confirm:
+            raise forms.ValidationError('Passwords do not match. Please re-enter your new password.')

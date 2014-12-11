@@ -23,21 +23,21 @@ def submit(request):
             from_email_address = contact_form.cleaned_data.get('from_email_address')
 
             # Send an email to shout@sparestub.com with the user's message
-            successful = send_email(SOCIAL_EMAIL_ADDRESS,
-                                    subject_type,
-                                    body,
-                                    from_email_address,
-                                    )
+            send_email(SOCIAL_EMAIL_ADDRESS,
+                       subject_type,
+                       body,
+                       from_email_address,
+                       )
 
             auto_response_message = render_to_string('contact/contact_auto_response.html')
             # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
-            successful = send_email(from_email_address,
-                                    auto_response_subject,
-                                    '',
-                                    SOCIAL_EMAIL_ADDRESS,
-                                    'SpareStub',
-                                    html=auto_response_message
-                                    )
+            send_email(from_email_address,
+                       auto_response_subject,
+                       '',
+                       SOCIAL_EMAIL_ADDRESS,
+                       'SpareStub',
+                       html=auto_response_message
+                       )
 
             # Notice that we always return True. If the email failed to send, we need to figure it out on our side.
             # There is nothing additional for the client to do.
