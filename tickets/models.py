@@ -43,7 +43,7 @@ class TicketManager(models.Manager):
                             rating=rating,
                             )
 
-        ticket.save(using=self._db)
+        ticket.save()
 
         return ticket
 

@@ -3,7 +3,7 @@ from django import forms
 from django.forms import ValidationError
 
 # SpareStub modules
-from registration.forms import UserInfoForm
+from registration.forms import UserInfoForm, ResetPasswordForm
 from registration.settings import password_form_settings
 from .settings import edit_profile_form_settings, profile_answer_form_settings
 
@@ -73,22 +73,12 @@ class EditProfileForm(UserInfoForm):
         return
 
 
-class ChangePasswordForm(forms.Form):
+class ChangePasswordForm(ResetPasswordForm):
 
     current_password = forms.CharField(required=True,
                                        min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
                                        max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
                                        )
-
-    new_password = forms.CharField(required=True,
-                                   min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
-                                   max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
-                                   )
-
-    repeat_password = forms.CharField(required=True,
-                                      min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
-                                      max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
-                                      )
 
     def __init__(self, *args, **kwargs):
         if 'request' in kwargs:
@@ -98,10 +88,3 @@ class ChangePasswordForm(forms.Form):
 
     def clean_current_password(self):
         return self.request.user.password_correct(self.cleaned_data.get('current_password'))
-
-    def clean(self):
-        new_password = self.cleaned_data.get('new_password')
-        confirm = self.cleaned_data.get('repeat_password')
-
-        if new_password != confirm:
-            raise forms.ValidationError('Passwords do not match. Please re-enter your new password.')

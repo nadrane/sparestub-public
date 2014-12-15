@@ -242,7 +242,7 @@ class PhotoManager(models.Manager):
                            rotate_degrees=rotate_degrees,
                            )
 
-        photo.save(using=self._db)
+        photo.save()
 
         return photo
 

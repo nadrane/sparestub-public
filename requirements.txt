@@ -28,6 +28,7 @@ requests-oauthlib==0.4.1
 six==1.8.0
 sqlparse==0.1.13
 static3==0.5.1
+stripe==1.19.1
 unittest2py3k==0.5.1
 urllib3==1.9.1
 yuicompressor==2.4.8

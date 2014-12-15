@@ -32,7 +32,7 @@ class MessageManager(models.Manager):
                            )
 
 
-        message.save(using=self._db)
+        message.save()
 
         return message
 

@@ -93,3 +93,5 @@ login_form_settings.update(password_form_settings)
 
 PASSWORD_RESET_EMAIL_SUBJECT = 'SpareStub - Reset your password'
 PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/forgot_password_email.html'
+EMAIL_CONFIRMATION_EMAIL_SUBJECT = 'SpareStub - Email confirmation'
+EMAIL_CONFIRMATION_EMAIL_TEMPLATE = 'registration/email_confirmation_email.html'

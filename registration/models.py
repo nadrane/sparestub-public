@@ -13,6 +13,7 @@ from django.forms import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
+from django.conf import settings
 
 # SpareStub modules
 from utils.models import TimeStampedModel
@@ -22,8 +23,10 @@ from utils.email import send_email, normalize_email
 from user_profile.models import UserProfile
 from locations.models import Location
 
-from .settings import PASSWORD_RESET_EMAIL_SUBJECT
-from .settings import PASSWORD_RESET_EMAIL_TEMPLATE
+from .settings import PASSWORD_RESET_EMAIL_SUBJECT, PASSWORD_RESET_EMAIL_TEMPLATE, EMAIL_CONFIRMATION_EMAIL_SUBJECT,\
+    EMAIL_CONFIRMATION_EMAIL_TEMPLATE
+
+DOMAIN = settings.DOMAIN
 
 
 class UserManager(BaseUserManager):
@@ -50,11 +53,14 @@ class UserManager(BaseUserManager):
                           is_staff=is_staff,
                           is_superuser=is_superuser,
                           user_profile=user_profile,
+                          confirmed=False,
                           **kwargs
                           )
 
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
+
+        EmailConfirmationLink.objects.create_email_confirmation(user)
 
         return user
 
@@ -124,6 +130,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                    default=False,
                                    help_text='Designates whether the user can log into this admin site.'
                                    )
+
+    confirmed = models.BooleanField(null=False,
+                                    blank=False,
+                                    default=False,
+                                    )
 
     # Why was this account marked as inactive. Cannot be part of UserPostableModel becomes choices will be different
     # for every model that inherits the UserPostableModelMixin.
@@ -365,25 +376,48 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return self.get_full_name()
 
 
+class EmailConfirmationLinkManager(models.Manager):
+    """
+    Represents a URL that a user can use to confirm his email address after signing up
+    """
+
+    def create_email_confirmation(self, user):
+        new_link = EmailLink.create_link()
+
+        while EmailConfirmationLink.objects.filter(link=new_link):
+            new_link = EmailLink.create_link()
+
+        email_confirm_link = self.model(user=user,
+                                        link=new_link,
+                                        expired=False,
+                                        )
+
+        email_confirm_link.save()
+
+        user.send_mail(EMAIL_CONFIRMATION_EMAIL_SUBJECT,
+                       '',
+                       html=render_to_string(EMAIL_CONFIRMATION_EMAIL_TEMPLATE, {'new_link': new_link,
+                                                                                 'DOMAIN': DOMAIN,
+                                                                                 }),
+                       )
+
+        return email_confirm_link
+
+
 class ForgotPasswordLinkManager(models.Manager):
     """
     Represents a URL that a user can use to reset his password during the login workflow
     """
 
-    @staticmethod
-    def create_link():
-        return ''.join([random.choice(string.ascii_letters + string.digits) for x in range(100)])
+    def create_forgot_password(self, user):
+        new_link = EmailLink.create_link()
 
-    def create_forgot_password_link(self, user):
-        new_link = ForgotPasswordLinkManager.create_link()
-        existing_links = ForgotPasswordLink.objects.filter(link=new_link)
-
-        while existing_links:
-            new_link = ForgotPasswordLinkManager.create_link()
-            existing_links = ForgotPasswordLink.objects.filter(link=new_link)
+        while ForgotPasswordLink.objects.filter(link=new_link):
+            new_link = EmailLink.create_link()
 
         forgot_password_link = self.model(user=user,
-                                          link=new_link
+                                          link=new_link,
+                                          expired=False,
                                           )
 
         forgot_password_link.save()
@@ -393,23 +427,42 @@ class ForgotPasswordLinkManager(models.Manager):
         user.send_mail(PASSWORD_RESET_EMAIL_SUBJECT,
                        '',
                        html=render_to_string(PASSWORD_RESET_EMAIL_TEMPLATE, {'new_link': new_link,
-                                                                             'times': times_requested
+                                                                             'times': times_requested,
+                                                                             'DOMAIN': DOMAIN,
                                                                              }),
                        )
 
         return forgot_password_link
 
 
-class ForgotPasswordLink(models.Model):
+class EmailLink(TimeStampedModel):
 
     user = models.ForeignKey(User,
                              null=False,
                              blank=False,
                              )
 
-    link = models.CharField(max_length=100,
+    link = models.CharField(max_length=50,
                             null=False,
                             blank=False
                             )
 
+    expired = models.BooleanField(null=False,
+                                  blank=False,
+                                  default=False
+                                  )
+
+
+    @staticmethod
+    def create_link():
+        return ''.join([random.choice(string.ascii_letters + string.digits) for x in range(50)])
+
+
+class ForgotPasswordLink(EmailLink):
+
     objects = ForgotPasswordLinkManager()
+
+
+class EmailConfirmationLink(EmailLink):
+
+    objects = EmailConfirmationLinkManager()

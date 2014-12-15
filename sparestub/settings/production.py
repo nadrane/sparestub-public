@@ -20,3 +20,9 @@ MEDIA_URL = ''
 # File Storage Backend Settings
 DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = 'sparestub-production'
+
+# Used to create links in emails to our site
+DOMAIN = 'www.sparestub.com'
+
+STRIPE_SECRET_API_KEY = get_env_variable('STRIPE_SECRET_API_KEY')
+STRIPE_SECRET_API_KEY = get_env_variable('STRIPE_PUBLIC_API_KEY')

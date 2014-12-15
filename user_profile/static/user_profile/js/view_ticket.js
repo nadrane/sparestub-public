@@ -58,10 +58,16 @@ function prepare_delete_ticket_button() {
     });
 }
 
+//TODO this is somewhat of a hack to override what the stripe button reads
+function prepare_stripe_button() {
+    $('.stripe-holder-form button').html('<span style="display: block; min-height: 30px;">Request to Buy</span>');
+}
+
 $(document).ready(function ($) {
     $('.message-user').on('click', function () {
         load_message_user_modal(true);
     });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
     prepare_delete_ticket_button();
+    prepare_stripe_button();
 });

@@ -10,17 +10,19 @@ from django.template.loader import render_to_string
 from django.utils.timezone import activate
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.conf import settings
+from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 # SpareStub Imports
-from .models import User, ForgotPasswordLink
-from .settings import signup_form_settings, login_form_settings
-from .forms import SignupForm, LoginForm, ForgotPasswordForm
+from .models import User, ForgotPasswordLink, EmailConfirmationLink
+from .settings import signup_form_settings, login_form_settings, password_form_settings
+from .forms import SignupForm, LoginForm, ResetPasswordForm, ForgotPasswordForm
 from utils.email import send_email
-from utils.miscellaneous import get_variable_from_settings
 from utils.networking import ajax_http
 from .utils import render_nav_bar
 
-SOCIAL_EMAIL_ADDRESS = get_variable_from_settings('SOCIAL_EMAIL_ADDRESS')
+SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
 
 
 def basic_info(request):
@@ -190,14 +192,61 @@ def create_forgot_password(request):
                   'registration/forgot_password.html')
 
 
-def reset_password(request, reset_link):
-    if request.method == 'POST':
-        forgot_password_form = ForgotPasswordForm(request.POST)
-        if forgot_password_form.is_valid():
-            forgot_password_link = ForgotPasswordLink.objects.filter(link=reset_link)
-            if forgot_password_link:
-                user = forgot_password_link[0].user
-            else:
-                return Http404()
+@login_required
+def create_email_confirmation_link(request):
+    EmailConfirmationLink.objects.create_email_confirmation(request.user)
+    return HttpResponseRedirect('/')
+
+
+def confirm_email(request, confirm_link):
+    # Login is not required because only the user with the correc email address will ever know the confirmation url
+    email_confirm_link = EmailConfirmationLink.objects.filter(link=confirm_link).filter(expired=False)
+    if email_confirm_link:
+        email_confirm_link = email_confirm_link[0]
+        user = email_confirm_link.user
+        email_confirm_link.expired = True
+        user.confirmed = True
+
+        with transaction.atomic():
+            email_confirm_link.save()
+            user.save()
+
     return render(request,
-                  'registration/reset_password.html')
+                  'registration/email_confirmation_finished.html')
+
+
+def reset_password(request, reset_link):
+    forgot_password_link = ForgotPasswordLink.objects.filter(link=reset_link).filter(expired=False)
+    if forgot_password_link:
+        if request.method == 'POST':
+            reset_password_form = ResetPasswordForm(request.POST)
+            if reset_password_form.is_valid():
+                    forgot_password_link = forgot_password_link[0]
+                    user = forgot_password_link.user
+                    email = user.email
+
+                    new_password = reset_password_form.cleaned_data.get('new_password')
+                    user.set_password(new_password)
+                    forgot_password_link.expired = True
+
+                    with transaction.atomic():
+                        user.save()
+                        forgot_password_link.save()
+
+                    user = authenticate(email=email, password=new_password)
+                    auth_login(request, user)
+                    return HttpResponseRedirect('/')
+            else:
+                return render(request,
+                              'registration/reset_password.html',
+                              {'reset_link': reset_link,
+                               'bad_password': True,
+                               'form_settings': password_form_settings
+                               })
+        return render(request,
+                      'registration/reset_password.html',
+                      {'reset_link': reset_link,
+                       'form_settings': password_form_settings
+                       })
+    else:
+        raise Http404()

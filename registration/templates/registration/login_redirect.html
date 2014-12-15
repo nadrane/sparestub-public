@@ -58,6 +58,51 @@
   </div>
 {% endblock %}
 
+<div class="row">
+    <div class="col-xs-12 col-sm-9 col-md-6 col-sm-offset-3">
+      <h2>Reset your password</h2>
+      <hr>
+      {% if bad_password %}
+        <ul><li>Uh oh, those passwords don't appear to match. Try again.</li></ul>
+      {% endif %}
+      <form id="reset-password-form" method="post" action="{% url "reset_password" reset_link=reset_link %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="change-password-new" class="control-label">New Password: </label>
+           <input type="password" class="form-control" id="change-password-new"
+                  name="new_password" placeholder="New Password" required
+
+                  data-bv-notempty-message="{{ form_settings.PASSWORD_NOTEMPTY_MESSAGE }}"
+
+                  data-bv-stringlength=true
+                  data-bv-stringlength-min="{{ form_settings.PASSWORD_MIN_LENGTH }}"
+                  data-bv-stringlength-max="{{ form_settings.PASSWORD_MAX_LENGTH }}"
+                  data-bv-stringlength-message="{{ form_settings.PASSWORD_LENGTH_MESSAGE }}">
+        </div>  <!-- form-group -->
+        <div class="form-group">
+          <label for="change-password-repeat" class="control-label">Repeat: </label>
+            <input type="password" class="form-control" id="change-password-repeat"
+                   name="repeat_password" placeholder="Repeat" required
+
+                   data-bv-notempty-message="{{ form_settings.PASSWORD_NOTEMPTY_MESSAGE }}"
+
+                   data-bv-stringlength=true
+                   data-bv-stringlength-min="{{ form_settings.PASSWORD_MIN_LENGTH }}"
+                   data-bv-stringlength-max="{{ form_settings.PASSWORD_MAX_LENGTH }}"
+                   data-bv-stringlength-message="{{ form_settings.PASSWORD_LENGTH_MESSAGE }}"
+
+                   data-bv-identical="true"
+                   data-bv-identical-field="new_password"
+                   data-bv-identical-message="{{ form_settings.PASSWORD_IDENTICAL_MESSAGE }}"
+
+                   data-bv-verbose=false>
+        </div>  <!-- form group -->
+        <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
+        <button id='reset-password-submit' class='pull-right btn btn-primary' type="submit">Change Password</button>
+      </form>
+    </div>
+  </div>
+
 {% block js %}
   {{ block.super }}
   <script type="text/javascript" src="{% static "registration/js/login_redirect.js" %}"></script>

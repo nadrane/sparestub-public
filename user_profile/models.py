@@ -27,7 +27,7 @@ class UserProfilerManager(models.Manager):
                                   profile_views=profile_views,
                                   )
 
-        user_profile.save(using=self._db)
+        user_profile.save()
 
         # Make sure a blank profile answer object exists for every question
         for profile_question in ProfileQuestion.objects.all():
@@ -129,7 +129,7 @@ class ProfileQuestionManager(models.Manager):
         """
 
         profile_question = self.model(question=question)
-        profile_question.save(using=self._db)
+        profile_question.save()
         return profile_question
 
 
@@ -161,7 +161,7 @@ class ProfileAnswerManager(models.Manager):
                                     question=question,
                                     answer=answer)
 
-        profile_answer.save(using=self._db)
+        profile_answer.save()
         return profile_answer
 
 

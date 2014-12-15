@@ -1,11 +1,12 @@
 # Django imports
 from django.contrib.auth.decorators import login_required
 from .settings import ticket_submit_form_settings
-from django.shortcuts import render
+from django.shortcuts import render, Http404
 from django.template.loader import render_to_string
 
 # 3rd Party Imports
 from haystack.views import FacetedSearchView
+import stripe
 
 #SpareStub imports
 from .settings import email_submit_ticket_subject, search_results_settings
@@ -13,7 +14,7 @@ from .models import Ticket
 from .forms import SubmitTicketForm
 from utils.networking import ajax_http, form_success_notification, form_failure_notification, \
     non_field_errors_notification
-
+from django.conf import settings
 
 @login_required()
 def submit_ticket(request):
@@ -72,3 +73,34 @@ def submit_ticket(request):
 
 class SearchResults(FacetedSearchView):
     template = 'search/search_results.html'
+
+
+@login_required()
+def request_to_buy(request, ticket_id):
+    try:
+        ticket = Ticket.objects.get(pk=ticket_id)
+    except Ticket.DoesNotExist:
+        return Http404()
+
+    import pdb
+    pdb.set_trace()
+
+    # Set your secret key: remember to change this to your live secret key in production
+    # See your keys here https://dashboard.stripe.com/account
+    stripe.api_key = settings.STRIPE_SECRET_API_KEY
+
+    charge_amount = int(float(request.POST['charge_amount']) * 100)
+
+    # Get the credit card details submitted by the form
+    token = request.POST['stripeToken']
+
+    # Create the charge on Stripe's servers - this will charge the user's card
+    try:
+        charge = stripe.Charge.create(amount=charge_amount,  # amount in cents, again
+                                      currency="usd",
+                                      card=token,
+                                      description='charge for ticket {}'.format(ticket.id)
+                                      )
+    except stripe.CardError as e:
+      # The card has been declined
+      pass

@@ -8,6 +8,7 @@ from .models import User
 from .settings import user_info_form_settings, signup_form_settings, login_form_settings
 from locations.models import Location
 from utils.email import normalize_email
+from .settings import password_form_settings
 
 class UserInfoForm(forms.Form):
     email = forms.EmailField(required=True,
@@ -68,7 +69,6 @@ class SignupForm(UserInfoForm):
     password = forms.CharField(required=True,
                                min_length=signup_form_settings['PASSWORD_MIN_LENGTH'],
                                max_length=signup_form_settings['PASSWORD_MAX_LENGTH'],
-                               widget=forms.PasswordInput(),
                                )
 
 
@@ -101,6 +101,27 @@ class LoginForm(forms.Form):
             raise forms.ValidationError('Wrong email or password entered. Please try again.', code="invalid_credentials")
 
         return
+
+
+class ResetPasswordForm(forms.Form):
+
+    new_password = forms.CharField(required=True,
+                                   min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
+                                   max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
+                                   )
+
+    repeat_password = forms.CharField(required=True,
+                                      min_length=password_form_settings['PASSWORD_MIN_LENGTH'],
+                                      max_length=password_form_settings['PASSWORD_MAX_LENGTH'],
+                                      )
+
+    def clean(self):
+        new_password = self.cleaned_data.get('new_password')
+        confirm = self.cleaned_data.get('repeat_password')
+
+        if new_password != confirm:
+            raise forms.ValidationError('Passwords do not match. Please re-enter your new password.',
+                                        code='password_mismatch')
 
 
 class ForgotPasswordForm(forms.Form):

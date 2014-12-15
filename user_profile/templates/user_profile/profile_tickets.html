@@ -27,7 +27,7 @@
                   Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
                   <td class="col-xs-1"><a href={{ ticket.get_absolute_url }}>{% localtime off %}{{ ticket.get_formatted_start_datetime.date }}<br>{{ ticket.get_formatted_start_datetime.time }}{% endlocaltime %}</a></td>
                   <td class="col-xs-1">
-                    ${{ ticket.price }} <br>
+                    ${{ ticket.price | currency}} <br>
                     {{ ticket.get_payment_method_display }}
                   </td>
                   <td class="col-xs-1">{{ ticket.location }}<br>{{ ticket.venue }}</td>

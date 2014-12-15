@@ -206,6 +206,11 @@ function update_question_form() {
                 spinner.stop();
             });
     });
+
+    // Remove the green checkmark or red X when the user edits their answer
+    $('.answer').on('input propertychange', function () {
+        $(this).siblings().find('.answer-button-status').html('');
+    });
 }
 
 function initialize_bootstrap_validator_edit_profile() {

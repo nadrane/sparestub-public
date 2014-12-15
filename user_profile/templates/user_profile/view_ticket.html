@@ -1,6 +1,9 @@
 {% extends "user_profile/base_profile.html" %}
 {% load tz %}
 {% load static %}
+{% load humanize %}
+{% load misc_filters %}
+{% load l10n %}
 
 {% block css %}
   {{ block.super }}
@@ -38,7 +41,7 @@
         <div id="right-middle" class="col-xs-4 middle-contents">
           <div class="row">
             <span class="col-xs-3 middle-label">Price: </span>
-              <span class="col-xs-9 middle-item">${{ ticket.price}}</span>
+              <span class="col-xs-9 middle-item">{{ ticket.price | currency}}</span>
             </span>
           </div>
         </div>
@@ -54,17 +57,19 @@
             <button id="delete-ticket" type=button class="btn btn-primary cancel-ticket" type="button"
                     data-toggle="modal" data-target="#modal-yes-cancel-root">Delete Ticket</button>
           {% else %}
-            <form action="" method="POST">
-            <script
-              src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-              data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
-              data-amount="2000"
-              data-name="Demo Site"
-              data-description="2 widgets ($20.00)"
-              data-image="/128x128.png">
-            </script>
-          </form>
-            <button class="btn btn-primary buy-ticket" type="button">Request To Buy Ticket</button>
+            <form class="stripe-holder-form" action="{% url "request_to_buy" ticket_id=ticket.id %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="charge_amount" value="{{ ticket.price }}">
+              <script
+                id="stripe-script"
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="{{ stripe_public_api_key }}"
+                data-amount="{% localize off %}{{ ticket.price | format_stripe_price}}{% endlocalize %}"
+                data-name="1 Ticket"
+                data-description="{{ ticket.title }}"
+                data-image="/128x128.png">
+              </script>
+            </form>
             <button class="btn btn-default message-user" type="button">Message User</button>
             {% if ticket.is_buy_it_now_enabled %}
               <button class="btn btn-default message-user" type="button">Message User</button>

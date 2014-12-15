@@ -1,9 +1,13 @@
-__author__ = 'nicholasdrane'
-
+# Standard Imports
 import logging
 
-from django.core.mail import send_mail, EmailMultiAlternatives
+# 3rd Party Imports
+from requests.exceptions import RequestException
 from djrill import MandrillAPIError
+
+# Django Imports
+from django.core.mail import send_mail, EmailMultiAlternatives
+
 
 
 def normalize_email(email):
@@ -50,3 +54,8 @@ def send_email(recipient_list, subject, message, from_email, from_name='', **kwa
          # Mandrill errors are thrown as exceptions
         logging.critical('A mandrill error occurred. Status code {}'.format(e.status_code))
         # TODO queue message and try again later and bolster logging
+
+    except RequestException as e:
+        # Generally occurs when the internet is not connected
+        logging.critical('Cannot connect to email server: error {}'.format(str(e)))
+        # TODO queue these up

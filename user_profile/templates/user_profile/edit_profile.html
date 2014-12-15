@@ -1,6 +1,13 @@
 <div class="modal-content">
   <div class="modal-header">
-    <h4 class="modal-title">Edit Profile</h4>
+    <div class="row">
+      <div class="col-xs-10">
+        <h4 class="modal-title">Edit Your Profile</h4>
+      </div>
+      <div class="col-xs-2">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+      </div>
+    </div>
     <div id="edit-profile-notification-root">
       <div class="notification-style" style="display: None">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -195,10 +202,6 @@
                  data-bv-stringlength-min="{{ form_settings.PASSWORD_MIN_LENGTH }}"
                  data-bv-stringlength-max="{{ form_settings.PASSWORD_MAX_LENGTH }}"
                  data-bv-stringlength-message="{{ form_settings.PASSWORD_LENGTH_MESSAGE }}"
-
-                 data-bv-identical="true"
-                 data-bv-identical-field="repeat_password"
-                 data-bv-identical-message="{{ form_settings.PASSWORD_IDENTICAL_MESSAGE }}"
 
                  data-bv-verbose=false>
         </div>

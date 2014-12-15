@@ -30,7 +30,7 @@ def message_user_modal(request, ticket_id):
                        'ticket': ticket,
                        })
 
-@login_required
+@login_required()
 def send_message(request, ticket_id):
     if request.method == 'POST':
         sender = request.user
@@ -103,8 +103,6 @@ def inbox(request):
                                             }
             last_ticket_id = ticket_id
 
-        import pdb
-        pdb.set_trace()
         first_ticket = conversations[conversations.values()]
 
         return render(request,
