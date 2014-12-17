@@ -13,13 +13,8 @@
     <title>SpareStub</title>
 
     {% block css %}
-      {% if environment == 'production' or environment == 'staging' %}
-          <!-- Bootstrap core CSS -->
-          <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-      {% else %}
-          <!-- Bootstrap core CSS -->
-          <link href="{% static "sparestub/css/bootstrap.css" %}" rel="stylesheet">
-      {% endif %}
+      <!-- Bootstrap core CSS -->
+      <link href="{% static "sparestub/css/bootstrap.css" %}" rel="stylesheet">
 
       <!-- Boostrap Validator CSS -->
       <link href="{% static "sparestub/css/bootstrapValidator.css" %}" rel="stylesheet">
@@ -101,30 +96,22 @@
     {% comment %} Load JS files in this block that a lot of things will be dependencies of. Will likely just appear as
     block.super in files that extend base.html {% endcomment %}
     {% block core_js %}
-      {% if environment == 'production' or environment == 'staging' %}
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>  <!--TODO get a local copy configure based on what checks we use. -->
+      {% if environment == 'production'%}
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-55020709-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+      {% endif %}
 
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.min.js"></script>
-        <!-- Google analytics -->
-
-        {% if environment == 'production'%}
-          <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-55020709-1', 'auto');
-            ga('send', 'pageview');
-          </script>
-        {% endif %}
-      {% else %}
-        <script type="text/javascript" src="{% static "sparestub/js/jquery-1.11.1.js" %}"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.js"></script>
+      <script type="text/javascript" src="{% static "sparestub/js/jquery-1.11.1.js" %}"></script>
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.js"></script>
 
         <!-- Bootstrap linter -->
-        <!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>-->
-      {% endif %}
+        <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>
     {% endblock %}
     {% block js %}
       <!-- Bootstrap -->

@@ -14,7 +14,6 @@ def get_range(value):
         return range(value)
     return value
 
-
 # Thank you Stackoverflow for this simple and easy solution
 #http://stackoverflow.com/questions/6481788/format-of-timesince-filter
 @register.filter(is_safe=True)
@@ -25,7 +24,7 @@ def upto(value, delimiter=None):
 @register.filter(is_safe=True)
 @stringfilter
 def format_stripe_price(value):
-    return int(value.split('.')[0]) * 100
+    return int(float(value) * 100)
 
 @register.filter(is_safe=True)
 def currency(dollars):

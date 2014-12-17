@@ -89,7 +89,7 @@ def request_to_buy(request, ticket_id):
     # See your keys here https://dashboard.stripe.com/account
     stripe.api_key = settings.STRIPE_SECRET_API_KEY
 
-    charge_amount = int(float(request.POST['charge_amount']) * 100)
+    charge_amount = Ticket.convert_price_to_stripe_amount(request.POST.get('charge_amount'))
 
     # Get the credit card details submitted by the form
     token = request.POST['stripeToken']

@@ -129,6 +129,14 @@ class Ticket(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    @staticmethod
+    def convert_price_to_stripe_amount(price):
+        """
+        Takes a ticket price as input and converts it to cents, removing the decimal in the process.
+        This is necessary because Stripe only accepts charges that are formatted in cents
+        """
+        return int(float(price) * 100)
+
     def get_absolute_url(self):
         return reverse('view_ticket', kwargs={'username': self.poster.user_profile.username,
                                               'ticket_id': self.id,
