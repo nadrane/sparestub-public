@@ -17,6 +17,7 @@ elasticsearch==1.2.0
 gunicorn==19.1.1
 htmlmin==0.1.5
 mandrill==1.0.56
+newrelic==2.40.0.34
 oauthlib==0.6.3
 ply==3.4
 psycopg2==2.5.4

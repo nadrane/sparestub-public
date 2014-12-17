@@ -10,6 +10,7 @@ from locations.models import Location
 from utils.email import normalize_email
 from .settings import password_form_settings
 
+
 class UserInfoForm(forms.Form):
     email = forms.EmailField(required=True,
                              max_length=user_info_form_settings.get('EMAIL_MAX_LENGTH'),
@@ -23,8 +24,6 @@ class UserInfoForm(forms.Form):
     last_name = forms.CharField(required=True,
                                 max_length=user_info_form_settings.get('LAST_NAME_MAX_LENGTH'),
                                 )
-
-    birthdate = forms.DateField(required=True)
 
     zip_code = forms.CharField(required=True,
                                max_length=user_info_form_settings.get('ZIPCODE_MAX_LENGTH')
@@ -49,9 +48,6 @@ class UserInfoForm(forms.Form):
     def clean_last_name(self):
         return User.valid_name(self.cleaned_data.get('last_name', ''))
 
-    def clean_birthdate(self):
-        return User.valid_birthdate(self.cleaned_data.get('birthdate', ''))
-
     def clean_zip_code(self):
         inputted_zip_code = Location.valid_zipcode(self.cleaned_data.get('zip_code'))
 
@@ -66,10 +62,16 @@ class UserInfoForm(forms.Form):
 
 #Form that will be displayed on signup.html to load a person
 class SignupForm(UserInfoForm):
+
+    birthdate = forms.DateField(required=True)
+
     password = forms.CharField(required=True,
                                min_length=signup_form_settings['PASSWORD_MIN_LENGTH'],
                                max_length=signup_form_settings['PASSWORD_MAX_LENGTH'],
                                )
+
+    def clean_birthdate(self):
+        return User.valid_birthdate(self.cleaned_data.get('birthdate', ''))
 
 
 class LoginForm(forms.Form):

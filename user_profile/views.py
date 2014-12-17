@@ -21,6 +21,7 @@ from photos.models import Photo
 def edit_profile(request, username):
     profile = UserProfile.get_user_profile_from_username(username)
     # Make sure that the profile exists
+
     if profile:
         user = profile.user
     else:
