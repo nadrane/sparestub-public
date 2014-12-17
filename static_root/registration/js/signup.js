@@ -54,10 +54,7 @@ function initialize_bootstrap_validator_signup(redirect) {
             .done(function (data, textStatus, xhr) {
                 // It's probably redundant to check the json value for true seeing as the server returned a 200 status
                 // code, but an extra check never hurts.
-                handle_ajax_response(data);
-                $('#modal-signup-root').modal('hide');
-                set_notification($('#notification-root'), 'Success!',
-                                   "You're ready to use SpareStub!", 'alert-success');
+                window.location.reload();
             })
             .fail(function (data, textStatus, xhr) {
                 // Obviously there are cases were we never reached the server (internet down or incredibly high loads

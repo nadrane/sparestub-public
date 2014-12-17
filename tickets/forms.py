@@ -52,9 +52,15 @@ class SearchTicketForm(FacetedSearchForm):
         # Should also filter down nearby city list to exclude zip codes that can never be chosen because they have
         # a city/state combo that has less population than another identical city/state combo
         if self.cleaned_data['location_raw']:
-            location = self.get_location()
-            if location:
-                sqs = sqs.filter(location=location)
+
+            # We might not get great input from the user. They might not have selected an autocomplete options.
+            # If they didn't don't let this crash.
+            try:
+                location = self.get_location()
+                if location:
+                    sqs = sqs.filter(location=location)
+            except forms.ValidationError:
+                pass
 
         if self.cleaned_data['ticket_type']:
             sqs = sqs.filter(ticket_type=self.cleaned_data.get('ticket_type'))
@@ -68,7 +74,15 @@ class SearchTicketForm(FacetedSearchForm):
         return sqs
 
     def get_location(self):
-        city, state = map(lambda x: x.strip().lower(), self.cleaned_data.get('location_raw').split(','))
+        location_raw = self.cleaned_data.get('location_raw')
+        city_state_location = None
+
+        # Sometimes the user doesn't actually select an autocomplete option, and the input will not contain a comma.
+        # This causes the unpacking to crash. Don't let that happen.
+        if ',' in location_raw:
+            city, state = map(lambda x: x.strip().lower(), location_raw.split(','))
+        else:
+            city, state = location_raw.strip().lower(), ''
 
         try:
             city_state_location = map_citystate_to_location(city, state)
@@ -119,7 +133,14 @@ class SubmitTicketForm(forms.Form):
     #                                   choices=ticket_submit_form_settings.get('PAYMENT_METHODS'))
 
     def handle_location(self):
-        city, state = map(lambda x: x.strip().lower(), self.cleaned_data.get('location_raw').split(','))
+        location_raw = self.cleaned_data.get('location_raw')
+
+        # Sometimes the user doesn't actually select an autocomplete option, and the input will not contain a comma.
+        # This causes the unpacking to crash. Don't let that happen.
+        if ',' in location_raw:
+            city, state = map(lambda x: x.strip().lower(), location_raw.split(','))
+        else:
+            city, state = location_raw.strip().lower(), ''
 
         try:
             city_state_location = map_citystate_to_location(city, state)

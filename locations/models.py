@@ -170,7 +170,10 @@ def map_citystate_to_location(city, state):
 
     # Make sure that every matched city also has the inputted state
     if location_city_match_list:
-        location_citystate_match_list = location_city_match_list.filter(state=state)
+
+        # State might be a null string if we get bad input
+        if state:
+            location_citystate_match_list = location_city_match_list.filter(state=state)
 
         # We don't need to be working with a query set anymore but rather just a plain old list of Location objects,
         location_citystate_match_list = [location for location in location_citystate_match_list]
@@ -181,7 +184,11 @@ def map_citystate_to_location(city, state):
     alias_city_match_list = Alias.objects.filter(alias=city)
 
     if alias_city_match_list:
-        alias_citystate_match_list = alias_city_match_list.filter(location__state=state)
+
+        # State might be a null string if we get bad input
+        if state:
+            alias_citystate_match_list = alias_city_match_list.filter(location__state=state)
+
         alias_citystate_match_locations = [alias.location for alias in alias_citystate_match_list]
 
         # This list will have duplicates if a location has an alias with the same name as it's primary city.
