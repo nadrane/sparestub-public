@@ -103,8 +103,8 @@ def signup(request):
 def login(request):
     # If the user is already logged in, redirect him to the homepage
     if request.user.is_authenticated():
-        return ajax_http(contents='True',
-                         redirect='/'
+        return ajax_http({'isSuccessful': True,
+                         'redirect_href': '/'},
                          )
 
     # If the form has been submitted by the user
