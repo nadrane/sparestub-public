@@ -95,8 +95,10 @@ input[type=number] {
 /* Allow the submit button to be on the same line as the search box on small screens. */
 #search-ticket-input {
     display: inline-block;
-    width: 80%;
-    max-width: 300px;
+    width: 75%; /* Don't make this percentage bigger. It will work most of the time, but sometimes certain browsers
+                   (*cough* Chrome *cough* decide they want to render the font size differently than the css specifies.
+                   This percentage ensures the search button does not appear on a different line when Chrome
+                   gets sassy. */
 }
 
 #search-ticket-submit {
