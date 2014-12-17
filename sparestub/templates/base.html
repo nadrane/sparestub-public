@@ -108,10 +108,10 @@
       {% endif %}
 
       <script type="text/javascript" src="{% static "sparestub/js/jquery-1.11.1.js" %}"></script>
-      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.js"></script>
+      <script type="text/javascript" src="{% static "moment-with-locales.js" %}"></script>
 
         <!-- Bootstrap linter -->
-        <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>
+        <!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>-->
     {% endblock %}
     {% block js %}
       <!-- Bootstrap -->
