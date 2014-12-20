@@ -103,9 +103,13 @@ def inbox(request):
                                             }
             last_ticket_id = ticket_id
 
+        import pdb
+        pdb.set_trace()
+
         first_ticket = conversations[conversations.values()]
 
         return render(request,
                       'messages/inbox.html',
                       {'conversations': conversations,
-                      })
+                       'first_ticket': first_ticket,
+                       })
