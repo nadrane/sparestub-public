@@ -55,19 +55,19 @@ INSTALLED_APPS = (
     'messages',
 
     # All needed for zinnia
-    #'django_comments',
-    #'mptt',
-    #'tagging',
-    #'zinnia',
+    'django_comments',
+    'mptt',
+    'tagging',
+    'zinnia',
 )
 
-SITE_ID = 1 # Needed for allauth
+SITE_ID = 1  # Needed for allauth
 
 TEMPLATE_CONTEXT_PROCESSORS = (
   'django.contrib.auth.context_processors.auth',
   'django.core.context_processors.i18n',
   'django.core.context_processors.request',       # Required by allauth template tags
-  'zinnia.context_processors.version',  # Optional
+  'zinnia.context_processors.version',  # Optional - for Zinnia
   'utils.context_processors.environment',
   'utils.context_processors.ticket_types',
 )

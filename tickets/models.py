@@ -8,10 +8,12 @@ from pytz import timezone
 from utils.models import TimeStampedModel
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 
 # SparStub imports
 from registration.models import User
-from .settings import ticket_model_settings, bid_model_settings
+from .settings import ticket_model_settings, bid_model_settings, TICKET_REQUESTED_BIDDER_SUBJECT, \
+    TICKET_REQUESTED_BIDDER_TEMPLATE, TICKET_REQUESTED_POSTER_SUBJECT, TICKET_REQUESTED_POSTER_TEMPLATE
 from locations.models import Location
 
 
@@ -129,13 +131,20 @@ class Ticket(TimeStampedModel):
     def __str__(self):
         return self.title
 
-    @staticmethod
-    def convert_price_to_stripe_amount(price):
+    def convert_price_to_stripe_amount(self):
         """
         Takes a ticket price as input and converts it to cents, removing the decimal in the process.
         This is necessary because Stripe only accepts charges that are formatted in cents
         """
-        return int(float(price) * 100)
+        price_in_cents = int(float(self.price) * 100)
+
+        # Add the 5 dollar base transaction fee
+        price_in_cents += 500
+
+        if self.payment_method == 'S':
+            price_in_cents *= 1.05
+
+        return round(price_in_cents)
 
     def get_absolute_url(self):
         return reverse('view_ticket', kwargs={'username': self.poster.user_profile.username,
@@ -186,6 +195,33 @@ class Ticket(TimeStampedModel):
         return Ticket.objects.filter(Q(poster=user) | Q(bidders=user)).filter(is_active=False)
 
 
+class BidManager(models.Manager):
+
+    def create_bid(self, ticket, user):
+        """
+        Creates a bid record using the given input.
+        This function will shoot off an email to both the ticket poster and the user that requested to buy the ticket.
+        """
+
+        bid = self.model(bidder=user,
+                         ticket=ticket,
+                         status='P'
+                         )
+
+        bid.save()
+
+        ticket.poster.send_mail(TICKET_REQUESTED_POSTER_SUBJECT,
+                                message='',
+                                html=render_to_string(TICKET_REQUESTED_POSTER_TEMPLATE)
+                                )
+        user.send_mail(TICKET_REQUESTED_BIDDER_SUBJECT,
+                       message='',
+                       html=render_to_string(TICKET_REQUESTED_BIDDER_TEMPLATE)
+                       )
+
+        return bid
+
+
 class Bid(models.Model):
     """
     Created when a user requests to buy a ticket. This model that action.
@@ -207,3 +243,5 @@ class Bid(models.Model):
                               default='',
                               choices=bid_model_settings.get('BID_STATUSES'),
                               )
+
+    objects = BidManager()

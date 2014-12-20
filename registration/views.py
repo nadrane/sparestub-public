@@ -15,7 +15,7 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
 # SpareStub Imports
-from .models import User, ForgotPasswordLink, EmailConfirmationLink
+from .models import User, ForgotPasswordLink
 from .settings import signup_form_settings, login_form_settings, password_form_settings
 from .forms import SignupForm, LoginForm, ResetPasswordForm, ForgotPasswordForm
 from utils.email import send_email

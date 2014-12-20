@@ -344,7 +344,6 @@ def view_ticket(request, username, ticket_id):
                    'is_owner': is_owner,
                    'ticket': ticket,
                    'most_recent_review_info': most_recent_review_info,
-                   'form_settings': profile_answer_form_settings,
                    'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY
                    },
                   content_type='text/html',

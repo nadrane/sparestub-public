@@ -73,3 +73,8 @@ bid_model_settings = {'BID_STATUSES': (('P', 'Pending'),   # User has not yet ac
                                        ('C', 'Cancelled'), # The user cancelled their bid.
                                        )
                       }
+
+TICKET_REQUESTED_POSTER_SUBJECT = "SpareStub - A User Requested To Buy Your Ticket"
+TICKET_REQUESTED_POSTER_TEMPLATE = "tickets/ticket_requested_poster_email"
+TICKET_REQUESTED_BIDDER_SUBJECT = "SpareStub - Ticket Request Confirmation"
+TICKET_REQUESTED_BIDDER_TEMPLATE = "tickets/ticket_requested_bidder_email"

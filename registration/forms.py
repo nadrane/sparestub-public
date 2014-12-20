@@ -14,7 +14,6 @@ from .settings import password_form_settings
 class UserInfoForm(forms.Form):
     email = forms.EmailField(required=True,
                              max_length=user_info_form_settings.get('EMAIL_MAX_LENGTH'),
-                             widget=forms.EmailInput(),
                              )
 
     first_name = forms.CharField(required=True,
@@ -75,19 +74,14 @@ class SignupForm(UserInfoForm):
 
 
 class LoginForm(forms.Form):
-    '''
-        This is the login form that is used in base.html and that always appears in the upper right hand corner of the
-        page for users that are not logged in.
-    '''
+    """
+    This is the login form that is used in base.html and that always appears in the upper right hand corner of the
+    page for users that are not logged in.
+    """
 
-    email = forms.EmailField(max_length=login_form_settings['EMAIL_MAX_LENGTH'],
-                             label='email',
-                             widget=forms.EmailInput(attrs={'placeholder': 'Email'})
-                             )
+    email = forms.EmailField(required=True)
     
-    password = forms.CharField(label='password',
-                               widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
-                               )
+    password = forms.CharField(required=True)
 
     def clean(self):
         # We know the form data is valid at this point. Log the user in.

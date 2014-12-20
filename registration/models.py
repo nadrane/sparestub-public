@@ -26,8 +26,6 @@ from locations.models import Location
 from .settings import PASSWORD_RESET_EMAIL_SUBJECT, PASSWORD_RESET_EMAIL_TEMPLATE, EMAIL_CONFIRMATION_EMAIL_SUBJECT,\
     EMAIL_CONFIRMATION_EMAIL_TEMPLATE
 
-DOMAIN = settings.DOMAIN
-
 
 class UserManager(BaseUserManager):
 
@@ -90,7 +88,6 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     """
     A fully featured User model with admin-compliant permissions that uses a full-length email field as the username.
-
     Email and password are required. Other fields are optional.
     """
 
@@ -397,7 +394,7 @@ class EmailConfirmationLinkManager(models.Manager):
         user.send_mail(EMAIL_CONFIRMATION_EMAIL_SUBJECT,
                        '',
                        html=render_to_string(EMAIL_CONFIRMATION_EMAIL_TEMPLATE, {'new_link': new_link,
-                                                                                 'DOMAIN': DOMAIN,
+                                                                                 'DOMAIN': settings.DOMAIN,
                                                                                  }),
                        )
 
@@ -428,7 +425,7 @@ class ForgotPasswordLinkManager(models.Manager):
                        '',
                        html=render_to_string(PASSWORD_RESET_EMAIL_TEMPLATE, {'new_link': new_link,
                                                                              'times': times_requested,
-                                                                             'DOMAIN': DOMAIN,
+                                                                             'DOMAIN': settings.DOMAIN,
                                                                              }),
                        )
 
