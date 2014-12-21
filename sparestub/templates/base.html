@@ -63,17 +63,17 @@
           {% block navigation_bar_right %}{% include "navigation_bar_right.html" %}{% endblock %}
         </div><!-- .nav-collapse -->
       </div> <!-- .navbar -->
+    </div>
 
-      <div id="notification-root">
-        <div class="notification-style" style="display: None;">
-          <a href="#" class="close" data-dismiss="alert">&times;</a>
-          <strong class="notification-header"></strong>
-          <span class="notification-content"></span>
-        </div>
+    <div id="notification-root">
+      <div class="notification-style" style="display: None;">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong class="notification-header"></strong>
+        <span class="notification-content"></span>
       </div>
+    </div>
 
       {% block content %}{% endblock %}
-    </div><!-- .container-fluid -->
 
     {% comment %} Define a couple constants using the Django templating language {% endcomment %}
     <script type="text/javascript">

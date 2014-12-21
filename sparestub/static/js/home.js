@@ -20,5 +20,5 @@ $(window).on('load resize', function () {
     if (new_padding < 10) {
         new_padding = 10;
     }
-    $('#intro-content').css('padding-bottom', new_padding);
+    $('#buffer').height(new_padding);
 });
