@@ -66,9 +66,6 @@ logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
 # Make indexing happen whenever a model is saved or loaded
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
-# File Storage Backend Settings
-DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
-
 # Used to create links in emails to our site
 DOMAIN = 'localhost:8000'
 
