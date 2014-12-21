@@ -111,7 +111,7 @@
       <script type="text/javascript" src="{% static "sparestub/js/moment-with-locales.min.js" %}"></script>
 
         <!-- Bootstrap linter -->
-        <!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>-->
+        <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootlint/0.3.0/bootlint.min.js"></script>
     {% endblock %}
     {% block js %}
       <!-- Bootstrap -->
@@ -141,59 +141,59 @@
       <script type="text/javascript" src="{% static "tickets/js/submit_ticket.js" %}"></script>
     {% endblock %}
 
-     <!-- TODO aria-labeledby we need to set this appropriately -->
-    <div id="modal-contact-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content" id="modal-contact-form-content">
-        </div>
-      </div>
-    </div>
-
-    <div id="modal-signup-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content" id="modal-signup-form-content">
-        </div>
-      </div>
-    </div>
-
-    <div id="modal-login-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content" id="modal-login-form-content">
-        </div>
-      </div>
-    </div>
-
-    <div id="modal-submit-ticket-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="modal-submit-ticket-form-content">
-        </div>
-      </div>
-    </div>
-
-    <div id="modal-yes-cancel-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="yes-cancel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <div class="row">
-              <div class="col-xs-10">
-                <h5 id="modal-yes-cancel-title"></h5>
-              </div>
-              <div class="col-xs-2">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-              </div>
-            </div>
-            <form id='modal-yes-cancel-form' method="post">
-              {% csrf_token %}
-              <p>
-                <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
-                <button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              </p>
-            </form>
+    {% block modals %}
+       <!-- TODO aria-labeledby we need to set this appropriately -->
+      <div id="modal-contact-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content" id="modal-contact-form-content">
           </div>
         </div>
       </div>
-    </div>
-    {% block modals %}
+
+      <div id="modal-signup-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content" id="modal-signup-form-content">
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-login-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content" id="modal-login-form-content">
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-submit-ticket-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="modal-submit-ticket-form-content">
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-yes-cancel-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="yes-cancel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="row">
+                <div class="col-xs-10">
+                  <h5 id="modal-yes-cancel-title"></h5>
+                </div>
+                <div class="col-xs-2">
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                </div>
+              </div>
+              <form id='modal-yes-cancel-form' method="post">
+                {% csrf_token %}
+                <p>
+                  <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
+                  <button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 
     {% endblock %}
     </body>

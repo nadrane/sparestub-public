@@ -15,6 +15,11 @@ button, input, body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* The block dots in lists won't be used anywhere */
+ul {
+    list-style: none;
+}
+
 /* Make a button look like an anchor tag */
 .link-button {
     background:none!important;
@@ -67,6 +72,18 @@ input[type=number] {
     padding-left: 10px;
     padding-right: 10px;
     margin-bottom: 0px;
+}
+
+/* The search dropdown is not really visible when the nav bar is collapsed. Make it so!*/
+.navbar>.navbar-collapse {
+    max-height: 400px;
+}
+
+/* Removes padding from navnar on small screens so that logo, search bar, and menu toggle can all fit*/
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0;
+    }
 }
 
 /* Make sure that every link in the navbar changes the cursor to a hand */

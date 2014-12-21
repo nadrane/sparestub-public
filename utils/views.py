@@ -83,21 +83,3 @@ def correct_password(request):
 
     return ajax_http(True,
                      extra_json={'valid': valid})
-
-
-def terms_of_service(request):
-    return render(request,
-                  'utils/terms_of_service.html',
-                  )
-
-
-def privacy_policy(request):
-    return render(request,
-                  'utils/privacy_policy.html',
-                  )
-
-
-def cookie_use(request):
-    return render(request,
-                  'utils/cookie_use.html',
-                  )

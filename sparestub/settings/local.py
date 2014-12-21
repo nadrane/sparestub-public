@@ -6,13 +6,14 @@ TEMPLATE_DEBUG = True
 
 dirname = os.path.dirname
 
-INSTALLED_APPS += 'debug_toolbar',
+#INSTALLED_APPS += 'debug_toolbar',
 
 STATICFILES_DIRS = (
     (os.path.join('sparestub', 'css'), os.path.join(BASE_DIR, 'static', 'css')),
     (os.path.join('sparestub', 'js'), os.path.join(BASE_DIR, 'static', 'js')),
     (os.path.join('sparestub', 'fonts'), os.path.join(BASE_DIR, 'static', 'fonts')),
     (os.path.join('sparestub', 'logos'), os.path.join(BASE_DIR, 'static', 'logos')),
+    (os.path.join('sparestub', 'backgrounds'), os.path.join(BASE_DIR, 'static', 'backgrounds')),
 )
 
 # Serve from the local machine during development

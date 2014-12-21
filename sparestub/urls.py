@@ -1,16 +1,21 @@
-from django.conf.urls import patterns, include, url
-
-from django.contrib import admin
-admin.autodiscover()
-
-import contact.views
+# Django Imports
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from django.conf.urls import patterns, include, url
+from django.contrib import admin
 
-from utils.views import terms_of_service, privacy_policy, cookie_use
+admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', contact.views.home, name='homepage'),
+    url(r'^$', TemplateView.as_view(template_name="home.html"), name='homepage'),
+    url(r'^tos/$', TemplateView.as_view(template_name="terms_of_service.html"), name='tos'),
+    url(r'^privacypolicy/$', TemplateView.as_view(template_name="privacy_policy.html"), name='privacy policy'),
+    url(r'^cookieuse/$', TemplateView.as_view(template_name="cookie_use.html"), name='cookie use'),
+    url(r'^disputeresolution/$', TemplateView.as_view(template_name="dispute_resolution.html"), name='dispute resolution'),
+    url(r'^buyersguide/$', TemplateView.as_view(template_name="buyers_guide.html"), name='buyers guide'),
+    url(r'^sellersguide/$', TemplateView.as_view(template_name="sellers_guide.html"), name='sellers guide'),
+
     url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
     url(r'^comments/', include('django_comments.urls')),
     url(r'^profile/', include('user_profile.urls')),
@@ -19,9 +24,6 @@ urlpatterns = patterns('',
     url(r'^tickets/', include('tickets.urls')),
     url(r'^messages/', include('messages.urls')),
     url(r'^utils/', include('utils.urls')),
-    url(r'^tos/$', terms_of_service, name='tos'),
-    url(r'^privacypolicy/$', privacy_policy, name='privacy policy'),
-    url(r'^cookieuse/$', cookie_use, name='cookie use'),
     url(r'^admin/', include(admin.site.urls)),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -58,10 +58,3 @@ def submit(request):
                    'form_settings': contact_form_settings,
                    }
                   )
-
-
-def home(request):
-    return render(request,
-                  'home.html'
-                  )
-
