@@ -1,1 +1,138 @@
-﻿{% extends "base.html" %}{% load static %}{% block css %}  {{ block.super }}  <link rel="stylesheet" href="{% static "sparestub/css/home.css" %}">{% endblock %}{% block content %}  <div id="introduction">    <div class="container">      <div class="row text-center">        <div id="top-intro" class="col-xs-12 title">          <span>SpareStub is ticket resale... but better.</span>        </div>        <div id="intro-button-div" class="col-xs-12">          <div id="left-intro">              <button id="search-now" class="btn btn-primary intro-btn" type="button">Search Now</button>          </div>          <div id="right-intro">            <button class="btn btn-primary intro-btn signup-form-button"                    type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>          </div>        </div>        <div id="buffer" class="col-xs-12"></div>        <div id="learn-more" class="col-xs-12 center-block">          <div>            <h3>Learn More</h3><br>            <span class="glyphicon glyphicon-chevron-down"></span>          </div>        </div>      </div>    </div>  </div>  <div id="introducing-sparestub">    <div class="container">      <h3>Introducing SpareStub</h3>      <h1>Fairly Priced Tickets.</h1>      <h1 id="new-friends">New Friends.</h1>      <h4>Never find yourself with an extra ticket again.</h4>      <h4>Concerts, Sports, Theater, Comedy, and more.</h4>    </div>  </div>  <div id="how-it-works">    <div class="container">      <div id="steps" class="row">        <h3 class="col-xs-12 title">How It Works</h3>        <div id="step-1" class="step text-center col-xs-12 col-sm-4">          <img class="step-image" src="{% static "sparestub/logos/post.png" %}">          <div class="step-explanation">            <h3>Sell your stub and find a gig buddy</h3>            <ul>              <li>Left with an extra ticket? Post it for free!</li>              <li>List your ticket as "Request to Buy" and approve your gig buddy, or list it as "Quick Buy" to accept the first buyer.</li>            </ul>          </div>        </div>        <div id="step-2" class="step text-center col-xs-12 col-sm-4">          <img class="step-image" src="{% static "sparestub/logos/buy.png" %}">          <div class="step-explanation">            <h3>Find a ticket and a new friend</h3>            <ul>              <li>Search for something fun to do and review the seller's bio and user reviews.</li>              <li>Get to know each other. Match made in heaven? Time to buy!</li>              <li>Request to Buy the ticket, or use "Quick Buy" if available.</li>            </ul>          </div>        </div>        <div id="step-3" class="step text-center col-xs-12 col-sm-4">          <img class="step-image" src="{% static "sparestub/logos/go.png" %}">          <div class="step-explanation">            <h3>Happily Ever After</h3>            <ul>              <li>Once a buyer and seller are matched, they handle the ticket exchange and have a great night with a new gig buddy!</li>              <li>After the event, they can leave each other reviews and add to our wall of Success Stories!</li>            </ul>          </div>        </div>      </div>    </div>  </div>  <div id="founders">    <div class="container">      <h2 id="founders-title" class="text-center">Meet The Founders</h2>      <div class="row">        <div class="col-xs-12 col-sm-6 text-center">            <img class="founder-image" src="{% static "sparestub/logos/founder_steph.jpg" %}">          <h3>Stephanie MacConnell, CEO</h3>          <ul class="social">            <li><a class="glyphicon glyphicon-envelope" href="mailto:stephanie@sparestub.com" target="_blank"></a></li>          </ul>        </div>        <div class="col-xs-12 col-sm-6 text-center">          <img class="founder-image" src="{% static "sparestub/logos/founder_nick.jpg" %}">          <h3>Nick Drane, CTO</h3>          <ul class="social">            <li><a class="glyphicon glyphicon-envelope" href="mailto:nick@sparestub.com" target="_blank"></a></li>          </ul>        </div>      </div>    </div>  </div>  <div id="footer">    <div class="container">      <div class="row">        <div class="col-xs-12 col-sm-6">          <h4>Follow The Adventure:</h4>          <h5>Twitter</h5>          <h5>Instagram</h5>          <h5>Facebook</h5>          <h5>LinkedIn</h5>        </div>        <div class="col-xs-12 col-sm-6">          <h4>Talking Shop:</h4>          <ul>            <li><a href="{% url "buyers guide" %}">Buyer's Guide</a></li>            <li><a href="{% url "sellers guide" %}">Seller's Guide</a></li>            <li><a href="{% url "dispute resolution" %}">Dispute Resolution</a></li>            <li><a href="{% url "tos" %}">Terms of Service</a></li>            <li><a href="{% url "privacy policy" %}">Privacy Policy</a></li>            <li><a href="{% url "cookie use" %}">Cookie Use</a></li>            <li><a href="">Online Connection Bill of Rights</a></li>            {% comment %} TODO <a href="{% url "press_kit" %}">Press Kit</a> {% endcomment %}          </ul>        </div>      </div>    </div>  </div>{% endblock %}{% block js %}  {{ block.super }}  <script type="text/javascript" src="{% static "sparestub/js/home.js" %}"></script>{% endblock %}
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "sparestub/css/home.css" %}">
+{% endblock %}
+
+{% block content %}
+  <div id="introduction">
+    <div class="container">
+      <div class="row text-center">
+        <div id="top-intro" class="col-xs-12 title">
+          <span>SpareStub is ticket resale... but better.</span>
+        </div>
+        <div id="intro-button-div" class="col-xs-12">
+          <div id="left-intro">
+              <button id="search-now" class="btn btn-primary intro-btn" type="button">Search Now</button>
+          </div>
+          <div id="right-intro">
+            <button class="btn btn-primary intro-btn signup-form-button"
+                    type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>
+          </div>
+        </div>
+        <div id="buffer" class="col-xs-12"></div>
+        <div id="learn-more" class="col-xs-12 center-block">
+          <div>
+            <h3>Learn More</h3><br>
+            <span class="glyphicon glyphicon-chevron-down"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="introducing-sparestub">
+    <div class="container">
+      <h3>Introducing SpareStub</h3>
+      <h1>Fairly Priced Tickets.</h1>
+      <h1 id="new-friends">New Friends.</h1>
+      <h4>Never find yourself with an extra ticket again.</h4>
+      <h4>Concerts, Sports, Theater, Comedy, and more.</h4>
+    </div>
+  </div>
+  <div id="how-it-works">
+    <div class="container">
+        <h3 class="col-xs-12 title">How It Works</h3>
+      <div id="steps" class="row">
+        <h3 class="col-xs-12 title">How It Works</h3>
+        <div id="step-1" class="step text-center col-xs-12 col-sm-4">
+          <img class="step-image" src="{% static "sparestub/logos/post.png" %}">
+          <div class="step-explanation">
+              <h4>Sell your stub and find a gig buddy</h4>
+            <ul>
+                <li>Have an extra ticket? Post it for free.</li>
+                <li>List as <b>Request to Buy</b> to approve your gig buddy, or list as <b>Quick Buy</b> to accept the first buyer.</li>
+                <li>Check out our <a href="{% url "sellers guide" %}">Seller's Guide</a> for more info!</li>
+            </ul>
+          </div>
+        </div>
+        <div id="step-2" class="step text-center col-xs-12 col-sm-4">
+          <img class="step-image" src="{% static "sparestub/logos/buy.png" %}">
+          <div class="step-explanation">
+              <h4>Find a ticket and a new friend</h4>
+            <ul>
+                <li>Search for spare stubs in your city.</li>
+                <li>Review the seller's bio and user reviews.</li>
+                <li>Get to know each other. Match made in heaven?</li>
+                <li>Request to Buy, or use Quick Buy if available.</li>
+                <li>Check out the <a href="{% url "buyers guide" %}">Buyer's Guide</a> for more info!</li>
+            </ul>
+          </div>
+        </div>
+        <div id="step-3" class="step text-center col-xs-12 col-sm-4">
+          <img class="step-image" src="{% static "sparestub/logos/go.png" %}">
+          <div class="step-explanation">
+              <h4>Happily Ever After</h4>
+            <ul>
+                <li>The buyer and seller handle the ticket exchange, then have a great night with a new gig buddy!</li>
+              <li>After the event, they can leave each other reviews and add to our wall of Success Stories!</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="founders">
+    <div class="container">
+      <h2 id="founders-title" class="text-center">Meet The Founders</h2>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 text-center">
+            <img class="founder-image" src="{% static "sparestub/logos/founder_steph.jpg" %}">
+          <h3>Stephanie MacConnell, CEO</h3>
+          <ul class="social">
+            <li><a class="glyphicon glyphicon-envelope" href="mailto:stephanie@sparestub.com" target="_blank"></a></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-6 text-center">
+          <img class="founder-image" src="{% static "sparestub/logos/founder_nick.jpg" %}">
+          <h3>Nick Drane, CTO</h3>
+          <ul class="social">
+            <li><a class="glyphicon glyphicon-envelope" href="mailto:nick@sparestub.com" target="_blank"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <h4>Follow The Adventure:</h4>
+          <h5>Twitter</h5>
+          <h5>Instagram</h5>
+          <h5>Facebook</h5>
+          <h5>LinkedIn</h5>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <h4>Talking Shop:</h4>
+          <ul>
+            <li><a href="{% url "buyers guide" %}">Buyer's Guide</a></li>
+            <li><a href="{% url "sellers guide" %}">Seller's Guide</a></li>
+            <li><a href="{% url "dispute resolution" %}">Dispute Resolution</a></li>
+            <li><a href="{% url "tos" %}">Terms of Service</a></li>
+            <li><a href="{% url "privacy policy" %}">Privacy Policy</a></li>
+            <li><a href="{% url "cookie use" %}">Cookie Use</a></li>
+            <li><a href="">Online Connection Bill of Rights</a></li>
+            {% comment %} TODO <a href="{% url "press_kit" %}">Press Kit</a> {% endcomment %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static "sparestub/js/home.js" %}"></script>
+{% endblock %}
