@@ -49,9 +49,8 @@ textarea {
 }
 
 .glyphicon-remove {
-    color: 'red;
+    color: red;
 }
-
 
 /* Disable the annoying number spinner for type=number HTML5 input fields in Chrome/Safari/IE*/
 input[type=number]::-webkit-outer-spin-button,
