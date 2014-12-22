@@ -1,7 +1,7 @@
 <form id="search-ticket-form" class="navbar-form navbar-left dropdown" method="get"
       action="{% url "haystack_search" %}" role="search">
   <label class="control-label sr-only">search</label>
-  <input id="search-ticket-input" name="q" type="search" class="form-control"
+  <input id="search-ticket-input" name="q" type="search" class="form-control" autocomplete="off" spellcheck="off"
          placeholder="Search for Tickets" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
   <button id="search-ticket-submit" class="btn btn-default" type="submit">
     <span class="glyphicon glyphicon-search"></span>
