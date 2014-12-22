@@ -3,10 +3,10 @@
 }
 
 #introduction {
-    color: black;
+    color: #ffffff;
     font-family: Helvetica, Arial, sans-serif;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/concert.jpg") no-repeat center center fixed;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_colored_lights.jpeg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -44,9 +44,16 @@
 .intro-btn {
     padding: 15px;
     font-size: 20px;
+    background-color: forestgreen;
+    border-color: forestgreen;
     margin-top: 15px;
+
 }
 
+.intro-btn:hover {
+    background-color: darkgreen;
+    border-color: darkgreen;
+}
 
 #learn-more {
     padding-bottom: 15px;
@@ -62,17 +69,12 @@
     line-height: .2;
 }
 
-#learn-more div:hover {
-    color:  #CA2473;
-}
-
 /* INTRODUCING SPARESTUB */
 
 #introducing-sparestub {
     text-align: center;
-    color:white;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_colored_lights.jpeg") no-repeat center center fixed;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_white_lights.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

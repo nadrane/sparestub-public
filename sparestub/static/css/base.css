@@ -5,49 +5,6 @@
    background: url("http://www.cssmatic.com/img/bg-right-column.jpg");
 }*/
 
-/* Override padding for logo in navbar */
-.navbar-brand {
-    padding: 10px;
-}
-
-/* Override bootstrap button styling with branding colors */
-.btn-primary {
-    background-color: #2A97BC;
-    border-color: #2A97BC;
-}
-
-.btn-primary:hover {
-    background-color: #CA2473;
-    border-color: #CA2473;
-}
-
-.btn-default:hover {
-    border-color:  #CA2473;
-    color:  #CA2473;
-    background-color: #ffffff;
-}
-
-/* Larger font size for all buttons in navbar */
-.navbar-nav>li>a, .navbar-nav>li>button {
-    font-size: 16px;
-}
-
-::-webkit-input-placeholder {
-   font-size: 16px;
-}
-
-:-moz-placeholder { /* Firefox 18- */
-   font-size: 16px;
-}
-
-::-moz-placeholder {  /* Firefox 19+ */
-   font-size: 16px;
-}
-
-:-ms-input-placeholder {
-   font-size: 16px;
-}
-
 /* Pad the body so that it does not overlap the navbar */
 body {
     padding-top: 50px;
