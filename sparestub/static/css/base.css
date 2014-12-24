@@ -118,13 +118,26 @@ input[type=number] {
 
 /* The search dropdown is not really visible when the nav bar is collapsed. Make it so!*/
 .navbar>.navbar-collapse {
-    max-height: 400px;
+    overflow: visible;
 }
 
-/* Removes padding from navnar on small screens so that logo, search bar, and menu toggle can all fit*/
+
 @media (max-width: 768px) {
+    /* Removes padding from navnar on small screens so that logo, search bar, and menu toggle can all fit*/
     .navbar {
         padding: 0;
+    }
+
+    /* When the dropdown is displayed, it will appear inside collapsed navbar. When the dropdown is positioned absolutely,
+       it's position will not affect the size of it's parent, so it remains invisible. This fixes that */
+    #search-ticket-dropdown {
+        display: relative;
+    }
+
+    /* The filter input fields in the search ticket dropdown need to be the width as the text search input box */
+    #search-ticket-dropdown>li {
+        width: 75%;
+        padding: 0 12px;
     }
 }
 

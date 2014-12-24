@@ -17,10 +17,12 @@
           <div id="left-intro">
               <button id="search-now" class="btn btn-primary intro-btn" type="button">Search Now</button>
           </div>
-          <div id="right-intro">
-            <button class="btn btn-primary intro-btn signup-form-button"
-                    type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>
-          </div>
+          {% if not user.is_authenticated %}
+            <div id="right-intro">
+              <button class="btn btn-primary intro-btn signup-form-button"
+                      type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>
+            </div>
+          {% endif %}
         </div>
         <div id="buffer" class="col-xs-12"></div>
         <div id="learn-more" class="col-xs-12 center-block">
@@ -121,7 +123,7 @@
             <li><a href="{% url "tos" %}">Terms of Service</a></li>
             <li><a href="{% url "privacy policy" %}">Privacy Policy</a></li>
             <li><a href="{% url "cookie use" %}">Cookie Use</a></li>
-            <li><a href="">Online Connection Bill of Rights</a></li>
+            <li><a href="http://www.ag.ny.gov/sites/default/files/pdfs/bureaus/consumer_fraud/dating_service.pdf">Online Connection Bill of Rights</a></li>
             {% comment %} TODO <a href="{% url "press_kit" %}">Press Kit</a> {% endcomment %}
           </ul>
         </div>
