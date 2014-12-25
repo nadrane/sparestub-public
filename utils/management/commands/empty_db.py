@@ -1,6 +1,3 @@
-__author__ = 'nicholasdrane'
-
-
 import logging
 import psycopg2
 

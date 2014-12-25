@@ -39,6 +39,7 @@
 #top-intro {
     font-size: 40px;
     padding-top: 20px;
+    text-shadow: 1px 1px black;
 }
 
 .intro-btn {
@@ -60,6 +61,7 @@
 #learn-more h3 {
     margin-bottom: 0;
     line-height: .2;
+    text-shadow: 1px 1px black;
 }
 
 #learn-more div:hover {

@@ -1,9 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title></title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+{% load tz %}
 
-</body>
-</html>
+{% block css %}
+  {{ block.super }}
+  <link href="{% static "tickets/css/gallery.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+  <div class="container-fluid">
+    <div id="results-wrapper" class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Search Results:</h3>
+      </div>
+      <div class="panel-body">
+    {% comment %} Only display filters if there are search results {% endcomment %}
+    {% if page.object_list %}
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#search-ticket-navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="search-ticket-navbar">
+            <p class="pull-left">Filter by: </p>
+            <ul id="filter-list" class="nav navbar-nav pagination pull-left">
+              <li><a id="filter-ticket-type" href="#" tabindex="0" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus" data-content="stuff">Event Type</a></li>
+              <li><a id="filter-price" href="#" tabindex="1" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus">Price</a></li>
+              <li><a id="filter-distance" href="#" tabindex="2" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus">Distance from Location</a></li>
+              <li><a id="filter-rating" href="#" tabindex="3" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus">User Rating</a></li>
+              <li><a id="filter-payment-method" href="#" tabindex="4" role="button" data-placement="bottom" data-toggle="popover" data-html='true'>Payment Method</a></li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    {% endif %}
+
+
+  {% spaceless %}
+  {% for listing in listing_results %}
+    <div class="thumbnail-wrapper" style="display: none">
+      <div class="thumbnail">
+        <img id="{{ listing.id }}"
+             src="{% if listing.photo.thumbnail_file %}{{ listing.photo.thumbnail_file }}{% else %}{{ stock_image_url }}{% endif %}"
+             height="{{ thumbnail_height }}px" width="{{ thumbnail_width }}px">
+        <div class="thumbnail-caption-div">
+          <h4 class="thumbnail-caption">{{ listing.title}}</h4>
+        </div>
+        <div class="thumbnail-social-buttons">
+          <a href="#" id="full-name" role="button" class="btn btn-default">{{ listing.poster.get_full_name }}</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  {% endspaceless %}
+
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript" src="{% static "tickets/js/gallery.js"%}"></script>
+  {{ block.super }}
+{% endblock %}
