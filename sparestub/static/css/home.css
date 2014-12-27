@@ -6,7 +6,7 @@
     color: white;
     font-family: Helvetica, Arial, sans-serif;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/concert.jpg") no-repeat center center fixed;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/concert.jpg") no-repeat center center scroll;;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -74,7 +74,7 @@
     text-align: center;
     color:white;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_colored_lights.jpeg") no-repeat center center fixed;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_colored_lights.jpeg") no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
