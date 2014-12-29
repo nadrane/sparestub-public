@@ -15,11 +15,11 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
 # SpareStub Imports
-from .models import User, ForgotPasswordLink
+from .models import User, ForgotPasswordLink, EmailConfirmationLink
 from .settings import signup_form_settings, login_form_settings, password_form_settings
 from .forms import SignupForm, LoginForm, ResetPasswordForm, ForgotPasswordForm
 from utils.email import send_email
-from utils.networking import ajax_http
+from utils.networking import ajax_http, form_success_notification, form_failure_notification
 from .utils import render_nav_bar
 
 SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
@@ -153,15 +153,15 @@ def login_redirect(request):
             activate(user.timezone())  # Configure time zone
             return ajax_http({'isSuccessful': True,
                               'redirect_href': '/'},
-                               status=200
+                             status=200
                              )
         else:
-           return ajax_http({'isSuccessful': False,
+            return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
                               'notification_content': render_to_string('user_profile/forgot_password.html', '', RequestContext(request))
-                             },
-                            status=400,
-                            )
+                              },
+                             status=400,
+                             )
 
     return render(request,
                   'registration/login_redirect.html',
@@ -195,7 +195,7 @@ def create_forgot_password(request):
 @login_required
 def create_email_confirmation_link(request):
     EmailConfirmationLink.objects.create_email_confirmation(request.user)
-    return HttpResponseRedirect('/')
+    return ajax_http(form_success_notification("An email is already on it's way. Just click the link inside."))
 
 
 def confirm_email(request, confirm_link):

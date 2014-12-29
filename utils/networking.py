@@ -34,9 +34,10 @@ def ajax_http(contents, status=200, extra_json={}, **kwargs):
                         status=status
                         )
 
+
 def non_field_errors_notification(form):
     """
-        Return the first non_field_errors in json format ready to appear as a failure notification
+    Return the first non_field_errors in json format ready to appear as a failure notification
     """
     try:
         message = form.non_field_errors()[0] # I can't think of a time when there is going to
@@ -50,17 +51,17 @@ def non_field_errors_notification(form):
 
 def form_success_notification(notification_content):
     """
-        Trigger a green success notification bar to pop up on the client side with the enclosed message.
+    Trigger a green success notification bar to pop up on the client side with the enclosed message.
     """
 
     return {'contents': {'notification_type': 'alert-success',
-                        'notification_content': notification_content},
+                         'notification_content': notification_content},
             'status': 200}
 
 
 def form_failure_notification(notification_content):
     """
-        Trigger a red failure notification bar to pop up on the client side with the enclosed message.
+    Trigger a red failure notification bar to pop up on the client side with the enclosed message.
     """
 
     return {'contents': {'notification_type': 'alert-danger',

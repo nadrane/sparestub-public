@@ -6,7 +6,7 @@ var $ = jQuery
 
 var has_notification_update = function (response) {
     'use strict';
-    return (response.notification_type && response.notification_content);
+    return response.notification_type && response.notification_content;
 };
 
 var clear_notification = function ($notification_root) {
@@ -50,10 +50,6 @@ var handle_ajax_response = function (response, $notification_root) {
         window.location.href = response.redirect_href;
     // If it's not a complete redirect, then we are replacing specific elements of the DOM.  Do that here.
     } else {
-        // Right now, this div shows login and signup buttons. Show username and logout buttons instead.
-        if (response.navigation_bar_right_div) {
-            $('#navigation-bar-right-div').replaceWith((response.navigation_bar_right_div));
-        }
         if (has_notification_update(response)) {
             set_notification($notification_root,
                              response.notification_content,

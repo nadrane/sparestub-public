@@ -63,12 +63,12 @@
       </div> <!-- .navbar -->
     </div>
 
-    {% if not user.is_anonymous and not user.is_confirmed %}
+    {% if user.is_authenticated and not user.is_confirmed %}
       <div id="notification-root">
         <div class="notification-style alert alert-info">
           <a id="notification-root-close" class="close" data-dismiss="alert">&times;</a>
           <span class="notification-content">Don't forget to confirm your email! We already sent you a message.
-            <a href="{% url "create_email_confirmation_link" %}">Resend verification email</a>
+            <a id="resend-confirm-email">Resend verification email</a>
           </span>
         </div>
       </div>
@@ -80,7 +80,9 @@
     <script type="text/javascript">
     window.additional_parameters =
     {
+        'resend_confirmation_email_link' : "{% url "create_email_confirmation_link" %}",
         'is_authenticated' : "{{ user.is_authenticated }}" === "True",
+        'is_confirmed' : "{{ user.is_confirmed }}" === "True",
         'contact_form_url' : "{% url "contact.views.submit" %}",
         'signup_form_url' : "{% url "registration.views.signup" %}",
         'login_form_url' : "{% url "registration.views.login" %}",

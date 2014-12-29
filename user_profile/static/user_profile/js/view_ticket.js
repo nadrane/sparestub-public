@@ -60,6 +60,9 @@ function prepare_delete_ticket_button() {
 
 //TODO this is somewhat of a hack to override what the stripe button reads
 function prepare_stripe_button() {
+    if (!window.additional_parameters.is_confirmed) {
+        set_notification('You need to confirm your email address before you can request to buy a ticket. <a id="resend-confirm-email" href="{% url "create_email_confirmation_link" %}">Resend verification email</a>');
+    }
     $('.stripe-holder-form button').html('<span style="display: block; min-height: 30px;">Request to Buy</span>');
 }
 
