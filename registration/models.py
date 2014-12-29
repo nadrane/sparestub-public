@@ -51,7 +51,7 @@ class UserManager(BaseUserManager):
                           is_staff=is_staff,
                           is_superuser=is_superuser,
                           user_profile=user_profile,
-                          confirmed=False,
+                          is_confirmed=False,
                           **kwargs
                           )
 
@@ -128,10 +128,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                    help_text='Designates whether the user can log into this admin site.'
                                    )
 
-    confirmed = models.BooleanField(null=False,
-                                    blank=False,
-                                    default=False,
-                                    )
+    is_confirmed = models.BooleanField(null=False,
+                                       blank=False,
+                                       default=False,
+                                       )
 
     # Why was this account marked as inactive. Cannot be part of UserPostableModel becomes choices will be different
     # for every model that inherits the UserPostableModelMixin.

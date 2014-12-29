@@ -63,13 +63,16 @@
       </div> <!-- .navbar -->
     </div>
 
-    <div id="notification-root">
-      <div class="notification-style" style="display: None;">
-        <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong class="notification-header"></strong>
-        <span class="notification-content"></span>
+    {% if not user.is_anonymous and not user.is_confirmed %}
+      <div id="notification-root">
+        <div class="notification-style alert alert-info">
+          <a id="notification-root-close" class="close" data-dismiss="alert">&times;</a>
+          <span class="notification-content">Don't forget to confirm your email! We already sent you a message.
+            <a href="{% url "create_email_confirmation_link" %}">Resend verification email</a>
+          </span>
+        </div>
       </div>
-    </div>
+    {% endif %}
 
     {% block content %}{% endblock %}
 
@@ -165,7 +168,7 @@
 
         <div id="modal-submit-ticket-root" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
-            <div class="modal-content id="modal-submit-ticket-form-content">
+            <div class="modal-content" id="modal-submit-ticket-form-content">
             </div>
           </div>
         </div>

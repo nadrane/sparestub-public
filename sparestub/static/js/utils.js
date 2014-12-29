@@ -6,7 +6,7 @@ var $ = jQuery
 
 var has_notification_update = function (response) {
     'use strict';
-    return (response.notification_type && (response.notification_content || response.notification_header));
+    return (response.notification_type && response.notification_content);
 };
 
 var clear_notification = function ($notification_root) {
@@ -14,7 +14,7 @@ var clear_notification = function ($notification_root) {
     $notification_root.empty();
 };
 
-var set_notification = function ($notification_root, header_message, content_message, message_type) {
+var set_notification = function ($notification_root, content_message, message_type) {
    'use strict';
 
     // The close button removes everything inside the root when clicked. Instead of using a custom event,
@@ -22,14 +22,12 @@ var set_notification = function ($notification_root, header_message, content_mes
     if ($notification_root.children().length === 0) {
         $notification_root.append('<div class="notification-style">' +
                                    '<a href="#" class="close" data-dismiss="alert">×</a>' +
-                                   '<strong class="notification-header"></strong>' +
                                    '<span class="notification-content"></span>' +
                                   '</div>'
                                  );
         }
 
     // These statemements allow us to generically have many notification roots, typically in modal forms for errors.
-    $notification_root.find('.notification-header').html(header_message);
     $notification_root.find('.notification-content').html(content_message);
 
     //We need style the notification-style div as opposed to the root div so that styles do not persist after the
@@ -57,8 +55,9 @@ var handle_ajax_response = function (response, $notification_root) {
             $('#navigation-bar-right-div').replaceWith((response.navigation_bar_right_div));
         }
         if (has_notification_update(response)) {
-            set_notification($notification_root, response.notification_header,
-                             response.notification_content, response.notification_type);
+            set_notification($notification_root,
+                             response.notification_content,
+                             response.notification_type);
         }
 
 

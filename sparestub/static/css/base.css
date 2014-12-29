@@ -224,35 +224,39 @@ input[type=number] {
 }
 /* END NAVBAR */
 
+/* NOTIFICATIONS */
 
 #notification-root {
     text-align: center;   /* Center the text for the notification bar */
+    position: fixed;
 }
 
-#notification-style {
-    margin-bottom: 10px; /* The alert bar should have minimal spacing around it to conserve vertical screen space */
+#notification-root-close {
+    display: inline;
 }
 
-/*If the margin appears inside the notification root, then the inner div will push the boundaries of
-notifcation-root outwards, and they will not collapse with top margins of elements below notification-root */
-#notification-root div{
-    margin-bottom: 0px;
+.notification-style {
+    padding: 5px;
 }
 
-#signup-notification-root .alert {
-    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
-    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+.notification-content {
+    margin-right: 10px;
+    font-size: 15px;
+    color: #717172;
 }
 
-#login-notification-root .alert {
-    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
-    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+.notification-content>a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #717172;
 }
 
-#contact-notification-root .alert {
-    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
-    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+#signup-notification-root .alert, #login-notification-root .alert, #contact-notification-root .alert {
+    margin-bottom: 0px; /* The same applies to the forms. Minimize space around the alert. */
+    margin-top: 15px;  /* But make sure that the modal-header and alert have spacing between them. */
 }
+
+/* END NOTIFICATIONS */
 
 
 /* Make sure that there is even spacing between the form fields and submit buttons */
