@@ -205,7 +205,7 @@ def confirm_email(request, confirm_link):
         email_confirm_link = email_confirm_link[0]
         user = email_confirm_link.user
         email_confirm_link.expired = True
-        user.confirmed = True
+        user.is_confirmed = True
 
         with transaction.atomic():
             email_confirm_link.save()
