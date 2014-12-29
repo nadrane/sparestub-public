@@ -28,3 +28,12 @@ $(window).on('load resize', function () {
     }
     $('#buffer').height(new_padding);
 });
+
+(function () {
+    'use strict';
+    var ios = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    // IOS devices do not properly support fixed background images. Change them to scroll if the device is ios.
+    if (ios) {
+        document.getElementById('#introducing-sparestub').style.backgroundAttachment = 'scroll';
+    }
+}());

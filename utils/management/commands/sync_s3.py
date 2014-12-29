@@ -256,7 +256,9 @@ class Command(BaseCommand):
         """
         Walks the media/static directories and syncs files to S3
         """
+        print('\nRunning collectstatic:', end='')
         call_command('collectstatic', interactive=False)
+        print()
         bucket, key = self.open_s3()
         print('uploading files to {}'.format(bucket))
         for root_directory in self.DIRECTORIES:

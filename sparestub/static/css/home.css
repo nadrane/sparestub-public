@@ -6,7 +6,7 @@
     color: white;
     font-family: Helvetica, Arial, sans-serif;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/concert.jpg") no-repeat center center scroll;;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/concert.jpg") no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -43,9 +43,16 @@
 }
 
 .intro-btn {
-    padding: 15px;
-    font-size: 20px;
+    padding: 11px;
+    font-size: 17px;
     margin-top: 15px;
+}
+
+@media (max-width: 500px) {
+    .intro-btn {
+        padding: 10px;
+        font-size: 15px;
+    }
 }
 
 
@@ -74,7 +81,7 @@
     text-align: center;
     color:white;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_colored_lights.jpeg") no-repeat center center scroll;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_colored_lights.jpeg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -161,4 +168,11 @@
 
 #right-footer a {
     color: #000000;
+}
+
+/* Target IOS devices which can't seem to handle the fixed option of background-attachment correctly */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px)  {
+    #introducing-sparestub {
+        background-attachment: scroll;
+    }
 }
