@@ -180,7 +180,7 @@ def create_forgot_password(request):
         forgot_password_form = ForgotPasswordForm(request.POST)
         if forgot_password_form.is_valid():
             user = User.objects.filter(email=forgot_password_form.cleaned_data.get('email'))[0]
-            ForgotPasswordLink.objects.create_forgot_password_link(user)
+            ForgotPasswordLink.objects.create_forgot_password(user)
             return render(request,
                           'registration/forgot_password_email_sent.html')
         else:

@@ -379,7 +379,7 @@ class EmailConfirmationLinkManager(models.Manager):
     """
 
     def create_email_confirmation(self, user):
-        new_link = EmailLink.create_link()
+        new_link = EmailConfirmationLink.create_link()
 
         while EmailConfirmationLink.objects.filter(link=new_link):
             new_link = EmailLink.create_link()
@@ -407,7 +407,7 @@ class ForgotPasswordLinkManager(models.Manager):
     """
 
     def create_forgot_password(self, user):
-        new_link = EmailLink.create_link()
+        new_link = ForgotPasswordLink.create_link()
 
         while ForgotPasswordLink.objects.filter(link=new_link):
             new_link = EmailLink.create_link()
