@@ -1,5 +1,5 @@
 # Standard Imports
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
 # Django Imports
 from django.shortcuts import render
@@ -69,17 +69,30 @@ def send_message(request, ticket_id):
 
 @login_required
 def inbox(request):
+    message = namedtuple('message', 'other_user_pic_url', 'body', 'did_this_user_send')
+    convo_header = namedtuple('convo_header', 'pic_url', 'name', 'place', 'rating')
+    ticket_ribbon = namedtuple('ticket_ribbon', 'ticket_id', 'price', 'when', 'where')
+
+    conversations = dict()  # The threads with difference users about different tickets that appear on the
+                            # left side of the inbox screen.
+    messages = defaultdict(defaultdict)  # Contains every message associated with a ticket_user_id pair
+    convo_headers = defaultdict(list)    # The user information that appears above the actual conversation in the inbox.
+    ticket_ribbons = defaultdict(list)   # The ribbon of ticket information that appears below the header and above the
+                                         # conversation.
+
     user = request.user
+
     if request.method == 'GET':
-        conversations = dict()   # All messages that the user has sent or been sent
+
         last_ticket_id = ''
-        for message in Message.get_all_messages_sorted(user):
+        for index, message in enumerate(Message.get_all_messages_sorted(user)):
             ticket_id = message.ticket.id
             # Check to see if the two messages from the same conversation
             if ticket_id != last_ticket_id:
                 sender = message.sender
                 if user == sender:
                     other_user = message.receiver
+                    did_this_user_send = True
                 else:
                     other_user = sender
 
@@ -101,15 +114,44 @@ def inbox(request):
                                             'pic_url': profile_picture,
                                             'last_timestamp': last_timestamp,
                                             }
+
+
             last_ticket_id = ticket_id
 
-        import pdb
-        pdb.set_trace()
+            if ticket_id in messages and other_user.id in messages[ticket_id]:
+                messages[ticket_id][other_user.id].append(message(other_user_pic_url=profile_picture,
+                                                                  body=message.body,
+                                                                  did_this_user_send=did_this_user_send,
+                                                                  ))
+            else:
+                messages[ticket_id][other_user.id] = [message.body]
 
-        first_ticket = conversations[conversations.values()]
+            if ticket_id in convo_headers and other_user.id in convo_headers[ticket_id]:
+                convo_headers[ticket_id][other_user.id].append(convo_header(other_user_pic_url=profile_picture,
+                                                                            body=message.body,
+                                                                            did_this_user_send=did_this_user_send,
+                                                                            ))
+
+        if conversations:
+            try:
+                current_user_pic_url = user.profile_picture
+            # Some users don't have profile pictures. This is okay. We will use a default in the template.
+            except Photo.DoesNotExist:
+                profile_picture = ''
+
+            if current_user_pic_url:
+                current_user_pic_url = profile_picture.search_thumbnail.url
+
+        # The django template language cannot handle defaultdict's properly. This resolves our issue.
+        # SO explains why.
+        messages.default_factory = None
+        for key in messages.keys():
+            messages[key].default_factory = None
 
         return render(request,
                       'messages/inbox.html',
                       {'conversations': conversations,
-                       'first_ticket': first_ticket,
+                       'messages': messages,
+                       'convo_headers': convo_headers,
+                       'ticket_ribbons': ticket_ribbons,
                        })

@@ -10,75 +10,81 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div id="conversations" class="col-sm-3">
-      {% if conversations %}
-        {% for ticket_id, conversation in conversations.items %}
-            <div class="row thread">
-              <div class="col-sm-2">
-                <img class="conversation-pic" src="{% if conversation.pic_url %}{{ conversation.pic_url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
+  <div id='page-wrapper' class="container-fluid">
+    <div class="row">
+      <div id="conversations" class="col-sm-3">
+        {% if conversations %}
+          {% for ticket_id, conversation in conversations.items %}
+              <div class="row thread">
+                <div class="col-sm-2">
+                  <img class="conversation-pic"
+                       src="{% if conversation.pic_url %}{{ conversation.pic_url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}"
+                       alt="User profile picture">
+                </div>
+                <div class="col-sm-10">
+                  <h5 class="name">{{ conversation.name | title }}</h5>
+                  <span class="blurb">{{ conversation.blurb | truncatechars:20 }}</span>
+                  <span class="last-message-timestamp">{{ conversation.last_timestamp | naturaltime | upto:',' }}</span>
+                </div>
               </div>
-              <div class="col-sm-10">
-                <h5 class="name">{{ conversation.name | title }}</h5>
-                <span class="blurb">{{ conversation.blurb | truncatechars:20 }}</span>
-                <span class="last-message-timestamp">{{ conversation.last_timestamp | naturaltime | upto:',' }}</span>
+          {% endfor %}
+        {% else %}
+          <div class="no-conversations">
+            <h3 class="text-center">You have no messages!</h3>
+            <p class="text-center">Find a ticket you like, and shoot the seller a message!</p>
+          </div>
+        {% endif %}
+      </div>
+      {% with sender=first_ticket.user %}
+        <div id="current-conversation" class=col-sm-9>
+          <div id="header">
+            <img id="header-pic"
+                 src="{% if sender.profile_picture.search_thumbnail.url %}{{ sender.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}"
+                 alt="User profile picture">
+            <div id="header-demographic-info">
+              <h5 id="header-name"><a href={{ sender.user_profile.get_absolute_url }}>{{ sender.get_full_name | title }}{% if sender.age %}, {{ sender.age }}{% endif %}</a></h5>
+              <div id="header-user-rating">
+                <h3>
+                  {% for x in sender.rating|get_range %}
+                    <span class="glyphicon glyphicon-star"></span>
+                  {% endfor %}
+                </h3>
               </div>
-            </div>
-        {% endfor %}
-      {% else %}
-        <div class="no-conversations">
-          <h3 class="text-center">You have no messages!</h3>
-          <p class="text-center">Find a ticket you like, and shoot the seller a message!</p>
-        </div>
-      {% endif %}
-    </div>
-    {% with conversation=conversations.0 sender=conversations.0.sender %}
-      <div id="current-conversation" class=col-sm-9>
-        <div id="header">
-          <img id="header-pic" src="{% if sender.profile_picture.search_thumbnail.url %}{{ sender.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
-          <div id="header-demographic-info">
-            <h5 id="header-name"><a href={{ sender.user_profile.get_absolute_url }}>{{ sender.get_full_name | title }}{% if sender.age %}, {{ sender.age }}{% endif %}</a></h5>
-            <div id="header-user-rating">
-              <h3>
-                {% for x in sender.rating|get_range %}
-                  <span class="glyphicon glyphicon-star"></span>
-                {% endfor %}
-              </h3>
-            </div>
-            <div id="header-location">
-              {{ sender.location.city | title }}, {{ sender.location.state | upper }}
+              <div id="header-location">
+                {{ sender.location.city | title }}, {{ sender.location.state | upper }}
+              </div>
             </div>
           </div>
-        </div>
-        <div id="conversation_body">
           <div id="ticket-info-ribbon">
-            {% with ticket=conversation.ticket %}
+            {% with ticket=first_ticket.ticket %}
               <a href="{{ ticket.get_absolute_url }}">Ticket Information: </a>
               <span><b>Price:</b> ${{ ticket.price }}  </span>
               <span><b>When:</b> {% localtime off %}{{ ticket.get_formatted_start_datetime.date }} {{ ticket.get_formatted_start_datetime.time }}{% endlocaltime %}  </span>
               <span><b>Where:</b> {{ ticket.location }} {{ ticket.venue }}</span>
             {% endwith %}
           </div>
-        </div>
-      </div>
-    {% endwith %}
-    {% comment %}Data structure: dict[conversation_id] = [message_object_1, message_object_2, message_object_3...] {% endcomment %}
-    {% comment %}
-    {% for conversation_id, messages in user_messages.items %}
-      {% for message in messages %}
-        <div class="conversation" data-conversation="{{ conversation_id }}">
-          <div class="talk-bubble">
-            <img id=".talk-bubble-pic" src="{% if sender.profile_picture.search_thumbnail.url %}{{ sender.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
+          <div id="conversation_body">
           </div>
         </div>
-      {% endfor %}
-    {% endfor %}
-      {% endcomment %}
+      {% endwith %}
+    </div> <!-- .row -->
+  </div>  <!-- .container-fluid -->
+      <div id="all-conversation-details">
+        {% for ticket_id, ticket_conversations in messages.items %}
+          {% for message in ticket_conversations %}
+            <div class="conversation" data-conversation="{{ conversation_id }}">
+              <div class="talk-bubble">
+                <img id=".talk-bubble-pic" src="{% if sender.profile_picture.search_thumbnail.url %}{{ sender.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
+              </div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
   </div>
-
 {% endblock %}
 
 {% block js %}
   {{ block.super }}
-  <script type="text/javascript" src="{% static "messages/js/inbox.js" %}"
+  <script type="text/javascript" src="{% static "messages/js/inbox.js" %}"></script>
 {% endblock %}

@@ -5,6 +5,7 @@ import logging
 from datetime import date
 import random
 import string
+import os
 
 # Django modules
 from django.utils.http import urlquote
@@ -14,10 +15,11 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 # SpareStub modules
 from utils.models import TimeStampedModel
-from .settings import user_model_settings
+from .settings import user_model_settings, DEFAULT_PROFILE_PIC_URL
 from utils.miscellaneous import get_variable_from_settings
 from utils.email import send_email, normalize_email
 from user_profile.models import UserProfile
@@ -184,6 +186,29 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
             average = 0
 
         return average
+
+    def get_profile_pic_url(self, which_pic):
+        """
+        Get the URL of the profile picture for this user.
+        If the user has not uploaded a picture yet, the default picture is used.
+        """
+
+        pic = None
+        try:
+            pic = self.profile_picture
+        # Some users don't have profile pictures. This is okay. We will use a default in the template.
+        except ObjectDoesNotExist:
+            pass
+
+        if which_pic == 'search':
+            pic = os.path.join(settings.STATIC_URL, pic.search_thumbnail.url)
+        elif which_pic == 'profile':
+            pic = os.path.join(settings.STATIC_URL, pic.profile_thumbnail.url)
+        else:
+            pic = os.path.join(settings.STATIC_URL, DEFAULT_PROFILE_PIC_URL)
+
+        return pic
+
 
     @staticmethod
     def user_exists(email):

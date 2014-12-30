@@ -95,3 +95,5 @@ PASSWORD_RESET_EMAIL_SUBJECT = 'SpareStub - Reset your password'
 PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/forgot_password_email.html'
 EMAIL_CONFIRMATION_EMAIL_SUBJECT = 'SpareStub - Email confirmation'
 EMAIL_CONFIRMATION_EMAIL_TEMPLATE = 'registration/email_confirmation_email.html'
+
+DEFAULT_PROFILE_PIC_URL = 'sparestub/logos/lilman.jpg'

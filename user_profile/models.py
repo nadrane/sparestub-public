@@ -64,6 +64,7 @@ class UserProfile(TimeStampedModel):
     #The username must be composed of numbers and upper and lower case letters
     username_regex = re.compile(r'^[a-zA-Z0-9]+$')
 
+
     # This is set in the User manager as opposed to here. This is because we need user email/name info. to create the username,
     # but the UserProfile needs to be created before the User because the User.user_profile cannot be null.
     username = models.CharField(max_length=user_profile_model_settings.get('USERNAME_MAX_LENGTH'),

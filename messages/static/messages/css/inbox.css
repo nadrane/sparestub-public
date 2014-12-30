@@ -1,5 +1,11 @@
 /* CONVERSATION LIST SIDE BAR */
 
+/* We want these tags to stretch the entire height of the page, which will be set in javascript when the page changes
+   size */
+html, body, #page-wrapper, #page-wrapper>.row {
+    height: 100%;
+}
+
 #conversations {
     background-color: #393939;
     height: 100%;

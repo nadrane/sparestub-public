@@ -219,9 +219,18 @@ input[type=number] {
 
 /* Make the inbox icon have the same spacing as the user profile and logout buttons next to it */
 #inbox-icon a {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 6px 10px;
+    margin: 8px 0;
+    border: solid 1px white;
+    font-size: 14px;
 }
+#inbox-icon a:hover {
+    border-color: #CA2473;
+    color: #CA2473;
+    border-radius: 4px;
+}
+
+
 /* END NAVBAR */
 
 /* NOTIFICATIONS */
