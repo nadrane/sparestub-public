@@ -1,0 +1,8 @@
+{% load tz %}
+
+<div class="ticket-info-ribbon" data-identity-ticket="{{ ticket_id }}" data-identity-user="{{ other_user_id }}">
+  <a href="{{ ticket_ribbon.get_absolute_url }}">Ticket Information: </a>
+  <span><b>Price:</b> ${{ ticket_ribbon.price }}  </span>
+  <span><b>When:</b> {% localtime off %}{{ ticket_ribbon.get_formatted_start_datetime.date }}{{ ticket_ribbon.when }}{{ ticket.get_formatted_start_datetime.time }}{% endlocaltime %}  </span>
+  <span><b>Where:</b> {{ticket_ribbon.where}}</span>
+</div>

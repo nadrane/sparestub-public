@@ -61,6 +61,8 @@ class Message(TimeStampedModel):
 
     body = models.TextField(max_length=message_model_settings.get('BODY_MAX_LENGTH'))
 
+    # Has the RECEIVER of the message read it. This is a very obvious point but tripped me up.
+    # Obviously we don't need to keep track of whether the sender has read the messaeg
     is_read = models.BooleanField(blank=False,
                                   null=False,
                                   default=False)
@@ -82,15 +84,36 @@ class Message(TimeStampedModel):
         return '{}: {} -> {}\n'.format(self.id, self.sender, self.receiver)
 
     @staticmethod
-    def messages_received(user):
+    def mark_conversation_read(current_user_id, ticket_id, other_user_id):
         """
-        Returns a QuerySet of all messages the user has received.
+        Find every message associated with a particular user/ticket id pair and mark all of them as read.
+        Basically, indicate that a user has viewed a particular conversation with a
+        particular user about a particular ticket.
         """
+        if not current_user_id or not ticket_id or not other_user_id:
+            return False
 
-        return Message.objects.filter(conversation__receiver=user)
+        # Obviously a user cannot have a conversation with themselves
+        if current_user_id == other_user_id:
+            return False
+
+        unmarked_messages = Message.get_messages_received(current_user_id).filter(ticket_id=ticket_id)
+        unmarked_messages.update(is_read=True)
+
+        return True
 
     @staticmethod
-    def messages_sent(user):
+    def get_messages_received(user):
+        """
+        Returns a QuerySet of messages where the inputted user was the receiver
+        """
+
+        # Note that both users may function as both the sender and the receiver. After all, they will both send
+        # and receive messages in a conversation (hopefully).
+        return Message.objects.filter(receiver=user)
+
+    @staticmethod
+    def get_messages_sent(user):
         """
         Returns a QuerySet of all messages the user has sent.
         """
@@ -128,24 +151,24 @@ class Message(TimeStampedModel):
                               .filter((Q(sender=user1) & Q(receiver=user2)) |
                                        Q(sender=user2) & Q(receiver=user1))
 
-    @staticmethod
-    def get_messages_received(user):
-        """
-        Returns a QuerySet of messages where the inputted user was the receiver
-        """
-
-        # Note that both users may function as both the sender and the receiver. After all, they will both send
-        # and receive messages in a conversation (hopefully).
-        return Message.objects.filter(receiver=user)
 
     @staticmethod
     def get_all_messages_sorted(user):
         """
+        FALSE: WHAT WE ORIGINALLY TRIED
         Returns a QuerySet of messages that are grouped according to the above definition of a conversation for a
         particular user.
+
+        WHAT WE ACTUALLY Do
+        READ ME:  We actually can't do the above.
+        We could need to group by ticket, then other user, then creation_timestamp.
+        But the thing is, we don't know who the other user is (is it the sender or reciever).
+        We would need to maintain a concept of an inbox for each user, and then we would always know who the other user
+        is.
+
         """
 
-        return Message.all_messages(user).order_by('ticket', '-creation_timestamp')
+        return Message.all_messages(user).order_by('creation_timestamp')
 
     @staticmethod
     def message_count(user):

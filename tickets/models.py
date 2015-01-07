@@ -1,5 +1,5 @@
 # Standard Imports
-from itertools import chain
+import string
 
 # 3rd Party Imports
 from pytz import timezone
@@ -150,6 +150,9 @@ class Ticket(TimeStampedModel):
         return reverse('view_ticket', kwargs={'username': self.poster.user_profile.username,
                                               'ticket_id': self.id,
                                               })
+
+    def get_full_location(self):
+        return self.location.city.title() + ',' + self.location.state.upper() + '-' + self.venue.title()
 
     def get_formatted_start_datetime(self):
         """

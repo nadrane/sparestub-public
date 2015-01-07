@@ -1,0 +1,20 @@
+{% load misc_filters %}
+
+<div class="header-id" data-identity-ticket="{{ ticket_id }}" data-identity-user="{{ other_user_id }}">
+  <img class="header-pic" src="{{ convo_header.other_user_pic_url }}" alt="User profile picture">
+  <div class="header-demographic-info">
+    <h5 class="header-name"><a href={{ convo_header.absolute_url }}>{{ sender.get_full_name | title }}{% if sender.age %}, {{ sender.age }}{% endif %}</a></h5>
+    <div class="header-user-rating">
+      <h3>
+        {% for x in convo_header.rating|get_range %}
+          <span class="glyphicon glyphicon-star"></span>
+        {% endfor %}
+      </h3>
+    </div>
+    <div class="header-location">
+      {% with location=convo_header.location %}
+        {{ location.city | title }}, {{ location.state | upper }}
+      {% endwith %}
+    </div>
+  </div>
+</div>

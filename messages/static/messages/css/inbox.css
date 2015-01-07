@@ -6,7 +6,7 @@ html, body, #page-wrapper, #page-wrapper>.row {
     height: 100%;
 }
 
-#conversations {
+#threads {
     background-color: #393939;
     height: 100%;
     color: #E0E0DB;
@@ -20,29 +20,29 @@ html, body, #page-wrapper, #page-wrapper>.row {
     border-bottom: rgb(221, 221, 221) solid 1px;
 }
 
-.conversation:hover {
+.thread:hover {
     background-color: lightgray;
     cursor: pointer;
     color: #000000;
 }
 
-.no-conversations {
+.no-threads {
     color: #f5f5f5;
 }
 
-.name {
+.thread-name {
     margin-top: 0;
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: normal;
 }
 
-.blurb {
+.thread-blurb {
     font-size: 12px;
     float: left;
 }
 
-.conversation-pic {
+.thread-pic {
     width: 40px;
 	height: 40px;
 	border-radius: 20px;
@@ -50,7 +50,7 @@ html, body, #page-wrapper, #page-wrapper>.row {
 	-moz-border-radius: 20px;
 }
 
-.last-message-timestamp {
+.thread-last-message-timestamp {
     font-size: 10px;
     font-style: italic;
     float: right;
@@ -60,7 +60,7 @@ html, body, #page-wrapper, #page-wrapper>.row {
 
 /* CURRENT CONVERSATION HEADER*/
 
-#header-pic {
+.header-pic {
     width: 75px;
 	height: 75px;
 	border-radius: 38px;
@@ -70,38 +70,39 @@ html, body, #page-wrapper, #page-wrapper>.row {
 
 #current-conversation {
     padding: 0;
+    height: 100%;
 }
 
-#header {
-    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/logos/old_moon.png");
+#convo-header {
+    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/backgrounds/old_moon.png");
     padding: 10px;
     height: 90px;
 }
 
-#header-pic {
+.header-pic {
     float: left;
     margin-right: 10px;
 }
 
-#header-demographic-info {
+.header-demographic-info {
     float: left;
 }
 
-#header-name {
+.header-name {
     font-size: 18px;
     margin: 0;
 }
 
-#header-name a {
+.header-name a {
     color: #000000 !important;
 }
 
-#header-user-rating h3{
+.header-user-rating h3{
     margin-top: 4px;
     margin-bottom: -2px;
 }
 
-#ticket-info-ribbon {
+#ticket-ribbon {
     -webkit-font-smoothing: antialiased;
     background-color: rgb(245, 245, 245);
     height: 20px;
@@ -112,17 +113,26 @@ html, body, #page-wrapper, #page-wrapper>.row {
 /* END CURRENT CONVERSATION */
 
 /* CURRENT CONVERSATION BODY*/
+#conversation-body {
+    padding: 10px;
+    background-color: rgb(221, 221, 221);
+    height: 100%;
+}
+
 .talk-bubble-pic {
     width: 40px;
 	height: 40px;
+    margin: 5px;
 	border-radius: 20px;
+    border: 1px black solid;
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
 }
 
 .talk-bubble {
-    background: rgb(221, 221, 221);
-
+    background: white;
+    min-height: 50px; /* The height of the pic and it's padding */
+    margin-top: 10px;
     /* Rounded talk bubbles */
     border-radius: 10px;
 	-webkit-border-radius: 10px;

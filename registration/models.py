@@ -193,21 +193,21 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         If the user has not uploaded a picture yet, the default picture is used.
         """
 
-        pic = None
+        pic, url = None, None
         try:
             pic = self.profile_picture
+            if which_pic == 'search':
+                url = os.path.join(settings.STATIC_URL, pic.search_thumbnail.url)
+            elif which_pic == 'profile':
+                url = os.path.join(settings.STATIC_URL, pic.profile_thumbnail.url)
         # Some users don't have profile pictures. This is okay. We will use a default in the template.
         except ObjectDoesNotExist:
             pass
 
-        if which_pic == 'search':
-            pic = os.path.join(settings.STATIC_URL, pic.search_thumbnail.url)
-        elif which_pic == 'profile':
-            pic = os.path.join(settings.STATIC_URL, pic.profile_thumbnail.url)
-        else:
-            pic = os.path.join(settings.STATIC_URL, DEFAULT_PROFILE_PIC_URL)
+        if not url:
+            url = os.path.join(settings.STATIC_URL, DEFAULT_PROFILE_PIC_URL)
 
-        return pic
+        return url
 
 
     @staticmethod

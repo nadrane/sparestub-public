@@ -1,0 +1,10 @@
+<div class="conversation" data-identity-ticket="{{ ticket_id }}" data-identity-user="{{ other_user_id }}">
+  {% for message in messages %}
+    <div class="talk-bubble">
+      <img class="talk-bubble-pic {% if message.did_this_user_send %}pull-right{% else %}pull-left{% endif %}" src="{{ message.pic_url }}">
+      <div class="talk-bubble-contents {% if message.did_this_user_send %}pull-right{% else %}pull-left{% endif %}">
+        {{ message.body }}
+      </div>
+    </div>
+  {% endfor %}
+</div>

@@ -123,7 +123,7 @@ def login(request):
                              status=200,
                              request=request)
         else:
-           return ajax_http({'isSuccessful': False,
+            return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
                               'notification_content': 'Wrong username or password! <a href="{}">Click to reset your password</a>'.format(reverse('create_forgot_password'))
                              },
