@@ -238,6 +238,7 @@ input[type=number] {
 #notification-root {
     text-align: center;   /* Center the text for the notification bar */
     position: fixed;
+    z-index: 100;
     right: 0;
 }
 
@@ -295,6 +296,10 @@ input[type=number] {
 
 #modal-yes-cancel-form {
     margin-top: 20px;
+}
+
+.modal-dialog {
+    z-index: 10000;
 }
 
 /* END YES CANCEL MODAL */
