@@ -22,6 +22,7 @@ from utils.models import TimeStampedModel
 from .settings import user_model_settings, DEFAULT_PROFILE_PIC_URL
 from utils.miscellaneous import get_variable_from_settings
 from utils.email import send_email, normalize_email
+from .utils import calculate_age
 from user_profile.models import UserProfile
 from locations.models import Location
 
@@ -165,7 +166,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return Message.message_count(self)
 
     def age(self):
-        return self.user_profile.age()
+        return calculate_age(self.birthdate)
 
     def most_recent_review(self):
         from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
@@ -290,18 +291,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         if not birthdate:
             raise ValidationError('Birthdate is blank', code='blank')
 
-        today = date.today()
-        try:
-            birthday = birthdate.replace(year=today.year)
-        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
-            birthday = birthdate.replace(year=today.year, month=birthdate.month+1, day=1)
-        if birthday > today:
-            age = today.year - birthdate.year - 1
-        else:
-            age = today.year - birthdate.year
+        age = calculate_age(birthdate)
+
         if age < 18:
             raise ValidationError('User is less than 18 years old', code='under_age')
-        return birthdate
+        return age
 
     def password_correct(self, current_password):
         if not authenticate(email=self.email, password=current_password):

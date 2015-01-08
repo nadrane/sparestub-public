@@ -152,7 +152,7 @@ class Ticket(TimeStampedModel):
                                               })
 
     def get_full_location(self):
-        return self.location.city.title() + ',' + self.location.state.upper() + '-' + self.venue.title()
+        return self.location.city.title() + ', ' + self.location.state.upper() + '-' + self.venue.title()
 
     def get_formatted_start_datetime(self):
         """

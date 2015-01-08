@@ -8,7 +8,6 @@ from django.forms import ValidationError
 from django.core.urlresolvers import reverse
 
 # SpareStub imports
-from .utils import calculate_age
 from utils.models import TimeStampedModel
 from .settings import profile_question_model_settings, profile_answer_model_settings, user_profile_model_settings
 
@@ -76,11 +75,6 @@ class UserProfile(TimeStampedModel):
     # The number of times that this person's profile.html has been viewed by others.
     profile_views = models.IntegerField(default=0)
 
-    birthdate = models.DateField(blank=True,
-                                 null=True,
-                                 default=None,
-                                 )
-
     objects = UserProfilerManager()
 
     def __str__(self):
@@ -88,9 +82,6 @@ class UserProfile(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('view_profile', kwargs={'username': self.username})
-
-    def age(self):
-        return calculate_age(self.birthdate)
 
     def valid_username(self, username):
         # Make sure that the inputted username is in the correct format

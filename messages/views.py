@@ -3,8 +3,9 @@ from collections import defaultdict, namedtuple
 
 # Django Imports
 from django.shortcuts import render
-from django.http import Http404
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 # SpareStub Imports
 from .settings import send_message_form_settings
@@ -15,52 +16,33 @@ from utils.networking import ajax_http, non_field_errors_notification, form_succ
 from registration.models import User
 
 
-def message_user_modal(request, ticket_id):
+class MessageUserModal(TemplateView):
+    template_name = 'messages/message_user_modal.html'
 
-    # Ticket does not exist.
-    try:
-        ticket = Ticket.objects.get(pk=ticket_id)
-    except Ticket.DoesNotExist:
-        raise Http404()
+    def get_context_data(self, ticket_id, **kwargs):
+        context = super(MessageUserModal, self).get_context_data(**kwargs)
+        context['form_settings'] = send_message_form_settings
 
-    if request.method == 'GET':
-        return render(request,
-                      'messages/message_user_modal.html',
-                      {'form_settings': send_message_form_settings,
-                       'ticket': ticket,
-                       })
+        # This should really never happen. We still just return a modal with missing ticket information if it does.
+        try:
+            ticket = Ticket.objects.get(pk=ticket_id)
+        except ObjectDoesNotExist:
+            pass
+
+        context['ticket'] = ticket
+        return context
 
 @login_required()
-def send_message(request, ticket_id):
+def send_message(request):
     if request.method == 'POST':
-        sender = request.user
-
-        ticket = Ticket.objects.get(pk=ticket_id)
-
-        if ticket:
-            receiver = ticket.poster
-        else:
-            return ajax_http({'isSuccessful': False,
-                              'notification_type': 'alert-danger',
-                              'notification_content': 'This ticket does not exist!'
-                              })
-
-        # Make sure that the username entered is the actual poster of this ticket
-        if sender == receiver:
-            return ajax_http({'isSuccessful': False,
-                              'notification_type': 'alert-danger',
-                              'notification_content': "You can't send a message to yourself!"
-                              })
-
-        if not ticket.is_active:
-            return ajax_http({'isSuccessful': False,
-                              'notification_type': 'alert-danger',
-                              'notification_content': 'The poster of this ticket cancelled it in the last few minutes!'
-                              })
-
-        send_message_form = SendMessageForm(request.POST)
+        send_message_form = SendMessageForm(request.POST, request=request)
         if send_message_form.is_valid():
-            body = request.POST.get('body')
+
+            sender = request.user
+            ticket = send_message_form.cleaned_data.get('ticket')
+            receiver = send_message_form.cleaned_data.get('receiver')
+            body = send_message_form.cleaned_data.get('body')
+
             Message.objects.create_message(sender, receiver, ticket, body)
             return ajax_http(form_success_notification('Your message was sent successfully!'))
         else:
@@ -69,13 +51,15 @@ def send_message(request, ticket_id):
 
 @login_required
 def inbox(request):
-    message_tuple = namedtuple('message', ['pic_url', 'body', 'did_this_user_send'])
-    convo_header_tuple = namedtuple('convo_header', ['other_user_pic_url', 'name', 'absolute_url', 'location', 'rating'])
+    message_tuple = namedtuple('message', ['pic_url', 'body', 'did_this_user_send', 'timestamp'])
+    convo_header_tuple = namedtuple('convo_header', ['other_user_pic_url', 'name', 'age', 'absolute_url', 'location',
+                                                     'rating'])
     ticket_ribbon_tuple = namedtuple('ticket_ribbon', ['ticket_id', 'absolute_url', 'price', 'when', 'where'])
 
-    threads = defaultdict(defaultdict)  # Contains every conversation associated with a ticket/user id pair.
+    threads = defaultdict(defaultdict)   # Contains every conversation associated with a ticket/user id pair.
     messages = defaultdict(defaultdict)  # Contains every message associated with a ticket/user id pair
-    convo_headers = defaultdict(defaultdict)    # The user information that appears above the actual conversation in the inbox.
+    convo_headers = defaultdict(defaultdict)  # The user information that appears above the actual conversation
+                                              # in the inbox.
     ticket_ribbons = dict()    # The ribbon of ticket information that appears below the header and above the
                                # conversation.
 
@@ -84,8 +68,6 @@ def inbox(request):
     if request.method == 'GET':
         our_user_profile_picture_url = user.get_profile_pic_url('search')  # The profile pic url of the user whose inbox
                                                                            # we are loading
-        last_ticket_id = None  # The id of the ticket associated with the message in the previous iteration loop
-        last_other_user_id = None # The id of the other user associated with the message in the previous iteration loop
 
         for index, message in enumerate(Message.get_all_messages_sorted(user)):
             ticket = message.ticket
@@ -106,14 +88,15 @@ def inbox(request):
             name = other_user.get_full_name()
             body = message.body
 
-            last_timestamp = message.creation_timestamp
             threads[ticket_id][other_user_id] = {'name': name,
                                                  'blurb': body,
                                                  'pic_url': profile_picture,
-                                                 'last_timestamp': last_timestamp,
+                                                 'last_timestamp': Message.last_message_time(user,
+                                                                                             other_user,
+                                                                                             ticket_id),
                                                  }
 
-            if ticket_id != last_ticket_id:
+            if ticket_id not in ticket_ribbons:
                 ticket_ribbons[ticket_id] = ticket_ribbon_tuple(ticket_id=ticket_id,
                                                                 absolute_url=ticket.get_absolute_url(),
                                                                 price=ticket.price,
@@ -121,23 +104,23 @@ def inbox(request):
                                                                 where=ticket.get_full_location(),
                                                                 )
 
-
-            last_ticket_id = ticket_id
-
             if ticket_id in messages and other_user_id in messages[ticket_id]:
                 messages[ticket_id][other_user_id].append(message_tuple(pic_url=profile_picture,
                                                                         body=body,
                                                                         did_this_user_send=did_this_user_send,
+                                                                        timestamp=message.creation_timestamp,
                                                                         ))
             else:
                 messages[ticket_id][other_user_id] = [message_tuple(pic_url=profile_picture,
                                                                     body=message.body,
                                                                     did_this_user_send=did_this_user_send,
+                                                                    timestamp=message.creation_timestamp,
                                                                     )]
 
             if other_user_id not in convo_headers[ticket_id]:
                 convo_headers[ticket_id][other_user_id] = convo_header_tuple(other_user_pic_url=profile_picture,
                                                                              name=name,
+                                                                             age=other_user.age(),
                                                                              absolute_url=other_user.get_absolute_url(),
                                                                              location=ticket.location,
                                                                              rating=other_user.rating,

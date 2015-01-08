@@ -128,12 +128,13 @@ class Message(TimeStampedModel):
 
         return Message.objects.filter(Q(sender=user) | Q(receiver=user))
 
-    def last_message_time(self):
+    @staticmethod
+    def last_message_time(user1, user2, ticket_id):
         """
         Returns the time between now and the time the last message was sent for a particular conversation
         """
 
-        messages = Message.objects.filter(conversation=self.id).order_by('creation_timestamp')
+        messages = Message.get_messages_in_conversation(user1, user2, ticket_id).order_by('-creation_timestamp')
         if messages:
             return messages[0].creation_timestamp
         return None

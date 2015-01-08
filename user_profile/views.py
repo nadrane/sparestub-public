@@ -318,6 +318,7 @@ def view_ticket(request, username, ticket_id):
                  'state': user_location.state,
                  'rating': user.rating,
                  'username': username,
+                 'user_id': user.id,
                  }
 
     try:

@@ -47,6 +47,10 @@ function load_message_user_modal(show_modal) {
         if (show_modal) {
             $('#modal-message-user-root').modal('show');
         }
+        $('#message-user-form-submit-button').on('click', function () {
+            modal_message_user_button();
+        });
+
     });
 }
 
@@ -66,11 +70,24 @@ function prepare_stripe_button() {
     $('.stripe-holder-form button').html('<span style="display: block; min-height: 30px;">Request to Buy</span>');
 }
 
+function modal_message_user_button() {
+    /* When the user clicks the Send Message button inside the modal messaging form, this tag is called to contact the
+     * server and add the message to the database.
+     */
+    $.post(window.additional_parameters.send_message_url,
+           {'receiver_id': window.additional_parameters.user_id,
+            'ticket_id': window.additional_parameters.ticket_id,
+            'body': $('#message-user-body').val()
+            },
+            'json');
+}
+
 $(document).ready(function ($) {
     $('.message-user').on('click', function () {
         load_message_user_modal(true);
     });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
+
     prepare_delete_ticket_button();
     prepare_stripe_button();
 });

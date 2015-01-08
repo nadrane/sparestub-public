@@ -11,18 +11,24 @@ html, body, #page-wrapper, #page-wrapper>.row {
     height: 100%;
     color: #E0E0DB;
     font-weight: 200;
+    overflow-y: auto;
 }
 
 .thread {
     padding-top: 7px;
     padding-bottom: 7px;
     padding-right: 7px;
-    border-bottom: rgb(221, 221, 221) solid 1px;
+    border-bottom: #FCFCFC solid 1px;
 }
 
 .thread:hover {
-    background-color: lightgray;
+    background-color: #A9A9A9;
     cursor: pointer;
+    color: #000000;
+}
+
+.current-thread {
+    background-color: #F2F2F2;
     color: #000000;
 }
 
@@ -77,6 +83,8 @@ html, body, #page-wrapper, #page-wrapper>.row {
     background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/backgrounds/old_moon.png");
     padding: 10px;
     height: 90px;
+    position: fixed;
+    width: 100%;
 }
 
 .header-pic {
@@ -108,34 +116,102 @@ html, body, #page-wrapper, #page-wrapper>.row {
     height: 20px;
     padding-left: 10px;
     border-bottom: solid rgb(221, 221, 221) 1px;
+    position: relative;
+    top: 90px; /* Position directly below the header */
 }
 
 /* END CURRENT CONVERSATION */
 
 /* CURRENT CONVERSATION BODY*/
-#conversation-body {
-    padding: 10px;
-    background-color: rgb(221, 221, 221);
+.conversation {
+    overflow-y: auto;
     height: 100%;
+}
+
+#conversation-body {
+    padding: 0 10px;
+    background-color: rgb(247, 247, 247);
+    position: relative;
+    top: 90px; /* Position below the header and the ticket ribbon.
+                  Same as ticket ribbon because only the header is fixed. Remember, relative to normal position */
+}
+
+.talk-bubble-wrapper {
+    width: 100%;
+    min-height: 50px;
+    margin-top: 10px;
 }
 
 .talk-bubble-pic {
     width: 40px;
 	height: 40px;
-    margin: 5px;
 	border-radius: 20px;
     border: 1px black solid;
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
 }
 
+.talk-bubble-contents {
+    padding: 5px 10px 5px 10px;
+}
+
 .talk-bubble {
-    background: white;
+    padding: 5px;
     min-height: 50px; /* The height of the pic and it's padding */
-    margin-top: 10px;
     /* Rounded talk bubbles */
     border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 }
+
+.this-user {
+    background-color: #A3E0FF;
+}
+
+.that-user {
+    background-color: #ffa2c3;
+}
 /* END CURRENT CONVERSATION BODY*/
+
+/* NEW MESSAGE BOX */
+#new-message-box {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+#send-message {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 5px;
+    font-size: 12px;
+}
+
+#send-message-errors > ul > li{
+    font-size: 16px;
+}
+
+#send-message-errors {
+    margin-bottom: 0;
+}
+
+#new-message-textarea-wrapper {
+    position: relative;
+    width: 97%;
+    margin: 10px 10px 10px 10px;
+    padding: 10px;
+    border: solid lightgrey 1px;
+    border-radius: 10px;
+}
+
+#new-message-textarea {
+    width: 80%;
+    display: block;
+    border: none;
+}
+#new-message-textarea:focus {
+    border: none;
+    outline: none;
+}
+/* END NEW MESSAGE BOX */

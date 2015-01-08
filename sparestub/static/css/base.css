@@ -298,6 +298,7 @@ input[type=number] {
     margin-top: 20px;
 }
 
+/* Make sure that modal dialogues appear in front of the fixed notification root */
 .modal-dialog {
     z-index: 10000;
 }

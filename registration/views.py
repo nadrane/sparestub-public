@@ -19,8 +19,7 @@ from .models import User, ForgotPasswordLink, EmailConfirmationLink
 from .settings import signup_form_settings, login_form_settings, password_form_settings
 from .forms import SignupForm, LoginForm, ResetPasswordForm, ForgotPasswordForm
 from utils.email import send_email
-from utils.networking import ajax_http, form_success_notification, form_failure_notification
-from .utils import render_nav_bar
+from utils.networking import ajax_http, form_success_notification
 
 SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
 
@@ -82,7 +81,7 @@ def signup(request):
                                  status=200
                                  )
 
-            return ajax_http(render_nav_bar, 200, request=request)
+            return ajax_http(True, 200)
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
         # We don't actually specify what the form error was. This is okay because our app requires JS to be enabled.
@@ -126,9 +125,9 @@ def login(request):
             return ajax_http({'isSuccessful': False,
                               'notification_type': 'alert-danger',
                               'notification_content': 'Wrong username or password! <a href="{}">Click to reset your password</a>'.format(reverse('create_forgot_password'))
-                             },
-                            status=400,
-                            )
+                              },
+                             status=400,
+                             )
 
 
     return render(request,
