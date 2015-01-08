@@ -17,7 +17,7 @@ class UserProfilerManager(models.Manager):
     def create_user_profile(self, first_name=None, last_name=None, profile_views=0):
         """
         Creates a user profile given a particular first and last name.
-        The way the system exists now, birth_date and profile_views will never have a value when the profile is created.
+        The way the system exists now, profile_views will never have a value when the profile is created.
         """
 
         username = self.make_username(first_name, last_name)

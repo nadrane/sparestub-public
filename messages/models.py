@@ -30,7 +30,7 @@ class MessageManager(models.Manager):
         # For example, if two users exchange ten or fifteen messages and then one users "delete/hides" their
         # conversation, we need to unhide all of those messages so that the entirety of the conversation is visible
         # for both users when the receiver checks the new message.
-        Message.mark_conversation_hidden_toggle(sender.id, receiver.id, ticket.id, False, True)
+        Message.mark_conversation_hidden_toggle(sender.id, ticket.id, receiver.id, False, True)
 
         receiver.send_mail(new_message_subject,
                            '',
@@ -164,7 +164,7 @@ class Message(TimeStampedModel):
                     message.is_read = True
                 message.save()
         else:
-            conversation_messages.update({'is_hidden_from_sender': hide_toggle, 'is_hidden_from_receiver': hide_toggle})
+            conversation_messages.update(is_hidden_from_sender=hide_toggle, is_hidden_from_receiver=hide_toggle)
             # If the messages are being hidden for both users, then mark all messages as read so that they don't
             # appear as unread in the inbox badge in the navbar.
             if hide_toggle:
