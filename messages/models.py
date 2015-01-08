@@ -164,8 +164,7 @@ class Message(TimeStampedModel):
                     message.is_read = True
                 message.save()
         else:
-            conversation_messages.update(is_hidden_from_sender=hide_toggle)
-            conversation_messages.update(is_hidden_from_receiver=hide_toggle)
+            conversation_messages.update({'is_hidden_from_sender': hide_toggle, 'is_hidden_from_receiver': hide_toggle})
             # If the messages are being hidden for both users, then mark all messages as read so that they don't
             # appear as unread in the inbox badge in the navbar.
             if hide_toggle:

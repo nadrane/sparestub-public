@@ -63,7 +63,6 @@ user_info_form_settings = {'FIRST_NAME_NOTEMPTY_MESSAGE': 'Please enter your fir
                            'BIRTHDATE_DATE_FORMAT': 'MM/DD/YYYY',
                            'BIRTHDATE_DATE_MESSAGE': 'Please enter your birthdate in MM/DD/YYYY format.',
                            'BIRTHDATE_DATE_SEPARATOR': '/',
-                           'BIRTHDATE_OVER_18': over_18_year_date,
 
                            'ZIP_CODE_NOTEMPTY_MESSAGE': 'Please enter your zipcode',
                            'ZIP_CODE_MAX_LENGTH': user_model_settings.get('ZIP_CODE_MAX_LENGTH'),

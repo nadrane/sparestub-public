@@ -70,7 +70,7 @@ class SignupForm(UserInfoForm):
                                )
 
     def clean_birthdate(self):
-        return User.valid_birthdate(self.cleaned_data.get('birthdate', ''))
+        return User.valid_birthdate(self.cleaned_data.get('birthdate', None))
 
 
 class LoginForm(forms.Form):

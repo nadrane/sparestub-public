@@ -114,8 +114,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                  blank=False
                                  )
 
-
-    birthdate=models.DateField(null=False,
+    birthdate = models.DateField(null=False,
                                blank=False
                                )
 
@@ -295,7 +294,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
         if age < 18:
             raise ValidationError('User is less than 18 years old', code='under_age')
-        return age
+        return birthdate
 
     def password_correct(self, current_password):
         if not authenticate(email=self.email, password=current_password):
