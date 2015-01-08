@@ -193,7 +193,7 @@ def create_forgot_password(request):
 @login_required
 def create_email_confirmation_link(request):
     EmailConfirmationLink.objects.create_email_confirmation(request.user)
-    return ajax_http(form_success_notification("An email is already on it's way. Just click the link inside."))
+    return ajax_http(form_success_notification("An email is already on its way. Just click the link inside."))
 
 
 def confirm_email(request, confirm_link):
