@@ -246,10 +246,6 @@ input[type=number] {
     margin: 0;
 }
 
-#notification-root-close {
-    display: inline;
-}
-
 .close {
     line-height: 20px;
 }

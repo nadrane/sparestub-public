@@ -170,6 +170,11 @@ function initialize_resend_email_notification() {
 $(document).ready(function ($) {
     'use strict';
 
+    // Remove a notificaiton when clicked, regardless of where. The bootstrap code for alert-dismiss takes forver.
+    $('#notification-root').on('click', function() {
+        $(this).children().remove();
+    });
+
     initialize_resend_email_notification();
 
     $('.contact-form-button').on('click', function () {

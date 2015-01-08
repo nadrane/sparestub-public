@@ -20,8 +20,8 @@ var set_notification = function ($notification_root, content_message, message_ty
     // The close button removes everything inside the root when clicked. Instead of using a custom event,
     // Just make sure everything exists before we try to edit it's contents.
     if ($notification_root.children().length === 0) {
-        $notification_root.append('<div class="notification-style" data-dismiss="alert">' +
-                                   '<a href="#" class="close" data-dismiss="alert">×</a>' +
+        $notification_root.append('<div class="notification-style">' +
+                                   '<a class="close">×</a>' +
                                    '<span class="notification-content"></span>' +
                                   '</div>'
                                  );
