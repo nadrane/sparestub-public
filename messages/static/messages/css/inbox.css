@@ -153,32 +153,55 @@ html, body, #page-wrapper, #page-wrapper>.row {
                   Same as ticket ribbon because only the header is fixed. Remember, relative to normal position */
 }
 
-.talk-bubble-wrapper {
+.talk-bubble {
     width: 100%;
     min-height: 50px;
     margin-top: 10px;
-}
 
-.talk-bubble-pic {
-    width: 40px;
-	height: 40px;
-	border-radius: 20px;
-    border: 1px black solid;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-}
-
-.talk-bubble-contents {
-    padding: 5px 10px 5px 10px;
-}
-
-.talk-bubble {
     padding: 5px;
     min-height: 50px; /* The height of the pic and it's padding */
     /* Rounded talk bubbles */
     border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
+}
+
+.talk-bubble-pic {
+	height: 40px;
+	border-radius: 20px;
+    border: 1px black solid;
+    margin-right: 10px; /* Don't the let body of the message encroach on the image */
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+}
+
+.talk-bubble-contents {
+    display: inline-block;
+    padding: 0px 10px 5px 10px;
+    word-wrap: break-word;
+    width: 80%;
+}
+
+.talk-bubble-timestamp {
+    width: 10%;
+}
+
+@media (max-width: 1350px) {
+    .talk-bubble-timestamp {
+        width: 20%;
+    }
+    .talk-bubble-contents {
+        width: 70%;
+    }
+}
+
+@media (max-width: 720px) {
+    .talk-bubble-timestamp {
+        width: 35%;
+    }
+    .talk-bubble-contents {
+        width: 65%;
+    }
 }
 
 .this-user {
