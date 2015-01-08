@@ -195,15 +195,14 @@ html, body, #page-wrapper, #page-wrapper>.row {
     }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 500px) {
     .talk-bubble-timestamp {
-        width: 35%;
+        width: 25%;
     }
     .talk-bubble-contents {
-        width: 65%;
+        width: 75%;
     }
 }
-
 .this-user {
     background-color: #A3E0FF;
 }
