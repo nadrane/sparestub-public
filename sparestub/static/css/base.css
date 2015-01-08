@@ -243,6 +243,7 @@ input[type=number] {
 }
 
 #notification-root-close {
+    padding-left: 5px;
     display: inline;
     font-size: 26px;
     line-height: 18px;
@@ -253,7 +254,6 @@ input[type=number] {
 }
 
 .notification-content {
-    margin-right: 10px;
     font-size: 15px;
     color: #717172;
 }
