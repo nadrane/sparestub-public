@@ -129,7 +129,6 @@ def login(request):
                              status=400,
                              )
 
-
     return render(request,
                   'registration/login.html',
                   {'form_settings': login_form_settings})

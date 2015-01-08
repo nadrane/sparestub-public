@@ -7,20 +7,17 @@ from .settings import send_message_form_settings
 from tickets.models import Ticket
 from registration.models import User
 
-class SendMessageForm(forms.Form):
-    body = forms.CharField(required=True,
-                           max_length=send_message_form_settings.get('BODY_MAX_LENGTH'),
-                           )
 
+class EditMessageForm(forms.Form):
     # The id of the ticket to which this message refers
     ticket_id = forms.IntegerField(required=True)
 
     # The PK of the user that is being sent a message
-    receiver_id = forms.IntegerField(required=True)
+    other_user_id = forms.IntegerField(required=True)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
-        super(SendMessageForm, self).__init__(*args, **kwargs)
+        super(EditMessageForm, self).__init__(*args, **kwargs)
 
     def clean_ticket_id(self):
         try:
@@ -34,30 +31,31 @@ class SendMessageForm(forms.Form):
 
         return self.cleaned_data.get('ticket_id')
 
-    def clean_receiver_id(self):
+    def clean_other_user_id(self):
         try:
-            receiver = User.objects.get(pk=self.cleaned_data.get('receiver_id'))
-            self.cleaned_data['receiver'] = receiver
+            other_user = User.objects.get(pk=self.cleaned_data.get('other_user_id'))
+            self.cleaned_data['other_user'] = other_user
         except ObjectDoesNotExist:
             raise forms.ValidationError('Something went wrong!')
 
-        return self.cleaned_data.get('receiver_id')
+        return self.cleaned_data.get('other_user_id')
 
     def clean(self):
         ticket_poster = self.cleaned_data.get('ticket').poster
         sender = self.request.user
-        receiver = self.cleaned_data.get('receiver')
+        other_user = self.cleaned_data.get('other_user')
 
         # One of the users in the conversation better own the ticket
-        if sender != ticket_poster and receiver != ticket_poster:
+        if sender != ticket_poster and other_user != ticket_poster:
             raise forms.ValidationError("Something went wrong!")
 
         # A user cannot message themselves
-        if sender == receiver:
+        if sender == other_user:
             forms.ValidationError("Something went wrong!")
 
 
-class MarkMessagesReadForm(forms.Form):
-    ticket_id = forms.IntegerField(required=True)
+class SendMessageForm(EditMessageForm):
 
-    other_user_id = forms.IntegerField(required=True)
+        body = forms.CharField(required=True,
+                               max_length=send_message_form_settings.get('BODY_MAX_LENGTH'),
+                               )

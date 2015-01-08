@@ -11,7 +11,7 @@
 {% block content %}
   <div id='page-wrapper' class="container-fluid">
     <div class="row">
-      <div id="threads" class="col-xs-3">
+      <div id="threads" class="{% if threads %}col-xs-3{% else %}col-xs-12{% endif %}">
         {% if threads %}
           {% for ticket_id, user_ids in threads.items %}
             {% for other_user_id, thread in user_ids.items %}
@@ -24,6 +24,7 @@
                   <span class="thread-blurb">{{ thread.blurb | truncatechars:20 }}</span>
                   <span class="thread-last-message-timestamp">{{ thread.last_timestamp | naturaltime | upto:',' }}</span>
                 </div>
+                <span class="delete-conversation glyphicon glyphicon-remove" style="display:none;"></span>
               </div>
             {% endfor %}
           {% endfor %}
@@ -34,6 +35,8 @@
           </div>
         {% endif %}
       </div>
+    {% comment %}Just let the no messages div stretch across the whole screen{% endcomment %}
+    {% if threads %}
       <div id="current-conversation" class="col-xs-9">
         <div id="convo-header">
         </div>
@@ -55,6 +58,7 @@
           </div>
         </div>
       </div>
+    {% endif %}
     </div> <!-- .row -->
   </div>  <!-- .container-fluid -->
   <div id="all-convo-headers" style="display:none;">
@@ -82,6 +86,7 @@
    <script type="text/javascript">
        window.additional_parameters.mark_messages_read_url = "{% url "mark_messages_read" %}";
        window.additional_parameters.send_message_url = "{% url "send_message" %}";
+         window.additional_parameters.messages_hidden_toggle_url = "{% url "messages_hidden_toggle" %}";
    </script>
 
   {{ block.super }}

@@ -44,7 +44,7 @@ function send_message(e) {
     $conversation.animate({'scrollTop': ($conversation[0].scrollHeight)});
 
     $.post(window.additional_parameters.send_message_url,
-           {'receiver_id': $current_thread.data('identity-user'),
+           {'other_user_id': $current_thread.data('identity-user'),
             'ticket_id': $current_thread.data('identity-ticket'),
             'body': body
             },
@@ -120,10 +120,44 @@ $(document).on('ready', function () {
     });
 });
 
+var $thread = $('.thread');
+
 // Load a threads contents when it is clicked
-$('.thread').on('click', function (e) {
+$thread.on('click', function (e) {
     'use strict';
     var ticket_id = $(this).data('identity-ticket');
     var other_user_id = $(this).data('identity-user');
     load_thread($(this), ticket_id, other_user_id);
 });
+
+// When a user hovers over a thread, show the delete x button
+$thread.hover(
+    function (e) {
+        'use strict';
+        $(this).find('.delete-conversation').css('display', '');
+    },
+    function (e) {
+        'use strict';
+        $(this).find('.delete-conversation').css('display', 'none');
+    }
+);
+
+$('.delete-conversation').on('click', function (e) {
+
+    // Don't allow the .thread.onclick event to fire, causing the thread to display it's contents and the messages to be
+    // marked as read.
+    e.stopPropagation();
+
+    var $parent = $(this).parent();
+    var ticket_id = $parent.data('identity-ticket');
+    var other_user_id = $parent.data('identity-user');
+
+    $.post(window.additional_parameters.messages_hidden_toggle_url,
+           {'ticket_id': ticket_id,
+            'other_user_id': other_user_id},
+           'json');
+
+    // Make the conversation gone on the front end;
+    $parent.remove();
+});
+

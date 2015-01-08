@@ -9,11 +9,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # SpareStub Imports
 from .settings import send_message_form_settings
-from .forms import SendMessageForm, MarkMessagesReadForm
+from .forms import EditMessageForm, SendMessageForm
 from tickets.models import Ticket
 from messages.models import Message
 from utils.networking import ajax_http, non_field_errors_notification, form_success_notification
-from registration.models import User
 
 
 class MessageUserModal(TemplateView):
@@ -40,10 +39,10 @@ def send_message(request):
 
             sender = request.user
             ticket = send_message_form.cleaned_data.get('ticket')
-            receiver = send_message_form.cleaned_data.get('receiver')
+            other_user = send_message_form.cleaned_data.get('other_user')
             body = send_message_form.cleaned_data.get('body')
 
-            Message.objects.create_message(sender, receiver, ticket, body)
+            Message.objects.create_message(sender, other_user, ticket, body)
             return ajax_http(form_success_notification('Your message was sent successfully!'))
         else:
             return ajax_http(non_field_errors_notification(send_message_form))
@@ -76,10 +75,16 @@ def inbox(request):
             # Check to see if the two messages from the same conversation
             sender = message.sender
             if user == sender:
+                # Has the user "deleted" this conversation from his inbox?
+                if message.is_hidden_from_sender:
+                    continue
                 other_user = message.receiver
                 did_this_user_send = True
                 profile_picture = our_user_profile_picture_url
             else:
+                # Has the user "deleted" this conversation from his inbox?
+                if message.is_hidden_from_receiver:
+                    continue
                 other_user = sender
                 did_this_user_send = False
                 profile_picture = other_user.get_profile_pic_url('search')
@@ -153,29 +158,42 @@ def mark_messages_read(request):
     """
 
     if request.method == 'POST':
-
-        mark_message_read_form = MarkMessagesReadForm(request.POST)
+        mark_message_read_form = EditMessageForm(request.POST, request=request)
 
         if mark_message_read_form.is_valid():
-
-            user = request.user
+            sender_id = request.user.id
             other_user_id = mark_message_read_form.cleaned_data.get('other_user_id')
             ticket_id = mark_message_read_form.cleaned_data.get('ticket_id')
 
-            # make sure that the other user exists
-            if not User.objects.filter(pk=other_user_id).exists():
-                return ajax_http({'isSuccessful': False},
-                                 status=400)
-
-            # The user cannot have a conversation with himself
-            if other_user_id == user.id:
-                return ajax_http({'isSuccessful': False},
-                                 status=400)
-
-            if Message.mark_conversation_read(user.id, ticket_id, other_user_id):
+            if Message.mark_conversation_read(sender_id, ticket_id, other_user_id):
                 return ajax_http({'isSuccessful': True},
                                  status=200)
 
+            else:
+                return ajax_http({'isSuccessful': False},
+                                 status=400,
+                                 )
+
+        return ajax_http({'isSuccessful': False},
+                         status=400)
+
+@login_required()
+def messages_hidden_toggle(request):
+    """
+    Mark all messages between two users for a particular ticket as read for the user that calls this url.
+    """
+
+    if request.method == 'POST':
+        toggle_message_form = EditMessageForm(request.POST, request=request)
+
+        if toggle_message_form.is_valid():
+            sender_id = request.user.id
+            other_user_id = toggle_message_form.cleaned_data.get('other_user_id')
+            ticket_id = toggle_message_form.cleaned_data.get('ticket_id')
+
+            if Message.mark_conversation_hidden_toggle(sender_id, ticket_id, other_user_id, True):
+                return ajax_http({'isSuccessful': True},
+                                 status=200)
             else:
                 return ajax_http({'isSuccessful': False},
                                  status=400,

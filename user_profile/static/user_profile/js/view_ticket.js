@@ -75,7 +75,7 @@ function modal_message_user_button() {
      * server and add the message to the database.
      */
     $.post(window.additional_parameters.send_message_url,
-           {'receiver_id': window.additional_parameters.user_id,
+           {'other_user_id': window.additional_parameters.user_id,
             'ticket_id': window.additional_parameters.ticket_id,
             'body': $('#message-user-body').val()
             },

@@ -26,6 +26,12 @@ class MessageManager(models.Manager):
                              is_active=True,
                              )
 
+        # Whenever a new message is created, we need to make sure all messages in that conversation are visible.
+        # For example, if two users exchange ten or fifteen messages and then one users "delete/hides" their
+        # conversation, we need to unhide all of those messages so that the entirety of the conversation is visible
+        # for both users when the receiver checks the new message.
+        Message.mark_conversation_hidden_toggle(sender.id, receiver.id, ticket.id, False, True)
+
         receiver.send_mail(new_message_subject,
                            '',
                            html=render_to_string(new_message_template),
@@ -71,6 +77,18 @@ class Message(TimeStampedModel):
                                          null=True,
                                          default=None)
 
+    # These fields are used when a user "deletes" a conversation from his inbox. We will effectively hide all of the
+    # messages for that conversation for that user.
+    is_hidden_from_sender = models.BooleanField(blank=False,
+                                                null=False,
+                                                default=False,
+                                                )
+
+    is_hidden_from_receiver = models.BooleanField(blank=False,
+                                                  null=False,
+                                                  default=False,
+                                                  )
+
     # Does this message belong to an active conversation about a ticket that has not yet been sold?
     # TODO probably should mark conversation inactive on rejection
     is_active = models.BooleanField(blank=False,
@@ -99,6 +117,59 @@ class Message(TimeStampedModel):
 
         unmarked_messages = Message.get_messages_received(current_user_id).filter(ticket_id=ticket_id)
         unmarked_messages.update(is_read=True)
+
+        return True
+
+    @staticmethod
+    def mark_conversation_hidden_toggle(current_user_id, ticket_id, other_user_id, hide_toggle, both_users=False):
+        """
+        Find every message associated with a particular user/ticket id pair and toggle their hidden attribute
+        Basically, if a user tries to delete a conversation, we will mark all messages as hidden for that particular
+        user. If a new message is sent between those two users for that ticket, the hidden messages will then be
+        unhidden. This function hides messages if they are visible and makes them visible them if they are hidden.
+
+        I know that this is inefficient and we should probably have a "conversation" table to avoid marking
+        messages every time a new message is sent, but we need to go live :(
+
+        current_user_id = The user whose messages will be toggled, unless the both_users parameter is True.
+        hide_toggle - This value will be true or false. True means hide the messages. False means make them visible.
+        both_users = If this value is set to True, both messages for both users will be toggled.
+                     This is used whenever a new message is sent in a conversation. We need to make sure no messages are
+                     hidden.
+        """
+
+        if not current_user_id or not ticket_id or not other_user_id:
+            return False
+
+        # Obviously a user cannot have a conversation with themselves
+        if current_user_id == other_user_id:
+            return False
+
+        # We actually need to grab all messages in the conversation, regardless of whether they are hidden or not.
+        # This is because for any given message, we do not know if the user deleting is the sender or receiver.
+        conversation_messages = Message.get_messages_in_conversation(current_user_id, other_user_id, ticket_id)
+
+        # Are we toggling the messages for one user or both of them?
+        if not both_users:
+            # Figure out if the user that requested the delete is the sender or receiver and then mark the message as
+            # hidden for that user.
+            for message in conversation_messages:
+                if message.sender.id == current_user_id:
+                    message.is_hidden_from_sender = hide_toggle
+                else:
+                    message.is_hidden_from_receiver = hide_toggle
+                    # If a user hides a conversation, we want to mark all messages that they received in that
+                    # conversations as read, even if they aren't, to avoid having them contribute to the inbox total
+                    # unread count in the navbar.
+                    message.is_read = True
+                message.save()
+        else:
+            conversation_messages.update(is_hidden_from_sender=hide_toggle)
+            conversation_messages.update(is_hidden_from_receiver=hide_toggle)
+            # If the messages are being hidden for both users, then mark all messages as read so that they don't
+            # appear as unread in the inbox badge in the navbar.
+            if hide_toggle:
+                conversation_messages.update(is_read=True)
 
         return True
 
