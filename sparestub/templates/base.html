@@ -66,7 +66,7 @@
     {% if user.is_authenticated and not user.is_confirmed %}
       <div id="notification-root">
         <div class="notification-style alert alert-info">
-          <button id="notification-root-close" class="close pull-right" data-dismiss="alert">&times;</button>
+          <div id="notification-root-close" class="close pull-right" data-dismiss="alert">&times;</div>
           <span class="notification-content">Don't forget to confirm your email! We already sent you a message.
             <a id="resend-confirm-email">Resend verification email</a>
           </span>
