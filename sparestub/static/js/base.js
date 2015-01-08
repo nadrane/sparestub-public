@@ -171,8 +171,8 @@ $(document).ready(function ($) {
     'use strict';
 
     // Remove a notificaiton when clicked, regardless of where. The bootstrap code for alert-dismiss takes forver.
-    $('#notification-root').on('click', function() {
-        $(this).children().remove();
+    $('.close').on('click touchstart touchend', function() {
+        $(this).parent().remove();
     });
 
     initialize_resend_email_notification();
