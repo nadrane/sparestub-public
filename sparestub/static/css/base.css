@@ -244,6 +244,8 @@ input[type=number] {
 
 #notification-root-close {
     display: inline;
+    font-size: 26px;
+    line-height: 18px;
 }
 
 .notification-style {
