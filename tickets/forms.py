@@ -46,6 +46,10 @@ class SearchTicketForm(FacetedSearchForm):
         if isinstance(sqs, EmptySearchQuerySet):
             if self.cleaned_data['location_raw'] or self.cleaned_data['ticket_type'] or self.cleaned_data['start_date'] or self.cleaned_data['end_date']:
                 sqs = self.searchqueryset
+            else:
+                # Default to new york if the user tries to search everywhere
+                self.cleaned_data['location_raw'] = "New York, NY"
+                sqs = self.searchqueryset
 
         # Check to see if a location was chosen. Make sure search results are from that location
         # TODO Make this location date sensitive and search nearby zip_codes

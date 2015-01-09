@@ -7,12 +7,6 @@
   <link href="{% static "tickets/css/search.css" %}" rel="stylesheet">
 {% endblock %}
 
-<style>
-  .popover {
-    width: 200px;
-  }
-</style>
-
 {% block content %}
   <div class="container-fluid">
     <div id="results-wrapper" class="panel panel-primary">
@@ -107,6 +101,5 @@
 {% endblock %}
 
 {% block js %}
-  <script type="text/javascript" src="{% static "tickets/js/search_results.js"%}"></script>
   {{ block.super }}
 {% endblock %}

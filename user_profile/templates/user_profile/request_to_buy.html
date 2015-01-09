@@ -1,0 +1,85 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="row">
+      <div class="col-xs-10">
+        <h4 class="modal-title">{{ ticket.title }}</h4>
+      </div>
+      <div class="col-xs-2">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+      </div>
+    </div>
+    <div id="stripe-notification-root">
+      <div class="notification-style" style="display: None">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong class="notification-header"></strong>
+        <span class="notification-content"></span>
+      </div>
+    </div>
+  </div>
+
+  <form id="stripe-form" class="form-horizontal" action="{% url "request_to_buy" %}">
+    {% csrf_token %}
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label for="billing-email" class="control-label sr-only"></label>
+        <input id="billing-email" class="form-control" name="billing_email" type="email" value="{{ user.email }}"
+               placeholder="Billing Email" required
+
+               data-bv-notempty-message="{{ form_settings.EMAIL_NOTEMPTY_MESSAGE }}"
+               data-bv-emailaddress-message="{{ form_settings.EMAIL_EMAILADDRESS_MESSAGE }}"
+
+               data-bv-stringlength=true
+               data-bv-stringlength-max="{{ form_settings.EMAIL_MAXLENGTH }}"
+               data-bv-stringlength-message="{{ form_settings.EMAIL_LENGTH_MESSAGE }}"
+      </div>
+
+      <div class="form-group">
+        <label for="credit-card-number" class="control-label sr-only"></label>
+        <input id="credit-card-number" class="form-control" type="text" name="credit_card_number"
+               placeholder="Card Number" required
+
+               data-bv-callback="true"
+               data-bv-callback-callback="validate_credit_card_number"
+               data-bv-callback-message="That credit card number is not valid">
+      </div>
+
+            <div class="form-group">
+        <label for="expiration-date" class="control-label sr-only"></label>
+        <input id="expiration-date" name="expiration_date" class="form-control" type="text" required
+               placeholder="MM / YY"
+
+               data-bv-notempty-message="{{ form_settings.BIRTHDATE_NOTEMPTY_MESSAGE }}"
+
+               data-bv-callback="true"
+               data-bv-callback-callback="validate_expiration_date"
+               data-bv-callback-message="That card is expired">
+      </div>  <!-- form group -->
+
+      <div class="form-group">
+        <label for="cvc" class="control-label sr-only"></label>
+        <input id="cvc" class="form-control" type="text" name="cvc" placeholder="CVC" required
+
+               data-bv-callback="true"
+               data-bv-callback-callback="validate_cvc"
+               data-bv-callback-message="That cvc is not valid">
+      </div>
+
+    </div>  <!-- modal body -->
+
+    <div class="modal-footer">
+      <div id="disclosure-message">
+        By signing up, you agree to the <a href="{% url "tos" %}" target="_blank"> Terms of Service</a> and <a href="{% url "privacy policy" %}" target="_blank">Privacy Policy</a>.
+      </div>
+      <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
+      <button id="stripe-form-submit-button" class='btn btn-primary form-submit-button'
+              type="submit">Pay {{ ticket.price }}</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </form>  <!-- Stripe form -->
+</div>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  Stripe.setPublishableKey('{{ stripe_publishable_key }}');
+</script>
