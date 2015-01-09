@@ -63,16 +63,10 @@
       </div> <!-- .navbar -->
     </div>
 
-    {% if user.is_authenticated and not user.is_confirmed %}
-      <div id="notification-root">
-        <div class="notification-style alert alert-info">
-          <a class="close">Close</a>
-          <span class="notification-content">Don't forget to confirm your email! We already sent you a message.
-            <a id="resend-confirm-email">Resend verification email.</a>
-          </span>
-        </div>
-      </div>
-    {% endif %}
+    {% block notification %}
+      <div id="notification-root"></div>
+    {% endblock %}
+
 
     {% block content %}{% endblock %}
 
