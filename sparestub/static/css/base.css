@@ -357,6 +357,11 @@ input[type=number] {
     margin-top: 20px;
 }
 
+#modal-popup-notification-content {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
 /* Make sure that modal dialogues appear in front of the fixed notification root */
 .modal-dialog {
     z-index: 10000;

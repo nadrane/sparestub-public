@@ -70,11 +70,13 @@ user_info_form_settings = {'FIRST_NAME_NOTEMPTY_MESSAGE': 'Please enter your fir
                            'ZIP_CODE_LENGTH_MESSAGE': 'We only need a {} digit zipcode'.format(user_model_settings.get('ZIP_CODE_MAX_LENGTH'),),
                            'ZIP_CODE_REMOTE_MESSAGE': 'That is not a valid zip code',
 
-                           # Note that this regx is actually wrong. It matches 1 through 5 digits.
+                           # Note that this regx is actually wrong. It matches 1 through 10 digits.
                            # We want to avoid having this error fire when less than 5 digits have been entered since the
                            # error message would be otherwise misleading.
+                           # Furthermore, we don't want to fire the error if there are more than 5 digits because it
+                           # would also be misleading. Let the length message fire instead.
                            # The length validator kicks into play when the length is wrong.
-                           'ZIP_CODE_REGEXP': '^\d{1,5}$',  # Note that this is javascript. If this changes,
+                           'ZIP_CODE_REGEXP': '^\d{1,10}$',  # Note that this is javascript. If this changes,
                                                            # the serverside validator MUST change as well.
 
                            'ZIP_CODE_REGEXP_MESSAGE': 'Your zipcode should only contain numbers',
