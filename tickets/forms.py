@@ -60,7 +60,8 @@ class SearchTicketForm(FacetedSearchForm):
                 if location:
                     sqs = sqs.filter(location=location)
             except forms.ValidationError:
-                pass
+                # If the location is not real, then clearly nothing can match the filters given.
+                return EmptySearchQuerySet()
 
         if self.cleaned_data['ticket_type']:
             sqs = sqs.filter(ticket_type=self.cleaned_data.get('ticket_type'))
