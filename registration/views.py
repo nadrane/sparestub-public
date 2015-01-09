@@ -21,8 +21,6 @@ from .forms import SignupForm, LoginForm, ResetPasswordForm, ForgotPasswordForm
 from utils.email import send_email
 from utils.networking import ajax_http, form_success_notification
 
-SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
-
 
 def basic_info(request):
     return render(request,
@@ -47,16 +45,6 @@ def signup(request):
             birthdate = signup_form.cleaned_data.get('birthdate')
             location = signup_form.cleaned_data.get('location')
 
-            # Email the user to welcome them to out website.
-            signup_email_message = render_to_string('registration/signup_email.html')
-            send_email(email,
-                       "Welcome to SpareStub!",
-                       '',
-                       SOCIAL_EMAIL_ADDRESS,
-                       'SpareStub',
-                       html=signup_email_message
-                       )
-
             # Creates the user profile as well. Saves both objects to the database.
             User.objects.create_user(email=email,
                                      password=password,
@@ -66,26 +54,19 @@ def signup(request):
                                      birthdate=birthdate,
                                      )
 
-            #Immediately log the user in after saving them to the database
-            #Even though we know the username_or_email and password are valid since we just got them, we MUST authenticate anyway.
-            #This is because authenticate sets an attribute on the user that notes that authentication was successful.
-            #auth_login() requires this attribute to exist.
-            #Note that we pass in a non-hashed version of the password into authenticate
-            user = authenticate(email=email, password=password)
-            auth_login(request, user)
-            activate(user.location.timezone)  # Configure time zone
-
-            # If we are signup up from the login_redirect form, do not keep the user on that blank page.
-            if request.GET.get('redirect') == 'true':
-                return ajax_http({'redirect_href': '/'},
-                                 status=200
-                                 )
-
-            return ajax_http(True, 200)
+            return ajax_http({'popup_notification_type': 'success',
+                              'popup_notification_content': "One last step before you can log in! "
+                                                            "We sent you a confirmation email that should "
+                                                            "arrive in the next few minutes. "
+                                                            "Just click the link inside. "
+                                                            "Don't forget to check your spam folder too."
+                              },
+                             status=200,
+                             )
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
         # We don't actually specify what the form error was. This is okay because our app requires JS to be enabled.
-        # If the user managed to send us an aysynch request with JS disabled, they aren't using the site as designed.
+        # If the user managed to send us an asynch request with JS disabled, they aren't using the site as designed.
         # eg., possibly a malicious user. No need to repeat the form pretty validation already done on the front end.
         else:
             return ajax_http(False, 400)
@@ -115,6 +96,14 @@ def login(request):
             # We actually do this authenticate function twice, once in LoginForm and once here.
             # The code is cleaner this way, despite the extra DB hits.
             user = authenticate(email=email, password=password)
+            if not user.is_confirmed:
+                EmailConfirmationLink.objects.create_email_confirmation(user)
+                return ajax_http({'notification_type': 'alert-danger',
+                                  'notification_content': 'You need to confirm your email address. We just sent you another link!'
+                                  },
+                                 status=400,
+                                 )
+
             auth_login(request, user)
             activate(user.timezone())  # Configure time zone
 
@@ -122,9 +111,9 @@ def login(request):
                              status=200,
                              request=request)
         else:
-            return ajax_http({'isSuccessful': False,
-                              'notification_type': 'alert-danger',
-                              'notification_content': 'Wrong username or password! <a href="{}">Click to reset your password</a>'.format(reverse('create_forgot_password'))
+            return ajax_http({'notification_type': 'alert-danger',
+                              'notification_content': 'Wrong username or password! <a href="{}">Click to reset your password</a>'
+                              .format(reverse('create_forgot_password'))
                               },
                              status=400,
                              )
@@ -149,14 +138,14 @@ def login_redirect(request):
             user = authenticate(email=email, password=password)
             auth_login(request, user)
             activate(user.timezone())  # Configure time zone
-            return ajax_http({'isSuccessful': True,
-                              'redirect_href': '/'},
+            return ajax_http({'redirect_href': '/'},
                              status=200
                              )
         else:
-            return ajax_http({'isSuccessful': False,
-                              'notification_type': 'alert-danger',
-                              'notification_content': render_to_string('user_profile/forgot_password.html', '', RequestContext(request))
+            return ajax_http({'notification_type': 'alert-danger',
+                              'notification_content': render_to_string('user_profile/forgot_password.html',
+                                                                       '',
+                                                                       RequestContext(request))
                               },
                              status=400,
                              )
@@ -209,8 +198,19 @@ def confirm_email(request, confirm_link):
             email_confirm_link.save()
             user.save()
 
-    return render(request,
-                  'registration/email_confirmation_finished.html')
+        # Immediately log the user in after saving them to the database
+        # Even though we know the user is valid because they clicked the confirmation link, we MUST authenticate anyway.
+        # This is because authenticate sets an attribute on the user that notes that authentication was successful.
+        # auth_login() requires this attribute to exist.
+        # But we cannot authenticate the email with the password because don't know it, so we can use the confirm link
+        # instead.
+        user = authenticate(email_confirm_link=email_confirm_link)
+        auth_login(request, user)
+        activate(user.location.timezone)  # Configure time zone
+
+        return render(request,
+                      'registration/email_confirmation_finished.html')
+    raise Http404()
 
 
 def reset_password(request, reset_link):

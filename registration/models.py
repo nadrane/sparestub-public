@@ -29,6 +29,8 @@ from locations.models import Location
 from .settings import PASSWORD_RESET_EMAIL_SUBJECT, PASSWORD_RESET_EMAIL_TEMPLATE, EMAIL_CONFIRMATION_EMAIL_SUBJECT,\
     EMAIL_CONFIRMATION_EMAIL_TEMPLATE
 
+SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
+
 
 class UserManager(BaseUserManager):
 
@@ -60,6 +62,16 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.save()
+
+        # Email the user to welcome them to out website.
+        signup_email_message = render_to_string('registration/signup_email.html')
+        send_email(email,
+                   "Welcome to SpareStub!",
+                   '',
+                   SOCIAL_EMAIL_ADDRESS,
+                   'SpareStub',
+                   html=signup_email_message
+                   )
 
         EmailConfirmationLink.objects.create_email_confirmation(user)
 
@@ -471,6 +483,9 @@ class EmailLink(TimeStampedModel):
     @staticmethod
     def create_link():
         return ''.join([random.choice(string.ascii_letters + string.digits) for x in range(50)])
+
+    def get_user_from_link(self):
+        return self.user
 
 
 class ForgotPasswordLink(EmailLink):

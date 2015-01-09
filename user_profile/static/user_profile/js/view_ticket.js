@@ -58,7 +58,8 @@ function prepare_delete_ticket_button() {
     // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
     // The answer is that this modal is multi-purposed, and another button might use it in the future.
     $('#delete-ticket').on('click', function () {
-        prepare_yes_cancel_modal('Are you sure you want to permanently delete this ticket listing?', window.additional_parameters.delete_ticket_url);
+        prepare_yes_cancel_modal('Are you sure you want to permanently delete this ticket listing?',
+                                 window.additional_parameters.delete_ticket_url);
     });
 }
 
@@ -67,7 +68,35 @@ function prepare_stripe_button() {
     if (!window.additional_parameters.is_confirmed) {
         set_notification('You need to confirm your email address before you can request to buy a ticket. <a id="resend-confirm-email" href="{% url "create_email_confirmation_link" %}">Resend verification email</a>');
     }
-    $('.stripe-holder-form button').html('<span style="display: block; min-height: 30px;">Request to Buy</span>');
+
+    var handler = StripeCheckout.configure({
+        key: window.additional_parameters.stripe_public_key,
+        image: '/square-image.png',
+        token: function(token) {
+          // Use the token to create the charge with a server-side script.
+          // You can access the token ID with `token.id`
+        }
+    });
+
+    $('#request-to-buy').on('click', function (e) {
+      if (window.additional_parameters.is_authenticated) {
+
+      }
+
+      // Open Checkout with further options
+      handler.open({
+        name: 'Demo Site',
+        description: '2 widgets ($20.00)',
+        amount: 2000
+      });
+      e.preventDefault();
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function() {
+      handler.close();
+    });
+
 }
 
 function modal_message_user_button() {

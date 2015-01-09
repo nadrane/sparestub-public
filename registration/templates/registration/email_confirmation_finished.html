@@ -2,11 +2,14 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
       <h2>Your email has been confirmed!</h2>
       <hr>
       <p>
-        Get out there and experience SpareStub!
+        Next, take a few minutes to fill out your profile:
+      </p>
+      <p>
+        <a href="{% url "view_profile" username=user.user_profile.username %}" class="btn btn-primary">Click to go to your profile</a>
       </p>
     </div>
   </div>

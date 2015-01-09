@@ -9,6 +9,11 @@ var has_notification_update = function (response) {
     return response.notification_type && response.notification_content;
 };
 
+var has_popup_notification = function (response) {
+    'use strict';
+    return response.popup_notification_type && response.popup_notification_content;
+};
+
 var clear_notification = function ($notification_root) {
     // Completely remove a notification
     $notification_root.empty();
@@ -40,23 +45,32 @@ var set_notification = function ($notification_root, content_message, message_ty
 var handle_ajax_response = function (response, $notification_root) {
     'use strict';
     // If we aren't updating the notification root on a modal, then update the site's main notification bar.
-    if (!$notification_root) {
-        $notification_root = $('#notification-root');
-    }
     if (!response) {
         return;
     }
+
+
+    if (!$notification_root) {
+        $notification_root = $('#notification-root');
+    }
+
     if (!!response.redirect_href) {
         window.location.href = response.redirect_href;
-    // If it's not a complete redirect, then we are replacing specific elements of the DOM.  Do that here.
+
+    // If we want to close to current modal and show a new one that only displays a notification.
+    } else if (has_popup_notification(response)) {
+        show_popup_notification_modal(response.popup_notification_content,
+                                      response.popup_notification_type);
+
+    // If we want to show a notification inside the currently open modal
+    } else if (has_notification_update(response)) {
+        set_notification($notification_root,
+                         response.notification_content,
+                         response.notification_type);
+
+    // We expect any ajax response to either redirect, give a notification, or reload the current page
     } else {
-        if (has_notification_update(response)) {
-            set_notification($notification_root,
-                             response.notification_content,
-                             response.notification_type);
-        }
-
-
+        window.location.reload();
     }
 };
 
@@ -74,30 +88,6 @@ function add_failure_x($target) {
     $target.empty();
     $target.append('<span class="glyphicon glyphicon-remove">');
 }
-
-/*
-var store_in_local = function (key, data_to_store, is_data_json) {
-    'use strict';
-    if (Modernizr.localstorage) {
-        if (is_data_json) {
-            data_to_store = JSON.stringify(data_to_store);
-        }
-        var compressed = LZString.compress(data_to_store);
-        localStorge.setItem(key, compressed);
-    }
-};
-
-var retrieve_from_local = function (key, is_data_json){
-    'use strict';
-    var data;
-    if (Modernizr.localstorage) {
-        data = LZString.decompress(localStorage.getItem(key));
-    }
-    if (is_data_json) {
-        data = JSON.parse(data);
-    }
-    return data;
-};*/
 
 function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
     'use strict';
@@ -120,4 +110,15 @@ function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
     } else {
         $modal_yes.attr('type', 'button');
     }
+}
+
+function show_popup_notification_modal(notification_content, notification_type) {
+    'use strict';
+    // Make sure that a modal is not currently open. Close it if one is.
+    $('.in.modal').modal('hide');
+
+    var $modal_popup_notification_content = $('#modal-popup-notification-content');
+    $modal_popup_notification_content.addClass('alert-' + notification_type);
+    $modal_popup_notification_content.text(notification_content);
+    $('#modal-popup-notification-root').modal('show');
 }

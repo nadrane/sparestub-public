@@ -82,10 +82,7 @@ MIDDLEWARE_CLASSES = (
     #'utils.middleware.history.LastVisitedMiddleware'
 )
 
-AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin
-    "django.contrib.auth.backends.ModelBackend",
-)
+AUTHENTICATION_BACKENDS = ('registration.backends.user_backend.UserBackend',)
 
 MANDRILL_API_KEY = get_env_variable('MANDRILL_API_KEY')
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
