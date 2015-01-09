@@ -37,8 +37,9 @@ class UserProfilerManager(models.Manager):
 
     @staticmethod
     def make_username(first_name, last_name):
-        # Make the username's in title case
-        first_name, last_name = first_name.title(), last_name.title()
+        # Make the usernames title case and remove any spaces.
+        # This avoids having spaces that need escaping in the user profile url.
+        first_name, last_name = first_name.title().replace(' ', ''), last_name.title().replace(' ', '')
 
         # Try to make the url equal to the users first and last names concatenated together
         potential_username = first_name + last_name
@@ -55,7 +56,7 @@ class UserProfilerManager(models.Manager):
             number_to_append += 1
 
         logging.error("profile.html url did not generate properly for input user profile {} {}".
-                     format(first_name, last_name))
+                      format(first_name, last_name))
         return None
 
 

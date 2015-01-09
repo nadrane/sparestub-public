@@ -7,8 +7,8 @@ user_model_settings = {'PASSWORD_MIN_LENGTH': 6,
                        'PASSWORD_MAX_LENGTH': 128,  # Don't edit this. This value is defined in
                                                     # django / contrib / auth / models.py / AbstractBaseUser
 
-                       'FIRST_NAME_MAX_LENGTH': 30,
-                       'LAST_NAME_MAX_LENGTH': 30,
+                       'FIRST_NAME_MAX_LENGTH': 20,
+                       'LAST_NAME_MAX_LENGTH': 20,
                        'EMAIL_MAX_LENGTH': 254,
 
                        'DEACTIVATION_REASON': (),

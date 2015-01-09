@@ -123,7 +123,7 @@ input[type=number] {
 
 
 @media (max-width: 768px) {
-    /* Removes padding from navnar on small screens so that logo, search bar, and menu toggle can all fit*/
+    /* Removes padding from navbar on small screens so that logo, search bar, and menu toggle can all fit*/
     .navbar {
         padding: 0;
     }
@@ -171,6 +171,60 @@ input[type=number] {
                    (*cough* Chrome *cough* decide they want to render the font size differently than the css specifies.
                    This percentage ensures the search button does not appear on a different line when Chrome
                    gets sassy. */
+}
+
+/* Before the navbar collapases, let's try to shrink it down so it doesn't take up 2 lines of space */
+@media (min-width:900px) and (max-width: 1000px) {
+    .navbar-nav>li>a {
+        padding: 15px 12px;
+        font-size: 14px;
+    }
+    #search-ticket-form {
+        padding: 0;
+        max-width: 200px;
+    }
+    ::-webkit-input-placeholder {
+    font-size: 14px;
+    }
+    :-moz-placeholder { /* Firefox 18- */
+       font-size: 14px;
+    }
+    ::-moz-placeholder {  /* Firefox 19+ */
+       font-size: 14px;
+    }
+    :-ms-input-placeholder {
+       font-size: 14px;
+    }
+    .navbar-nav button, .navbar-nav a {
+        font-size: 14px;
+    }
+}
+
+/* Before the navbar collapases, let's try to shrink it down so it doesn't take up 2 lines of space */
+@media (min-width:768px) and (max-width: 900px) {
+    .navbar-nav>li>a {
+        padding: 15px 8px;
+        font-size: 13px;
+    }
+    #search-ticket-form {
+        padding: 0;
+        max-width: 180px;
+    }
+    ::-webkit-input-placeholder {
+    font-size: 13px;
+    }
+    :-moz-placeholder { /* Firefox 18- */
+       font-size: 13px;
+    }
+    ::-moz-placeholder {  /* Firefox 19+ */
+       font-size: 13px;
+    }
+    :-ms-input-placeholder {
+       font-size: 13px;
+    }
+    .navbar-nav button, .navbar-nav a {
+        font-size: 13px;
+    }
 }
 
 #search-ticket-submit {
