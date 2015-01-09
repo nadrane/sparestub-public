@@ -57,6 +57,7 @@
             <button id="delete-ticket" type=button class="btn btn-primary cancel-ticket" type="button"
                     data-toggle="modal" data-target="#modal-yes-cancel-root">Delete Ticket</button>
           {% else %}
+            <button id="request-to-buy">Request To Buy</button>
             {% comment %}
             <form class="stripe-holder-form" action="{% url "request_to_buy" ticket_id=ticket.id %}" method="POST">
               {% csrf_token %}
@@ -86,6 +87,7 @@
 {% block js %}
   {% with ticket_id=ticket.id %}
     <script type="text/javascript">
+        window.additional_parameters.stripe_public_key = "{{ stripe_public_key }}"
         window.additional_parameters.user_id = "{{ user_info.user_id }}";
         window.additional_parameters.ticket_id = "{{ ticket_id }}";
         window.additional_parameters.send_message_url = "{% url "send_message" %}";
@@ -94,6 +96,7 @@
     </script>
   {% endwith %}
   {{ block.super }}
+  <script src="https://checkout.stripe.com/checkout.js"></script>
   <script type="text/javascript" src="{% static "user_profile/js/view_ticket.js" %}"></script>
 {% endblock %}
 

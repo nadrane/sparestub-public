@@ -67,7 +67,31 @@ function prepare_stripe_button() {
     if (!window.additional_parameters.is_confirmed) {
         set_notification('You need to confirm your email address before you can request to buy a ticket. <a id="resend-confirm-email" href="{% url "create_email_confirmation_link" %}">Resend verification email</a>');
     }
-    $('.stripe-holder-form button').html('<span style="display: block; min-height: 30px;">Request to Buy</span>');
+
+    var handler = StripeCheckout.configure({
+        key: window.additional_parameters.stripe_public_key,
+        image: '/square-image.png',
+        token: function(token) {
+          // Use the token to create the charge with a server-side script.
+          // You can access the token ID with `token.id`
+        }
+    });
+
+    $('#customButton').on('click', function(e) {
+      // Open Checkout with further options
+      handler.open({
+        name: 'Demo Site',
+        description: '2 widgets ($20.00)',
+        amount: 2000
+      });
+      e.preventDefault();
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function() {
+      handler.close();
+    });
+
 }
 
 function modal_message_user_button() {
