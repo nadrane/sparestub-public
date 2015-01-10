@@ -21,6 +21,16 @@ function initialize_bootstrap_validator_message_user() {
     });
 }
 
+function format_money (number) {
+    var c = 2;
+    var d = '.';
+    var t = ',';
+    var s = number < 0 ? "-" : "";
+    var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "";
+    var j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
+
 function load_message_user_modal(show_modal) {
     'use strict';
     /* Load the message user modal content from the server and display that form if requested.
@@ -65,10 +75,6 @@ function prepare_delete_ticket_button() {
 
 //TODO this is somewhat of a hack to override what the stripe button reads
 function prepare_stripe_button() {
-    if (!window.additional_parameters.is_confirmed) {
-        set_notification('You need to confirm your email address before you can request to buy a ticket. <a id="resend-confirm-email" href="{% url "create_email_confirmation_link" %}">Resend verification email</a>');
-    }
-
     var handler = StripeCheckout.configure({
         key: window.additional_parameters.stripe_public_key,
         image: '/square-image.png',
@@ -79,22 +85,27 @@ function prepare_stripe_button() {
     });
 
     $('#request-to-buy').on('click', function (e) {
-      if (window.additional_parameters.is_authenticated) {
+        // Users cannot request to buy tickets if they are not logged in
+        if (!window.additional_parameters.is_authenticated) {
+            load_login_modal(true);
+        }
 
-      }
+        // Open Checkout with further options
+        handler.open({
+            name: 'SpareStub',
+            description: window.additional_parameters.ticket_title,
+            //amount: parseFloat(window.additional_parameters.ticket_amount) * 100,
+            allowRememberMe: true,
+            email: window.additional_parameters.user_email,
+            panelLabel: '$' + (parseFloat(window.additional_parameters.ticket_amount) + 5).toString() + ' ($' + (parseFloat(window.additional_parameters.ticket_amount)).toString() + ' + $5 fee)'
+        });
 
-      // Open Checkout with further options
-      handler.open({
-        name: 'Demo Site',
-        description: '2 widgets ($20.00)',
-        amount: 2000
-      });
-      e.preventDefault();
+        e.preventDefault();
     });
 
     // Close Checkout on page navigation
     $(window).on('popstate', function() {
-      handler.close();
+        handler.close();
     });
 
 }

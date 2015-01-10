@@ -8,7 +8,7 @@
 }
 
 #buy-or-message-buttons {
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .middle-contents {
@@ -26,13 +26,9 @@
 }
 
 #row-bottom {
-    padding-top: 10px;
-    border-top: 1px solid #e5e5e5;
+    padding-top: 15px;
 }
 
-#row-top {
-    border-bottom: 1px solid #e5e5e5;
-}
 
 .stripe-holder-form {
     display: inline-block;

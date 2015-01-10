@@ -3,7 +3,7 @@ from locations.settings import states
 
 ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                          'CONTENT_MAX_LENGTH': 10000,
-                         'VENUE_MAX_LENGTH': 300,
+                         'VENUE_MAX_LENGTH': 50,
                          'TICKET_TYPES': (('M', 'Music'),
                                           ('S', 'Sports'),
                                           ('T', 'Theatre'),
@@ -37,7 +37,7 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
                                'PRICE_NUMERIC_SEPARATOR': '.',
                                'PRICE_NUMERIC_MESSAGE': 'Please enter a number',
                                'PRICE_MIN_VALUE': '0.00',
-                               'PRICE_MAX_VALUE': '1000000.00',
+                               'PRICE_MAX_VALUE': '999999.99',
 
                                'START_DATE_NOTEMPTY_MESSAGE': 'Please enter the date event starts',
                                'START_DATE_DATE_FORMAT': 'MM/DD/YYYY',

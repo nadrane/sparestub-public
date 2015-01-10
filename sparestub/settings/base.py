@@ -103,6 +103,7 @@ CURRENT_TIME_ZONE = 'EST'
 USE_I18N = True
 
 USE_L10N = True
+FORMAT_MODULE_PATH = 'formats'
 
 USE_THOUSAND_SEPARATOR = True  # We expect currency input to contain thousands separators.
                                # They are inserted by the utoNumeric library.

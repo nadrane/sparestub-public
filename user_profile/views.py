@@ -268,14 +268,14 @@ def profile_tickets(request, username):
     past_tickets = None
     return render(request,
                   'user_profile/profile_tickets.html',
-                   {'user_info': user_info,
-                    'is_owner': is_owner,
-                    'available_tickets': available_tickets,
-                    'in_progress_tickets': in_progress_tickets,
-                    'past_tickets': past_tickets,
-                    'most_recent_review_info': most_recent_review_info,
-                    'form_settings': profile_answer_form_settings,
-                    },
+                  {'user_info': user_info,
+                   'is_owner': is_owner,
+                   'available_tickets': available_tickets,
+                   'in_progress_tickets': in_progress_tickets,
+                   'past_tickets': past_tickets,
+                   'most_recent_review_info': most_recent_review_info,
+                   'form_settings': profile_answer_form_settings,
+                   },
                   content_type='text/html',
                   )
 
@@ -319,6 +319,7 @@ def view_ticket(request, username, ticket_id):
                  'rating': user.rating,
                  'username': username,
                  'user_id': user.id,
+                 'email': user.email
                  }
 
     try:
