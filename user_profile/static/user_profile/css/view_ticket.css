@@ -25,11 +25,8 @@
     display: block;
 }
 
-#row-bottom {
+#about {
     padding-top: 15px;
+    font-size: 16px;
 }
 
-
-.stripe-holder-form {
-    display: inline-block;
-}

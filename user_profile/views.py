@@ -49,11 +49,16 @@ def edit_profile(request, username):
                     pass
 
                 uploaded_photo = request.FILES.get('profile_picture')
-                x, y = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),
-                x2, y2 = x + edit_profile_form.cleaned_data.get('w'), y + edit_profile_form.cleaned_data.get('h')
-                crop_coords = x, y, x2, y2
-                rotate_degrees = edit_profile_form.cleaned_data.get('rotate_degrees', 0)
-                profile_picture = Photo.objects.create_photo(user, uploaded_photo, crop_coords, rotate_degrees)
+                if uploaded_photo:
+                    x, y = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),
+                    x2, y2 = x + edit_profile_form.cleaned_data.get('w'), y + edit_profile_form.cleaned_data.get('h')
+                    crop_coords = x, y, x2, y2
+                    rotate_degrees = edit_profile_form.cleaned_data.get('rotate_degrees', 0)
+                    profile_picture = Photo.objects.create_photo(user, uploaded_photo, crop_coords, rotate_degrees)
+                else:
+                    profile_picture = None
+            else:
+                profile_picture = None
 
             email = edit_profile_form.cleaned_data.get('email')
             first_name = edit_profile_form.cleaned_data.get('first_name')
@@ -67,7 +72,7 @@ def edit_profile(request, username):
             user.location = location
 
             # No need to handle the profile picture if we are using the old one.
-            if not use_old_photo:
+            if profile_picture:
                 profile_picture.save()
                 user.save()
             else:

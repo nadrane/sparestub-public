@@ -234,7 +234,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return False
 
     def get_absolute_url(self):
-        return "/profile.html/%s/" % urlquote(self.user_profile.username)
+        return self.user_profile.get_absolute_url()
 
     def get_full_name(self):
         """

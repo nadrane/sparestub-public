@@ -21,8 +21,8 @@ function initialize_select_photo() {
     'use strict';
 
     $('#select-photo').on('click', function () {
-        $('#is_valid-photo').val(false); // A new photo has not yet been cropped, so it must be invalid.
-        $('use-old-photo').val(true);    // This will never be set to true unless the user had a photo when the edit
+        $('#is-valid-photo').val(false); // A new photo has not yet been cropped, so it must be invalid.
+        $('#use-old-photo').val(false);   // This will never be set to true unless the user had a photo when the edit
                                          // profile activity was loaded. This is required so users can remove profile
                                          // pics.
     });
@@ -30,7 +30,7 @@ function initialize_select_photo() {
 
 function initialize_remove_photo() {
     $('#remove-photo').on('click', function () {
-        $('#is_valid-photo').val(true);  // It's perfectly fine to have no photo.
+        $('#is-valid-photo').val(true);  // It's perfectly fine to have no photo.
 
         // When an image is selected, we change this width to auto so that the div scales to the child img dimensions
         $('.fileinput-preview').width('250px').height('200px');
@@ -40,7 +40,6 @@ function initialize_remove_photo() {
 
         // Handle the case where the remove button was clicked after cropping occurred.
         $('#crop').text('Crop');
-        $('#is_valid-photo').val(false);
         $('#rotate-left, #rotate-right').css('cursor', 'pointer');
     });
 }
@@ -53,7 +52,7 @@ function initialize_crop_button() {
         if ($('.cropper-disabled').length > 0) {
             $cropper_image.cropper('enable');
             $('#crop').text('Crop');
-            $('#is_valid-photo').val(false);
+            $('#is-valid-photo').val(false);
 
             // The user can once again use the rotate buttons since they undid cropping
             // The cropper API takes care of preventing the actual image rotation
@@ -63,7 +62,7 @@ function initialize_crop_button() {
         } else {
             $cropper_image.cropper('disable');
             $('#crop').text('Uncrop');
-            $('#is_valid-photo').val(true);
+            $('#is-valid-photo').val(true);
             store_crop();
 
             // The user cannot use the rotate buttons after cropping
@@ -163,7 +162,7 @@ function resize_profile_picture_preview() {
 }
 
 function valid_photo() {
-    var is_valid = $('#is_valid-photo').val();
+    var is_valid = $('#is-valid-photo').val();
     if (is_valid === 'true' || is_valid === true) {
         return true;
     } else if (is_valid === 'false' || is_valid === false) {

@@ -20,7 +20,7 @@
                                   <p class="search-result-location">{{ ticket.location }} - {{ ticket.venue | truncatechars:200}}</p>
                                 </div>
   </td>
-  <td class="hidden-xs col-sm-3">
+  <td class="hidden-xs col-sm-3 col-lg-2">
     <img class="search-result-picture pull-left" src="{% if ticket.poster.profile_picture.search_thumbnail.url %}{{ ticket.poster.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
     <div style="padding-left: 10px;" class="pull-left">
       <p class="ticket-result-name">{{ ticket.poster.first_name | title}}{% if ticket.poster.age %}, {{ ticket.poster.age }}</p>{% endif %}

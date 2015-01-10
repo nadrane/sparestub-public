@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-fluid">
+  <div class="container-fluid" style="max-width: 1000px">
     <div id="profile-header" class="row wave">
     {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
       <div id="user-picture"class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
@@ -62,6 +62,7 @@
     </div>
     <div id="profile-body" class="row">
       <!--Note that the columns spanned by this div need to equal the columns spanned by the profile picture div-->
+
       <div id="left-side-bar" class="col-xs-12 col-sm-2">
         <div id="left-side-bar-content" class="row">
           <div id="profile" class="col-xs-4 col-sm-12 side-bar-element">

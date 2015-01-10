@@ -158,7 +158,7 @@ input[type=number] {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     /* Removes padding from navbar on small screens so that logo, search bar, and menu toggle can all fit*/
     .navbar {
         padding: 0;
@@ -497,7 +497,7 @@ span.twitter-typeahead .tt-suggestion > p:focus {
   color: #ffffff;
   text-decoration: none;
   outline: 0;
-  background-color: #428bca;
+  background-color: #2CB0EF;
 }
 span.twitter-typeahead .tt-suggestion.tt-cursor {
   color: #ffffff;
