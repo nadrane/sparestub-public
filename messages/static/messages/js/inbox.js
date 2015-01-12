@@ -104,11 +104,15 @@ function mark_messages_read(ticket_id, other_user_id) {
 
 // When the user opens the page, load the first thread
 $(document).on('ready', function () {
-    var $all_convo_headers = $('#all-convo-headers');
-    if ($all_convo_headers.children().length > 0) {
-        var ticket_id = $all_convo_headers.children().data('identity-ticket');
-        var other_user_id = $all_convo_headers.children().data('identity-user');
-        load_thread($($('#threads').children()[0]), ticket_id, other_user_id);
+    var $threads = $('#threads');
+    /* We need to use threads here instead of something else like convo headers. It might seem like we could use any of
+     * them, but threads are the only group sorted by last timestamp, we want to display the messages from the thread at
+     * the top. The first child of $threads will 100% for sure be the first conversation in the list of the left.
+     */
+    if ($threads.children().length > 0) {
+        var ticket_id = $threads.children().data('identity-ticket');
+        var other_user_id = $threads.children().data('identity-user');
+        load_thread($($threads.children()[0]), ticket_id, other_user_id);
     }
 
     $('#send-message').on('click', function (e) {
