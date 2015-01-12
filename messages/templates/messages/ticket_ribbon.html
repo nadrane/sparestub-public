@@ -3,6 +3,6 @@
 <div class="ticket-info-ribbon" data-identity-ticket="{{ ticket_id }}">
   <a href="{{ ticket_ribbon.absolute_url }}">Jump to Ticket: </a>
   <span><b>Price:</b> ${{ ticket_ribbon.price }}  </span>
-  <span><b>When:</b> {% localtime off %}{{ ticket_ribbon.get_formatted_start_datetime.date }}{{ ticket_ribbon.when }}{{ ticket.get_formatted_start_datetime.time }}{% endlocaltime %}  </span>
+  <span><b>When:</b> {% localtime off %}{{ ticket_ribbon.when }}{% endlocaltime %}  </span>
   <span><b>Where:</b> {{ticket_ribbon.where}}</span>
 </div>

@@ -1,1 +1,2 @@
 DATE_FORMAT = 'N d'
+DATETIME_FORMAT = 'D N j, P'

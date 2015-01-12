@@ -97,13 +97,16 @@ def inbox(request):
             name = other_user.get_full_name()
             body = message.body
 
+            # Grab a request record for this ticket/user combo if one exists
+            user_request = Request.get_request(user, ticket)
+
             threads[ticket_id][other_user_id] = {'name': name,
                                                  'ticket_title': ticket.title,
                                                  'pic_url': profile_picture,
                                                  'last_timestamp': Message.last_message_time(user,
                                                                                              other_user,
                                                                                              ticket_id),
-                                                 'request_status': Request.get_request(user, ticket).status,
+                                                 'request_status': user_request.status if user_request else None,
                                                  'ticket_id': ticket_id,
                                                  'other_user_id': other_user_id
                                                  }
@@ -112,7 +115,7 @@ def inbox(request):
                 ticket_ribbons[ticket_id] = ticket_ribbon_tuple(ticket_id=ticket_id,
                                                                 absolute_url=ticket.get_absolute_url(),
                                                                 price=ticket.price,
-                                                                when=ticket.start_datetime,
+                                                                when=ticket.get_formatted_start_datetime(),
                                                                 where=ticket.get_full_location(),
                                                                 )
 
@@ -130,15 +133,14 @@ def inbox(request):
                                                                     )]
 
             if other_user_id not in convo_headers[ticket_id]:
-                user_request = Request.get_request(user, ticket)
                 convo_headers[ticket_id][other_user_id] = convo_header_tuple(other_user_pic_url=profile_picture,
                                                                              name=name,
                                                                              age=other_user.age(),
                                                                              absolute_url=other_user.get_absolute_url(),
                                                                              location=ticket.location,
                                                                              rating=other_user.rating,
-                                                                             request_status=user_request.status,
-                                                                             is_requester=(user == user_request.requester)
+                                                                             request_status=user_request.status if user_request else None,
+                                                                             is_requester=(user == user_request.requester if user_request else None)
                                                                              )
 
         # The django template language cannot handle defaultdict's properly. This resolves our issue.

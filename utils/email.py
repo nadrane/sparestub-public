@@ -7,6 +7,7 @@ from djrill import MandrillAPIError
 
 # Django Imports
 from django.core.mail import send_mail, EmailMultiAlternatives
+from django.conf import settings
 
 def normalize_email(email):
     """
@@ -30,12 +31,16 @@ def send_email(recipient_list, subject, message, from_email, from_name='', **kwa
     returns: True - If the email sent successfully
              False - If the email failed to send
     """
+    # It's convenient to disable emails on the development machines sometimes
+    if not settings.SEND_EMAILS:
+        return False
 
     if not isinstance(recipient_list, list):
         recipient_list = [recipient_list]
 
     if not from_name:
         from_name = from_email
+        #TODO pass from name to mandrill???
 
     fail_silently = kwargs.get('fail_silently', False)
 

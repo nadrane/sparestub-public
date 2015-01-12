@@ -71,3 +71,5 @@ DOMAIN = 'http://www.localhost:8000'
 
 STRIPE_SECRET_API_KEY = 'sk_test_gmA01wRhwK2cwkbGzdMHa00a'
 STRIPE_PUBLIC_API_KEY = 'pk_test_6VZiRzF0eM4jjp3VJ7avVPZj'
+
+SEND_EMAILS = False

@@ -152,3 +152,5 @@ DEFAULT_CITY_LIST_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'location
 
 LOGIN_URL = '/registration/login_redirect/'
 LOGIN_REDIRECT_URL = '/'
+
+SEND_EMAILS = True  # Default to sending emails unless a specific settings file disables it

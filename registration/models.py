@@ -31,7 +31,8 @@ SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
 class UserManager(BaseUserManager):
 
     @transaction.atomic()  # We definitely do not want to create a User record without a UserProfile
-    def _create_user(self, email, password, first_name, last_name, location, is_staff, is_superuser, **kwargs):
+    def _create_user(self, email, password, first_name, last_name, location, is_staff, is_superuser,
+                     is_confirmed=False, **kwargs):
         """
         Creates and saves a User with the given email and password.
         """
@@ -52,7 +53,7 @@ class UserManager(BaseUserManager):
                           is_staff=is_staff,
                           is_superuser=is_superuser,
                           user_profile=user_profile,
-                          is_confirmed=False,
+                          is_confirmed=is_confirmed,
                           **kwargs
                           )
 
