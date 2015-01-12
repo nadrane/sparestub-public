@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Forgot Password</title>
+    <title>Request Cancelled</title>
 </head>
 <body>
 
@@ -56,12 +56,12 @@
     <div class="container">
         <p id="header">
              <a href="http://www.sparestub.com"><img class="logo" src="C:\Users\steph\Documents\GitHub\SpareStub\sparestub\static\logos\logo_official.png"></a></p>
-        <p>Aw shucks... forgot your password, {{ user.first_name|title }}?<br><br>
-            <a href="{{ DOMAIN }}{% url "reset_password" reset_link=new_link %}">Click this link</a> in the next 24 hours to reset your password.<br>
-            We'll put the show on hold until you're back!</p><br>
-        <p class="bodytext">We hope you enjoy SpareStub. If you have any questions or feedback for us, we'd love to hear from you.
-            Just email <a href="mailto:shout@sparestub.com">shout@sparestub.com.</a>
-        </p>
+        <p>Request to Buy Cancelled</p>
+        <p class="bodytext">This is confirmation that {{ request.requester.first_name|title }} has cancelled the Request to Buy
+          for ticket "{{ ticket.title }}".<br><br>
+
+      <p class="bodytext">Let us know if you have any questions or feedback at <a href="mailto:shout@sparestub.com">shout@sparestub.com.</a>
+      </p>
         <p id="footer">
             Be sure to follow the adventure:<br>
             <a href="http://facebook.com/sparestub" target="_blank">Like us on Facebook</a> and <a href="http://www.twitter.com/sparestub" target="_blank">Follow us on Twitter</a><br><br>

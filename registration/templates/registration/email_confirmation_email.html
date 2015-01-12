@@ -1,9 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+    <title>Confirm Email</title>
 </head>
 <body>
-  Click this link <a href="www.{{ DOMAIN }}{% url "confirm_email" confirm_link=new_link %}">{{ DOMAIN }}{% url "confirm_email" confirm_link=new_link %}</a> to confirm your email address.<br>
+
+    <style>
+        p {
+            margin-left: 25px;
+            margin-right: 25px;
+        }
+
+        p.bodytext {
+            font-size: 18px;
+        }
+
+        #header {
+            padding-top: 25px;
+        }
+
+        #footer {
+            padding-bottom: 25px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            background-color: white;
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: gray;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 26px;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(44, 176, 239);
+        }
+
+        .logo {
+            width: 20%;
+        }
+
+        a {
+            color: #CA2473;
+        }
+
+    </style>
+    <div class="container">
+        <p id="header">
+             <a href="http://www.sparestub.com"><img class="logo" src="C:\Users\steph\Documents\GitHub\SpareStub\sparestub\static\logos\logo_official.png"></a></p>
+        <p>To use SpareStub, we need you to confirm your email address.</p>
+        <p class="bodytext"><a href="{{ DOMAIN }}{% url "confirm_email" confirm_link=new_link %}">Click this link to confirm your email address.</a><br><br><br>
+        <p class="bodytext">We hope you enjoy SpareStub. If you have any questions or feedback for us, we'd love to hear from you.
+            Just email <a href="mailto:shout@sparestub.com">shout@sparestub.com.</a>
+        </p>
+        <p id="footer">
+            Be sure to follow the adventure:<br>
+            <a href="http://facebook.com/sparestub" target="_blank">Like us on Facebook</a> and <a href="http://www.twitter.com/sparestub" target="_blank">Follow us on Twitter</a><br><br>
+            Don't forget to add SpareStub to your safe sender list so you don't miss any updates!<br><br>
+            &copy; 2015 SpareStub LLC
+        </p>
+
+    </div>
 </body>
 </html>
