@@ -17,4 +17,10 @@
       {% endwith %}
     </div>
   </div>
+  {% if is_requestor and request_status == "P"%}
+  <div id="accept-delcine" class="pull-left">
+    <button id="accept-request" class="btn btn-primary">Accept Request</button>
+    <button id="decline-request" class="btn btn-primary">Decline Request</button>
+  {% endif %}
+  </div>
 </div>

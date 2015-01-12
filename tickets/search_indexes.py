@@ -1,4 +1,3 @@
-import datetime
 from haystack import indexes
 from .models import Ticket
 
@@ -20,8 +19,6 @@ class TicketIndex(indexes.SearchIndex, indexes.Indexable):
 
     is_active = indexes.CharField(model_attr='is_active')
 
-    #poster = indexes.IntegerField(model_attr='poster')
-
     poster_rating = indexes.IntegerField(model_attr='rating',
                                          null=True,
                                          )
@@ -30,9 +27,6 @@ class TicketIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Ticket
-
-    #def prepare_poster(self, poster):
-    #    return poster.id
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""

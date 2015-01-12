@@ -13,20 +13,20 @@
     <div class="row">
       <div id="threads" class="{% if threads %}col-xs-3{% else %}col-xs-12{% endif %}">
         {% if threads %}
-          {% for ticket_id, user_ids in threads.items %}
-            {% for other_user_id, thread in user_ids.items %}
-              <div class="row thread" data-identity-ticket="{{ ticket_id }}" data-identity-user="{{ other_user_id }}">
-                <div class="col-xs-2">
-                  <img class="thread-pic" src="{{ thread.pic_url }}" alt="User profile picture">
-                </div>
-                <div class="col-xs-10">
-                  <h5 class="thread-name">{{ thread.name | title }}</h5>
-                  <span class="thread-blurb">{{ thread.blurb | truncatechars:20 }}</span>
-                  <span class="thread-last-message-timestamp">{{ thread.last_timestamp | naturaltime | upto:',' }}</span>
-                </div>
-                <span class="delete-conversation glyphicon glyphicon-remove" style="display:none;"></span>
+          {% for thread in threads %}
+            <div class="row thread"
+                 data-identity-ticket="{{ thread.ticket_id }}"
+                 data-identity-user="{{ thread.other_user_id }}">
+              <div class="col-xs-2">
+                <img class="thread-pic" src="{{ thread.pic_url }}" alt="User profile picture">
               </div>
-            {% endfor %}
+              <div class="col-xs-10">
+                <h5 class="thread-name">{{ thread.name | title }}</h5>
+                <span class="thread-title">{{ thread.ticket_title | truncatechars:20 }}</span>
+                <span class="thread-last-message-timestamp">{{ thread.last_timestamp | naturaltime | upto:',' }}</span>
+              </div>
+              <span class="delete-conversation glyphicon glyphicon-remove" style="display:none;"></span>
+            </div>
           {% endfor %}
         {% else %}
           <div class="no-threads">

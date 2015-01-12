@@ -2,8 +2,7 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-
-# SpareStub Imports
+# Modules Imports
 from .views import inbox, send_message, MessageUserModal, mark_messages_read, messages_hidden_toggle
 
 urlpatterns = patterns('',

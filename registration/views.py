@@ -10,7 +10,6 @@ from django.template.loader import render_to_string
 from django.utils.timezone import activate
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from django.conf import settings
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
@@ -18,8 +17,7 @@ from django.contrib.auth.decorators import login_required
 from .models import User, ForgotPasswordLink, EmailConfirmationLink
 from .settings import signup_form_settings, login_form_settings, password_form_settings
 from .forms import SignupForm, LoginForm, ResetPasswordForm, ForgotPasswordForm
-from utils.email import send_email
-from utils.networking import ajax_http, form_success_notification
+from utils.networking import ajax_http, ajax_popup_notification, form_success_notification
 
 
 def basic_info(request):
@@ -54,15 +52,12 @@ def signup(request):
                                      birthdate=birthdate,
                                      )
 
-            return ajax_http({'popup_notification_type': 'success',
-                              'popup_notification_content': "One last step before you can log in! "
-                                                            "We sent you a confirmation email that should "
-                                                            "arrive in the next few minutes. "
-                                                            "Just click the link inside. "
-                                                            "Don't forget to check your spam folder too."
-                              },
-                             status=200,
-                             )
+            return ajax_popup_notification('success', "One last step before you can log in! "
+                                                      "We sent you a confirmation email that should "
+                                                      "arrive in the next few minutes. "
+                                                      "Just click the link inside. "
+                                                      "Don't forget to check your spam folder too.",
+                                           status=200)
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
         # We don't actually specify what the form error was. This is okay because our app requires JS to be enabled.

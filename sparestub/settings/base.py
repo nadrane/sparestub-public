@@ -53,6 +53,8 @@ INSTALLED_APPS = (
     'utils',
     'reviews',
     'messages',
+    'asks',
+    'stripe_data',
 
     # All needed for zinnia
     'django_comments',

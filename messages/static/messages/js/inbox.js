@@ -31,14 +31,10 @@ function send_message(e) {
 
     // Make it appear as if the user's message sent by placing it into the conversation.
     $('#conversation-body').find('.conversation')
-                           .append('<div class="talk-bubble-wrapper">' +
-                                   '<div class="talk-bubble pull-left this-user">' +
-                                   '<img class="talk-bubble-pic pull-left" src="' + user_image + '">' +
-                                   '<div class="talk-bubble-contents pull-left">' + body +
-                                   '</div>' +
-                                   '</div>' +
-                                   '<div class="talk-bubble-timestamp pull-right">Just now' +
-                                   '</div>' +
+                           .append('<div class="talk-bubble this-user">' +
+                                     '<img class="talk-bubble-pic pull-left" src="' + user_image + '">' +
+                                     '<span class="talk-bubble-contents pull-left">' + body + '</span>' +
+                                     '<div class="talk-bubble-timestamp pull-right">Just now' + '</div>' +
                                    '</div>');
 
     $conversation.animate({'scrollTop': ($conversation[0].scrollHeight)});

@@ -7,12 +7,14 @@ from django.template.loader import render_to_string
 from utils.models import TimeStampedModel
 from registration.models import User
 from tickets.models import Ticket
+
+# Module Imports
 from .settings import message_model_settings, new_message_subject, new_message_template
 
 
 class MessageManager(models.Manager):
 
-    def create_message(self, sender, receiver, ticket, body):
+    def create_message(self, sender, receiver, ticket, body, send_email=True):
         """
         Creates a message record using the given input.
         """
@@ -32,11 +34,11 @@ class MessageManager(models.Manager):
         # for both users when the receiver checks the new message.
         Message.mark_conversation_hidden_toggle(sender.id, ticket.id, receiver.id, False, True)
 
-        receiver.send_mail(new_message_subject,
-                           '',
-                           html=render_to_string(new_message_template),
-                           )
-
+        if send_email:
+            receiver.send_mail(new_message_subject,
+                               '',
+                               html=render_to_string(new_message_template),
+                               )
 
         message.save()
 

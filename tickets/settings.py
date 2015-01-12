@@ -1,6 +1,3 @@
-from datetime import date
-from locations.settings import states
-
 ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                          'CONTENT_MAX_LENGTH': 10000,
                          'VENUE_MAX_LENGTH': 50,
@@ -14,10 +11,10 @@ ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
                                              ('S', 'Secure'),
                                              ),
 
-                         'DEACTIVATION_REASONS': (('C', 'Cancelled'),  # User cancelled ticket
-                                                  ('E', 'Expired'),  # Event date has passed
-                                                  ('S', 'Sold'), # Ticket sold to another user
-                                                  ('D', 'Deactivated') # User account deactivated with active tickets
+                         'DEACTIVATION_REASONS': (('C', 'Cancelled'),   # User cancelled ticket
+                                                  ('E', 'Expired'),     # Event date has passed
+                                                  ('S', 'Sold'),        # Ticket sold to another user
+                                                  ('D', 'Deactivated')  # User account deactivated with active tickets
                                                   )
                          }
 
@@ -65,16 +62,3 @@ search_results_settings = {'TICKET_TYPES': ticket_model_settings.get('TICKET_TYP
                            }
 
 email_submit_ticket_subject = 'SpareStub has received your ticket submission!'
-
-bid_model_settings = {'BID_STATUSES': (('P', 'Pending'),   # User has not yet accepted or rejected the user
-                                       ('E', 'Expired'),   # Event date has passed, or user does not accept or reject within time limit
-                                       ('A', 'Accepted'),  # Ticket sold to this user!
-                                       ('R', 'Rejected'),  # This user was rejected!
-                                       ('C', 'Cancelled'), # The user cancelled their bid.
-                                       )
-                      }
-
-TICKET_REQUESTED_POSTER_SUBJECT = "SpareStub - A User Requested To Buy Your Ticket"
-TICKET_REQUESTED_POSTER_TEMPLATE = "tickets/ticket_requested_poster_email"
-TICKET_REQUESTED_BIDDER_SUBJECT = "SpareStub - Ticket Request Confirmation"
-TICKET_REQUESTED_BIDDER_TEMPLATE = "tickets/ticket_requested_bidder_email"

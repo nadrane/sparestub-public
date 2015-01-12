@@ -3,9 +3,11 @@ from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 
 # SpareStub Imports
-from .settings import send_message_form_settings
 from tickets.models import Ticket
 from registration.models import User
+
+# Module Imports
+from .settings import send_message_form_settings
 
 
 class EditMessageForm(forms.Form):

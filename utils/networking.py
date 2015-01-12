@@ -12,6 +12,31 @@ from django.http import HttpResponse
 from django.conf import settings
 
 
+def ajax_other_message(other_message, status):
+    """
+    Helper function that works in tandem with handle_ajax_response on the frontend.
+    This function will give the client a success or failure message that it must handle displaying on it's own.
+    """
+
+    return ajax_http({'other_message': other_message}, status=status)
+
+
+def ajax_popup_notification(notification_type, notification_content, status):
+    """
+    Helper function that works in tandem with handle_ajax_response on the frontend.
+    This function will trigger a popup modal alert with the inputted message.
+    """
+    if not status:
+        if notification_type == 'success':
+            status = 200
+        else:
+            status = 400
+
+    return ajax_http({'popup_notification_type': notification_type,
+                      'popup_notification_content': notification_content},
+                     status)
+
+
 def ajax_http(contents, status=200, extra_json={}, **kwargs):
     """
     Returns an HTTP response that we can use for asynchronous requests
@@ -21,10 +46,11 @@ def ajax_http(contents, status=200, extra_json={}, **kwargs):
     if callable(contents):
         contents = contents(**kwargs)
 
-    if contents == True:
-        contents = {'isSuccessful': True}
+    if contents is True:
+        status = 200
+        contents = {}
 
-    if contents == False:
+    if contents is False:
         contents = form_failure_notification('Uh Oh. Something went wrong over here.')
 
     contents.update(extra_json)

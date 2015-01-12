@@ -307,6 +307,9 @@ def view_ticket(request, username, ticket_id):
     if ticket.poster != user:
         raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
 
+    if ticket.is_active == False:
+        raise Http404('It looks like this page no longer exists. The user probably cancelled their ticket.')
+
     # If the user looking at this profile is its owner, then we want to render a couple edit buttons
     if request.user == user:
         is_owner = True
@@ -362,6 +365,8 @@ def delete_ticket(request, ticket_id):
     Delete the inputted ticket
     """
 
+    #TODO disable deactivating tickets if there is an accepted request. Also make the cancel button not show up.
+
     user = request.user
 
     # Make sure that ticket exists
@@ -374,7 +379,7 @@ def delete_ticket(request, ticket_id):
     if ticket.poster != user:
         raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
 
-    ticket.delete()
+    ticket.deactivate('C')
 
     return redirect(reverse('profile_tickets',
                             kwargs={'username': user.user_profile.username}

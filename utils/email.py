@@ -8,8 +8,6 @@ from djrill import MandrillAPIError
 # Django Imports
 from django.core.mail import send_mail, EmailMultiAlternatives
 
-
-
 def normalize_email(email):
     """
     Normalize the address by lowercasing the domain part of the email

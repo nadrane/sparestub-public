@@ -43,6 +43,13 @@
           {{ ticket.about }}
         </div>
       </div>
+      <div id="request-to-buy-errors" class="row" style="display:none;">
+        <div class="col-xs-12">
+          <div class="alert alert-danger">
+            <p></p>
+          </div>
+        </div>
+      </div>
       <div id="buy-or-message-buttons" class="row">
         <div class="col-xs-12">
           {% if is_owner %}
@@ -64,7 +71,9 @@
 {% block js %}
   {% with ticket_id=ticket.id %}
     <script type="text/javascript">
-        window.additional_parameters.stripe_public_key = "{{ stripe_public_key }}"
+        window.additional_parameters.can_request_ticket_url = "{% url "can_request_ticket" ticket_id=ticket_id %}"
+        window.additional_parameters.request_to_buy_url = "{% url "request_to_buy" %}";
+        window.additional_parameters.stripe_public_key = "{{ stripe_public_api_key }}";
         window.additional_parameters.ticket_id = "{{ ticket.id }}";
         window.additional_parameters.ticket_amount = "{{ ticket.price }}";
         window.additional_parameters.ticket_title = "{{ ticket.title }}";

@@ -1,6 +1,5 @@
-__author__ = 'Nick'
-
 from .base import *
+from urllib.parse import urlparse
 
 # Keep these in here always. regardless of what base.py says. Just be safe.
 DEBUG = False
@@ -22,7 +21,19 @@ DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = 'sparestub-production'
 
 # Used to create links in emails to our site
-DOMAIN = 'www.sparestub.com'
+DOMAIN = 'http://www.sparestub.com'
 
 STRIPE_SECRET_API_KEY = get_env_variable('STRIPE_SECRET_API_KEY')
 STRIPE_SECRET_API_KEY = get_env_variable('STRIPE_PUBLIC_API_KEY')
+
+es = urlparse(os.environ.get('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
+
+port = es.port or 80
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': es.scheme + '://' + es.hostname + ':' + str(port),
+        'INDEX_NAME': 'haystack',
+    },
+}

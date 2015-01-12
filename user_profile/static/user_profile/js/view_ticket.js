@@ -21,16 +21,6 @@ function initialize_bootstrap_validator_message_user() {
     });
 }
 
-function format_money (number) {
-    var c = 2;
-    var d = '.';
-    var t = ',';
-    var s = number < 0 ? "-" : "";
-    var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "";
-    var j = (j = i.length) > 3 ? j % 3 : 0;
-    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
-
 function load_message_user_modal(show_modal) {
     'use strict';
     /* Load the message user modal content from the server and display that form if requested.
@@ -73,41 +63,75 @@ function prepare_delete_ticket_button() {
     });
 }
 
-//TODO this is somewhat of a hack to override what the stripe button reads
+function initiate_stripe() {
+
+    show_popup_notification_modal('<p>After you close this popup, you will be asked to enter your credit card ' +
+        'information. You will not be charged immediately or necessarily at all.</p><p>The seller of this ticket must ' +
+        'first approve you and agree to go to the event with you. If he accepts your request, your card will be ' +
+        'charged. If he does not accept your request, you will not be charged.</p><p>After initiating this request, you ' +
+        'will not be able to request to go to another show on the same day at the same time.</p>', 'warning', true);
+}
+
+function can_request_to_buy() {
+    /* There are some cases where we will not allow a user to request to buy a ticket.
+     * If the ticket was cancelled or the buyer is already going to another show or already requested to buy this ticket
+     */
+
+    $.post(window.additional_parameters.can_request_ticket_url,
+           {'ticket_id': window.additional_parameters.ticket_id},
+           "json")
+        .done(function (response) {
+            initiate_stripe();
+        })
+        .fail(function (response) {
+            var error_message = handle_ajax_response(response.responseJSON);
+            var $request_to_buy_errors = $('#request-to-buy-errors');
+            $request_to_buy_errors.css('display', '');
+            $request_to_buy_errors.find('p').text(error_message);
+        });
+
+}
+
 function prepare_stripe_button() {
-    var handler = StripeCheckout.configure({
-        key: window.additional_parameters.stripe_public_key,
-        image: '/square-image.png',
-        token: function(token) {
-          // Use the token to create the charge with a server-side script.
-          // You can access the token ID with `token.id`
-        }
-    });
+    'use strict';
 
     $('#request-to-buy').on('click', function (e) {
         // Users cannot request to buy tickets if they are not logged in
         if (!window.additional_parameters.is_authenticated) {
             load_login_modal(true);
+            return;
         }
+        e.preventDefault();
+        can_request_to_buy();
+    });
 
-        // Open Checkout with further options
+    $(document).on('modal-popup-notification-closed', function () {
+        var handler = StripeCheckout.configure({
+            key: window.additional_parameters.stripe_public_key,
+            image: '/square-image.png',
+            token: function (token) {
+                  // Use the token to create the charge with a server-side script.
+                  // You can access the token ID with `token.id`
+                $.post(window.additional_parameters.request_to_buy_url,
+                    {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
+                     "json");
+            }
+        });
+
+        // Open Stripe checkout modal
         handler.open({
             name: 'SpareStub',
             description: window.additional_parameters.ticket_title,
-            //amount: parseFloat(window.additional_parameters.ticket_amount) * 100,
             allowRememberMe: true,
             email: window.additional_parameters.user_email,
             panelLabel: '$' + (parseFloat(window.additional_parameters.ticket_amount) + 5).toString() + ' ($' + (parseFloat(window.additional_parameters.ticket_amount)).toString() + ' + $5 fee)'
         });
-
-        e.preventDefault();
     });
 
     // Close Checkout on page navigation
-    $(window).on('popstate', function() {
+    $(window).on('popstate', function () {
         handler.close();
     });
-
 }
 
 function modal_message_user_button() {

@@ -233,5 +233,7 @@ $(document).ready(function ($) {
 
     // Initialize when the page loads so that ticker search autocomplete woks
     initialize_location_autocomplete();
+
+    setup_pop_notification_modal();
 }($));
 

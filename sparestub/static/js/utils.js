@@ -20,7 +20,7 @@ var clear_notification = function ($notification_root) {
 };
 
 var set_notification = function ($notification_root, content_message, message_type) {
-   'use strict';
+    'use strict';
 
     // The close button removes everything inside the root when clicked. Instead of using a custom event,
     // Just make sure everything exists before we try to edit it's contents.
@@ -68,7 +68,15 @@ var handle_ajax_response = function (response, $notification_root) {
                          response.notification_content,
                          response.notification_type);
 
-    // We expect any ajax response to either redirect, give a notification, or reload the current page
+    // This condition is for more general purpose messages.
+    // The caller of handle_ajax_response will display the contents.
+    } else if (response.other_message) {
+        var error_message = response.other_message;
+        if (!error_message) {
+            error_message = 'Uh Oh! Something went wrong!';
+        }
+        return error_message;
+    // We expect any ajax response to either redirect, give some type of notification, or reload the current page
     } else {
         window.location.reload();
     }
@@ -112,13 +120,29 @@ function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
     }
 }
 
-function show_popup_notification_modal(notification_content, notification_type) {
+function setup_pop_notification_modal() {
+    'use strict';
+    /* This function needs to be called once when sparestub starts to make sure that the popup notification modal
+    kicks off an event when it closes that other functions can bind to.
+     */
+    $(document).on('hidden.bs.modal', function (e) {
+        if (e.target.id === 'modal-popup-notification-root') {
+            $(document).trigger('modal-popup-notification-closed');
+        }
+    });
+}
+
+function show_popup_notification_modal(notification_content, notification_type, use_html) {
     'use strict';
     // Make sure that a modal is not currently open. Close it if one is.
     $('.in.modal').modal('hide');
 
     var $modal_popup_notification_content = $('#modal-popup-notification-content');
     $modal_popup_notification_content.addClass('alert-' + notification_type);
-    $modal_popup_notification_content.text(notification_content);
+    if (use_html) {
+        $modal_popup_notification_content.html(notification_content);
+    } else {
+        $modal_popup_notification_content.text(notification_content);
+    }
     $('#modal-popup-notification-root').modal('show');
 }

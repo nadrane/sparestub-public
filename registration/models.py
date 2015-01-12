@@ -1,14 +1,10 @@
 # Standard library modules
 import re
-import requests
-import logging
-from datetime import date
 import random
 import string
 import os
 
 # Django modules
-from django.utils.http import urlquote
 from django.db import models, transaction
 from django.forms import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
@@ -366,23 +362,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         if user:
             return user[0]
         return None
-
-    @staticmethod
-    def is_fb_access_token_valid(fb_uid, fb_access_token):
-        if not fb_uid or not fb_access_token:
-            return False
-        response = requests.get('https://graph.facebook.com/me', params={'access_token': fb_access_token})
-        response_json = response.json()
-        # This is incredibly important!! We need to make sure that the facebook user ID that the user sent us is the
-        # same one that they authenticated with. Otherwise, the user could authenticate with FB as one user but send
-        # us any old users user id.
-        response_json['id'] = str(response_json['id'])  # Currently a string, but be safe
-        fb_uid = str(fb_uid)  # This likely is an integer
-        if response_json['id'] != fb_uid:
-            logging.critical('fb_uid has been tampered with.')
-            return False
-        return True
-
 
     @staticmethod
     def get_user_by_email(email):
