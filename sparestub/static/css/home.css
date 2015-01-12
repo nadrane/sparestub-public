@@ -53,14 +53,6 @@
     margin-top: 15px;
 }
 
-@media (max-width: 500px) {
-    .intro-btn {
-        padding: 10px;
-        font-size: 15px;
-    }
-}
-
-
 #learn-more {
     padding-bottom: 15px;
 }
@@ -123,19 +115,6 @@
 .step-image {
     max-width: 300px;
 }
-
-@media (max-width: 1050px) {
-    .step-image {
-        max-width: 260px;
-    }
-}
-
-@media (max-width: 950px) {
-    .step-image {
-        max-width: 225px;
-    }
-}
-
 
 .step-explanation {
     padding-top: 15px;
@@ -224,6 +203,13 @@
     font-weight: 500;
 }
 
+@media (max-width: 500px) or (max-device-width: 500px) {
+    .intro-btn {
+        padding: 10px;
+        font-size: 15px;
+    }
+}
+
 /* Target IOS devices which can't seem to handle the fixed option of background-attachment correctly */
 @media only screen and (min-device-width : 768px) and (max-device-width : 1024px)  {
     #introducing-sparestub {
@@ -231,11 +217,23 @@
     }
 }
 
-@media (max-width: 525px) {
+@media (max-width: 525px) or (max-device-width: 525px) {
     #social-media {
         margin-left: 30px;
     }
     #talking-shop {
         margin-right: 40px;
+    }
+}
+
+@media (max-width: 1050px) or (max-device-width: 1050px) {
+    .step-image {
+        max-width: 260px;
+    }
+}
+
+@media (max-width: 950px) or (max-device-width: 950px){
+    .step-image {
+        max-width: 225px;
     }
 }
