@@ -57,6 +57,8 @@ def inbox(request):
     convo_header_tuple = namedtuple('convo_header', ['other_user_pic_url', 'name', 'age', 'absolute_url', 'location',
                                                      'rating', 'request_status', 'is_requester'])
     ticket_ribbon_tuple = namedtuple('ticket_ribbon', ['ticket_id', 'absolute_url', 'price', 'when', 'where'])
+    thread_tuple = namedtuple('thread', ['name', 'ticket_title', 'pic_url', 'last_timestamp', 'request_status', 'ticket_id',
+                              'other_user_id'])
 
     threads = defaultdict(defaultdict)   # Contains every conversation associated with a ticket/user id pair.
     sorted_threads = list()              # A list of threads sorted by timestamp. What the template actually uses.
@@ -97,19 +99,35 @@ def inbox(request):
             name = other_user.get_full_name()
             body = message.body
 
-            # Grab a request record for this ticket/user combo if one exists
-            user_request = Request.get_request(user, ticket)
+            def get_request_information():
+                """
+                Grab a request record for this ticket/user combo if one exists
+                First we need to determine who the requester would have been.
+                Our inbox viewer might be a seller or a buyer, but the request can only be made by a buyer.
+                """
+                if ticket.poster == user:
+                    user_request = Request.get_request(other_user, ticket)
+                     # The user viewing the inbox did not request this ticket. He is the seller.
+                    is_requester = False if user_request else None
+                elif ticket.poster == other_user:
+                    user_request = Request.get_request(user, ticket)
+                    # The user viewing the inbox did request this ticket. He is the buyer.
+                    is_requester = True if user_request else None
+                request_status = user_request.status if user_request else None
+                return request_status, is_requester
 
-            threads[ticket_id][other_user_id] = {'name': name,
-                                                 'ticket_title': ticket.title,
-                                                 'pic_url': profile_picture,
-                                                 'last_timestamp': Message.last_message_time(user,
-                                                                                             other_user,
-                                                                                             ticket_id),
-                                                 'request_status': user_request.status if user_request else None,
-                                                 'ticket_id': ticket_id,
-                                                 'other_user_id': other_user_id
-                                                 }
+            if not (ticket_id in threads and other_user_id in threads[ticket_id]):
+                request_status, is_requester = get_request_information()
+                threads[ticket_id][other_user_id] = thread_tuple(name=name,
+                                                                 ticket_title=ticket.title,
+                                                                 pic_url=profile_picture,
+                                                                 last_timestamp=Message.last_message_time(user,
+                                                                                                          other_user,
+                                                                                                          ticket_id),
+                                                                 request_status=request_status,
+                                                                 ticket_id=ticket_id,
+                                                                 other_user_id=other_user_id,
+                                                                 )
 
             if ticket_id not in ticket_ribbons:
                 ticket_ribbons[ticket_id] = ticket_ribbon_tuple(ticket_id=ticket_id,
@@ -133,15 +151,18 @@ def inbox(request):
                                                                     )]
 
             if other_user_id not in convo_headers[ticket_id]:
-                convo_headers[ticket_id][other_user_id] = convo_header_tuple(other_user_pic_url=profile_picture,
-                                                                             name=name,
-                                                                             age=other_user.age(),
-                                                                             absolute_url=other_user.get_absolute_url(),
-                                                                             location=ticket.location,
-                                                                             rating=other_user.rating,
-                                                                             request_status=user_request.status if user_request else None,
-                                                                             is_requester=(user == user_request.requester if user_request else None)
-                                                                             )
+                if not request_status or not is_requester:
+                    request_status, is_requester = get_request_information()
+                convo_headers[ticket_id][other_user_id] = \
+                    convo_header_tuple(other_user_pic_url=profile_picture,
+                                       name=name,
+                                       age=other_user.age(),
+                                       absolute_url=other_user.get_absolute_url(),
+                                       location=ticket.location,
+                                       rating=other_user.rating,
+                                       request_status=request_status,
+                                       is_requester=is_requester
+                                       )
 
         # The django template language cannot handle defaultdict's properly. This resolves our issue.
         # Django Issues explains why.
@@ -157,7 +178,7 @@ def inbox(request):
         for ticket_id in threads:
             for other_user_id in threads[ticket_id]:
                 sorted_threads.append(threads[ticket_id][other_user_id])
-        sorted_threads.sort(key=lambda x: x['last_timestamp'], reverse=True)
+        sorted_threads.sort(key=lambda x: x.last_timestamp, reverse=True)
 
         return render(request,
                       'messages/inbox.html',

@@ -104,19 +104,6 @@ class Request(TimeStampedModel):
         Message.objects.create_message(ticket.poster, self.requester, ticket, message_body, False)
 
     @staticmethod
-    def get_request_status(user, ticket):
-        """
-        Get the status of a request given the requester and the ticket
-        We only care about the most recent request status.
-        """
-
-        # TODO what should we do for each particular status??? We probably only care about the most recent request
-        request = Request.get_request(user, ticket)
-        if request:
-            return request.status
-        return None
-
-    @staticmethod
     def get_request(user, ticket):
         """
         Get the request for a given requester ticket combination

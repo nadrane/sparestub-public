@@ -17,11 +17,11 @@
       {% endwith %}
     </div>
   </div>
-  {% if request_status == "P"%}
-    <div id="accept-delcine" class="pull-left">
-      {% if is_requestor %}
-        <button id="accept-request" class="btn btn-primary">Accept Request</button>
-        <button id="decline-request" class="btn btn-primary">Decline Request</button>
+  {% if convo_header.request_status == "P" %}
+    <div class="accept-decline" class="pull-left">
+      {% if not convo_header.is_requester %}
+        <button type="submit" class="accept-request btn btn-primary">Accept Request</button>
+        <button type="submit" class="decline-request btn btn-primary">Decline Request</button>
       {% else %}
         <p>User has xxxx hours to make a decision</p>
       {% endif %}
