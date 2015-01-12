@@ -55,10 +55,10 @@ def send_message(request):
 def inbox(request):
     message_tuple = namedtuple('message', ['pic_url', 'body', 'did_this_user_send', 'timestamp'])
     convo_header_tuple = namedtuple('convo_header', ['other_user_pic_url', 'name', 'age', 'absolute_url', 'location',
-                                                     'rating', 'request_status', 'is_requester'])
+                                                     'rating', 'request_status', 'is_requester', 'request_expiration'])
     ticket_ribbon_tuple = namedtuple('ticket_ribbon', ['ticket_id', 'absolute_url', 'price', 'when', 'where'])
-    thread_tuple = namedtuple('thread', ['name', 'ticket_title', 'pic_url', 'last_timestamp', 'request_status', 'ticket_id',
-                              'other_user_id'])
+    thread_tuple = namedtuple('thread', ['name', 'ticket_title', 'pic_url', 'last_timestamp', 'request_status',
+                                         'ticket_id', 'other_user_id'])
 
     threads = defaultdict(defaultdict)   # Contains every conversation associated with a ticket/user id pair.
     sorted_threads = list()              # A list of threads sorted by timestamp. What the template actually uses.
@@ -105,6 +105,7 @@ def inbox(request):
                 First we need to determine who the requester would have been.
                 Our inbox viewer might be a seller or a buyer, but the request can only be made by a buyer.
                 """
+                user_request, request_status, request_expiration = None, None, None
                 if ticket.poster == user:
                     user_request = Request.get_request(other_user, ticket)
                      # The user viewing the inbox did not request this ticket. He is the seller.
@@ -113,11 +114,14 @@ def inbox(request):
                     user_request = Request.get_request(user, ticket)
                     # The user viewing the inbox did request this ticket. He is the buyer.
                     is_requester = True if user_request else None
-                request_status = user_request.status if user_request else None
-                return request_status, is_requester
+                if user_request:
+                    request_status = user_request.status
+                    request_expiration = user_request.calculate_expiration_datetime()
+
+                return request_status, is_requester, request_expiration
 
             if not (ticket_id in threads and other_user_id in threads[ticket_id]):
-                request_status, is_requester = get_request_information()
+                request_status, is_requester, request_expiration = get_request_information()
                 threads[ticket_id][other_user_id] = thread_tuple(name=name,
                                                                  ticket_title=ticket.title,
                                                                  pic_url=profile_picture,
@@ -152,7 +156,7 @@ def inbox(request):
 
             if other_user_id not in convo_headers[ticket_id]:
                 if not request_status or not is_requester:
-                    request_status, is_requester = get_request_information()
+                    request_status, is_requester, request_expiration = get_request_information()
                 convo_headers[ticket_id][other_user_id] = \
                     convo_header_tuple(other_user_pic_url=profile_picture,
                                        name=name,
@@ -161,7 +165,8 @@ def inbox(request):
                                        location=ticket.location,
                                        rating=other_user.rating,
                                        request_status=request_status,
-                                       is_requester=is_requester
+                                       is_requester=is_requester,
+                                       request_expiration=request_expiration,
                                        )
 
         # The django template language cannot handle defaultdict's properly. This resolves our issue.

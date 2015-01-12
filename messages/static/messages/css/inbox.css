@@ -107,6 +107,11 @@ html, body, #page-wrapper, #page-wrapper>.row {
     width: 100%;
 }
 
+.request-expiration {
+    display: block;
+    font-style: italic;
+}
+
 .accept-decline {
     float: left;
     margin-left: 5px;
@@ -295,10 +300,14 @@ html, body, #page-wrapper, #page-wrapper>.row {
     }
 
     #convo-header {
-        height: 70px;
+        height: 80px;
     }
 
     #ticket-ribbon {
-        top: 70px;
+        top: 80px;
+    }
+
+    .request-expiration {
+        font-size: 12px ;
     }
 }

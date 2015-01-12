@@ -86,7 +86,9 @@
    <script type="text/javascript">
        window.additional_parameters.mark_messages_read_url = "{% url "mark_messages_read" %}";
        window.additional_parameters.send_message_url = "{% url "send_message" %}";
-         window.additional_parameters.messages_hidden_toggle_url = "{% url "messages_hidden_toggle" %}";
+       window.additional_parameters.messages_hidden_toggle_url = "{% url "messages_hidden_toggle" %}";
+       window.additional_parameters.accept_request_url = "{% url "accept_request" %}";
+       window.additional_parameters.decline_request_url = "{% url "decline_request" %}";
    </script>
 
   {{ block.super }}

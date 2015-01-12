@@ -3,7 +3,7 @@ import logging
 
 # Django imports
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, Http404
+from django.shortcuts import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
@@ -12,12 +12,72 @@ import stripe
 
 #SpareStub Imports
 from tickets.models import Ticket
-from utils.networking import ajax_http, ajax_other_message
+from utils.networking import ajax_http, ajax_other_message, ajax_popup_notification
 from stripe_data.models import Customer
+from registration.models import User
 
 # Module Imports
 from .models import Request
 
+@login_required()
+def accept_request(request):
+    user = request.user
+    try:
+        ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
+    except Ticket.DoesNotExist:
+        return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    if ticket.poster != user:
+        logging.critical('Fraudulent request detected {} tried to accept a ticket posted by {}'
+                         .format(user, ticket.poster))
+        return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    if not ticket.is_active:
+        return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
+
+    try:
+        other_user = User.objects.get(pk=request.POST.get('other_user_id'))
+    except User.DoesNotExist:
+        return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    user_request = Request.get_request(other_user, ticket)
+    if user_request.status != 'P':
+        return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
+
+    customer = Customer.get_customer_from_user(other_user)
+    if not customer:
+        logging.critical('Customer information not available for request {}', request.id)
+        return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    user_request.accept()
+    Customer.get_customer().charge
+
+@login_required()
+def decline_request(request):
+    user = request.user
+    try:
+        ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
+    except Ticket.DoesNotExist:
+        return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    if ticket.poster != user:
+        logging.critical('Fraudulent request detected {} tried to decline a ticket posted by {}'
+                         .format(user, ticket.poster))
+        return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    if not ticket.is_active:
+        return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
+
+    try:
+        other_user = User.objects.get(pk=request.POST.get('other_user_id'))
+    except User.DoesNotExist:
+        return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    user_request = Request.get_request(other_user, ticket)
+    if user_request.status != 'P':
+        return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
+
+    user_request.decline()
 
 @login_required()
 def can_request_ticket(request, ticket_id):
@@ -35,7 +95,7 @@ def can_request_ticket(request, ticket_id):
         return ajax_other_message("Uh Oh, something went wrong. Our developers are on it!", 400)
 
     if not ticket.is_active:
-        return ajax_other_message("It looks like the seller cancelled this ticket just a moment ago. Sorry!", 400)
+        return ajax_other_message("It looks like this ticket is no longer available. Sorry!", 400)
 
     requests = Request.requests_for_ticket(user, ticket)
     # Allow the user to request to buy the ticket again only if the other requests were cancelled by
@@ -55,7 +115,7 @@ def request_to_buy(request):
     user = request.user
 
     try:
-        ticket = Ticket.objects.filter(pk=request.POST.get('ticket_id'))[0]
+        ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
     except Ticket.DoesNotExist:
         raise Http404()
 

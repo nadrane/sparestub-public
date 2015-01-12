@@ -5,6 +5,7 @@ import datetime
 from utils.models import TimeStampedModel
 from django.db import models
 from django.template.loader import render_to_string
+from django.db import transaction
 
 # SparStub imports
 from registration.models import User
@@ -12,9 +13,11 @@ from tickets.models import Ticket
 from messages.models import Message
 
 # Module Imports
-from .settings import request_model_settings, TICKET_REQUESTED_REQUESTER_SUBJECT, \
-    TICKET_REQUESTED_REQUESTER_TEMPLATE, TICKET_REQUESTED_POSTER_SUBJECT, TICKET_REQUESTED_POSTER_TEMPLATE, \
-    TICKET_CANCELLED_SUBJECT, TICKET_CANCELLED_TEMPLATE
+from .settings import request_model_settings,\
+    TICKET_REQUESTED_REQUESTER_SUBJECT, TICKET_REQUESTED_REQUESTER_TEMPLATE,\
+    TICKET_REQUESTED_POSTER_SUBJECT, TICKET_REQUESTED_POSTER_TEMPLATE, \
+    REQUEST_INACTIVE_SUBJECT, REQUEST_INACTIVE_TEMPLATE, \
+    REQUEST_ACCEPTED_SUBJECT, REQUEST_ACCEPTED_TEMPLATE
 
 
 class RequestManager(models.Manager):
@@ -83,6 +86,48 @@ class Request(TimeStampedModel):
 
     objects = RequestManager()
 
+    def calculate_expiration_datetime(self):
+        return self.creation_timestamp + datetime.timedelta(hours=48)
+
+    def accept(self):
+        """
+        When a seller accepts a user's request and agrees to go to the show with them.
+        """
+
+        ticket = self.ticket
+        poster = ticket.poster
+        requester = self.requester
+
+        # Make sure that the ticket and request are updated in tandem
+        with transaction.atomic():
+            #TODO make sure atomic transactions does not cause this ticket to change it's status to 'S' instead of 'A' inside change_status
+            self.status = 'A'
+            self.save()
+            ticket.change_status('S')
+
+        message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE)
+
+        poster.send_mail(REQUEST_ACCEPTED_SUBJECT,
+                         message='',
+                         html=message_body
+                         )
+
+        requester.send_mail(REQUEST_ACCEPTED_SUBJECT,
+                            message='',
+                            html=message_body
+                            )
+
+    def decline(self):
+        """
+        When a seller declines to go to an event with a user
+        """
+        self.status = 'D'
+        self.save()
+
+        self.requester.send_mail(REQUEST_INACTIVE_SUBJECT,
+                                 message='',
+                                 html=render_to_string(REQUEST_INACTIVE_TEMPLATE))
+
     def cancel(self):
         """
         Cancel a request. This happens when a ticket is deactivated.
@@ -92,9 +137,9 @@ class Request(TimeStampedModel):
         It will also send an automated message that explains that the message was cancelled
         """
 
-        self.requester.send_mail(TICKET_CANCELLED_SUBJECT,
+        self.requester.send_mail(REQUEST_INACTIVE_SUBJECT,
                                  message='',
-                                 html=render_to_string(TICKET_CANCELLED_TEMPLATE))
+                                 html=render_to_string(REQUEST_INACTIVE_TEMPLATE))
         ticket = self.ticket
 
         message_body = 'This is an automated message to let you know that {}' \

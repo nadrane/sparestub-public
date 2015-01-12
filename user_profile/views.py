@@ -379,7 +379,7 @@ def delete_ticket(request, ticket_id):
     if ticket.poster != user:
         raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
 
-    ticket.deactivate('C')
+    ticket.change_status('C')
 
     return redirect(reverse('profile_tickets',
                             kwargs={'username': user.user_profile.username}

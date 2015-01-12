@@ -29,7 +29,7 @@ class EditMessageForm(forms.Form):
             raise forms.ValidationError('This ticket does not exist!')
 
         if not ticket.is_active:
-            raise forms.ValidationError('The poster of this ticket cancelled it in the last few minutes!')
+            raise forms.ValidationError('This ticket is no longer available. Sorry!')
 
         return self.cleaned_data.get('ticket_id')
 

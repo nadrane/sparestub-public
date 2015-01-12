@@ -1,16 +1,37 @@
-//Make the thread bar stretch down the entire height of the screen, even if there aren't enough
-//conversations to fill it.
-$(window).on('onload resize', function () {
-    $('html').height(window.innerHeight);
-});
+var document = window.document;
+var $ = jQuery;
 
-$(window).on('resize', function () {
-    set_conversation_body_height();
-});
+function accept_request() {
+    /* Kick this off when a seller accepts a buyer's request. */
+    'use strict';
 
-$(document).on('ready', function () {
-    set_conversation_body_height();
-});
+    var $current_thread = $('.current-thread');
+    $.post(window.additional_parameters.accept_request_url,
+           {'ticket_id': $current_thread.data('identity-ticket'),
+            'other_user_id': $current_thread.data('identity-user')},
+            "json")
+        .always(function (response) {
+            handle_ajax_response(response.responseJSON);
+        });
+}
+
+function decline_request() {
+    /* Kick this off when a seller decline's a buyer's request. */
+    'use strict';
+
+    var $current_thread = $('.current-thread');
+    $.post(window.additional_parameters.decline_request_url,
+           {'ticket_id': $current_thread.data('identity-ticket'),
+            'other_user_id': $current_thread.data('identity-user')},
+            "json")
+        .done(function () {
+            handle_ajax_response();
+        })
+        .fail(function () {
+            handle_ajax_response();
+        });
+}
+
 
 function send_message(e) {
     /* Create a message object when the Send Message button is clicked
@@ -104,7 +125,11 @@ function mark_messages_read(ticket_id, other_user_id) {
 
 // When the user opens the page, load the first thread
 $(document).on('ready', function () {
+    set_conversation_body_height(); // This should be done first to get the screen looking right as fast as possible.
+
     var $threads = $('#threads');
+    var $thread = $('.thread');
+
     /* We need to use threads here instead of something else like convo headers. It might seem like we could use any of
      * them, but threads are the only group sorted by last timestamp, we want to display the messages from the thread at
      * the top. The first child of $threads will 100% for sure be the first conversation in the list of the left.
@@ -118,46 +143,65 @@ $(document).on('ready', function () {
     $('#send-message').on('click', function (e) {
         send_message(e);
     });
+
+    $('.accept-request').on('click', function (e) {
+        accept_request();
+    });
+
+    $('.decline-request').on('click', function (e) {
+        decline_request();
+    });
+
+    // Load a threads contents when it is clicked
+    $thread.on('click', function (e) {
+        'use strict';
+        var ticket_id = $(this).data('identity-ticket');
+        var other_user_id = $(this).data('identity-user');
+        load_thread($(this), ticket_id, other_user_id);
+    });
+
+    // When a user hovers over a thread, show the delete x button
+    $thread.hover(
+        function (e) {
+            'use strict';
+            $(this).find('.delete-conversation').css('display', '');
+        },
+        function (e) {
+            'use strict';
+            $(this).find('.delete-conversation').css('display', 'none');
+        }
+    );
+
+    $('.delete-conversation').on('click', function (e) {
+
+        // Don't allow the .thread.onclick event to fire, causing the thread to display it's contents and the messages to be
+        // marked as read.
+        e.stopPropagation();
+
+        var $parent = $(this).parent();
+        var ticket_id = $parent.data('identity-ticket');
+        var other_user_id = $parent.data('identity-user');
+
+        $.post(window.additional_parameters.messages_hidden_toggle_url,
+               {'ticket_id': ticket_id,
+                'other_user_id': other_user_id},
+               'json');
+
+        // Make the conversation gone on the front end;
+        $parent.remove();
+    });
 });
 
-var $thread = $('.thread');
-
-// Load a threads contents when it is clicked
-$thread.on('click', function (e) {
+//Make the thread bar stretch down the entire height of the screen, even if there aren't enough
+//conversations to fill it.
+$(window).on('onload resize', function () {
     'use strict';
-    var ticket_id = $(this).data('identity-ticket');
-    var other_user_id = $(this).data('identity-user');
-    load_thread($(this), ticket_id, other_user_id);
+
+    $('html').height(window.innerHeight);
 });
 
-// When a user hovers over a thread, show the delete x button
-$thread.hover(
-    function (e) {
-        'use strict';
-        $(this).find('.delete-conversation').css('display', '');
-    },
-    function (e) {
-        'use strict';
-        $(this).find('.delete-conversation').css('display', 'none');
-    }
-);
+$(window).on('resize', function () {
+    'use strict';
 
-$('.delete-conversation').on('click', function (e) {
-
-    // Don't allow the .thread.onclick event to fire, causing the thread to display it's contents and the messages to be
-    // marked as read.
-    e.stopPropagation();
-
-    var $parent = $(this).parent();
-    var ticket_id = $parent.data('identity-ticket');
-    var other_user_id = $parent.data('identity-user');
-
-    $.post(window.additional_parameters.messages_hidden_toggle_url,
-           {'ticket_id': ticket_id,
-            'other_user_id': other_user_id},
-           'json');
-
-    // Make the conversation gone on the front end;
-    $parent.remove();
+    set_conversation_body_height();
 });
-

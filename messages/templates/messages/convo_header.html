@@ -22,8 +22,9 @@
       {% if not convo_header.is_requester %}
         <button type="submit" class="accept-request btn btn-primary">Accept Request</button>
         <button type="submit" class="decline-request btn btn-primary">Decline Request</button>
+        <p class="request-expiration">Expires: {{ convo_header.request_expiration|timeuntil }}</p>
       {% else %}
-        <p>User has xxxx hours to make a decision</p>
+        <span class="request-expiration">Request expires in {{ convo_header.request_expiration|timeuntil }}</span>
       {% endif %}
     </div>
   {% endif %}

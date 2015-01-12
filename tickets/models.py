@@ -15,7 +15,7 @@ from locations.models import Location
 class TicketManager(models.Manager):
 
     def create_ticket(self, poster, price, title, start_datetime, location_raw, location, ticket_type, payment_method,
-                      is_active, venue, about=None):
+                      venue, status='P', about=None):
         """
         Creates a ticket record using the given input
         """
@@ -36,7 +36,7 @@ class TicketManager(models.Manager):
                             venue=venue,
                             ticket_type=ticket_type,
                             payment_method=payment_method,
-                            is_active=is_active,
+                            status=status,
                             rating=rating,
                             )
 
@@ -105,15 +105,12 @@ class Ticket(TimeStampedModel):
                                       choices=ticket_model_settings.get('PAYMENT_METHODS'))
 
     # An active ticket is one that is available to be bid on
-    is_active = models.BooleanField(blank=False,
-                                    default=False,
-                                    db_index=True,
-                                    )
-
-    deactivation_reason = models.CharField(blank=True,
-                                           max_length=1,
-                                           default='',
-                                           choices=ticket_model_settings.get('DEACTIVATION_REASONS'))
+    status = models.BooleanField(blank=False,
+                                 db_index=True,
+                                 default='P',
+                                 max_length=1,
+                                 choices=ticket_model_settings.get('TICKET_STATUSES'),
+                                 )
 
     # The rating of the user that posted the ticket. Do not use this field!! Reference the poster rating instead.
     # Yes, they should always be the same, but let's just be safe. This field exists solely because Haystack cannot
@@ -128,19 +125,37 @@ class Ticket(TimeStampedModel):
     def __str__(self):
         return self.title
 
-    def deactivate(self, deactivation_reason):
+    def change_status(self, new_status):
         from asks.models import Request
 
-        # Mark the ticket inactive
-        self.is_active = False
-        self.deactivation_reason = deactivation_reason
-        self.save()
+        # Ticket posted by seller
+        if new_status == 'P':
+            pass
+        # Ticket cancelled by seller
+        elif new_status == 'C':
+            # Mark all of the associated requests as cancelled
+            requests = Request.objects.filter(ticket=self)
+            requests.update(status='T')
+            for request in requests:
+                request.cancel()
+        # Event date has passed and ticket expired
+        elif new_status == 'E':
+            pass
+        # Ticket sold... seller accepted request to buy
+        # Should only be called by requests.models.Request.accept, so there won't be additional handling for the
+        # attached request. But there will be for other requests for that ticket.
+        elif new_status == 'S':
+            # Change all other requests besides the calling request to Ticket Sold.
+            # That means that a different user purchased the ticket.
+            requests = self.get_requests().filter(status='P').update('S')
+            for request in requests:
+                request.requster.send_mail()
+        # User account deactivated, and ticket deactivated along with it
+        elif new_status == 'D':
+            pass
 
-        # Mark all of the associated requests as cancelled
-        requests = Request.objects.filter(ticket=self)
-        requests.update(status='T')
-        for request in requests:
-            request.cancel()
+        self.status = new_status
+        self.save()
 
     def convert_price_to_stripe_amount(self):
         """
@@ -172,6 +187,13 @@ class Ticket(TimeStampedModel):
 
         ticket_timezone = timezone(self.location.timezone)
         return ticket_timezone.normalize(self.start_datetime.astimezone(ticket_timezone))
+
+    def get_requests(self):
+        """
+        Returns a QuerySet containing all Request records associated with the calling ticket.
+        """
+        from requests.models import Request
+        return Request.objects.filter(ticket=self)
 
     @staticmethod
     def available_tickets(user):

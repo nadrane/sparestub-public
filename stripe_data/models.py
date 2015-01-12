@@ -36,15 +36,29 @@ class Customer(TimeStampedModel):
                                  null=False,
                                  blank=False,
                                  unique=True,
+                                 db_index=True,
                                  )
 
     def get_customer(self):
         """
         We do not store any actual customer information on our system, just an ID that we can use to retrieve the
-        customer information from Stripe. Do that here
+        customer information from Stripe. Do that here.
         """
+
         stripe.api_key = settings.STRIPE_SECRET_API_KEY
         return stripe.Customer.retrieve(self.id)
+
+    @staticmethod
+    def get_customer_from_user(user):
+        """
+        Using a user record, get the Django custom record from our database. This record can be used to communicate with
+        Stripe to charge the customer.
+        """
+
+        customer = Customer.objects.filter(customer=user)
+        if customer:
+            return customer[0]
+        return None
 
     @staticmethod
     def customer_exists(user):
