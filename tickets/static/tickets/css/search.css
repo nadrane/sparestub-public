@@ -34,3 +34,50 @@ body {
 .user-col {
     text-align: right;
 }
+
+.search-result-title {
+    font-size: 16px;
+    line-height: 17px;
+    word-break: normal;
+}
+
+.search-result-location {
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 0px;
+}
+
+.search-result-title-location {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.ticket-result-time {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.ticket-result-date {
+    display: block;
+    font-size: 30px;
+}
+
+.ticket-result-price {
+    font-size: 20px;
+    margin-top: 8px;
+}
+
+.ticket-result-name {
+    font-size: 20px;
+    margin-top: 8px;
+    margin-bottom: 0;
+    white-space: normal;
+}
+
+.search-result-picture {
+    height: 100%;
+    border: 1px solid gray;
+    border-radius: 37px;
+    max-height: 75px;
+}

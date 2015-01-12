@@ -1,0 +1,30 @@
+{% load misc_filters %}
+
+<div class="header-id" data-identity-ticket="{{ ticket_id }}" data-identity-user="{{ other_user_id }}">
+  <img class="header-pic" src="{{ convo_header.other_user_pic_url }}" alt="User profile picture">
+  <div class="header-demographic-info">
+    <h5 class="header-name"><a href="{{ convo_header.absolute_url }}">{{ convo_header.name | title }}{% if convo_header.age %}, {{ convo_header.age }}{% endif %}</a></h5>
+    <div class="header-user-rating">
+      <h3>
+        {% for x in convo_header.rating|get_range %}
+          <span class="glyphicon glyphicon-star"></span>
+        {% endfor %}
+      </h3>
+    </div>
+    <div class="header-location">
+      {% with location=convo_header.location %}
+        {{ location.city | title }}, {{ location.state | upper }}
+      {% endwith %}
+    </div>
+  </div>
+  {% if convo_header.request_status == "P" %}
+    <div class="accept-decline" class="pull-left">
+      {% if not convo_header.is_requester %}
+        <button type="submit" class="accept-request btn btn-primary">Accept Request</button>
+        <button type="submit" class="decline-request btn btn-primary">Decline Request</button>
+      {% else %}
+        <p>User has xxxx hours to make a decision</p>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

@@ -1,36 +1,38 @@
 # Standard library modules
 import re
-import requests
-import logging
-from datetime import date
 import random
 import string
+import os
 
 # Django modules
-from django.utils.http import urlquote
 from django.db import models, transaction
 from django.forms import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 # SpareStub modules
 from utils.models import TimeStampedModel
-from .settings import user_model_settings
+from .settings import user_model_settings, DEFAULT_PROFILE_PIC_URL
 from utils.miscellaneous import get_variable_from_settings
 from utils.email import send_email, normalize_email
+from .utils import calculate_age
 from user_profile.models import UserProfile
 from locations.models import Location
 
 from .settings import PASSWORD_RESET_EMAIL_SUBJECT, PASSWORD_RESET_EMAIL_TEMPLATE, EMAIL_CONFIRMATION_EMAIL_SUBJECT,\
     EMAIL_CONFIRMATION_EMAIL_TEMPLATE
 
+SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
+
 
 class UserManager(BaseUserManager):
 
     @transaction.atomic()  # We definitely do not want to create a User record without a UserProfile
-    def _create_user(self, email, password, first_name, last_name, location, is_staff, is_superuser, **kwargs):
+    def _create_user(self, email, password, first_name, last_name, location, is_staff, is_superuser,
+                     is_confirmed=False, **kwargs):
         """
         Creates and saves a User with the given email and password.
         """
@@ -51,12 +53,22 @@ class UserManager(BaseUserManager):
                           is_staff=is_staff,
                           is_superuser=is_superuser,
                           user_profile=user_profile,
-                          confirmed=False,
+                          is_confirmed=is_confirmed,
                           **kwargs
                           )
 
         user.set_password(password)
         user.save()
+
+        # Email the user to welcome them to out website.
+        signup_email_message = render_to_string('registration/signup_email.html')
+        send_email(email,
+                   "Welcome to SpareStub!",
+                   '',
+                   SOCIAL_EMAIL_ADDRESS,
+                   'SpareStub',
+                   html=signup_email_message
+                   )
 
         EmailConfirmationLink.objects.create_email_confirmation(user)
 
@@ -111,8 +123,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                  blank=False
                                  )
 
-
-    birthdate=models.DateField(null=False,
+    birthdate = models.DateField(null=False,
                                blank=False
                                )
 
@@ -128,10 +139,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                    help_text='Designates whether the user can log into this admin site.'
                                    )
 
-    confirmed = models.BooleanField(null=False,
-                                    blank=False,
-                                    default=False,
-                                    )
+    is_confirmed = models.BooleanField(null=False,
+                                       blank=False,
+                                       default=False,
+                                       )
 
     # Why was this account marked as inactive. Cannot be part of UserPostableModel becomes choices will be different
     # for every model that inherits the UserPostableModelMixin.
@@ -163,7 +174,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return Message.message_count(self)
 
     def age(self):
-        return self.user_profile.age()
+        return calculate_age(self.birthdate)
 
     def most_recent_review(self):
         from reviews.models import Review  # Avoid a circular dependency between Review has foreign keys to User
@@ -185,6 +196,29 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
         return average
 
+    def get_profile_pic_url(self, which_pic):
+        """
+        Get the URL of the profile picture for this user.
+        If the user has not uploaded a picture yet, the default picture is used.
+        """
+
+        pic, url = None, None
+        try:
+            pic = self.profile_picture
+            if which_pic == 'search':
+                url = os.path.join(settings.STATIC_URL, pic.search_thumbnail.url)
+            elif which_pic == 'profile':
+                url = os.path.join(settings.STATIC_URL, pic.profile_thumbnail.url)
+        # Some users don't have profile pictures. This is okay. We will use a default in the template.
+        except ObjectDoesNotExist:
+            pass
+
+        if not url:
+            url = os.path.join(settings.STATIC_URL, DEFAULT_PROFILE_PIC_URL)
+
+        return url
+
+
     @staticmethod
     def user_exists(email):
         """
@@ -197,7 +231,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return False
 
     def get_absolute_url(self):
-        return "/profile.html/%s/" % urlquote(self.user_profile.username)
+        return self.user_profile.get_absolute_url()
 
     def get_full_name(self):
         """
@@ -265,15 +299,8 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         if not birthdate:
             raise ValidationError('Birthdate is blank', code='blank')
 
-        today = date.today()
-        try:
-            birthday = birthdate.replace(year=today.year)
-        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
-            birthday = birthdate.replace(year=today.year, month=birthdate.month+1, day=1)
-        if birthday > today:
-            age = today.year - birthdate.year - 1
-        else:
-            age = today.year - birthdate.year
+        age = calculate_age(birthdate)
+
         if age < 18:
             raise ValidationError('User is less than 18 years old', code='under_age')
         return birthdate
@@ -338,23 +365,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         return None
 
     @staticmethod
-    def is_fb_access_token_valid(fb_uid, fb_access_token):
-        if not fb_uid or not fb_access_token:
-            return False
-        response = requests.get('https://graph.facebook.com/me', params={'access_token': fb_access_token})
-        response_json = response.json()
-        # This is incredibly important!! We need to make sure that the facebook user ID that the user sent us is the
-        # same one that they authenticated with. Otherwise, the user could authenticate with FB as one user but send
-        # us any old users user id.
-        response_json['id'] = str(response_json['id'])  # Currently a string, but be safe
-        fb_uid = str(fb_uid)  # This likely is an integer
-        if response_json['id'] != fb_uid:
-            logging.critical('fb_uid has been tampered with.')
-            return False
-        return True
-
-
-    @staticmethod
     def get_user_by_email(email):
         """
         A helper function to look up users based on their unique email address
@@ -379,7 +389,7 @@ class EmailConfirmationLinkManager(models.Manager):
     """
 
     def create_email_confirmation(self, user):
-        new_link = EmailLink.create_link()
+        new_link = EmailConfirmationLink.create_link()
 
         while EmailConfirmationLink.objects.filter(link=new_link):
             new_link = EmailLink.create_link()
@@ -407,7 +417,7 @@ class ForgotPasswordLinkManager(models.Manager):
     """
 
     def create_forgot_password(self, user):
-        new_link = EmailLink.create_link()
+        new_link = ForgotPasswordLink.create_link()
 
         while ForgotPasswordLink.objects.filter(link=new_link):
             new_link = EmailLink.create_link()
@@ -453,6 +463,9 @@ class EmailLink(TimeStampedModel):
     @staticmethod
     def create_link():
         return ''.join([random.choice(string.ascii_letters + string.digits) for x in range(50)])
+
+    def get_user_from_link(self):
+        return self.user
 
 
 class ForgotPasswordLink(EmailLink):

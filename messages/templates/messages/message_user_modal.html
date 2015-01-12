@@ -10,9 +10,8 @@
     </div>
   </div>
 
-  <form id="message-user-form" class="form-horizontal" action="{% url "send_message" ticket_id=ticket.id %}">
+  <form id="message-user-form" class="form-horizontal">
         {% csrf_token %}
-
     <div class="modal-body">
       <div class="form-group">
         <label for="message-user-subject-type" class="control-label sr-only"></label>

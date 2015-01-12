@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load tz %}
 {% load humanize %}
 {% load misc_filters %}
 
@@ -10,75 +9,86 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div id="conversations" class="col-sm-3">
-      {% if conversations %}
-        {% for ticket_id, conversation in conversations.items %}
-            <div class="row thread">
-              <div class="col-sm-2">
-                <img class="conversation-pic" src="{% if conversation.pic_url %}{{ conversation.pic_url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
+  <div id='page-wrapper' class="container-fluid">
+    <div class="row">
+      {% if threads %}
+        <div id="threads" class="col-xs-3">
+          {% for thread in threads %}
+            <div class="row thread"
+                 data-identity-ticket="{{ thread.ticket_id }}"
+                 data-identity-user="{{ thread.other_user_id }}">
+              <div class="col-md-2 hidden-sm hidden-xs">
+                <img class="thread-pic" src="{{ thread.pic_url }}" alt="User profile picture">
               </div>
-              <div class="col-sm-10">
-                <h5 class="name">{{ conversation.name | title }}</h5>
-                <span class="blurb">{{ conversation.blurb | truncatechars:20 }}</span>
-                <span class="last-message-timestamp">{{ conversation.last_timestamp | naturaltime | upto:',' }}</span>
+              <div class="col-xs-12 col-md-10">
+                <h5 class="thread-name">{{ thread.name | title }}</h5>
+                <span class="thread-title">{{ thread.ticket_title | truncatechars:20 }}</span>
+                <span class="thread-last-message-timestamp">{{ thread.last_timestamp | naturaltime | upto:',' }}</span>
               </div>
+              <span class="delete-conversation glyphicon glyphicon-remove" style="display:none;"></span>
             </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       {% else %}
-        <div class="no-conversations">
+        <div id="no-threads" class="col-xs-12">
           <h3 class="text-center">You have no messages!</h3>
           <p class="text-center">Find a ticket you like, and shoot the seller a message!</p>
         </div>
       {% endif %}
-    </div>
-    {% with conversation=conversations.0 sender=conversations.0.sender %}
-      <div id="current-conversation" class=col-sm-9>
-        <div id="header">
-          <img id="header-pic" src="{% if sender.profile_picture.search_thumbnail.url %}{{ sender.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
-          <div id="header-demographic-info">
-            <h5 id="header-name"><a href={{ sender.user_profile.get_absolute_url }}>{{ sender.get_full_name | title }}{% if sender.age %}, {{ sender.age }}{% endif %}</a></h5>
-            <div id="header-user-rating">
-              <h3>
-                {% for x in sender.rating|get_range %}
-                  <span class="glyphicon glyphicon-star"></span>
-                {% endfor %}
-              </h3>
-            </div>
-            <div id="header-location">
-              {{ sender.location.city | title }}, {{ sender.location.state | upper }}
-            </div>
-          </div>
+    {% comment %}Just let the no messages div stretch across the whole screen{% endcomment %}
+    {% if threads %}
+      <div id="current-conversation" class="col-xs-9">
+        <div id="convo-header">
         </div>
-        <div id="conversation_body">
-          <div id="ticket-info-ribbon">
-            {% with ticket=conversation.ticket %}
-              <a href="{{ ticket.get_absolute_url }}">Ticket Information: </a>
-              <span><b>Price:</b> ${{ ticket.price }}  </span>
-              <span><b>When:</b> {% localtime off %}{{ ticket.get_formatted_start_datetime.date }} {{ ticket.get_formatted_start_datetime.time }}{% endlocaltime %}  </span>
-              <span><b>Where:</b> {{ ticket.location }} {{ ticket.venue }}</span>
-            {% endwith %}
+        <div id="ticket-ribbon">
+        </div>
+        <div id="conversation-body">
+        </div>
+        <div id="new-message-box">
+          <div id="new-message-textarea-wrapper">
+            <form id="send-message-form">
+              <textarea id="new-message-textarea" placeholder="Say something..." rows=5></textarea>
+              <button id="send-message" type="submit" class="btn btn-primary pull-right">Send Message</button>
+            </form>
+          </div>
+          <div id="send-message-errors" class="alert alert-danger" style="display: none">
+            <ul>
+              <li>You can't do that!</li>
+            </ul>
           </div>
         </div>
       </div>
-    {% endwith %}
-    {% comment %}Data structure: dict[conversation_id] = [message_object_1, message_object_2, message_object_3...] {% endcomment %}
-    {% comment %}
-    {% for conversation_id, messages in user_messages.items %}
-      {% for message in messages %}
-        <div class="conversation" data-conversation="{{ conversation_id }}">
-          <div class="talk-bubble">
-            <img id=".talk-bubble-pic" src="{% if sender.profile_picture.search_thumbnail.url %}{{ sender.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
-          </div>
-        </div>
+    {% endif %}
+    </div> <!-- .row -->
+  </div>  <!-- .container-fluid -->
+  <div id="all-convo-headers" style="display:none;">
+    {% for ticket_id, ticket_convos in convo_headers.items %}
+      {% for other_user_id, convo_header in ticket_convos.items %}
+        {% include "messages/convo_header.html" %}
       {% endfor %}
     {% endfor %}
-      {% endcomment %}
   </div>
-
+  <div id="all-ticket-ribbons" style="display:none;">
+    {% for ticket_id, ticket_ribbon in ticket_ribbons.items %}
+      {% include "messages/ticket_ribbon.html" %}
+    {% endfor %}
+  </div>
+  <div id="all-conversation-bodies" style="display:none;">
+    {% for ticket_id, other_user_ids in messages.items %}
+      {% for other_user_id, messages in other_user_ids.items %}
+        {% include "messages/convo.html" %}
+      {% endfor %}
+    {% endfor %}
+  </div>
 {% endblock %}
 
 {% block js %}
+   <script type="text/javascript">
+       window.additional_parameters.mark_messages_read_url = "{% url "mark_messages_read" %}";
+       window.additional_parameters.send_message_url = "{% url "send_message" %}";
+         window.additional_parameters.messages_hidden_toggle_url = "{% url "messages_hidden_toggle" %}";
+   </script>
+
   {{ block.super }}
-  <script type="text/javascript" src="{% static "messages/js/inbox.js" %}"
+  <script type="text/javascript" src="{% static "messages/js/inbox.js" %}"></script>
 {% endblock %}

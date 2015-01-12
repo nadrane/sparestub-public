@@ -1,0 +1,16 @@
+{% load humanize %}
+{% load misc_filters %}
+
+<div class="conversation" data-identity-ticket="{{ ticket_id }}" data-identity-user="{{ other_user_id }}">
+  {% for message in messages %}
+    <div class="talk-bubble {% if message.did_this_user_send %}this-user{% else %}that-user{% endif %}">
+      <img class="talk-bubble-pic pull-left hidden-xs" src="{{ message.pic_url }}">
+      <span class="talk-bubble-contents">
+        {{ message.body }}
+      </span>
+      <div class="talk-bubble-timestamp pull-right">
+        {{ message.timestamp | naturaltime | upto:','  }}
+      </div>
+    </div>
+  {% endfor %}
+</div>

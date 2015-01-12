@@ -23,11 +23,11 @@
     {% comment %}Validity of a photo is determined entirely by whether it has been cropped yet or not.
                  Nevertheless, when the edit profile activity is opened, the current photo, whether it be an old one or
                  simply a non-existent one, will always be valid.{% endcomment %}
-    <input id="is_valid-photo" type="hidden" name="is_valid_photo" value=true>
+    <input id="is-valid-photo" type="hidden" name="is_valid_photo" value=true>
     {% comment %}Regardless of the validity of the input, we aren't going to actually send the existing profile picture
                  to the server a second time. It's already stored in the DB.If the user has a photo and makes no changes
                   to their photo, indicate this server side and make no changes. {% endcomment %}
-    <input id="use-old-photo" type="hidden" name="use_old_photo" value={% if user_info.profile_pictures %}true{% else %}false{% endif %}>
+    <input id="use-old-photo" type="hidden" name="use_old_photo" value={% if user_info.profile_picture %}true{% else %}false{% endif %}>
     <input id="x" type="hidden" name="x" value="">
     <input id="y" type="hidden" name="y" value="">
     <input id="w" type="hidden" name="w" value="">

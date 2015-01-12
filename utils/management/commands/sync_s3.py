@@ -55,6 +55,7 @@ TODO:
  * Use fnmatch (or regex) to allow more complex FILTER_LIST rules.
 
 """
+#Standard Imports
 import datetime
 import email
 import mimetypes
@@ -62,12 +63,12 @@ from optparse import make_option
 import os
 import time
 import gzip
-
 from io import BytesIO
 
-
+# Django Imports
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+from django.core.management import call_command
 
 # Make sure boto is available
 try:
@@ -255,6 +256,9 @@ class Command(BaseCommand):
         """
         Walks the media/static directories and syncs files to S3
         """
+        print('\nRunning collectstatic:', end='')
+        call_command('collectstatic', interactive=False)
+        print()
         bucket, key = self.open_s3()
         print('uploading files to {}'.format(bucket))
         for root_directory in self.DIRECTORIES:

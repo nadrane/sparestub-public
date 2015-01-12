@@ -174,6 +174,8 @@ def map_citystate_to_location(city, state):
         # State might be a null string if we get bad input
         if state:
             location_citystate_match_list = location_city_match_list.filter(state=state)
+        else:
+            location_citystate_match_list = location_city_match_list
 
         # We don't need to be working with a query set anymore but rather just a plain old list of Location objects,
         location_citystate_match_list = [location for location in location_citystate_match_list]

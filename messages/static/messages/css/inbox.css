@@ -1,42 +1,74 @@
 /* CONVERSATION LIST SIDE BAR */
 
-#conversations {
+/* We want these tags to stretch the entire height of the page, which will be set in javascript when the page changes
+   size */
+html, body, #page-wrapper, #page-wrapper>.row {
+    height: 100%;
+}
+
+#threads, #no-threads {
     background-color: #393939;
     height: 100%;
-    color: #E0E0DB;
     font-weight: 200;
+}
+
+#threads {
+    overflow-y: auto;
+    color: #E0E0DB;
+}
+
+#no-threads {
+    padding-top: 50px;
+    color: #f5f5f5;
 }
 
 .thread {
     padding-top: 7px;
     padding-bottom: 7px;
     padding-right: 7px;
-    border-bottom: rgb(221, 221, 221) solid 1px;
+    border-bottom: #FCFCFC solid 1px;
+    position: relative;
 }
 
-.conversation:hover {
-    background-color: lightgray;
+.delete-conversation {
+    position: absolute;
+    font-size: 16px;
+    top: 0px;
+    right: 0px;
+}
+
+.delete-conversation:hover {
+    color: red;
+}
+
+.glyphicon-remove{
+    color: white;
+}
+
+.thread:hover {
+    background-color: #A9A9A9;
     cursor: pointer;
     color: #000000;
 }
 
-.no-conversations {
-    color: #f5f5f5;
+.current-thread {
+    background-color: #F2F2F2;
+    color: #000000;
 }
 
-.name {
+.thread-name {
     margin-top: 0;
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: normal;
 }
 
-.blurb {
+.thread-title {
     font-size: 12px;
     float: left;
 }
 
-.conversation-pic {
+.thread-pic {
     width: 40px;
 	height: 40px;
 	border-radius: 20px;
@@ -44,7 +76,7 @@
 	-moz-border-radius: 20px;
 }
 
-.last-message-timestamp {
+.thread-last-message-timestamp {
     font-size: 10px;
     font-style: italic;
     float: right;
@@ -54,7 +86,7 @@
 
 /* CURRENT CONVERSATION HEADER*/
 
-#header-pic {
+.header-pic {
     width: 75px;
 	height: 75px;
 	border-radius: 38px;
@@ -64,62 +96,209 @@
 
 #current-conversation {
     padding: 0;
+    height: 100%;
 }
 
-#header {
-    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/logos/old_moon.png");
+#convo-header {
+    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/backgrounds/old_moon.png");
     padding: 10px;
     height: 90px;
+    position: fixed;
+    width: 100%;
 }
 
-#header-pic {
+.accept-decline {
+    float: left;
+    margin-left: 5px;
+}
+
+.accept-decline > button {
+    font-size: 14px;
+    padding: 3px 6px;
+    display: block;
+}
+
+.decline-request {
+    margin-top: 5px;
+}
+
+.header-pic {
     float: left;
     margin-right: 10px;
 }
 
-#header-demographic-info {
+.header-demographic-info {
     float: left;
 }
 
-#header-name {
+.header-name {
     font-size: 18px;
     margin: 0;
 }
 
-#header-name a {
+.header-name a {
     color: #000000 !important;
 }
 
-#header-user-rating h3{
+.header-user-rating h3{
     margin-top: 4px;
     margin-bottom: -2px;
 }
 
-#ticket-info-ribbon {
+#ticket-ribbon {
     -webkit-font-smoothing: antialiased;
     background-color: rgb(245, 245, 245);
     height: 20px;
     padding-left: 10px;
     border-bottom: solid rgb(221, 221, 221) 1px;
+    position: relative;
+    top: 90px; /* Position directly below the header */
 }
 
 /* END CURRENT CONVERSATION */
 
 /* CURRENT CONVERSATION BODY*/
-.talk-bubble-pic {
-    width: 40px;
-	height: 40px;
-	border-radius: 20px;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
+.conversation {
+    overflow-y: auto;
+    height: 100%;
+}
+
+#conversation-body {
+    padding: 0 10px;
+    background-color: rgb(247, 247, 247);
+    position: relative;
+    top: 90px; /* Position below the header and the ticket ribbon.
+                  Same as ticket ribbon because only the header is fixed. Remember, relative to normal position */
 }
 
 .talk-bubble {
-    background: rgb(221, 221, 221);
+    width: 100%;
+    min-height: 50px;
+    margin-top: 10px;
 
+    padding: 5px;
+    min-height: 50px; /* The height of the pic and it's padding */
     /* Rounded talk bubbles */
     border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 }
+
+.talk-bubble-pic {
+	height: 40px;
+	border-radius: 20px;
+    border: 1px black solid;
+    margin-right: 10px; /* Don't the let body of the message encroach on the image */
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+}
+
+.talk-bubble-contents {
+    display: inline-block;
+    padding: 0px 10px 5px 10px;
+    word-wrap: break-word;
+    width: 80%;
+}
+
+.talk-bubble-timestamp {
+    width: 10%;
+}
+
+.this-user {
+    background-color: #A3E0FF;
+}
+
+.that-user {
+    background-color: #ffa2c3;
+}
 /* END CURRENT CONVERSATION BODY*/
+
+/* NEW MESSAGE BOX */
+#new-message-box {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+#send-message {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 5px;
+    font-size: 12px;
+}
+
+#send-message-errors > ul > li{
+    font-size: 16px;
+}
+
+#send-message-errors {
+    margin-bottom: 0;
+}
+
+#new-message-textarea-wrapper {
+    position: relative;
+    width: 97%;
+    margin: 10px 10px 10px 10px;
+    padding: 10px;
+    border: solid lightgrey 1px;
+    border-radius: 10px;
+}
+
+#new-message-textarea {
+    width: 80%;
+    display: block;
+    border: none;
+}
+#new-message-textarea:focus {
+    border: none;
+    outline: none;
+}
+/* END NEW MESSAGE BOX */
+
+@media (max-width: 1350px) {
+    .talk-bubble-timestamp {
+        width: 20%;
+    }
+    .talk-bubble-contents {
+        width: 70%;
+    }
+}
+
+@media (max-width: 500px) {
+    .talk-bubble-timestamp {
+        width: 25%;
+    }
+    .talk-bubble-contents {
+        width: 75%;
+    }
+
+    .header-name {
+        font-size: 14px;
+    }
+
+    .header-user-rating h3{
+        font-size: 16px;
+    }
+
+    .header-pic {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+    }
+
+    .accept-decline > button {
+        font-size: 12px;
+        padding: 2px 3px;
+    }
+
+    #convo-header {
+        height: 70px;
+    }
+
+    #ticket-ribbon {
+        top: 70px;
+    }
+}

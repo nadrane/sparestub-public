@@ -8,7 +8,6 @@ from django.forms import ValidationError
 from django.core.urlresolvers import reverse
 
 # SpareStub imports
-from .utils import calculate_age
 from utils.models import TimeStampedModel
 from .settings import profile_question_model_settings, profile_answer_model_settings, user_profile_model_settings
 
@@ -18,7 +17,7 @@ class UserProfilerManager(models.Manager):
     def create_user_profile(self, first_name=None, last_name=None, profile_views=0):
         """
         Creates a user profile given a particular first and last name.
-        The way the system exists now, birth_date and profile_views will never have a value when the profile is created.
+        The way the system exists now, profile_views will never have a value when the profile is created.
         """
 
         username = self.make_username(first_name, last_name)
@@ -38,8 +37,9 @@ class UserProfilerManager(models.Manager):
 
     @staticmethod
     def make_username(first_name, last_name):
-        # Make the username's in title case
-        first_name, last_name = first_name.title(), last_name.title()
+        # Make the usernames title case and remove any spaces.
+        # This avoids having spaces that need escaping in the user profile url.
+        first_name, last_name = first_name.title().replace(' ', ''), last_name.title().replace(' ', '')
 
         # Try to make the url equal to the users first and last names concatenated together
         potential_username = first_name + last_name
@@ -56,13 +56,14 @@ class UserProfilerManager(models.Manager):
             number_to_append += 1
 
         logging.error("profile.html url did not generate properly for input user profile {} {}".
-                     format(first_name, last_name))
+                      format(first_name, last_name))
         return None
 
 
 class UserProfile(TimeStampedModel):
     #The username must be composed of numbers and upper and lower case letters
     username_regex = re.compile(r'^[a-zA-Z0-9]+$')
+
 
     # This is set in the User manager as opposed to here. This is because we need user email/name info. to create the username,
     # but the UserProfile needs to be created before the User because the User.user_profile cannot be null.
@@ -75,11 +76,6 @@ class UserProfile(TimeStampedModel):
     # The number of times that this person's profile.html has been viewed by others.
     profile_views = models.IntegerField(default=0)
 
-    birthdate = models.DateField(blank=True,
-                                 null=True,
-                                 default=None,
-                                 )
-
     objects = UserProfilerManager()
 
     def __str__(self):
@@ -87,9 +83,6 @@ class UserProfile(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('view_profile', kwargs={'username': self.username})
-
-    def age(self):
-        return calculate_age(self.birthdate)
 
     def valid_username(self, username):
         # Make sure that the inputted username is in the correct format

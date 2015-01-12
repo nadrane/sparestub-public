@@ -1,6 +1,3 @@
-# Standard Imports
-from itertools import chain
-
 # 3rd Party Imports
 from pytz import timezone
 
@@ -8,12 +5,10 @@ from pytz import timezone
 from utils.models import TimeStampedModel
 from django.db import models
 from django.core.urlresolvers import reverse
-from django.template.loader import render_to_string
 
 # SparStub imports
 from registration.models import User
-from .settings import ticket_model_settings, bid_model_settings, TICKET_REQUESTED_BIDDER_SUBJECT, \
-    TICKET_REQUESTED_BIDDER_TEMPLATE, TICKET_REQUESTED_POSTER_SUBJECT, TICKET_REQUESTED_POSTER_TEMPLATE
+from .settings import ticket_model_settings
 from locations.models import Location
 
 
@@ -111,7 +106,9 @@ class Ticket(TimeStampedModel):
 
     # An active ticket is one that is available to be bid on
     is_active = models.BooleanField(blank=False,
-                                    default=False)
+                                    default=False,
+                                    db_index=True,
+                                    )
 
     deactivation_reason = models.CharField(blank=True,
                                            max_length=1,
@@ -130,6 +127,20 @@ class Ticket(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def deactivate(self, deactivation_reason):
+        from asks.models import Request
+
+        # Mark the ticket inactive
+        self.is_active = False
+        self.deactivation_reason = deactivation_reason
+        self.save()
+
+        # Mark all of the associated requests as cancelled
+        requests = Request.objects.filter(ticket=self)
+        requests.update(status='T')
+        for request in requests:
+            request.cancel()
 
     def convert_price_to_stripe_amount(self):
         """
@@ -150,6 +161,9 @@ class Ticket(TimeStampedModel):
         return reverse('view_ticket', kwargs={'username': self.poster.user_profile.username,
                                               'ticket_id': self.id,
                                               })
+
+    def get_full_location(self):
+        return self.location.city.title() + ', ' + self.location.state.upper() + '-' + self.venue.title()
 
     def get_formatted_start_datetime(self):
         """
@@ -193,55 +207,3 @@ class Ticket(TimeStampedModel):
         Returns a QuerySet of tickets that this user either successfully bought or successfully sold
         """
         return Ticket.objects.filter(Q(poster=user) | Q(bidders=user)).filter(is_active=False)
-
-
-class BidManager(models.Manager):
-
-    def create_bid(self, ticket, user):
-        """
-        Creates a bid record using the given input.
-        This function will shoot off an email to both the ticket poster and the user that requested to buy the ticket.
-        """
-
-        bid = self.model(bidder=user,
-                         ticket=ticket,
-                         status='P'
-                         )
-
-        bid.save()
-
-        ticket.poster.send_mail(TICKET_REQUESTED_POSTER_SUBJECT,
-                                message='',
-                                html=render_to_string(TICKET_REQUESTED_POSTER_TEMPLATE)
-                                )
-        user.send_mail(TICKET_REQUESTED_BIDDER_SUBJECT,
-                       message='',
-                       html=render_to_string(TICKET_REQUESTED_BIDDER_TEMPLATE)
-                       )
-
-        return bid
-
-
-class Bid(models.Model):
-    """
-    Created when a user requests to buy a ticket. This model that action.
-    """
-
-    bidder = models.ForeignKey(User,
-                               blank=False,
-                               null=False,
-                               )
-
-    ticket = models.ForeignKey(Ticket,
-                               blank=False,
-                               null=False
-                               )
-
-    status = models.CharField(max_length=1,
-                              null=False,
-                              blank=False,
-                              default='',
-                              choices=bid_model_settings.get('BID_STATUSES'),
-                              )
-
-    objects = BidManager()

@@ -2,7 +2,7 @@
   <div class="modal-header">
     <div class="row">
       <div class="col-xs-10">
-        <h4 class="modal-title">Sign Up For Sparestub!</h4>
+        <h4 class="modal-title">Sign Up For SpareStub!</h4>
       </div>
       <div class="col-xs-2">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
@@ -11,7 +11,6 @@
     <div id="signup-notification-root">
       <div class="notification-style" style="display: None">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong class="notification-header"></strong>
         <span class="notification-content"></span>
       </div>
     </div>
@@ -59,7 +58,6 @@
                data-bv-date-format="{{ form_settings.BIRTHDATE_DATE_FORMAT }}"
                data-bv-date-message="{{ form_settings.BIRTHDATE_DATE_MESSAGE }}"
                data-bv-date-separator="{{ form_settings.BIRTHDATE_DATE_SEPARATOR }}"
-               data-bv-date-max="{{ forms_settings.BIRTHDATE_OVER_18 }}"
 
                data-bv-callback="true"
                data-bv-callback-callback="validate_user_is_18"
@@ -119,7 +117,7 @@
 
     <div class="modal-footer">
       <div id="disclosure-message">
-        By signing up, you agree to the <a href="{% url "tos" %}" target="_blank"> Terms of Service</a> and <a href="{% url "privacy policy" %}" target="_blank">Privacy Policy</a>, including <a href="{% url "cookie use" %}" target="_blank">Cookie Use</a>.
+        By signing up, you agree to the <a href="{% url "tos" %}" target="_blank"> Terms of Service</a> and <a href="{% url "privacy policy" %}" target="_blank">Privacy Policy</a>.
       </div>
       <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
       <button id="signup-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Sign up</button>

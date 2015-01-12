@@ -70,7 +70,7 @@ class SignupForm(UserInfoForm):
                                )
 
     def clean_birthdate(self):
-        return User.valid_birthdate(self.cleaned_data.get('birthdate', ''))
+        return User.valid_birthdate(self.cleaned_data.get('birthdate', None))
 
 
 class LoginForm(forms.Form):
@@ -92,9 +92,11 @@ class LoginForm(forms.Form):
             if user.is_active:
                 pass
             else:
-                raise forms.ValidationError('This account has been disabled.', code="inactive_account")
+                raise forms.ValidationError('This account has been disabled.',
+                                            code="inactive_account")
         else:
-            raise forms.ValidationError('Wrong email or password entered. Please try again.', code="invalid_credentials")
+            raise forms.ValidationError('Wrong email or password entered. Please try again.',
+                                        code="invalid_credentials")
 
         return
 

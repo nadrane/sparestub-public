@@ -1,24 +1,19 @@
-#Standard Imports
-import logging
-
 # Django imports
 from django.contrib.auth.decorators import login_required
 from .settings import ticket_submit_form_settings
-from django.shortcuts import render, Http404, HttpResponseRedirect
+from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.core.exceptions import ObjectDoesNotExist
 
 # 3rd Party Imports
 from haystack.views import FacetedSearchView
-import stripe
 
-#SpareStub Imports
-from .settings import email_submit_ticket_subject, search_results_settings
-from .models import Ticket, Bid
+# SpareStub Imports
+from utils.networking import ajax_http, form_success_notification, non_field_errors_notification
+
+# Module Imports
+from .models import Ticket
+from .settings import email_submit_ticket_subject
 from .forms import SubmitTicketForm
-from utils.networking import ajax_http, form_success_notification, form_failure_notification, \
-    non_field_errors_notification
-from django.conf import settings
 
 @login_required()
 def submit_ticket(request):
@@ -77,92 +72,3 @@ def submit_ticket(request):
 
 class SearchResults(FacetedSearchView):
     template = 'search/search_results.html'
-
-
-@login_required()
-def request_to_buy(request, ticket_id):
-    user = request.user
-
-    try:
-        ticket = Ticket.objects.get(pk=ticket_id)
-    except Ticket.DoesNotExist:
-        return Http404()
-
-    if ticket.poster == user:
-        logging.warning('User cannot request to buy their own ticket')
-        return Http404()
-
-
-    # Set your secret key: remember to change this to your live secret key in production
-    # See your keys here https://dashboard.stripe.com/account
-    stripe.api_key = settings.STRIPE_SECRET_API_KEY
-
-    charge_amount = ticket.convert_price_to_stripe_amount()
-
-    # Get the credit card details submitted by the form
-    token = request.POST['stripeToken']
-
-    # Create the charge on Stripe's servers - this will charge the user's card
-    try:
-        charge = stripe.Charge.create(amount=charge_amount,  # amount in cents, again
-                                      currency="usd",
-                                      card=token,
-                                      description='charge for ticket {}'.format(ticket.id)
-                                      )
-
-        bid = Bid.objects.create_bid(ticket, user)
-
-    except stripe.CardError as e:
-
-        # If the user looking at this profile is its owner, then we want to render a couple edit buttons
-        if request.user == user:
-            is_owner = True
-        else:
-            is_owner = False
-
-        username = user.user_profile.username
-
-        user_location = user.location
-
-        most_recent_review = user.most_recent_review()
-
-        user_info = {'name': user,
-                     'age': user.age(),
-                     'city': user_location.city,
-                     'state': user_location.state,
-                     'rating': user.rating,
-                     'username': username,
-                     }
-
-        try:
-            user_info['profile_picture'] = user.profile_picture
-        except ObjectDoesNotExist:
-            pass
-
-        if most_recent_review:
-            reviewer_location = most_recent_review.reviewer.location
-            reviewer_city, reviewer_state = reviewer_location.city, reviewer_location.state
-            most_recent_review_info = {'name': most_recent_review.reviewer.get_short_name(),
-                                       'age': most_recent_review.reviewer.age(),
-                                       'city': reviewer_city,
-                                       'state': reviewer_state,
-                                       'contents': most_recent_review.contents,
-                                       'rating': most_recent_review.rating
-                                       }
-        else:
-            most_recent_review_info = None
-
-        # The card has been declined
-        return render(request,
-                      'user_profile/view_ticket.html',
-                      {'user_info': user_info,
-                       'is_owner': is_owner,
-                       'ticket': ticket,
-                       'most_recent_review_info': most_recent_review_info,
-                       'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY,
-                       'card_declined': True
-                       },
-                      content_type='text/html',
-                      )
-
-    return HttpResponseRedirect('/')

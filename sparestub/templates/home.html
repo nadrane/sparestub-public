@@ -6,21 +6,36 @@
   <link rel="stylesheet" href="{% static "sparestub/css/home.css" %}">
 {% endblock %}
 
+{% block notification %}
+  {% if user.is_authenticated and not user.is_confirmed %}
+     <div id="notification-root">
+        <div class="notification-style alert alert-info">
+          <a class="close">Close</a>
+          <span class="notification-content">Don't forget to confirm your email! We already sent you a message.
+            <a id="resend-confirm-email">Resend verification email.</a>
+          </span>
+        </div>
+      </div>
+  {% else %}
+    <div id="notification-root"></div>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
   <div id="introduction">
     <div class="container">
       <div class="row text-center">
-        <div id="top-intro" class="col-xs-12 title">
-          <span>SpareStub is ticket resale... but better.</span>
-        </div>
+        <h3 id="top-intro" class="col-xs-12 title">Ticket resale... but better.</h3>
         <div id="intro-button-div" class="col-xs-12">
           <div id="left-intro">
               <button id="search-now" class="btn btn-primary intro-btn" type="button">Search Now</button>
           </div>
-          <div id="right-intro">
-            <button class="btn btn-primary intro-btn signup-form-button"
-                    type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>
-          </div>
+          {% if not user.is_authenticated %}
+            <div id="right-intro">
+              <button class="btn btn-primary intro-btn signup-form-button"
+                      type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>
+            </div>
+          {% endif %}
         </div>
         <div id="buffer" class="col-xs-12"></div>
         <div id="learn-more" class="col-xs-12 center-block">
@@ -43,41 +58,28 @@
   </div>
 
   <div id="how-it-works">
-    <div class="container">
+    <div class="container-fluid">
       <div id="steps" class="row">
         <h1 class="col-xs-12 title">How It Works</h1>
         <div id="step-1" class="step text-center col-xs-12 col-sm-4">
           <img class="step-image" src="{% static "sparestub/logos/post.png" %}">
-          <div class="step-explanation">
-            <h4>Sell your stub and find a gig buddy</h4>
-            <ul>
-              <li>Have an extra ticket? Post it for free.</li>
-              <li>List as <b>Request to Buy</b> to approve your gig buddy, or list as <b>Quick Buy</b> to accept the first buyer.</li>
-              <li>Check out our <a href="{% url "sellers guide" %}">Seller's Guide</a> for more info!</li>
-            </ul>
+          <div class="step-explanation center-block">
+            <h4>Sell your stub. Find a gig buddy</h4>
+            <p>Have an extra ticket? Post it for free. List as <b>Request to Buy</b> to approve your gig buddy, or list as <b>Quick Buy</b> to accept the first buyer. Check out our <a href="{% url "sellers guide" %}">Seller's Guide</a> for more info!</p>
           </div>
         </div>
         <div id="step-2" class="step text-center col-xs-12 col-sm-4">
           <img class="step-image" src="{% static "sparestub/logos/buy.png" %}">
-          <div class="step-explanation">
+          <div class="step-explanation center-block">
             <h4>Find a ticket and a new friend</h4>
-            <ul>
-              <li>Search for spare stubs in your city.</li>
-              <li>Review the seller's bio and user reviews.</li>
-              <li>Get to know each other. Match made in heaven?</li>
-              <li>Request to Buy, or use Quick Buy if available.</li>
-              <li>Check out the <a href="{% url "buyers guide" %}">Buyer's Guide</a> for more info!</li>
-            </ul>
+            <p>Search for spare stubs in your city. Review the seller's bio and user reviews. Get to know each other. Match made in heaven?Request to Buy, or use Quick Buy if available. Check out the <a href="{% url "buyers guide" %}">Buyer's Guide</a> for more info!</p>
           </div>
         </div>
         <div id="step-3" class="step text-center col-xs-12 col-sm-4">
           <img class="step-image" src="{% static "sparestub/logos/go.png" %}">
-          <div class="step-explanation">
-            <h4>Happily Ever After</h4>
-            <ul>
-              <li>The buyer and seller handle the ticket exchange, then have a great night with a new gig buddy!</li>
-              <li>After the event, they can leave each other reviews and add to our wall of Success Stories!</li>
-            </ul>
+          <div class="step-explanation center-block">
+            <h4>And The Happily Ever After</h4>
+            <p>The buyer and seller handle the ticket exchange, then have a great night with a new gig buddy! After the event, they can leave each other reviews and add to our wall of Success Stories!</p>
           </div>
         </div>
       </div>
@@ -87,14 +89,14 @@
     <div class="container">
       <h2 id="founders-title" class="text-center">Meet The Founders</h2>
       <div class="row">
-        <div class="col-xs-12 col-sm-6 text-center">
+        <div class="col-xs-12 col-sm-5 col-sm-offset-1 col-lg-4 col-lg-offset-2 text-center">
           <img class="founder-image" src="{% static "sparestub/logos/founder_steph.jpg" %}">
           <h3>Stephanie MacConnell, CEO</h3>
           <ul class="social">
             <li><a class="glyphicon glyphicon-envelope" href="mailto:stephanie@sparestub.com" target="_blank"></a></li>
           </ul>
         </div>
-        <div class="col-xs-12 col-sm-6 text-center">
+        <div class="col-xs-12 col-sm-5 col-lg-4 text-center">
           <img class="founder-image" src="{% static "sparestub/logos/founder_nick.jpg" %}">
           <h3>Nick Drane, CTO</h3>
           <ul class="social">
@@ -105,30 +107,32 @@
     </div>
   </div>
   <div id="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-6">
-          <h4>Follow The Adventure:</h4>
-          <h5>Twitter</h5>
-          <h5>Instagram</h5>
-          <h5>Facebook</h5>
-          <h5>LinkedIn</h5>
-        </div>
-        <div class="col-xs-12 col-sm-6">
-          <h4>Talking Shop:</h4>
-          <ul>
-            <li><a href="{% url "buyers guide" %}">Buyer's Guide</a></li>
-            <li><a href="{% url "sellers guide" %}">Seller's Guide</a></li>
-            <li><a href="{% url "dispute resolution" %}">Dispute Resolution</a></li>
-            <li><a href="{% url "tos" %}">Terms of Service</a></li>
-            <li><a href="{% url "privacy policy" %}">Privacy Policy</a></li>
-            <li><a href="{% url "cookie use" %}">Cookie Use</a></li>
-            <li><a href="">Online Connection Bill of Rights</a></li>
-            {% comment %} TODO <a href="{% url "press_kit" %}">Press Kit</a> {% endcomment %}
-          </ul>
-        </div>
+    <div id="social-media">
+      <div>
+        <h4 class="pull-right">Follow The Adventure:</h4>
+        <ul style="margin-left: 25px;" class="text-left">
+          <li><a href="https://www.twitter.com/sparestub/">Twitter</a></li>
+          <li><a href="http://www.instagram.com/sparestub/">Instagram</a></li>
+          <li><a href="http://www.facebook.com/sparestub/">Facebook</a></li>
+          <li><a href="https://www.linkedin.com/company/sparestub">LinkedIn</a></li>
+        </ul>
       </div>
     </div>
+    <div id="talking-shop">
+      <div>
+        <h4 class="text-left">Talking Shop:</h4>
+        <ul class="text-left">
+          <li><a href="{% url "buyers guide" %}">Buyer's Guide</a></li>
+          <li><a href="{% url "sellers guide" %}">Seller's Guide</a></li>
+          <li><a href="{% url "dispute resolution" %}">Dispute Resolution</a></li>
+          <li><a href="{% url "tos" %}">Terms of Service</a></li>
+          <li><a href="{% url "privacy policy" %}">Privacy Policy</a></li>
+          <li><a href="http://www.ag.ny.gov/sites/default/files/pdfs/bureaus/consumer_fraud/dating_service.pdf">Online Connection Bill of Rights</a></li>
+          {% comment %} TODO <a href="{% url "press_kit" %}">Press Kit</a> {% endcomment %}
+        </ul>
+      </div>
+    </div>
+
   </div>
 {% endblock %}
 

@@ -7,8 +7,8 @@ user_model_settings = {'PASSWORD_MIN_LENGTH': 6,
                        'PASSWORD_MAX_LENGTH': 128,  # Don't edit this. This value is defined in
                                                     # django / contrib / auth / models.py / AbstractBaseUser
 
-                       'FIRST_NAME_MAX_LENGTH': 30,
-                       'LAST_NAME_MAX_LENGTH': 30,
+                       'FIRST_NAME_MAX_LENGTH': 20,
+                       'LAST_NAME_MAX_LENGTH': 20,
                        'EMAIL_MAX_LENGTH': 254,
 
                        'DEACTIVATION_REASON': (),
@@ -63,7 +63,6 @@ user_info_form_settings = {'FIRST_NAME_NOTEMPTY_MESSAGE': 'Please enter your fir
                            'BIRTHDATE_DATE_FORMAT': 'MM/DD/YYYY',
                            'BIRTHDATE_DATE_MESSAGE': 'Please enter your birthdate in MM/DD/YYYY format.',
                            'BIRTHDATE_DATE_SEPARATOR': '/',
-                           'BIRTHDATE_OVER_18': over_18_year_date,
 
                            'ZIP_CODE_NOTEMPTY_MESSAGE': 'Please enter your zipcode',
                            'ZIP_CODE_MAX_LENGTH': user_model_settings.get('ZIP_CODE_MAX_LENGTH'),
@@ -71,11 +70,13 @@ user_info_form_settings = {'FIRST_NAME_NOTEMPTY_MESSAGE': 'Please enter your fir
                            'ZIP_CODE_LENGTH_MESSAGE': 'We only need a {} digit zipcode'.format(user_model_settings.get('ZIP_CODE_MAX_LENGTH'),),
                            'ZIP_CODE_REMOTE_MESSAGE': 'That is not a valid zip code',
 
-                           # Note that this regx is actually wrong. It matches 1 through 5 digits.
+                           # Note that this regx is actually wrong. It matches 1 through 10 digits.
                            # We want to avoid having this error fire when less than 5 digits have been entered since the
                            # error message would be otherwise misleading.
+                           # Furthermore, we don't want to fire the error if there are more than 5 digits because it
+                           # would also be misleading. Let the length message fire instead.
                            # The length validator kicks into play when the length is wrong.
-                           'ZIP_CODE_REGEXP': '^\d{1,5}$',  # Note that this is javascript. If this changes,
+                           'ZIP_CODE_REGEXP': '^\d{1,10}$',  # Note that this is javascript. If this changes,
                                                            # the serverside validator MUST change as well.
 
                            'ZIP_CODE_REGEXP_MESSAGE': 'Your zipcode should only contain numbers',
@@ -95,3 +96,5 @@ PASSWORD_RESET_EMAIL_SUBJECT = 'SpareStub - Reset your password'
 PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/forgot_password_email.html'
 EMAIL_CONFIRMATION_EMAIL_SUBJECT = 'SpareStub - Email confirmation'
 EMAIL_CONFIRMATION_EMAIL_TEMPLATE = 'registration/email_confirmation_email.html'
+
+DEFAULT_PROFILE_PIC_URL = 'sparestub/logos/lilman.jpg'

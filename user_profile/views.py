@@ -49,11 +49,16 @@ def edit_profile(request, username):
                     pass
 
                 uploaded_photo = request.FILES.get('profile_picture')
-                x, y = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),
-                x2, y2 = x + edit_profile_form.cleaned_data.get('w'), y + edit_profile_form.cleaned_data.get('h')
-                crop_coords = x, y, x2, y2
-                rotate_degrees = edit_profile_form.cleaned_data.get('rotate_degrees', 0)
-                profile_picture = Photo.objects.create_photo(user, uploaded_photo, crop_coords, rotate_degrees)
+                if uploaded_photo:
+                    x, y = edit_profile_form.cleaned_data.get('x'), edit_profile_form.cleaned_data.get('y'),
+                    x2, y2 = x + edit_profile_form.cleaned_data.get('w'), y + edit_profile_form.cleaned_data.get('h')
+                    crop_coords = x, y, x2, y2
+                    rotate_degrees = edit_profile_form.cleaned_data.get('rotate_degrees', 0)
+                    profile_picture = Photo.objects.create_photo(user, uploaded_photo, crop_coords, rotate_degrees)
+                else:
+                    profile_picture = None
+            else:
+                profile_picture = None
 
             email = edit_profile_form.cleaned_data.get('email')
             first_name = edit_profile_form.cleaned_data.get('first_name')
@@ -67,7 +72,7 @@ def edit_profile(request, username):
             user.location = location
 
             # No need to handle the profile picture if we are using the old one.
-            if not use_old_photo:
+            if profile_picture:
                 profile_picture.save()
                 user.save()
             else:
@@ -268,14 +273,14 @@ def profile_tickets(request, username):
     past_tickets = None
     return render(request,
                   'user_profile/profile_tickets.html',
-                   {'user_info': user_info,
-                    'is_owner': is_owner,
-                    'available_tickets': available_tickets,
-                    'in_progress_tickets': in_progress_tickets,
-                    'past_tickets': past_tickets,
-                    'most_recent_review_info': most_recent_review_info,
-                    'form_settings': profile_answer_form_settings,
-                    },
+                  {'user_info': user_info,
+                   'is_owner': is_owner,
+                   'available_tickets': available_tickets,
+                   'in_progress_tickets': in_progress_tickets,
+                   'past_tickets': past_tickets,
+                   'most_recent_review_info': most_recent_review_info,
+                   'form_settings': profile_answer_form_settings,
+                   },
                   content_type='text/html',
                   )
 
@@ -302,6 +307,9 @@ def view_ticket(request, username, ticket_id):
     if ticket.poster != user:
         raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
 
+    if ticket.is_active == False:
+        raise Http404('It looks like this page no longer exists. The user probably cancelled their ticket.')
+
     # If the user looking at this profile is its owner, then we want to render a couple edit buttons
     if request.user == user:
         is_owner = True
@@ -318,6 +326,8 @@ def view_ticket(request, username, ticket_id):
                  'state': user_location.state,
                  'rating': user.rating,
                  'username': username,
+                 'user_id': user.id,
+                 'email': user.email
                  }
 
     try:
@@ -355,6 +365,8 @@ def delete_ticket(request, ticket_id):
     Delete the inputted ticket
     """
 
+    #TODO disable deactivating tickets if there is an accepted request. Also make the cancel button not show up.
+
     user = request.user
 
     # Make sure that ticket exists
@@ -367,7 +379,7 @@ def delete_ticket(request, ticket_id):
     if ticket.poster != user:
         raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
 
-    ticket.delete()
+    ticket.deactivate('C')
 
     return redirect(reverse('profile_tickets',
                             kwargs={'username': user.user_profile.username}

@@ -6,7 +6,12 @@ var $ = jQuery
 
 var has_notification_update = function (response) {
     'use strict';
-    return (response.notification_type && (response.notification_content || response.notification_header));
+    return response.notification_type && response.notification_content;
+};
+
+var has_popup_notification = function (response) {
+    'use strict';
+    return response.popup_notification_type && response.popup_notification_content;
 };
 
 var clear_notification = function ($notification_root) {
@@ -14,22 +19,20 @@ var clear_notification = function ($notification_root) {
     $notification_root.empty();
 };
 
-var set_notification = function ($notification_root, header_message, content_message, message_type) {
-   'use strict';
+var set_notification = function ($notification_root, content_message, message_type) {
+    'use strict';
 
     // The close button removes everything inside the root when clicked. Instead of using a custom event,
     // Just make sure everything exists before we try to edit it's contents.
     if ($notification_root.children().length === 0) {
         $notification_root.append('<div class="notification-style">' +
-                                   '<a href="#" class="close" data-dismiss="alert">×</a>' +
-                                   '<strong class="notification-header"></strong>' +
+                                   '<a class="close">×</a>' +
                                    '<span class="notification-content"></span>' +
                                   '</div>'
                                  );
         }
 
     // These statemements allow us to generically have many notification roots, typically in modal forms for errors.
-    $notification_root.find('.notification-header').html(header_message);
     $notification_root.find('.notification-content').html(content_message);
 
     //We need style the notification-style div as opposed to the root div so that styles do not persist after the
@@ -42,26 +45,40 @@ var set_notification = function ($notification_root, header_message, content_mes
 var handle_ajax_response = function (response, $notification_root) {
     'use strict';
     // If we aren't updating the notification root on a modal, then update the site's main notification bar.
-    if (!$notification_root) {
-        $notification_root = $('#notification-root');
-    }
     if (!response) {
         return;
     }
+
+
+    if (!$notification_root) {
+        $notification_root = $('#notification-root');
+    }
+
     if (!!response.redirect_href) {
         window.location.href = response.redirect_href;
-    // If it's not a complete redirect, then we are replacing specific elements of the DOM.  Do that here.
+
+    // If we want to close to current modal and show a new one that only displays a notification.
+    } else if (has_popup_notification(response)) {
+        show_popup_notification_modal(response.popup_notification_content,
+                                      response.popup_notification_type);
+
+    // If we want to show a notification inside the currently open modal
+    } else if (has_notification_update(response)) {
+        set_notification($notification_root,
+                         response.notification_content,
+                         response.notification_type);
+
+    // This condition is for more general purpose messages.
+    // The caller of handle_ajax_response will display the contents.
+    } else if (response.other_message) {
+        var error_message = response.other_message;
+        if (!error_message) {
+            error_message = 'Uh Oh! Something went wrong!';
+        }
+        return error_message;
+    // We expect any ajax response to either redirect, give some type of notification, or reload the current page
     } else {
-        // Right now, this div shows login and signup buttons. Show username and logout buttons instead.
-        if (response.navigation_bar_right_div) {
-            $('#navigation-bar-right-div').replaceWith((response.navigation_bar_right_div));
-        }
-        if (has_notification_update(response)) {
-            set_notification($notification_root, response.notification_header,
-                             response.notification_content, response.notification_type);
-        }
-
-
+        window.location.reload();
     }
 };
 
@@ -79,30 +96,6 @@ function add_failure_x($target) {
     $target.empty();
     $target.append('<span class="glyphicon glyphicon-remove">');
 }
-
-/*
-var store_in_local = function (key, data_to_store, is_data_json) {
-    'use strict';
-    if (Modernizr.localstorage) {
-        if (is_data_json) {
-            data_to_store = JSON.stringify(data_to_store);
-        }
-        var compressed = LZString.compress(data_to_store);
-        localStorge.setItem(key, compressed);
-    }
-};
-
-var retrieve_from_local = function (key, is_data_json){
-    'use strict';
-    var data;
-    if (Modernizr.localstorage) {
-        data = LZString.decompress(localStorage.getItem(key));
-    }
-    if (is_data_json) {
-        data = JSON.parse(data);
-    }
-    return data;
-};*/
 
 function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
     'use strict';
@@ -125,4 +118,31 @@ function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
     } else {
         $modal_yes.attr('type', 'button');
     }
+}
+
+function setup_pop_notification_modal() {
+    'use strict';
+    /* This function needs to be called once when sparestub starts to make sure that the popup notification modal
+    kicks off an event when it closes that other functions can bind to.
+     */
+    $(document).on('hidden.bs.modal', function (e) {
+        if (e.target.id === 'modal-popup-notification-root') {
+            $(document).trigger('modal-popup-notification-closed');
+        }
+    });
+}
+
+function show_popup_notification_modal(notification_content, notification_type, use_html) {
+    'use strict';
+    // Make sure that a modal is not currently open. Close it if one is.
+    $('.in.modal').modal('hide');
+
+    var $modal_popup_notification_content = $('#modal-popup-notification-content');
+    $modal_popup_notification_content.addClass('alert-' + notification_type);
+    if (use_html) {
+        $modal_popup_notification_content.html(notification_content);
+    } else {
+        $modal_popup_notification_content.text(notification_content);
+    }
+    $('#modal-popup-notification-root').modal('show');
 }

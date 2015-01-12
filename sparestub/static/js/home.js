@@ -5,6 +5,12 @@ $(document).on('ready', function () {
 
     $('#search-now').on('click', function (e) {
         e.stopPropagation(); // If the event propagates up, it will actually close the dropdown right after it opens.
+
+        // Check to see if the navigation bar is compressed, and if it is, we need to uncollapase it before
+        // showing the search-ticket dropdown.
+        if ($(window).width() < 768) {
+            $('#navbar-collapse').collapse('show'); // Make sure that the search bar is visible currently.
+        }
         $('#search-ticket-input').dropdown('toggle');
     });
 });
@@ -22,3 +28,12 @@ $(window).on('load resize', function () {
     }
     $('#buffer').height(new_padding);
 });
+
+(function () {
+    'use strict';
+    var ios = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    // IOS devices do not properly support fixed background images. Change them to scroll if the device is ios.
+    if (ios) {
+        document.getElementById('introducing-sparestub').style.backgroundAttachment = 'scroll';
+    }
+}());

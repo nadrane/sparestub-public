@@ -37,6 +37,13 @@ class EditProfileForm(UserInfoForm):
                                         initial=0
                                         )
 
+    def __init__(self, *args, **kwargs):
+        if kwargs.get('request').FILES.get('profile_picture'):
+            self.is_photo_blank = False
+        else:
+            self.is_photo_blank = True
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+
     def clean_username(self):
         """
         Make sure that the submitted username is unique.
@@ -61,14 +68,15 @@ class EditProfileForm(UserInfoForm):
     def clean(self):
 
         #If we are not using the old photo, then the cropping coordinates must be present.
-        if not self.cleaned_data.get('use_old_photo'):
+        if not self.cleaned_data.get('use_old_photo') and not self.is_photo_blank:
             # We need to >= in the case that x or y (actually it will be both) is equal to 0.
-            if not all(self.cleaned_data.get(attr) >= 0 for attr in ['x', 'y', 'w', 'h']):
+            # Default to -1 in case so the get method doesn't return None, resulting in python error. Fail gracefully.
+            if not all(self.cleaned_data.get(attr, -1) >= 0 for attr in ['x', 'y', 'w', 'h']):
                 raise ValidationError('The new photo submitted that was not cropped')
 
-        # Make sure the the aspect ratio of the submitted photo is 1.
-        if self.cleaned_data.get('w') != self.cleaned_data.get('h'):
-            raise ValidationError('The aspect ratio of the new photo is not 1.')
+            # Make sure the the aspect ratio of the submitted photo is 1.
+            if self.cleaned_data.get('w') != self.cleaned_data.get('h'):
+                raise ValidationError('The aspect ratio of the new photo is not 1.')
 
         return
 

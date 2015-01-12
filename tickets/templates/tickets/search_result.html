@@ -2,22 +2,28 @@
 {% load misc_filters %}
 {% load static %}
 
+{% spaceless %}
 <tr>
   {% comment %}Turn localtimeoff because the events might be in a different timezone than the user. We don't want to
   convert the event time to the timezone of the user but to the timezone of the event's location.
   Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
-  <td class="col-xs-2 col-sm-1"><a href="{{ ticket.get_absolute_url }}" target="_blank" >{% localtime off %}{{ ticket.get_formatted_start_datetime.date }}<br>{{ ticket.get_formatted_start_datetime.time }}{% endlocaltime %}</a></td>
+  <td class="col-xs-2 col-sm-1"><a href="{{ ticket.get_absolute_url }}" target="_blank" >{% localtime off %}
+    <span class="ticket-result-date">{{ ticket.get_formatted_start_datetime.date }}</span>
+    <span class="ticket-result-time">{{ ticket.get_formatted_start_datetime|date:"D P" }}</span>
+    {% endlocaltime %}</a></td>
   <td class="col-xs-2 col-sm-1">
-    {{ ticket.price | currency}} <br>
+    <p class="ticket-result-price">{{ ticket.price | currency}}</p>
     {% comment %}TODO enable secure payment{{ ticket.get_payment_method_display }}{% endcomment %}
   </td>
-  <td class="col-xs-2 col-sm-1">{{ ticket.location }}<br>{{ ticket.venue | truncatechars:50}}</td>
-  <td class="col-xs-2 col-sm-3">{{ ticket.title | truncatechars:200}}</td>
-  <td class="hidden-xs col-sm-3">
-    <img style="height: 100%; max-height: 75px;" class="pull-left" src="{% if ticket.poster.profile_picture.search_thumbnail.url %}{{ ticket.poster.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
+  <td class="col-xs-2 col-sm-4"><div class="search-result-title-location">
+                                  <p class="search-result-title">{{ ticket.title | truncatechars:200}}</p>
+                                  <p class="search-result-location">{{ ticket.location }} - {{ ticket.venue | truncatechars:200}}</p>
+                                </div>
+  </td>
+  <td class="hidden-xs col-sm-3 col-lg-2">
+    <img class="search-result-picture pull-left" src="{% if ticket.poster.profile_picture.search_thumbnail.url %}{{ ticket.poster.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
     <div style="padding-left: 10px;" class="pull-left">
-      {{ ticket.poster}}{% if ticket.poster.age %}, {{ ticket.poster.age }}{% endif %}
-      <br>
+      <p class="ticket-result-name">{{ ticket.poster.first_name | title}}{% if ticket.poster.age %}, {{ ticket.poster.age }}</p>{% endif %}
       <span>
         {% for x in ticket.poster.rating|get_range %}
           <span class="glyphicon glyphicon-star"></span>
@@ -26,3 +32,4 @@
     </div>
   </td>
 </tr>
+{% endspaceless %}

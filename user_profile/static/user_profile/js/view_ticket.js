@@ -47,6 +47,10 @@ function load_message_user_modal(show_modal) {
         if (show_modal) {
             $('#modal-message-user-root').modal('show');
         }
+        $('#message-user-form-submit-button').on('click', function () {
+            modal_message_user_button();
+        });
+
     });
 }
 
@@ -54,13 +58,92 @@ function prepare_delete_ticket_button() {
     // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
     // The answer is that this modal is multi-purposed, and another button might use it in the future.
     $('#delete-ticket').on('click', function () {
-        prepare_yes_cancel_modal('Are you sure you want to permanently delete this ticket listing?', window.additional_parameters.delete_ticket_url);
+        prepare_yes_cancel_modal('Are you sure you want to permanently delete this ticket listing?',
+                                 window.additional_parameters.delete_ticket_url);
     });
 }
 
-//TODO this is somewhat of a hack to override what the stripe button reads
+function initiate_stripe() {
+
+    show_popup_notification_modal('<p>After you close this popup, you will be asked to enter your credit card ' +
+        'information. You will not be charged immediately or necessarily at all.</p><p>The seller of this ticket must ' +
+        'first approve you and agree to go to the event with you. If he accepts your request, your card will be ' +
+        'charged. If he does not accept your request, you will not be charged.</p><p>After initiating this request, you ' +
+        'will not be able to request to go to another show on the same day at the same time.</p>', 'warning', true);
+}
+
+function can_request_to_buy() {
+    /* There are some cases where we will not allow a user to request to buy a ticket.
+     * If the ticket was cancelled or the buyer is already going to another show or already requested to buy this ticket
+     */
+
+    $.post(window.additional_parameters.can_request_ticket_url,
+           {'ticket_id': window.additional_parameters.ticket_id},
+           "json")
+        .done(function (response) {
+            initiate_stripe();
+        })
+        .fail(function (response) {
+            var error_message = handle_ajax_response(response.responseJSON);
+            var $request_to_buy_errors = $('#request-to-buy-errors');
+            $request_to_buy_errors.css('display', '');
+            $request_to_buy_errors.find('p').text(error_message);
+        });
+
+}
+
 function prepare_stripe_button() {
-    $('.stripe-holder-form button').html('<span style="display: block; min-height: 30px;">Request to Buy</span>');
+    'use strict';
+
+    $('#request-to-buy').on('click', function (e) {
+        // Users cannot request to buy tickets if they are not logged in
+        if (!window.additional_parameters.is_authenticated) {
+            load_login_modal(true);
+            return;
+        }
+        e.preventDefault();
+        can_request_to_buy();
+    });
+
+    $(document).on('modal-popup-notification-closed', function () {
+        var handler = StripeCheckout.configure({
+            key: window.additional_parameters.stripe_public_key,
+            image: '/square-image.png',
+            token: function (token) {
+                  // Use the token to create the charge with a server-side script.
+                  // You can access the token ID with `token.id`
+                $.post(window.additional_parameters.request_to_buy_url,
+                    {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
+                     "json");
+            }
+        });
+
+        // Open Stripe checkout modal
+        handler.open({
+            name: 'SpareStub',
+            description: window.additional_parameters.ticket_title,
+            allowRememberMe: true,
+            email: window.additional_parameters.user_email,
+            panelLabel: '$' + (parseFloat(window.additional_parameters.ticket_amount) + 5).toString() + ' ($' + (parseFloat(window.additional_parameters.ticket_amount)).toString() + ' + $5 fee)'
+        });
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function () {
+        handler.close();
+    });
+}
+
+function modal_message_user_button() {
+    /* When the user clicks the Send Message button inside the modal messaging form, this tag is called to contact the
+     * server and add the message to the database.
+     */
+    $.post(window.additional_parameters.send_message_url,
+           {'other_user_id': window.additional_parameters.user_id,
+            'ticket_id': window.additional_parameters.ticket_id,
+            'body': $('#message-user-body').val()
+            },
+            'json');
 }
 
 $(document).ready(function ($) {
@@ -68,6 +151,7 @@ $(document).ready(function ($) {
         load_message_user_modal(true);
     });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
+
     prepare_delete_ticket_button();
     prepare_stripe_button();
 });

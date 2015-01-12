@@ -5,6 +5,36 @@
 var $ = jQuery;
 var document = window.document;
 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
 function initialize_location_autocomplete() {
     'use strict';
     var locations = new Bloodhound({
@@ -121,8 +151,32 @@ function initialize_login_form_signup_link() {
     });
 }
 
+function initialize_resend_email_notification() {
+    /* Prepare the notification bar at the top of the screen that prompts the user to confirm their email address.
+     * This function readies the link that the user can click to resend the confirmation email. */
+
+    $('#resend-confirm-email').on('click', function (e) {
+        e.preventDefault();
+        $.post(window.additional_parameters.resend_confirmation_email_link, 'json')
+            .done(function(response) {
+                handle_ajax_response(response.contents);
+            })
+            .fail(function(response) {
+                handle_ajax_response(response.contents);
+            });
+    });
+}
+
 $(document).ready(function ($) {
     'use strict';
+
+    // Remove a notificaiton when clicked, regardless of where. The bootstrap code for alert-dismiss takes forver.
+    $('.close').on('click touchstart touchend', function() {
+        $(this).parent().remove();
+    });
+
+    initialize_resend_email_notification();
+
     $('.contact-form-button').on('click', function () {
         // If the modal content has already been loaded, don't do it again
         if ($('#modal-contact-form-content').children().length > 0) {
@@ -179,4 +233,7 @@ $(document).ready(function ($) {
 
     // Initialize when the page loads so that ticker search autocomplete woks
     initialize_location_autocomplete();
+
+    setup_pop_notification_modal();
 }($));
+

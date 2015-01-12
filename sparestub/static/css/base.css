@@ -5,6 +5,27 @@
    background: url("http://www.cssmatic.com/img/bg-right-column.jpg");
 }*/
 
+/* Override the default bootstrap setting that applies white-space: nowrap to all of these selectors.
+   This looks TERRIBLE on small screens when you have long titles or reviews since the text never breaks */
+.table-responsive > .table > thead > tr > th,
+.table-responsive > .table > tbody > tr > th,
+.table-responsive > .table > tfoot > tr > th,
+.table-responsive > .table > thead > tr > td,
+.table-responsive > .table > tbody > tr > td,
+.table-responsive > .table > tfoot > tr > td,
+.table-responsive > .table > tfoot > tr {
+    white-space: normal;
+}
+
+.table-responsive {
+    border: none;
+}
+
+/* Remove the uppermost line from tables which have no header labels */
+.table > tbody > tr:first-child > td {
+    border-top: none;
+}
+
 /* Override padding for logo in navbar */
 .navbar-brand {
     padding: 10px;
@@ -12,8 +33,8 @@
 
 /* Override bootstrap button styling with branding colors */
 .btn-primary {
-    background-color: #2A97BC;
-    border-color: #2A97BC;
+    background-color: #2CB0EF;
+    border-color: #2CB0EF;
 }
 
 .btn-primary:hover {
@@ -25,6 +46,21 @@
     border-color:  #CA2473;
     color:  #CA2473;
     background-color: #ffffff;
+}
+
+.panel-primary > .panel-heading {
+    background-color: #2CB0EF;
+    border-color: #2CB0EF;
+    font-size: 16px;
+}
+
+.panel {
+    border: none;
+    -webkit-box-shadow: none;
+}
+
+.panel-title {
+    font-
 }
 
 /* Larger font size for all buttons in navbar */
@@ -92,9 +128,8 @@ textarea {
 }
 
 .glyphicon-remove {
-    color: 'red;
+    color: red;
 }
-
 
 /* Disable the annoying number spinner for type=number HTML5 input fields in Chrome/Safari/IE*/
 input[type=number]::-webkit-outer-spin-button,
@@ -119,13 +154,26 @@ input[type=number] {
 
 /* The search dropdown is not really visible when the nav bar is collapsed. Make it so!*/
 .navbar>.navbar-collapse {
-    max-height: 400px;
+    overflow: visible;
 }
 
-/* Removes padding from navnar on small screens so that logo, search bar, and menu toggle can all fit*/
-@media (max-width: 768px) {
+
+@media (max-width: 767px) {
+    /* Removes padding from navbar on small screens so that logo, search bar, and menu toggle can all fit*/
     .navbar {
         padding: 0;
+    }
+
+    /* When the dropdown is displayed, it will appear inside collapsed navbar. When the dropdown is positioned absolutely,
+       it's position will not affect the size of it's parent, so it remains invisible. This fixes that */
+    #search-ticket-dropdown {
+        display: relative;
+    }
+
+    /* The filter input fields in the search ticket dropdown need to be the width as the text search input box */
+    #search-ticket-dropdown>li {
+        width: 75%;
+        padding: 0 12px;
     }
 }
 
@@ -159,6 +207,60 @@ input[type=number] {
                    (*cough* Chrome *cough* decide they want to render the font size differently than the css specifies.
                    This percentage ensures the search button does not appear on a different line when Chrome
                    gets sassy. */
+}
+
+/* Before the navbar collapases, let's try to shrink it down so it doesn't take up 2 lines of space */
+@media (min-width:900px) and (max-width: 1000px) {
+    .navbar-nav>li>a {
+        padding: 15px 12px;
+        font-size: 14px;
+    }
+    #search-ticket-form {
+        padding: 0;
+        max-width: 200px;
+    }
+    ::-webkit-input-placeholder {
+    font-size: 14px;
+    }
+    :-moz-placeholder { /* Firefox 18- */
+       font-size: 14px;
+    }
+    ::-moz-placeholder {  /* Firefox 19+ */
+       font-size: 14px;
+    }
+    :-ms-input-placeholder {
+       font-size: 14px;
+    }
+    .navbar-nav button, .navbar-nav a {
+        font-size: 14px;
+    }
+}
+
+/* Before the navbar collapases, let's try to shrink it down so it doesn't take up 2 lines of space */
+@media (min-width:768px) and (max-width: 900px) {
+    .navbar-nav>li>a {
+        padding: 15px 8px;
+        font-size: 13px;
+    }
+    #search-ticket-form {
+        padding: 0;
+        max-width: 180px;
+    }
+    ::-webkit-input-placeholder {
+    font-size: 13px;
+    }
+    :-moz-placeholder { /* Firefox 18- */
+       font-size: 13px;
+    }
+    ::-moz-placeholder {  /* Firefox 19+ */
+       font-size: 13px;
+    }
+    :-ms-input-placeholder {
+       font-size: 13px;
+    }
+    .navbar-nav button, .navbar-nav a {
+        font-size: 13px;
+    }
 }
 
 #search-ticket-submit {
@@ -207,40 +309,61 @@ input[type=number] {
 
 /* Make the inbox icon have the same spacing as the user profile and logout buttons next to it */
 #inbox-icon a {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 6px 10px;
+    margin: 8px 0;
+    border: solid 1px white;
+    font-size: 14px;
 }
+#inbox-icon a:hover {
+    border-color: #CA2473;
+    color: #CA2473;
+    border-radius: 4px;
+}
+
+
 /* END NAVBAR */
 
+/* NOTIFICATIONS */
 
 #notification-root {
     text-align: center;   /* Center the text for the notification bar */
+    position: fixed;
+    z-index: 100;
+    right: 0;
 }
 
-#notification-style {
-    margin-bottom: 10px; /* The alert bar should have minimal spacing around it to conserve vertical screen space */
+#notification-root .notification-style {
+    margin: 0;
 }
 
-/*If the margin appears inside the notification root, then the inner div will push the boundaries of
-notifcation-root outwards, and they will not collapse with top margins of elements below notification-root */
-#notification-root div{
-    margin-bottom: 0px;
+.close {
+    line-height: 20px;
 }
 
-#signup-notification-root .alert {
-    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
-    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+
+.notification-style {
+    padding: 5px;
 }
 
-#login-notification-root .alert {
-    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
-    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+.notification-content {
+    font-size: 15px;
+    color: #717172;
+    padding-right: 5px;
 }
 
-#contact-notification-root .alert {
-    margin-bottom: 0px; /* The same applies to the contact form. Minimize space around the alert. */
-    margin-top: 15px;  /* But make sure that the "Email Us" header and alert have spacing between them. */
+.notification-content>a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #717172;
+    cursor: pointer;
 }
+
+#signup-notification-root .alert, #login-notification-root .alert, #contact-notification-root .alert {
+    margin-bottom: 0px; /* The same applies to the forms. Minimize space around the alert. */
+    margin-top: 15px;  /* But make sure that the modal-header and alert have spacing between them. */
+}
+
+/* END NOTIFICATIONS */
 
 
 /* Make sure that there is even spacing between the form fields and submit buttons */
@@ -268,6 +391,20 @@ notifcation-root outwards, and they will not collapse with top margins of elemen
 
 #modal-yes-cancel-form {
     margin-top: 20px;
+}
+
+#modal-popup-notification-content {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+#modal-popup-notification-content p {
+    margin: 10px
+}
+
+/* Make sure that modal dialogues appear in front of the fixed notification root */
+.modal-dialog {
+    z-index: 10000;
 }
 
 /* END YES CANCEL MODAL */
@@ -364,7 +501,7 @@ span.twitter-typeahead .tt-suggestion > p:focus {
   color: #ffffff;
   text-decoration: none;
   outline: 0;
-  background-color: #428bca;
+  background-color: #2CB0EF;
 }
 span.twitter-typeahead .tt-suggestion.tt-cursor {
   color: #ffffff;

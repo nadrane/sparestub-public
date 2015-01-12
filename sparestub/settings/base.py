@@ -53,6 +53,8 @@ INSTALLED_APPS = (
     'utils',
     'reviews',
     'messages',
+    'asks',
+    'stripe_data',
 
     # All needed for zinnia
     'django_comments',
@@ -82,10 +84,7 @@ MIDDLEWARE_CLASSES = (
     #'utils.middleware.history.LastVisitedMiddleware'
 )
 
-AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin
-    "django.contrib.auth.backends.ModelBackend",
-)
+AUTHENTICATION_BACKENDS = ('registration.backends.user_backend.UserBackend',)
 
 MANDRILL_API_KEY = get_env_variable('MANDRILL_API_KEY')
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
@@ -106,6 +105,7 @@ CURRENT_TIME_ZONE = 'EST'
 USE_I18N = True
 
 USE_L10N = True
+FORMAT_MODULE_PATH = 'formats'
 
 USE_THOUSAND_SEPARATOR = True  # We expect currency input to contain thousands separators.
                                # They are inserted by the utoNumeric library.
@@ -152,3 +152,5 @@ DEFAULT_CITY_LIST_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'location
 
 LOGIN_URL = '/registration/login_redirect/'
 LOGIN_REDIRECT_URL = '/'
+
+SEND_EMAILS = True  # Default to sending emails unless a specific settings file disables it
