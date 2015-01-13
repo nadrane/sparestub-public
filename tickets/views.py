@@ -42,7 +42,7 @@ def submit_ticket(request):
                                          location=location,
                                          ticket_type=ticket_type,
                                          payment_method=payment_method,
-                                         is_active=True,
+                                         status='P',
                                          venue=venue,
                                          )
 

@@ -1,9 +1,13 @@
+# Standard Imports
+from itertools import chain
+
 # 3rd Party Imports
 from pytz import timezone
 
 # Django
 from utils.models import TimeStampedModel
 from django.db import models
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 
 # SparStub imports
@@ -105,12 +109,12 @@ class Ticket(TimeStampedModel):
                                       choices=ticket_model_settings.get('PAYMENT_METHODS'))
 
     # An active ticket is one that is available to be bid on
-    status = models.BooleanField(blank=False,
-                                 db_index=True,
-                                 default='P',
-                                 max_length=1,
-                                 choices=ticket_model_settings.get('TICKET_STATUSES'),
-                                 )
+    status = models.CharField(blank=False,
+                              db_index=True,
+                              default='P',
+                              max_length=1,
+                              choices=ticket_model_settings.get('TICKET_STATUSES'),
+                              )
 
     # The rating of the user that posted the ticket. Do not use this field!! Reference the poster rating instead.
     # Yes, they should always be the same, but let's just be safe. This field exists solely because Haystack cannot
@@ -124,6 +128,61 @@ class Ticket(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def get_buyer(self):
+        """
+        Return the buyer of a ticket by looking at it's associated requests
+        """
+
+        from asks.models import Request
+        requests = Request.objects.filter(ticket=self, status='A')
+        if requests:
+            return requests[0]
+        return None
+
+    def is_messageable(self):
+        """
+        A user is allowed to message another user about a particular ticket if it has a status of posted, sold, or expired.
+        Obviously not any user can send the message, but some user's can. For example, the user that bought the ticket
+        can send a message if the ticket has a status of sold.
+        """
+        status = self.status
+        return status == 'P' or status == 'S' or status == 'E'
+
+    def is_requestable(self):
+        """
+        Is this ticket available for requests. A ticket may only be requested if it's status is posted
+        """
+        return self.status == 'P'
+
+    def can_view(self, user):
+        """
+        Is this ticket viewable? A ticket is not viewable if
+        """
+        is_viewable = None
+        status = self.status
+        poster = self.poster
+
+        # If the ticket is posted, anyone may view it
+        if status == 'P':
+            is_viewable = True
+        # If the user cancelled the ticket, only he may view it
+        elif status == 'C':
+            if poster == user:
+                is_viewable = True
+            else:
+                is_viewable = False
+        # If the buyer's account was deactivated, no one may see the request
+        elif status == 'D':
+            is_viewable = False
+        # If the ticket is sold or the event has passed, only the buyer and seller may see it
+        elif status == 'E' or status == 'S':
+            if poster == user or poster == self.get_buyer():
+                is_viewable == True
+            else:
+                is_viewable = False
+
+        return is_viewable
 
     def change_status(self, new_status):
         from asks.models import Request
@@ -198,34 +257,50 @@ class Ticket(TimeStampedModel):
     @staticmethod
     def available_tickets(user):
         """
-        Return a QuerySet of tickets that this user posted that are still active
+        Return a QuerySet of tickets that this user posted that are still available to buy
         """
-        return Ticket.objects.filter(poster=user, is_active=True)
+        return Ticket.objects.filter(poster=user, status='P')
 
     @staticmethod
     def in_progress_ticket(user):
         """
-        Return a QuerySet of tickets that this user not not post that he has has either messaged another user about or
-        that he has requested to buy.
+        Return a QuerySet of tickets that are in progress for this user.
+        This list is aggregated from both active conversations and from active requests.
+        Any ticket with an associated request of
+            1. Accepted
+            2. Pending
+        will be added to this list if that ticket has a status of
+            1. Sold
+            2. Posted
         """
         from messages.models import Message
+        from asks.models import Request
 
-        # Get the tickets that this user has messaged other users about
-        active_messages = Message.get_messages_received(user).filter(is_active=True)
+        # Get any open accepted and pending requests for sold and posted tickets
+        open_requests = Request.objects.filter(Q(status='A') | Q(status='P'))\
+                                       .filter(Q(ticket__status='S') | Q(ticket__status='P'))
 
-        # Filter out duplicate tickets. There are lots of messages between two people about one ticket.
+        # Get the tickets that this user has messaged other users about.
+        # We do not care about messages I've received because those ticket's
+        # are available in the "available tickets" section
+        # We only care about posted tickets, not sold ones. If a sold one was relevant to me,
+        # it would be bundled up from the Request
+        active_messages = Message.get_messages_sent(user).exclude(ticket__poster=user).filter(ticket__status='P')
+
+        # Filter out duplicate tickets. There are lots of messages between two people about one ticket,
+        # and potentially multiple requests for that matter
+        tickets_requested = set(request.ticket for request in open_requests)
         tickets_messaged_about = set(message.ticket for message in active_messages)
 
-        # Get the tickets that this user has bid on that are still pending
-        # TODO include bids once they exist
-        #tickets_requested = Bid.objects.filter(bidder=user).filter(status='P').ticket
-        #return chain(tickets_messaged_about, tickets_requested)
-
-        return tickets_messaged_about
+        return tickets_requested.union(tickets_messaged_about)
 
     @staticmethod
     def past_tickets(user):
         """
         Returns a QuerySet of tickets that this user either successfully bought or successfully sold
         """
-        return Ticket.objects.filter(Q(poster=user) | Q(bidders=user)).filter(is_active=False)
+        from asks.models import Request
+
+        tickets_sold_and_cancelled_tickets = Ticket.objects.filter(poster=user).filter(Q(status='S') | Q(status='C'))
+        requests_for_tickets = Request.objects.filter(requester=user, ticket__status='S')
+        return chain(tickets_sold_and_cancelled_tickets, [request.ticket for request in requests_for_tickets])

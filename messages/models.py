@@ -25,7 +25,7 @@ class MessageManager(models.Manager):
                              body=body,
                              is_read=False,
                              datetime_read=None,
-                             is_active=True,
+                             status='A',
                              )
 
         # Whenever a new message is created, we need to make sure all messages in that conversation are visible.
@@ -91,12 +91,13 @@ class Message(TimeStampedModel):
                                                   default=False,
                                                   )
 
-    # Does this message belong to an active conversation about a ticket that has not yet been sold?
-    # TODO probably should mark conversation inactive on rejection
-    is_active = models.BooleanField(blank=False,
-                                    null=False,
-                                    default=False
-                                    )
+    status = models.BooleanField(blank=False,
+                                 null=False,
+                                 db_index=True,
+                                 default='A',
+                                 max_length=1,
+                                 choices=message_model_settings.get('MESSAGE_STATUSES'),
+                                 )
 
     objects = MessageManager()
 
@@ -190,7 +191,7 @@ class Message(TimeStampedModel):
         Returns a QuerySet of all messages the user has sent.
         """
 
-        return Message.objects.filter(conversation__sender=user)
+        return Message.objects.filter(sender=user)
 
     @staticmethod
     def all_messages(user):
@@ -238,7 +239,6 @@ class Message(TimeStampedModel):
         But the thing is, we don't know who the other user is (is it the sender or reciever).
         We would need to maintain a concept of an inbox for each user, and then we would always know who the other user
         is.
-
         """
 
         return Message.all_messages(user).order_by('creation_timestamp')
@@ -251,3 +251,33 @@ class Message(TimeStampedModel):
 
         return Message.objects.filter(receiver=user.id).filter(is_read=False).count()
 
+    @staticmethod
+    def can_message(ticket, user):
+        """
+        Can the inputted user send a message about this ticket?
+        """
+        from asks.models import Request
+        can_message = None
+
+        if not ticket or not user:
+            return False
+
+        if ticket.is_messageable():
+            status = ticket.status
+            # If the ticket is posted
+            if status == 'P':
+                # If the user has a previously declined request for that ticket, disable messaging
+                if Request.get_all_requests(user, ticket).filter(status='D').exists():
+                    can_message = False
+                else:
+                    can_message = True
+            # If the ticket is sold or the event has passed
+            elif status == 'S' or status == 'E':
+                # If the user purchased the ticket, conversation may continue
+                if Request.get_all_requests(user, ticket).filter(status='A').exists():
+                    can_message = True
+                else:
+                    can_message = False
+        else:
+            can_message = False
+        return can_message

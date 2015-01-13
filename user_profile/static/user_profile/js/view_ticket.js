@@ -58,8 +58,9 @@ function prepare_delete_ticket_button() {
     // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
     // The answer is that this modal is multi-purposed, and another button might use it in the future.
     $('#delete-ticket').on('click', function () {
-        prepare_yes_cancel_modal('Are you sure you want to permanently delete this ticket listing?',
-                                 window.additional_parameters.delete_ticket_url);
+        prepare_yes_cancel_modal('Are you sure you want to permanently delete this ticket listing? You will still be' +
+                                  'able to view it, but no one else will',
+                                  window.additional_parameters.delete_ticket_url);
     });
 }
 

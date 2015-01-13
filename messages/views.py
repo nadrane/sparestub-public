@@ -36,6 +36,8 @@ class MessageUserModal(TemplateView):
 
 @login_required()
 def send_message(request):
+    import pdb
+    pdb.set_trace()
     if request.method == 'POST':
         send_message_form = SendMessageForm(request.POST, request=request)
         if send_message_form.is_valid():
@@ -107,11 +109,11 @@ def inbox(request):
                 """
                 user_request, request_status, request_expiration = None, None, None
                 if ticket.poster == user:
-                    user_request = Request.get_request(other_user, ticket)
+                    user_request = Request.get_last_request(other_user, ticket)
                      # The user viewing the inbox did not request this ticket. He is the seller.
                     is_requester = False if user_request else None
                 elif ticket.poster == other_user:
-                    user_request = Request.get_request(user, ticket)
+                    user_request = Request.get_last_request(user, ticket)
                     # The user viewing the inbox did request this ticket. He is the buyer.
                     is_requester = True if user_request else None
                 if user_request:

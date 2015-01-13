@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 # SpareStub Imports
 from tickets.models import Ticket
 from registration.models import User
+from messages.models import Message
 
 # Module Imports
 from .settings import send_message_form_settings
@@ -28,9 +29,6 @@ class EditMessageForm(forms.Form):
         except ObjectDoesNotExist:
             raise forms.ValidationError('This ticket does not exist!')
 
-        if not ticket.is_active:
-            raise forms.ValidationError('This ticket is no longer available. Sorry!')
-
         return self.cleaned_data.get('ticket_id')
 
     def clean_other_user_id(self):
@@ -43,7 +41,9 @@ class EditMessageForm(forms.Form):
         return self.cleaned_data.get('other_user_id')
 
     def clean(self):
-        ticket_poster = self.cleaned_data.get('ticket').poster
+        ticket = self.cleaned_data.get('ticket')
+        ticket_poster = ticket.poster
+
         sender = self.request.user
         other_user = self.cleaned_data.get('other_user')
 
@@ -58,6 +58,26 @@ class EditMessageForm(forms.Form):
 
 class SendMessageForm(EditMessageForm):
 
-        body = forms.CharField(required=True,
-                               max_length=send_message_form_settings.get('BODY_MAX_LENGTH'),
-                               )
+    body = forms.CharField(required=True,
+                           max_length=send_message_form_settings.get('BODY_MAX_LENGTH'),
+                           )
+
+    def clean_ticket_id(self, *args, **kwargs):
+        super(SendMessageForm, self).clean_ticket_id(*args, **kwargs)
+
+        # No need to raise an error for this here. We do that in the base class.
+        ticket = self.cleaned_data.get('ticket')
+        if not ticket:
+            return
+        if not ticket.is_messageable():
+            raise forms.ValidationError('This ticket is no longer available.')
+
+    def clean(self, *args, **kwargs):
+        super(SendMessageForm, self).clean(*args, **kwargs)
+        ticket = self.cleaned_data.get('ticket')
+        sender = self.request.user
+        if Message.can_message(ticket, sender):
+            forms.ValidationError('Sorry, you are not allowed to send a message for that ticket.')
+
+
+

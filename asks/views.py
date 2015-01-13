@@ -32,7 +32,7 @@ def accept_request(request):
                          .format(user, ticket.poster))
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
-    if not ticket.is_active:
+    if not ticket.is_requestable():
         return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
 
     try:
@@ -40,7 +40,7 @@ def accept_request(request):
     except User.DoesNotExist:
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
-    user_request = Request.get_request(other_user, ticket)
+    user_request = Request.get_last_request(other_user, ticket)
     if user_request.status != 'P':
         return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
 
@@ -65,7 +65,7 @@ def decline_request(request):
                          .format(user, ticket.poster))
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
-    if not ticket.is_active:
+    if not ticket.is_requestable:
         return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
 
     try:
@@ -73,7 +73,7 @@ def decline_request(request):
     except User.DoesNotExist:
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
-    user_request = Request.get_request(other_user, ticket)
+    user_request = Request.get_last_request(other_user, ticket)
     if user_request.status != 'P':
         return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
 
@@ -94,13 +94,10 @@ def can_request_ticket(request, ticket_id):
     except ObjectDoesNotExist:
         return ajax_other_message("Uh Oh, something went wrong. Our developers are on it!", 400)
 
-    if not ticket.is_active:
+    if not ticket.is_requestable:
         return ajax_other_message("It looks like this ticket is no longer available. Sorry!", 400)
 
-    requests = Request.requests_for_ticket(user, ticket)
-    # Allow the user to request to buy the ticket again only if the other requests were cancelled by
-    # the requester or if the request expired
-    if requests.exclude(status='E').exclude(status='C').exists():
+    if Request.can_request(ticket, user):
         return ajax_other_message('You have already requested to buy this ticket. You cannot do that again!', 400)
 
     if Request.requested_other_ticket_same_time(user, ticket):

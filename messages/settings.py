@@ -1,4 +1,7 @@
-message_model_settings = {'BODY_MAX_LENGTH': 5000}
+message_model_settings = {'BODY_MAX_LENGTH': 5000,
+                          'MESSAGE_STATUSES': (('A', 'Active'),    # Associated with a ticket whose event date has not passed
+                                               ('F', 'Flagged'),   # A message that was flagged illicit by a user
+                                               )}
 
 send_message_form_settings = {'BODY_NOTEMPTY_MESSAGE': 'Please enter a message.',}
 send_message_form_settings.update(message_model_settings)

@@ -149,7 +149,7 @@ class Request(TimeStampedModel):
         Message.objects.create_message(ticket.poster, self.requester, ticket, message_body, False)
 
     @staticmethod
-    def get_request(user, ticket):
+    def get_last_request(user, ticket):
         """
         Get the request for a given requester ticket combination
         Note that there can be multiple requests for a ticket/user combination if a request was cancelled by the user
@@ -161,7 +161,7 @@ class Request(TimeStampedModel):
         return None
 
     @staticmethod
-    def requests_for_ticket(user, ticket):
+    def get_all_requests(user, ticket):
         """
         Return all requests of a particular user for this ticket.
         There may be more than 1 if
@@ -185,9 +185,27 @@ class Request(TimeStampedModel):
         # 1. Start on the same date as the inputted ticket
         # 2. begin within 2 hours of the start time of the inputted ticket
         return Request.objects.filter(requester=user,
-                                      ticket__is_active=True,
+                                      ticket__status='P',
                                       ticket__start_date=ticket.start_date,
                                       ticket__start_datetime__lte=early_bound,
                                       ticket__start_datetime__gte=late_bound) \
                                       .exclude(ticket=ticket)\
                                       .exists()
+
+    @staticmethod
+    def can_request(ticket, user):
+        """
+        Can the inputted user send a request for this ticket
+        """
+        can_request = None
+
+        if ticket.is_requestable():
+            # If the user has a pending request open or has a declined request, he cannot request again
+            if Request.get_all_requests(user, ticket).filter(status='P').filter(status='D'):
+                can_request = False
+            else:
+                can_request = True
+        else:
+            can_request = False
+
+        return can_request

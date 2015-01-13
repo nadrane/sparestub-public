@@ -17,7 +17,7 @@ class TicketIndex(indexes.SearchIndex, indexes.Indexable):
 
     payment_method = indexes.CharField(model_attr='payment_method')
 
-    is_active = indexes.CharField(model_attr='is_active')
+    status = indexes.CharField(model_attr='status')
 
     poster_rating = indexes.IntegerField(model_attr='rating',
                                          null=True,

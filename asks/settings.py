@@ -1,5 +1,7 @@
 request_model_settings = {'REQUEST_STATUSES': (('P', 'Pending'),    # User has not yet accepted or rejected the user
-                                               ('E', 'Expired'),    # Event date has passed, or user does not accept or reject within time limit
+                                               ('C', 'Closed'),     # Event date has passed.
+                                                                    # A request must be expired before it can reach this status.
+                                               ('E', 'Expired'),    # user does not accept or reject within time limit
                                                ('A', 'Accepted'),   # Ticket sold to this user!
                                                ('D', 'Declined'),   # This user was declined!
                                                ('C', 'Cancelled'),  # The user cancelled their request.

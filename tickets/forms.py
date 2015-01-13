@@ -41,7 +41,7 @@ class SearchTicketForm(FacetedSearchForm):
 
         # If the default search returned an empty query set, it simply means that no query string q was entered.
         # There are other things we can search on, though, like location, dates, and ticket type.
-        # Grab the original sqs filtered by is_active and ordered by date and filter over it.
+        # Grab the original sqs filtered by status as posted and ordered by date and filter over it.
         if isinstance(sqs, EmptySearchQuerySet):
             if self.cleaned_data['location_raw'] or self.cleaned_data['ticket_type'] or self.cleaned_data['start_date'] or self.cleaned_data['end_date']:
                 sqs = self.searchqueryset
