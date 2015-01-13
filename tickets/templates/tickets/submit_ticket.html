@@ -1,4 +1,6 @@
-<div class="modal-content">
+{% load l10n %}<
+
+div class="modal-content">
   <div class="modal-header">
     <div class="row">
       <div class="col-xs-10">
@@ -133,20 +135,6 @@
             </select>
           </div>  <!-- form group -->
         </div> <!-- column -->
-        {% comment %} Removing for lean launch
-        <div class="col-md-4 col-xs-12 small-feedback-icon-shift">
-          <div class="form-group">
-            <label for="submit-ticket-payment-method" class="control-label sr-only"></label>
-            <select id="submit-ticket-payment-method" type="text" class="form-control" name="payment_method" required
-                    data-bv-notempty-message="{{ form_settings.PAYMENT_METHOD_NOTEMPTY_MESSAGE }}">
-              <option value="" disabled selected>Select payment method</option>
-              {% for option in form_settings.PAYMENT_METHODS %}
-                <option value="{{ option.0 }}">{{ option.1 }}</option>
-              {% endfor %}
-            </select>
-          </div>  <!-- form group -->
-        </div> <!-- column -->
-        {% endcomment %}
       </div> <!-- row -->
 
       <div class="row">
@@ -154,7 +142,11 @@
           <div class="form-group last-form-group">
             <label for="submit-ticket-about" class="control-label sr-only"></label>
             <textarea id="submit-ticket-about" class="form-control" name="about"
-                      placeholder="Anything else you'd like to say?"></textarea>
+                      placeholder="Anything else you'd like to say?"
+
+                      data-bv-stringlength="true"
+                      data-bv-stringlength-max="{% localize off %}{{ form_settings.ABOUT_MAX_LENGTH }}{% endlocalize %}"
+                      data-bv-stringlength-message="{{ form_settings.ABOUT_LENGTH_MESSAGE }}"></textarea>
           </div>  <!-- form group -->
         </div> <!-- column -->
       </div> <!-- row -->

@@ -82,7 +82,7 @@ class Ticket(TimeStampedModel):
 
     about = models.TextField(blank=True,
                              default='',
-                             max_length=ticket_model_settings.get('CONTENT_MAX_LENGTH'))
+                             max_length=ticket_model_settings.get('ABOUT_MAX_LENGTH'))
 
     # When does the event start? Stored in UTC timezone format
     start_datetime = models.DateTimeField(blank=False)

@@ -1,14 +1,13 @@
 # Django imports
 from django.contrib.auth.decorators import login_required
-from .settings import ticket_submit_form_settings
 from django.shortcuts import render
-from django.template.loader import render_to_string
 
 # 3rd Party Imports
 from haystack.views import FacetedSearchView
 
 # SpareStub Imports
-from utils.networking import ajax_http, form_success_notification, non_field_errors_notification
+from utils.networking import ajax_http, ajax_popup_notification, non_field_errors_notification
+from .settings import ticket_submit_form_settings
 
 # Module Imports
 from .models import Ticket
@@ -45,8 +44,10 @@ def submit_ticket(request):
                                          venue=venue,
                                          )
 
-            return ajax_http(**form_success_notification('Your ticket was successfully submitted! '
-                                                         'It will become visible to others shortly.'))
+            return ajax_popup_notification('success',
+                                           'Your ticket was successfully submitted! '
+                                           'It will become visible to others shortly.',
+                                           200)
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
         # We don't actually specify what the form error was (unless it was a non_field error that we couldn't validate

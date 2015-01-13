@@ -1,5 +1,5 @@
 ticket_model_settings = {'TITLE_MAX_LENGTH': 300,
-                         'CONTENT_MAX_LENGTH': 10000,
+                         'ABOUT_MAX_LENGTH': 10000,
                          'VENUE_MAX_LENGTH': 50,
                          'TICKET_TYPES': (('M', 'Music'),
                                           ('S', 'Sports'),
@@ -24,9 +24,9 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
                                'TITLE_LENGTH_MESSAGE': "You're title cannot exceed {} characters"
                                    .format(ticket_model_settings.get('TITLE_MAX_LENGTH')),
 
-                               'CONTENT_MAX_LENGTH': ticket_model_settings.get('CONTENT_MAX_LENGTH'),
-                               'CONTENT_LENGTH_MESSAGE': "You're post cannot exceed {} characters"
-                                    .format(ticket_model_settings.get('CONTENT_MAX_LENGTH')),
+                               'ABOUT_MAX_LENGTH': ticket_model_settings.get('ABOUT_MAX_LENGTH'),
+                               'ABOUT_LENGTH_MESSAGE': "You're post cannot exceed {} characters"
+                                    .format(ticket_model_settings.get('ABOUT_MAX_LENGTH')),
 
                                'TICKET_TYPES': ticket_model_settings.get('TICKET_TYPES'),
                                'TICKET_TYPE_NOTEMPTY_MESSAGE': 'Please select the type of event',
@@ -54,7 +54,7 @@ ticket_submit_form_settings = {'TITLE_NOTEMPTY_MESSAGE': 'Please enter a title',
 
                                'VENUE_NOTEMPTY_MESSAGE': 'Please enter the venue where this event takes place',
                                'VENUE_LENGTH_MESSAGE': 'The venue cannot exceed {} characters'.format(ticket_model_settings.get('VENUE_MAX_LENGTH'))
-                            }
+                               }
 
 ticket_submit_form_settings.update(ticket_model_settings)
 
