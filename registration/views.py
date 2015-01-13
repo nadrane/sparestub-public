@@ -71,7 +71,7 @@ def signup(request):
     signup_form_settings['EMAIL_REMOTE_URL'] = reverse('valid_email')
 
     return render(request,
-                  'registration/signup.html',
+                  'registration/signup_email.html',
                   {'form_settings': signup_form_settings})
 
 
@@ -231,13 +231,13 @@ def reset_password(request, reset_link):
                     return HttpResponseRedirect('/')
             else:
                 return render(request,
-                              'registration/reset_password.html',
+                              'registration/reset_password_email.html',
                               {'reset_link': reset_link,
                                'bad_password': True,
                                'form_settings': password_form_settings
                                })
         return render(request,
-                      'registration/reset_password.html',
+                      'registration/reset_password_email.html',
                       {'reset_link': reset_link,
                        'form_settings': password_form_settings
                        })
