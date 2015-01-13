@@ -92,9 +92,16 @@ login_form_settings = {}
 login_form_settings.update(email_form_settings)
 login_form_settings.update(password_form_settings)
 
+# Send a user when he forgets his password
 PASSWORD_RESET_EMAIL_SUBJECT = 'SpareStub - Reset your password'
-PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/forgot_password_email.html'
+PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/reset_pasword.html'
+
+# Send to a user to ask him to confirm his email address
 EMAIL_CONFIRMATION_EMAIL_SUBJECT = 'SpareStub - Email confirmation'
-EMAIL_CONFIRMATION_EMAIL_TEMPLATE = 'registration/email_confirmation_email.html'
+EMAIL_CONFIRMATION_EMAIL_TEMPLATE = 'registration/email_confirmation.html'
+
+# Send to a user after he signs up
+SIGNUP_EMAIL_SUBJECT = 'Welcome to SpareStub'
+SIGNUP_EMAIL_TEMPlATE = 'registration/signup.html'
 
 DEFAULT_PROFILE_PIC_URL = 'sparestub/logos/lilman.jpg'

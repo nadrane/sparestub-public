@@ -6,6 +6,7 @@ from utils.models import TimeStampedModel
 from django.db import models
 from django.template.loader import render_to_string
 from django.db import transaction
+from django.db.models import Q
 
 # SparStub imports
 from registration.models import User
@@ -14,10 +15,11 @@ from messages.models import Message
 
 # Module Imports
 from .settings import request_model_settings,\
-    TICKET_REQUESTED_REQUESTER_SUBJECT, TICKET_REQUESTED_REQUESTER_TEMPLATE,\
-    TICKET_REQUESTED_POSTER_SUBJECT, TICKET_REQUESTED_POSTER_TEMPLATE, \
+    REQUEST_SENT_SUBJECT, REQUEST_SENT_TEMPLATE,\
+    REQUEST_RECEIVED_SUBJECT, REQUEST_RECEIVED_TEMPLATE, \
     REQUEST_INACTIVE_SUBJECT, REQUEST_INACTIVE_TEMPLATE, \
-    REQUEST_ACCEPTED_SUBJECT, REQUEST_ACCEPTED_TEMPLATE
+    REQUEST_ACCEPTED_SUBJECT, REQUEST_ACCEPTED_TEMPLATE, \
+    REQUEST_CANCELLED_TO_SELLER_SUBJECT, REQUEST_CANCELLED_TO_SELLER_TEMPLATE
 
 
 class RequestManager(models.Manager):
@@ -28,12 +30,6 @@ class RequestManager(models.Manager):
         This function will shoot off an email to both the ticket poster and the user that requested to buy the ticket.
         """
 
-        # There are only a few cirucmstances where a user can submit 2 requests for a single ticket.
-        #   1.  If the user cancels their own request, it should be okay for them to re-request
-        #   2.  If a ticket expires, but the request was not declined, the buyer can re-request
-        if Request.objects.filter(requester=requester, ticket=ticket).exclude(status='E').exclude(status='C'):
-            return None
-
         request = self.model(requester=requester,
                              ticket=ticket,
                              status='P'
@@ -42,14 +38,22 @@ class RequestManager(models.Manager):
 
         poster = ticket.poster
 
-        poster.send_mail(TICKET_REQUESTED_POSTER_SUBJECT,
+        received_html_message = render_to_string(REQUEST_RECEIVED_TEMPLATE,
+                                                 {'user': requester,
+                                                  'ticket': ticket
+                                                  })
+        poster.send_mail(REQUEST_RECEIVED_SUBJECT,
                          message='',
-                         html=render_to_string(TICKET_REQUESTED_POSTER_TEMPLATE)
+                         html=received_html_message
                          )
 
-        requester.send_mail(TICKET_REQUESTED_REQUESTER_SUBJECT,
+        send_html_message = render_to_string(REQUEST_SENT_TEMPLATE,
+                                             {'user': requester,
+                                              'ticket': ticket
+                                              })
+        requester.send_mail(REQUEST_SENT_SUBJECT,
                             message='',
-                            html=render_to_string(TICKET_REQUESTED_REQUESTER_TEMPLATE)
+                            html=send_html_message
                             )
 
         message_body = 'This is an automated message to let you know that {} has requested to buy your ticket. ' \
@@ -93,6 +97,8 @@ class Request(TimeStampedModel):
         """
         When a seller accepts a user's request and agrees to go to the show with them.
         """
+        import pdb
+        pdb.set_trace()
 
         ticket = self.ticket
         poster = ticket.poster
@@ -105,7 +111,8 @@ class Request(TimeStampedModel):
             self.save()
             ticket.change_status('S')
 
-        message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE)
+        message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE,
+                                        {'ticket': ticket})
 
         poster.send_mail(REQUEST_ACCEPTED_SUBJECT,
                          message='',
@@ -124,9 +131,12 @@ class Request(TimeStampedModel):
         self.status = 'D'
         self.save()
 
+        message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
+                                        {'user': self.requester,
+                                         'ticket': self.ticket})
         self.requester.send_mail(REQUEST_INACTIVE_SUBJECT,
                                  message='',
-                                 html=render_to_string(REQUEST_INACTIVE_TEMPLATE))
+                                 html=message_body)
 
     def cancel(self):
         """
@@ -201,7 +211,7 @@ class Request(TimeStampedModel):
 
         if ticket.is_requestable():
             # If the user has a pending request open or has a declined request, he cannot request again
-            if Request.get_all_requests(user, ticket).filter(status='P').filter(status='D'):
+            if Request.get_all_requests(user, ticket).filter(Q(status='P') | Q(status='D')).exists():
                 can_request = False
             else:
                 can_request = True

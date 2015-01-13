@@ -50,7 +50,8 @@ def accept_request(request):
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
     user_request.accept()
-    Customer.get_customer().charge
+    return ajax_popup_notification('success', 'Congratulations, you and {} are going the event together'
+                                   .format(other_user.first_name.title()))
 
 @login_required()
 def decline_request(request):
@@ -79,6 +80,9 @@ def decline_request(request):
 
     user_request.decline()
 
+    return ajax_popup_notification('info', "Aww, we'll let {} down easy. Good like finding another gig buddy."
+                                   .format(other_user.first_name.title()))
+
 @login_required()
 def can_request_ticket(request, ticket_id):
     """
@@ -97,7 +101,7 @@ def can_request_ticket(request, ticket_id):
     if not ticket.is_requestable:
         return ajax_other_message("It looks like this ticket is no longer available. Sorry!", 400)
 
-    if Request.can_request(ticket, user):
+    if not Request.can_request(ticket, user):
         return ajax_other_message('You have already requested to buy this ticket. You cannot do that again!', 400)
 
     if Request.requested_other_ticket_same_time(user, ticket):
@@ -116,9 +120,13 @@ def request_to_buy(request):
     except Ticket.DoesNotExist:
         raise Http404()
 
+    # Do this validation again...
+    if not Request.can_request(ticket, user) or Request.requested_other_ticket_same_time(user, ticket):
+        return ajax_http(False)
+
     if ticket.poster == user:
         logging.warning('User cannot request to buy their own ticket')
-        raise Http404()
+        return ajax_http(False)
 
     # Set your secret key: remember to change this to your live secret key in production
     # See your keys here https://dashboard.stripe.com/account

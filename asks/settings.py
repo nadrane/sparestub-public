@@ -7,20 +7,29 @@ request_model_settings = {'REQUEST_STATUSES': (('P', 'Pending'),    # User has n
                                                ('C', 'Cancelled'),  # The user cancelled their request.
                                                ('T', 'Ticket Cancelled'),  # The user seller cancelled the ticket
                                                ('S', 'Ticket Sold'),       # Other request accepted first
+                                               ('I', 'Inactive Ticket')    # The user's account was deactivated, and
+                                                                           # so were the associated requests
                                                )
                           }
 
-TICKET_REQUESTED_POSTER_SUBJECT = "SpareStub - A User Requested To Buy Your Ticket"
-TICKET_REQUESTED_POSTER_TEMPLATE = "asks/ticket_requested_poster_email.html"
-TICKET_REQUESTED_REQUESTER_SUBJECT = "SpareStub - Ticket Request Confirmation"
-TICKET_REQUESTED_REQUESTER_TEMPLATE = "asks/ticket_requested_requester_email.html"
+# When a request is submitted, these go to the poster of the ticket
+REQUEST_RECEIVED_SUBJECT = "SpareStub - A User Requested To Buy Your Ticket"
+REQUEST_RECEIVED_TEMPLATE = "asks/request_received.html"
 
-# What to send a user when his request is marked inactive because of something he did not do
+# When a request is submitted, these go to the submitter of the request
+REQUEST_SENT_SUBJECT = "SpareStub - Ticket Request Confirmation"
+REQUEST_SENT_TEMPLATE = "asks/request_sent.html"
+
+# What to send a user when his request is marked inactive because
   # 1. Requested ticket expired
   # 2. Requested declined by seller
   # 3. Ticket cancelled by seller
 REQUEST_INACTIVE_SUBJECT = "SpareStub - Request Cancelled"
-REQUEST_INACTIVE_TEMPLATE = "asks/request_inactive_email.html"
+REQUEST_INACTIVE_TEMPLATE = "asks/request_inactive.html"
+
+# What to send a seller when a user who requested to buy his ticket cancelled it
+REQUEST_CANCELLED_TO_SELLER_SUBJECT = "SpareStub - Request Cancelled"
+REQUEST_CANCELLED_TO_SELLER_TEMPLATE = "asks/request_cancelled_to_seller.html"
 
 # When a request is accepted by a seller. This email goes to both the buyer and the seller.
 REQUEST_ACCEPTED_SUBJECT = "SpareStub - Request Accepted"

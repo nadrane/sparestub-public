@@ -9,7 +9,7 @@ from registration.models import User
 from tickets.models import Ticket
 
 # Module Imports
-from .settings import message_model_settings, new_message_subject, new_message_template
+from .settings import message_model_settings, NEW_MESSAGE_SUBJECT, NEW_MESSAGE_EMAIL
 
 
 class MessageManager(models.Manager):
@@ -35,9 +35,11 @@ class MessageManager(models.Manager):
         Message.mark_conversation_hidden_toggle(sender.id, ticket.id, receiver.id, False, True)
 
         if send_email:
-            receiver.send_mail(new_message_subject,
+            message_body = render_to_string(NEW_MESSAGE_EMAIL,
+                                            {'user': receiver})
+            receiver.send_mail(NEW_MESSAGE_SUBJECT,
                                '',
-                               html=render_to_string(new_message_template),
+                               html=message_body,
                                )
 
         message.save()

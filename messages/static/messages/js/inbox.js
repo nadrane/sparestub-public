@@ -26,6 +26,8 @@ function decline_request() {
             "json")
         .done(function () {
             handle_ajax_response();
+            $('#new-message-textarea').attr('disabled', true)
+                                      .val('This converation is no longer active');
         })
         .fail(function () {
             handle_ajax_response();

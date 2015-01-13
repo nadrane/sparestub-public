@@ -8,7 +8,7 @@ from .settings import contact_form_settings
 from utils.miscellaneous import reverse_category_lookup, get_variable_from_settings
 from utils.networking import ajax_http
 from utils.email import send_email
-from .settings import auto_response_subject
+from .settings import FEEDBACK_SUBMISSION_RESPONSE_SUBJECT, FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE
 
 SOCIAL_EMAIL_ADDRESS = get_variable_from_settings('SOCIAL_EMAIL_ADDRESS')
 
@@ -29,14 +29,13 @@ def submit(request):
                        from_email_address,
                        )
 
-            auto_response_message = render_to_string('contact/contact_auto_response.html')
             # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
             send_email(from_email_address,
-                       auto_response_subject,
+                       FEEDBACK_SUBMISSION_RESPONSE_SUBJECT,
                        '',
                        SOCIAL_EMAIL_ADDRESS,
                        'SpareStub',
-                       html=auto_response_message
+                       html=render_to_string(FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE)
                        )
 
             # Notice that we always return True. If the email failed to send, we need to figure it out on our side.

@@ -22,8 +22,9 @@ from .utils import calculate_age
 from user_profile.models import UserProfile
 from locations.models import Location
 
-from .settings import PASSWORD_RESET_EMAIL_SUBJECT, PASSWORD_RESET_EMAIL_TEMPLATE, EMAIL_CONFIRMATION_EMAIL_SUBJECT,\
-    EMAIL_CONFIRMATION_EMAIL_TEMPLATE
+from .settings import PASSWORD_RESET_EMAIL_SUBJECT, PASSWORD_RESET_EMAIL_TEMPLATE,\
+                      EMAIL_CONFIRMATION_EMAIL_SUBJECT, EMAIL_CONFIRMATION_EMAIL_TEMPLATE, \
+                      SIGNUP_EMAIL_SUBJECT, SIGNUP_EMAIL_TEMPlATE
 
 SOCIAL_EMAIL_ADDRESS = settings.SOCIAL_EMAIL_ADDRESS
 
@@ -60,15 +61,13 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save()
 
-        # Email the user to welcome them to out website.
-        signup_email_message = render_to_string('registration/signup_email.html')
-        send_email(email,
-                   "Welcome to SpareStub!",
-                   '',
-                   SOCIAL_EMAIL_ADDRESS,
-                   'SpareStub',
-                   html=signup_email_message
-                   )
+        # Email the user to welcome them to out website
+        message_body = render_to_string(SIGNUP_EMAIL_TEMPlATE,
+                                        {'first_name': first_name})
+        user.send_mail(SIGNUP_EMAIL_SUBJECT,
+                       '',
+                       html=message_body
+                       )
 
         EmailConfirmationLink.objects.create_email_confirmation(user)
 

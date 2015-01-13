@@ -12,7 +12,6 @@ from utils.networking import ajax_http, form_success_notification, non_field_err
 
 # Module Imports
 from .models import Ticket
-from .settings import email_submit_ticket_subject
 from .forms import SubmitTicketForm
 
 @login_required()
@@ -45,14 +44,6 @@ def submit_ticket(request):
                                          status='P',
                                          venue=venue,
                                          )
-
-            email_submit_ticket_message = render_to_string('tickets/email_ticket_submit_message.html')
-
-            # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
-            request.user.send_mail(email_submit_ticket_subject,
-                                   message='',
-                                   html=email_submit_ticket_message
-                                   )
 
             return ajax_http(**form_success_notification('Your ticket was successfully submitted! '
                                                          'It will become visible to others shortly.'))

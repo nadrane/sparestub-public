@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Request Cancelled</title>
+    <title>Request Received</title>
 </head>
 <body>
 
@@ -13,6 +13,15 @@
 
         p.bodytext {
             font-size: 18px;
+        }
+
+        ul {
+            font-size: 18px;
+            margin-right: 15px;
+        }
+
+        li {
+            font-size: 16px;
         }
 
         #header {
@@ -50,15 +59,30 @@
 
         a {
             color: #CA2473;
+
         }
 
     </style>
+
     <div class="container">
         <p id="header">
-             <a href="http://www.sparestub.com"><img class="logo" src="C:\Users\steph\Documents\GitHub\SpareStub\sparestub\static\logos\logo_official.png"></a></p>
-        <p>Request to Buy Cancelled</p>
-        <p class="bodytext">This is confirmation that {{ request.requester.first_name|title }} has cancelled the Request to Buy
-          for ticket "{{ ticket.title }}".<br><br>
+             <a href="http://www.sparestub.com"><img class="logo" src="{% static "sparestub/logos/logo_official.png" %}"></a></p>
+        <p>Huzzah, {{ user.first_name|title }}! Someone has requested to buy your stub!</p>
+        <p class="bodytext">You've received a request to buy your ticket: {{ ticket.title }} on {% localtime off %}{{ ticket.get_formatted_start_datetime.date }}{% endlocaltime %} <br><br>
+          What happens now:<br></p>
+        <ul>
+          <li>Head to <a href="{% url "inbox" %}">Your Messages</a> to check out the request.</li><br>
+          <li>You have 48 hours to Accept or Decline the buyer's request, or it expires.<br><br>
+              <ul>
+                <li>If you accept, we will send you both an email introducing you and providing your email addresses.
+                  You'll follow up with your buyer to determine what works best for exchanging payment and the ticket.</li>
+                <li> If you decline or let the request expire, we will let the buyer know.</li><br>
+             </ul>
+          </li>
+          <li>Check out our <a href="{% url "sellers guide" %}">Seller's Guide</a> for more information.</li><br>
+        </ul>
+
+        <p class="bodytext">Off you go! Good times ahead! <a href="{% url "inbox" %}">Jump to Your Messages</a></p>
 
       <p class="bodytext">Let us know if you have any questions or feedback at <a href="mailto:shout@sparestub.com">shout@sparestub.com.</a>
       </p>

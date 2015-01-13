@@ -9,10 +9,12 @@ from utils.models import TimeStampedModel
 from django.db import models
 from django.db.models import Q
 from django.core.urlresolvers import reverse
+from django.db import transaction
+from django.template.loader import render_to_string
 
 # SparStub imports
 from registration.models import User
-from .settings import ticket_model_settings
+from .settings import ticket_model_settings, POST_TICKET_SUBMIT_SUBJECT, POST_TICKET_SUBMIT_TEMPLATE
 from locations.models import Location
 
 
@@ -45,6 +47,14 @@ class TicketManager(models.Manager):
                             )
 
         ticket.save()
+
+        # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
+        message_body = render_to_string(POST_TICKET_SUBMIT_TEMPLATE,
+                                {'user': poster})
+        poster.send_mail(POST_TICKET_SUBMIT_SUBJECT,
+                         message='',
+                         html=message_body
+                         )
 
         return ticket
 
@@ -184,12 +194,14 @@ class Ticket(TimeStampedModel):
 
         return is_viewable
 
+    @transaction.atomic()
     def change_status(self, new_status):
         from asks.models import Request
 
         # Ticket posted by seller
         if new_status == 'P':
             pass
+
         # Ticket cancelled by seller
         elif new_status == 'C':
             # Mark all of the associated requests as cancelled
@@ -197,21 +209,28 @@ class Ticket(TimeStampedModel):
             requests.update(status='T')
             for request in requests:
                 request.cancel()
+
         # Event date has passed and ticket expired
         elif new_status == 'E':
-            pass
+            # Update all expired requests to a status of closed
+            self.get_requests().filter(status='E').update(status='C')
+
         # Ticket sold... seller accepted request to buy
         # Should only be called by requests.models.Request.accept, so there won't be additional handling for the
         # attached request. But there will be for other requests for that ticket.
         elif new_status == 'S':
             # Change all other requests besides the calling request to Ticket Sold.
             # That means that a different user purchased the ticket.
-            requests = self.get_requests().filter(status='P').update('S')
+            requests = self.get_requests().filter(status='P')
+            requests.update(status='S')
             for request in requests:
                 request.requster.send_mail()
+
         # User account deactivated, and ticket deactivated along with it
         elif new_status == 'D':
-            pass
+            pass # TODO figure out how to handle this
+            #for request in requests:
+            #    request.requster.send_mail()
 
         self.status = new_status
         self.save()
@@ -251,7 +270,7 @@ class Ticket(TimeStampedModel):
         """
         Returns a QuerySet containing all Request records associated with the calling ticket.
         """
-        from requests.models import Request
+        from asks.models import Request
         return Request.objects.filter(ticket=self)
 
     @staticmethod

@@ -129,7 +129,11 @@ ALLOWED_HOSTS = ['*']
 
 TEMPLATE_DIRS = (
     # Location of base.html and a couple others
-    os.path.join(BASE_DIR, 'templates'),
+    os.path.join(os.path.dirname(BASE_DIR), 'registration', 'email_templates'),
+    os.path.join(os.path.dirname(BASE_DIR), 'messages', 'email_templates'),
+    os.path.join(os.path.dirname(BASE_DIR), 'contact', 'email_templates'),
+    os.path.join(os.path.dirname(BASE_DIR), 'asks', 'email_templates'),
+    os.path.join(os.path.dirname(BASE_DIR), 'tickets', 'email_templates'),
 )
 
 

@@ -62,4 +62,6 @@ search_results_settings = {'TICKET_TYPES': ticket_model_settings.get('TICKET_TYP
                            'PAYMENT_METHODS': ticket_model_settings.get('PAYMENT_METHODS')
                            }
 
-email_submit_ticket_subject = 'SpareStub has received your ticket submission!'
+# Email to send a user when they submit a ticket
+POST_TICKET_SUBMIT_SUBJECT = 'SpareStub has received your ticket submission!'
+POST_TICKET_SUBMIT_TEMPLATE = 'tickets/post_ticket_submit.html'

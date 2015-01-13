@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ticket Submitted</title>
+    <title>Request Decision</title>
 </head>
 <body>
 
@@ -13,15 +13,6 @@
 
         p.bodytext {
             font-size: 18px;
-        }
-
-        ul {
-            font-size: 18px;
-            margin-right: 15px;
-        }
-
-        li {
-            font-size: 16px;
         }
 
         #header {
@@ -59,33 +50,32 @@
 
         a {
             color: #CA2473;
+        }
 
+        a#search {
+          text-align: center;
         }
 
     </style>
-
     <div class="container">
         <p id="header">
-             <a href="http://www.sparestub.com"><img class="logo" src="C:\Users\steph\Documents\GitHub\SpareStub\sparestub\static\logos\logo_official.png"></a></p>
-        <p>Yeah, {{ user.first_name|title }}! You've successfully submitted your spare stub!</p>
-        <p class="bodytext">What happens now:<br></p>
-        <ul>
-          <li>Check your messages on SpareStub.com - fellow fans might have questions about your ticket.</li><br>
-          <li>If someone Requests to Buy your ticket, you'll be notified in your Messages. You'll have 48 hours to Accept or Decline the buyer's request.<br><br>
-              <ul>
-                <li>If you accept, we will send you both an email introducing you and providing your email addresses.
-                  You'll follow up with your buyer to determine what works best for exchanging payment and the ticket.</li>
-                <li> If you decline or let a request expire, we will let the buyer know.</li><br>
-             </ul>
-          </li>
-          <li>Check out our <a href="{% url "sellers guide" %}">Seller's Guide</a> for more tips and tricks.</li><br>
-        </ul>
-
-        <p class="bodytext">Good luck! Let us know if you have any questions!</p><br>
+             <a href="http://www.sparestub.com"><img class="logo" src="{% static "sparestub/logos/logo_official.png" %}"></a></p>
+        <p>{{ user.first_name|title }}, we have some good news and some bad news.</p>
+            <p class="bodytext">Bad news first, as they say. The ticket you requested to buy, {{ ticket.title }}, was not accepted, has expired or has been cancelled. {% comment %} TODO: calculate status {%  endcomment %}
+            </p>
+      <p>
+        But, there's good news, too!
+      </p>
+        <p class="bodytext">
+          Since you no longer have a pending ticket request, you are <strong><i>free, free as a bird</i></strong> to explore and request
+          new tickets!<br><br>
+          Don't delay- see who else has a ticket in your city. Or, buy a couple stubs and post your own spare!<br>
+          <a id="search" href="http://www.sparestub.com/tickets/search_ticket/?q=&location_raw=New+York%2C+NY&start_date=&end_date=&ticket_type=">Click here to check out available tickets in New York!</a><br><br>
+        </p>
 
       <p class="bodytext">We hope you enjoy SpareStub. If you have any questions or feedback for us, we'd love to hear from you.
-          Just email <a href="mailto:shout@sparestub.com">shout@sparestub.com.</a>
-      </p>
+            Just email <a href="mailto:shout@sparestub.com">shout@sparestub.com.</a>
+        </p>
         <p id="footer">
             Be sure to follow the adventure:<br>
             <a href="http://facebook.com/sparestub" target="_blank">Like us on Facebook</a> and <a href="http://www.twitter.com/sparestub" target="_blank">Follow us on Twitter</a><br><br>

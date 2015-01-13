@@ -40,7 +40,7 @@
     display: inline-block;
 }
 
-#top-intro {
+.top-intro {
     font-size: 40px;
     font-weight: 400;
     padding-top: 20px;

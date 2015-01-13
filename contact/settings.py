@@ -23,4 +23,5 @@ contact_form_settings['BODY_LENGTH_MESSAGE'] = "Please keep your message between
 contact_form_settings['EMAIL_LENGTH_MESSAGE'] = 'Please keep your email address fewer than %s characters.' % \
                                                  contact_form_settings['EMAIL_MAXLENGTH']
 
-auto_response_subject = 'Thanks From SpareStub!'
+FEEDBACK_SUBMISSION_RESPONSE_SUBJECT = 'SpareStub - Thank You For Your Feedback'
+FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE = 'contact/feedback_submission_response.html'
