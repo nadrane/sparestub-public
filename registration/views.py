@@ -71,7 +71,7 @@ def signup(request):
     signup_form_settings['EMAIL_REMOTE_URL'] = reverse('valid_email')
 
     return render(request,
-                  'registration/signup_email.html',
+                  'registration/signup.html',
                   {'form_settings': signup_form_settings})
 
 
