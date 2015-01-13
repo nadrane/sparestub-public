@@ -31,12 +31,16 @@
           <div id="left-intro">
               <button id="search-now" class="btn btn-primary intro-btn" type="button">Search Now</button>
           </div>
-          {% if not user.is_authenticated %}
-            <div id="right-intro">
-              <button class="btn btn-primary intro-btn signup-form-button"
-                      type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>
-            </div>
+          <div id="right-intro">
+          {% if user.is_authenticated %}
+            <button class="btn btn-primary intro-btn submit-ticket-form-button"
+                    type="button" data-toggle="modal" data-target="#modal-submit-ticket-root">Submit Your Stub</button>
+          {% else %}
+            <button class="btn btn-primary intro-btn signup-form-button"
+                    type="button" data-toggle="modal" data-target="#modal-signup-root">Join In!</button>
+
           {% endif %}
+          </div>
         </div>
         <div id="buffer" class="col-xs-12"></div>
         <div id="learn-more" class="col-xs-12 center-block">

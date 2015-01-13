@@ -110,7 +110,7 @@ function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
         $modal_yes.unbind().on('click', modal_yes_function);
     }
 
-    $('#modal-yes-cancel-title').text(title);
+    $('#modal-yes-cancel-title').html(title);
 
     if (post_url) {
         $('#modal-yes-cancel-form').attr('action', post_url);
