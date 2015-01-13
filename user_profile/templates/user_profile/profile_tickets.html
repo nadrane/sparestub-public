@@ -3,6 +3,10 @@
 {% load tz %}
 {% load misc_filters %}
 
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "user_profile/css/profile_tickets.css" %}">
+{% endblock %}
 
 {% spaceless %}
 {% block profile_body %}
@@ -53,7 +57,7 @@
       <div class="panel-body">
         {% if in_progress_tickets %}
           <div class="table-responsive">
-            <table class="table table-striped table-hover rowlink" data-link="row">
+            <table class="table table-hover rowlink" data-link="row">
               <tbody>
                 {% for ticket in in_progress_tickets %}
                   {% include "tickets/search_result.html" %} <!-- Defining ticket is not necessary, but I think it's more clear -->
@@ -75,7 +79,7 @@
       <div class="panel-body">
         {% if past_tickets %}
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table">
               <tbody>
                 {% for ticket in past_tickets %}
                   {% include "tickets/search_result.html" %} <!-- Defining ticket is not necessary, but I think it's more clear -->
