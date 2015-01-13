@@ -2735,6 +2735,14 @@ if (typeof jQuery === 'undefined') {
                 month = date[$.inArray('MM', dateFormat)],
                 day   = date[$.inArray('DD', dateFormat)];
 
+            // This is a patch to fix the bug that causes MM/DD/YYYY not to validate
+            if (year.length !== 4 | month.length !== 2 | day.length !== 2) {
+                    return {
+                            valid: false,
+                            message: options.message || $.fn.bootstrapValidator.i18n.date['default']
+                    };
+            }
+
             if (!year || !month || !day || year.length !== 4) {
                 return {
                     valid: false,
