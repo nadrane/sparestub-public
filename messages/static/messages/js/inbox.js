@@ -125,6 +125,22 @@ function mark_messages_read(ticket_id, other_user_id) {
            'json');
 }
 
+function load_first_thread() {
+    var $threads = $('#threads');
+    if ($threads.children().length > 0) {
+        var ticket_id = $threads.children().data('identity-ticket');
+        var other_user_id = $threads.children().data('identity-user');
+        load_thread($($threads.children()[0]), ticket_id, other_user_id);
+    }
+}
+
+function  display_no_tickets_screen() {
+    $('#threads').replaceWith('<div id="no-threads" class="col-xs-12">' +
+                              '<h3 class="text-center">You have no messages!</h3>' +
+                              '<p class="text-center">Find a ticket you like, and shoot the seller a message!</p>' +
+                              '</div>');
+}
+
 // When the user opens the page, load the first thread
 $(document).on('ready', function () {
     set_conversation_body_height(); // This should be done first to get the screen looking right as fast as possible.
@@ -136,11 +152,7 @@ $(document).on('ready', function () {
      * them, but threads are the only group sorted by last timestamp, we want to display the messages from the thread at
      * the top. The first child of $threads will 100% for sure be the first conversation in the list of the left.
      */
-    if ($threads.children().length > 0) {
-        var ticket_id = $threads.children().data('identity-ticket');
-        var other_user_id = $threads.children().data('identity-user');
-        load_thread($($threads.children()[0]), ticket_id, other_user_id);
-    }
+    load_first_thread();
 
     $('#send-message').on('click', function (e) {
         send_message(e);
@@ -191,6 +203,12 @@ $(document).on('ready', function () {
 
         // Make the conversation gone on the front end;
         $parent.remove();
+
+        if ($('#threads').children().length > 0) {
+            load_first_thread();
+        } else {
+            display_no_tickets_screen();
+        }
     });
 });
 
