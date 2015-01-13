@@ -36,8 +36,6 @@ class MessageUserModal(TemplateView):
 
 @login_required()
 def send_message(request):
-    import pdb
-    pdb.set_trace()
     if request.method == 'POST':
         send_message_form = SendMessageForm(request.POST, request=request)
         if send_message_form.is_valid():

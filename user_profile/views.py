@@ -270,6 +270,7 @@ def profile_tickets(request, username):
     available_tickets = Ticket.available_tickets(user)
     in_progress_tickets = Ticket.in_progress_ticket(user)
     past_tickets = Ticket.past_tickets(user)
+
     return render(request,
                   'user_profile/profile_tickets.html',
                   {'user_info': user_info,

@@ -322,4 +322,9 @@ class Ticket(TimeStampedModel):
 
         tickets_sold_and_cancelled_tickets = Ticket.objects.filter(poster=user).filter(Q(status='S') | Q(status='C'))
         requests_for_tickets = Request.objects.filter(requester=user, ticket__status='S')
+
+        # An if statement on the return from chain actually passes... so return None explicitly if there's nothing
+        if not tickets_sold_and_cancelled_tickets and not requests_for_tickets:
+            return None
+
         return chain(tickets_sold_and_cancelled_tickets, [request.ticket for request in requests_for_tickets])
