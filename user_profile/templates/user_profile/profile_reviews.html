@@ -15,7 +15,8 @@
               {% for review in reviews %}
                 <tr>
                   <td class="col-xs-2">
-                    <span>{{ review.creation_date }}</span>
+                    <a href="{{ review.reviewer.get_absolute_url }}">
+                    <span>{{ review.creation_date }}</span></a>
                   </td>
                   <td class="col-xs-6">
                     {% for x in review.rating|get_range %}
