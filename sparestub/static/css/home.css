@@ -99,7 +99,8 @@
 /* HOW IT WORKS */
 
 #how-it-works {
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/old_moon.png");
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/squared_metal.png");
+    /*url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/old_moon.png");*/
     padding: 40px 0;
 }
 
@@ -140,15 +141,52 @@
 
 /* END HOW IT WORKS */
 
+
+/* PRESS */
+
+#press {
+    padding: 25px 0 30px;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/squared_metal.png");
+    border-bottom: 1px solid darkgray;
+    border-top: 1px solid darkgray;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+}
+
+#press a {
+    color:rgb(51, 51, 51);
+}
+
+#press-title {
+    padding-bottom: 40px;
+    color: rgb(51, 51, 51);
+}
+
+.press-image {
+    max-width: 250px;
+    border-radius: 25px;
+    padding-bottom: 20px;
+}
+
+.column-press {
+    display: inline-block;
+    vertical-align: top;
+    width: 250px;
+}
+
+/* END PRESS */
+
 /* FOUNDERS */
 
 #founders {
-    padding: 40px 0;
-    background-color: #f5f5f5;
+    padding: 30px 0;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/squared_metal.png");
+    border-bottom: 1px solid darkgray;
 }
 
 #founders-title {
-    padding-bottom: 20px;
+    padding-bottom: 40px;
 }
 
 .founder-image {
@@ -160,47 +198,59 @@
     color: darkgrey;
 }
 
-/* END FOUNDERS */
-
-#footer {
-    background: rgb(34, 136, 180);
-    padding: 20px 0;
-    text-align: center;
-    height: 220px;
+#twitter {
+    height: 15px;
+    width: 15px;
 }
 
-#footer a {
+.founder-column li  {
+    display: inline-block;
+}
+
+/* END FOUNDERS */
+
+.footer {
+    background: rgb(34, 136, 180);
+    margin: 0 auto;
+    padding: 25px 0 30px;
+    text-align: center;
+    position: relative;
+    z-index: 30;
+}
+
+.footer a {
     color: #ffffff;
     font-size: 14px;
 }
 
-#footer ul {
-    padding: 0;
+.footer-container {
+    display: inline-block;
+    vertical-align: top;
 }
 
-#social-media{
-    width: 40%;
-    float: left;
-    font-size: 18px;
-}
-
-#social-media > div {
-    float: right;
-    width: 200px;
-}
-
-#talking-shop {
-    width: 40%;
-    float: right;
-}
-
-#talking-shop > div {
-    float: left;
+.footer-column {
+    font-size: 13px;
+    color: white;
+    display: inline-block;
+    vertical-align: top;
     width: 300px;
+    text-align: left;
+    margin-bottom: 30px;
+
 }
 
-#talking-shop h4, #social-media h4{
+.footer-column-title {
     font-weight: 500;
+    border-bottom: 1px solid #ffffff;
+    width: 70%;
+    margin-bottom: 8px;
+    font-size: 16px;
+    line-height: 18px;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
 }
 
 @media (max-width: 500px) {
@@ -214,6 +264,9 @@
 @media only screen and (min-device-width : 768px) and (max-device-width : 1024px)  {
     #introducing-sparestub {
         background-attachment: scroll;
+    }
+    .link-column {
+        margin-left: 10px;
     }
 }
 
