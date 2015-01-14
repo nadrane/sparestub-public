@@ -148,3 +148,21 @@ def request_to_buy(request):
         logging.critical('Stripe failed with error {}'.format(e))
 
     return ajax_http(True)
+
+@login_required()
+def cancel_request_to_but(request):
+
+    user = request.user
+
+    try:
+        ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
+    except Ticket.DoesNotExist:
+        return ajax_other_message("It looks like that ticket doesn't exist!", 400)
+
+
+    if Request.has_requested(ticket, user):
+        request = Request.objects.filter(ticket=ticket, user=user, status='P')
+        request.status = 'C'
+    else:
+        return ajax_popup_notification('You have not requested to buy this ticket.', 400)
+

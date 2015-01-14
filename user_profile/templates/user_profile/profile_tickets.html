@@ -79,8 +79,8 @@
       <div class="panel-body">
         {% if past_tickets %}
           <div class="table-responsive">
-            <table class="table">
-              <tbody>
+            <table class="table table-hover">
+              <tbody data-link="row" class="rowlink">
                 {% for ticket in past_tickets %}
                   {% include "tickets/search_result.html" %} <!-- Defining ticket is not necessary, but I think it's more clear -->
                 {% endfor %}

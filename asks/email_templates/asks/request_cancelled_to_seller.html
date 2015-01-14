@@ -60,7 +60,7 @@
         <p id="header">
              <a href="http://www.sparestub.com"><img class="logo" src="{% static "sparestub/logos/logo_official.png" %}"></a></p>
         <p>Request to Buy Cancelled</p>
-        <p class="bodytext">This is confirmation that {{ request.requester.first_name|title }} has cancelled the Request to Buy
+        <p class="bodytext">This is confirmation that {{ requester.first_name|title }} has cancelled the Request to Buy
           for ticket "{{ ticket.title }}".<br><br>
 
       <p class="bodytext">Let us know if you have any questions or feedback at <a href="mailto:shout@sparestub.com">shout@sparestub.com.</a>

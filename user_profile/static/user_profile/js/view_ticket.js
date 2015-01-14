@@ -54,16 +54,6 @@ function load_message_user_modal(show_modal) {
     });
 }
 
-function prepare_delete_ticket_button() {
-    // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
-    // The answer is that this modal is multi-purposed, and another button might use it in the future.
-    $('#delete-ticket').on('click', function () {
-        prepare_yes_cancel_modal('<p>Are you sure you want to permanently delete this ticket listing?</p>' +
-                                 '<p>Note: Your deleted tickets appear in the Past Tickets section of your profile.</p>',
-                                  window.additional_parameters.delete_ticket_url);
-    });
-}
-
 function initiate_stripe() {
 
     show_popup_notification_modal('<p>After you close this popup, you will be asked to enter your credit card ' +
@@ -71,6 +61,20 @@ function initiate_stripe() {
         'first approve you and agree to go to the event with you. If he accepts your request, your card will be ' +
         'charged. If he does not accept your request, you will not be charged.</p><p>After initiating this request, you ' +
         'will not be able to request to go to another show on the same day at the same time.</p>', 'warning', true);
+}
+
+
+function prepare_delete_ticket_button() {
+    // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
+    // The answer is that this modal is multi-purposed, and another button might use it in the future.
+    $('#delete-ticket').on('click', function () {
+        prepare_yes_cancel_modal('<p>Are you sure you want to permanently delete this ticket listing?</p>' +
+                                 '<p>Note: Your deleted tickets appear in the Past Tickets section of your profile.</p>',
+                                  window.additional_parameters.delete_ticket_url);
+    }).always(function (response) {
+        var message = handle_ajax_response(response.responseJSON);
+        show_ajax_message(message);
+    });
 }
 
 function can_request_to_buy() {
@@ -86,11 +90,15 @@ function can_request_to_buy() {
         })
         .fail(function (response) {
             var error_message = handle_ajax_response(response.responseJSON);
-            var $request_to_buy_errors = $('#request-to-buy-errors');
-            $request_to_buy_errors.css('display', '');
-            $request_to_buy_errors.find('p').text(error_message);
+            show_ajax_message(error_message);
         });
 
+}
+
+function show_ajax_message(message) {
+    var ajax_errors = $('#ajax-errors');
+    ajax_errors.css('display', '');
+    ajax_errors.find('p').text(message);
 }
 
 function prepare_stripe_button() {

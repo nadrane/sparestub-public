@@ -97,9 +97,6 @@ class Request(TimeStampedModel):
         """
         When a seller accepts a user's request and agrees to go to the show with them.
         """
-        import pdb
-        pdb.set_trace()
-
         ticket = self.ticket
         poster = ticket.poster
         requester = self.requester
@@ -138,25 +135,61 @@ class Request(TimeStampedModel):
                                  message='',
                                  html=message_body)
 
-    def cancel(self):
+    def ticket_cancelled(self):
         """
-        Cancel a request. This happens when a ticket is deactivated.
+        This happens when a ticket is deactivated.
         The status will actually be changed in tickes.models.Ticket.deactivate because we can update all the request
         statuses in bulk.
         This function will send emails to inform the requester that the ticket was cancelled.
         It will also send an automated message that explains that the message was cancelled
         """
 
+        requester = self.requester
+        ticket = self.ticket
+
+        message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
+                                        {'user': requester, 'ticket': ticket})
+
         self.requester.send_mail(REQUEST_INACTIVE_SUBJECT,
                                  message='',
-                                 html=render_to_string(REQUEST_INACTIVE_TEMPLATE))
-        ticket = self.ticket
+                                 html=message_body)
 
         message_body = 'This is an automated message to let you know that {}' \
                        ' has cancelled this ticket.'.format(ticket.poster.first_name.title())
 
         # No need to send an email that a message was sent since we just sent an email about the request
         Message.objects.create_message(ticket.poster, self.requester, ticket, message_body, False)
+
+    def cancel(self):
+        """
+        Cancel a request. This happens when a user rescinds their request to buy a ticket.
+        The status of the ticket will be changed to 'C'
+        This function will send emails to inform the requester that the ticket was cancelled.
+        It will also send an automated message that explains that the message was cancelled
+        """
+
+        ticket = self.ticket
+        poster = ticket.poster
+        requester = self.requester
+
+        message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
+                                        {'user': requester, 'ticket': ticket})
+
+        requester.send_mail(REQUEST_INACTIVE_SUBJECT,
+                            message='',
+                            html=message_body)
+
+        message_body = render_to_string(REQUEST_CANCELLED_TO_SELLER_TEMPLATE,
+                                        {'requester': requester, 'ticket': ticket})
+        poster.send_mail(REQUEST_CANCELLED_TO_SELLER_SUBJECT,
+                         message='',
+                         html=message_body)
+
+        message_body = 'This is an automated message to let you know that {}' \
+                       ' has cancelled their request.'.format(requester.first_name.title())
+
+        # No need to send an email that a message was sent since we just sent an email about the request
+        Message.objects.create_message(poster, requester, ticket, message_body, False)
 
     @staticmethod
     def get_last_request(user, ticket):
@@ -219,3 +252,11 @@ class Request(TimeStampedModel):
             can_request = False
 
         return can_request
+
+    @staticmethod
+    def has_requested(ticket, user):
+        """
+        Returns a boolean value indicated whether an inputted user has requested to buy an inputted ticket.
+        """
+
+        return Request.objects.filter(ticket=ticket, requester=user, status='P').exists()

@@ -1,3 +1,6 @@
+# Standard Imports
+import logging
+
 # Django Imports
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
@@ -14,8 +17,9 @@ from .forms import EditProfileForm, ProfileAnswerForm, ChangePasswordForm
 from .settings import edit_profile_form_settings, profile_answer_form_settings
 from registration.settings import password_form_settings
 from utils.networking import ajax_http, form_failure_notification, \
-    form_success_notification
+    form_success_notification, ajax_other_message, ajax_popup_notification
 from photos.models import Photo
+from asks.models import Request
 
 
 def edit_profile(request, username):
@@ -354,10 +358,14 @@ def view_ticket(request, username, ticket_id):
                    'is_owner': is_owner,
                    'ticket': ticket,
                    'most_recent_review_info': most_recent_review_info,
-                   'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY
+                   'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY,
+                   'has_requested': Request.has_requested(ticket, user)
                    },
                   content_type='text/html',
                   )
+
+#def cancel_request_to_buy(request):
+
 
 
 def delete_ticket(request, ticket_id):
@@ -365,26 +373,27 @@ def delete_ticket(request, ticket_id):
     Delete the inputted ticket
     """
 
-    #TODO disable deactivating tickets if there is an accepted request. Also make the cancel button not show up.
-
     user = request.user
 
     # Make sure that ticket exists
     try:
         ticket = Ticket.objects.get(pk=ticket_id)
     except Ticket.DoesNotExist:
-        raise Http404()
+        return ajax_other_message("That ticket doesn't exist")
 
     # Make sure that the username entered is the actual poster of this ticket
     if ticket.poster != user:
-        raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
+        logging.critical('user id {} tried to delete ticket id {}, which is not his'.format(user.id, ticket.id))
+        return ajax_other_message('You are not the owner of that ticket')
 
-    ticket.change_status('C')
+    if ticket.can_delete():
+        ticket.change_status('C')
 
-    return redirect(reverse('profile_tickets',
-                            kwargs={'username': user.user_profile.username}
-                            )
-                    )
+        return ajax_other_message('Your message was successfully deleted.', 200)
+    else:
+        return ajax_other_message("We're sorry. You cannot delete this ticket since you have already "
+                                                "accepted a user's request to buy it. If you have any questions "
+                                                "please contact us at Shout@sparestub.com.", 400)
 
 
 def update_question(request, username, question_id):

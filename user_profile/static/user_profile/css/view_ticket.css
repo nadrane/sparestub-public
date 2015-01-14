@@ -30,11 +30,11 @@
     font-size: 16px;
 }
 
-#request-to-buy-errors {
+#ajax-errors {
     margin-top: 25px;
 }
 
-#request-to-buy-errors .alert {
+#ajax-errors .alert {
     margin-bottom: 0;
 }
 

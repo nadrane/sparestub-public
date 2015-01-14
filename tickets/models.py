@@ -139,6 +139,15 @@ class Ticket(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def can_delete(self):
+        """
+        Return whether a ticket can be deleted or not
+        """
+
+        if self.get_buyer():
+            return False
+        return True
+
     def get_buyer(self):
         """
         Return the buyer of a ticket by looking at it's associated requests
@@ -206,18 +215,15 @@ class Ticket(TimeStampedModel):
         # Ticket cancelled by seller
         elif new_status == 'C':
             # Mark all of the associated requests as cancelled
-            # We do not need to worry about duplicate requests from a single user because each user can only have
-            # a single pending request for a single ticket/user combo at a time.
-
-            import pdb
-            pdb.set_trace()
-            requests = Request.objects.filter(ticket=self, status='P')
+            # We only care about requests that are pended and expired. These are the only user's who care to learn more.
+            requests = Request.objects.filter(ticket=self).filter(Q(status='P') | Q(status='E'))\
+                                      .order_by('requester').distinct('requester')   # Handle users that had an expired request that re-requested
             requests.update(status='T')
             users_messaged = set()  # Maintain a set of users who have already been messaged
             potential_users_to_message = set()  # A second set of users who might need to be messaged if they aren't in the first set
             for request in requests:
                 users_messaged.add(request.requster)
-                request.cancel()
+                request.ticket_cancelled()
 
             # Then add in conversations where there was no request sent.
             # These people clearly had an interest in the ticket.
@@ -232,9 +238,17 @@ class Ticket(TimeStampedModel):
                     potential_users_to_message.add(message.receiver)
             message_body = 'This is an automated message to let you know that {} ' \
                            'has cancelled this ticket.'.format(poster.first_name.title())
-            for user in potential_users_to_message.difference(users_messaged):
-                Message.objects.create_message(poster, user, self, message_body, False)
 
+            # Remove the users we have already messaged
+            for user in potential_users_to_message.difference(users_messaged):
+
+                # Continue to remove users we've already messaged based on if they have a requesy
+                user_requests = Request.objects.filter(requester=user)
+
+                # If there is no request or the request is expired, we want to send them a message
+                # Unlike pending requests, these requests remain expired
+                if not user_requests.exists():
+                    Message.objects.create_message(poster, user, self, message_body, False)
 
 
         # Event date has passed and ticket expired
