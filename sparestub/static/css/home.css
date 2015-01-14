@@ -203,7 +203,7 @@
     font-weight: 500;
 }
 
-@media (max-width: 500px) or (max-device-width: 500px) {
+@media (max-width: 500px) {
     .intro-btn {
         padding: 10px;
         font-size: 15px;
@@ -217,7 +217,7 @@
     }
 }
 
-@media (max-width: 525px) or (max-device-width: 525px) {
+@media (max-width: 525px) {
     #social-media {
         margin-left: 30px;
     }
@@ -226,13 +226,13 @@
     }
 }
 
-@media (max-width: 1050px) or (max-device-width: 1050px) {
+@media (max-width: 1050px) {
     .step-image {
         max-width: 260px;
     }
 }
 
-@media (max-width: 950px) or (max-device-width: 950px){
+@media (max-width: 950px){
     .step-image {
         max-width: 225px;
     }
