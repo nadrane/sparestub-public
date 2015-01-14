@@ -29,6 +29,9 @@ function validate_date_not_before_today(value) {
 // It appears as in callback to the ajax request that grabs this content in base.html
 function initialize_bootstrap_validator_submit_ticket() {
     'use strict';
+
+    var $submit_ticket_form = $('#submit-ticket-form');
+
     // Need to do this again now that the DOM has changed
     initialize_date_pickers();
 
@@ -41,8 +44,7 @@ function initialize_bootstrap_validator_submit_ticket() {
         // autoNumeric completely breaks bootstrap validator. Just make sure the field is validated when we lose focus.
                              .blur(function () { $('#submit-ticket-form').bootstrapValidator('revalidateField', 'price'); });
 
-
-    $('#submit-ticket-form').bootstrapValidator({
+    $submit_ticket_form.bootstrapValidator({
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
@@ -85,6 +87,11 @@ function initialize_bootstrap_validator_submit_ticket() {
                 $form.data('bootstrapValidator').resetField('start_time', true);
                 $form.data('bootstrapValidator').resetField('location_raw', true);
             });
+    });
+
+    // Start out validated since not required.
+    $('#modal-submit-ticket-root').on('shown.bs.modal', function () {
+        $('#submit-ticket-form').bootstrapValidator('revalidateField', 'about');
     });
 
     // Bootstrap validator will break the datetime picker. We need this function to undo the breakage.

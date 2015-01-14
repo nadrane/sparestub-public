@@ -197,6 +197,7 @@ class Ticket(TimeStampedModel):
     @transaction.atomic()
     def change_status(self, new_status):
         from asks.models import Request
+        from messages.models import Message
 
         # Ticket posted by seller
         if new_status == 'P':
@@ -205,10 +206,36 @@ class Ticket(TimeStampedModel):
         # Ticket cancelled by seller
         elif new_status == 'C':
             # Mark all of the associated requests as cancelled
-            requests = Request.objects.filter(ticket=self)
+            # We do not need to worry about duplicate requests from a single user because each user can only have
+            # a single pending request for a single ticket/user combo at a time.
+
+            import pdb
+            pdb.set_trace()
+            requests = Request.objects.filter(ticket=self, status='P')
             requests.update(status='T')
+            users_messaged = set()  # Maintain a set of users who have already been messaged
+            potential_users_to_message = set()  # A second set of users who might need to be messaged if they aren't in the first set
             for request in requests:
+                users_messaged.add(request.requster)
                 request.cancel()
+
+            # Then add in conversations where there was no request sent.
+            # These people clearly had an interest in the ticket.
+            # We don't want to just block their conversations abruptly.
+            messages = Message.objects.filter(ticket=self)
+            poster = self.poster
+            for message in messages:
+                sender = message.sender
+                if sender != poster:
+                    potential_users_to_message.add(sender)
+                else:
+                    potential_users_to_message.add(message.receiver)
+            message_body = 'This is an automated message to let you know that {} ' \
+                           'has cancelled this ticket.'.format(poster.first_name.title())
+            for user in potential_users_to_message.difference(users_messaged):
+                Message.objects.create_message(poster, user, self, message_body, False)
+
+
 
         # Event date has passed and ticket expired
         elif new_status == 'E':

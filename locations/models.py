@@ -190,6 +190,8 @@ def map_citystate_to_location(city, state):
         # State might be a null string if we get bad input
         if state:
             alias_citystate_match_list = alias_city_match_list.filter(location__state=state)
+        else:
+            alias_citystate_match_list = alias_city_match_list
 
         alias_citystate_match_locations = [alias.location for alias in alias_citystate_match_list]
 

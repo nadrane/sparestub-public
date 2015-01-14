@@ -115,6 +115,16 @@ function load_thread ($this, ticket_id, other_user_id) {
     var $conversation = $('.conversation');
     $conversation.scrollTop($conversation[0].scrollHeight);
 
+    // Make sure there aren't remnants from a previous conversation there
+    $('#new-message-box').val('');
+
+    // Adjust the message box to account for readonly conversations.
+    if (can_message($this)) {
+        toggle_messaging('on');
+    } else {
+        toggle_messaging('off');
+    }
+
     mark_messages_read(ticket_id, other_user_id);
 }
 
@@ -139,6 +149,33 @@ function  display_no_tickets_screen() {
                               '<h3 class="text-center">You have no messages!</h3>' +
                               '<p class="text-center">Find a ticket you like, and shoot the seller a message!</p>' +
                               '</div>');
+}
+
+function can_message($thread) {
+    /* Can the user message the other user form the inputted thread? */
+    return ($thread.data('can-message').toLowerCase() === "true");
+}
+
+function toggle_messaging(on_or_off) {
+    /* Toggle whether it is possible to message another user. Some conversations are read-only */
+    var $new_message_textarea = $('#new-message-textarea');
+    if (on_or_off === 'on') {
+        $new_message_textarea.removeAttr('disabled')
+                             .attr('placeholder', 'Say something...')
+                             .attr('rows', 5);
+
+        $('#send-message').css('display', '');
+    } else if (on_or_off === 'off') {
+        $new_message_textarea.attr('disabled', '')
+                             .attr('placeholder', 'This conversation is disabled')
+                             .attr('rows', 2);
+
+        $('#send-message').css('display', 'none');
+
+
+    }
+    // Now that the size has changed from the rows attribute, recalcualte the conversation body height
+    set_conversation_body_height();
 }
 
 // When the user opens the page, load the first thread

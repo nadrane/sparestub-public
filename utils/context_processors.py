@@ -1,7 +1,7 @@
-__author__ = 'nicholasdrane'
-
+# SpareStub Imports
 from utils.miscellaneous import get_env_variable
 from tickets.settings import ticket_submit_form_settings
+
 
 def environment(request):
     environment_list = get_env_variable("DJANGO_SETTINGS_MODULE").split('.')

@@ -16,7 +16,8 @@
           {% for thread in threads %}
             <div class="row thread"
                  data-identity-ticket="{{ thread.ticket_id }}"
-                 data-identity-user="{{ thread.other_user_id }}">
+                 data-identity-user="{{ thread.other_user_id }}"
+                 data-can-message="{{ thread.can_message }}">
               <div class="col-md-2 hidden-sm hidden-xs">
                 <img class="thread-pic" src="{{ thread.pic_url }}" alt="User profile picture">
               </div>

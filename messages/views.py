@@ -58,7 +58,7 @@ def inbox(request):
                                                      'rating', 'request_status', 'is_requester', 'request_expiration'])
     ticket_ribbon_tuple = namedtuple('ticket_ribbon', ['ticket_id', 'absolute_url', 'price', 'when', 'where'])
     thread_tuple = namedtuple('thread', ['name', 'ticket_title', 'pic_url', 'last_timestamp', 'request_status',
-                                         'ticket_id', 'other_user_id'])
+                                         'ticket_id', 'other_user_id', 'can_message'])
 
     threads = defaultdict(defaultdict)   # Contains every conversation associated with a ticket/user id pair.
     sorted_threads = list()              # A list of threads sorted by timestamp. What the template actually uses.
@@ -131,6 +131,7 @@ def inbox(request):
                                                                  request_status=request_status,
                                                                  ticket_id=ticket_id,
                                                                  other_user_id=other_user_id,
+                                                                 can_message=Message.can_message(ticket, user)
                                                                  )
 
             if ticket_id not in ticket_ribbons:
