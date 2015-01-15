@@ -104,13 +104,14 @@ function can_request_to_buy() {
 }
 
 function cancel_request_to_buy() {
-    $.post(window.additional_parameters.cancel_request_ticket_url,
+    $.post(window.additional_parameters.cancel_request_to_buy_url,
            {'ticket_id': window.additional_parameters.ticket_id},
            "json")
         .done(function (response) {
             var message = handle_ajax_response(response);
             show_ajax_message(message, 'success');
             $('#cancel-request').replaceWith('<button id="request-to-buy" class="btn btn-primary">Request To Buy</button>');
+            $('#request-to-buy').on('click', request_to_buy);
         })
         .fail(function (response) {
             var error_message = handle_ajax_response(response);
@@ -130,15 +131,7 @@ function show_ajax_message(message, type) {
 function prepare_stripe_button() {
     'use strict';
 
-    $('#request-to-buy').on('click', function (e) {
-        // Users cannot request to buy tickets if they are not logged in
-        if (!window.additional_parameters.is_authenticated) {
-            load_login_modal(true);
-            return;
-        }
-        e.preventDefault();
-        can_request_to_buy();
-    });
+    $('#request-to-buy').on('click', request_to_buy);
 
     $(document).on('modal-popup-notification-closed', function () {
         var handler = StripeCheckout.configure({
@@ -152,7 +145,8 @@ function prepare_stripe_button() {
                      "json")
                     .done(function (response) {
                         var message = handle_ajax_response(response);
-                        $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>');
+                        $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>')
+                        $('#cancel-request').on('click', cancel_request_to_buy);
                         show_ajax_message(message, 'success');
                     })
                     .fail(function () {
@@ -177,6 +171,15 @@ function prepare_stripe_button() {
     });
 }
 
+function request_to_buy() {
+    // Users cannot request to buy tickets if they are not logged in
+    if (!window.additional_parameters.is_authenticated) {
+        load_login_modal(true);
+        return;
+    }
+    can_request_to_buy();
+}
+
 function modal_message_user_button() {
     /* When the user clicks the Send Message button inside the modal messaging form, this tag is called to contact the
      * server and add the message to the database.
@@ -194,7 +197,8 @@ $(document).ready(function ($) {
         load_message_user_modal(true);
     });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
-
     prepare_delete_ticket_button();
     prepare_stripe_button();
+
+    $('#cancel-request').on('click', cancel_request_to_buy);
 });

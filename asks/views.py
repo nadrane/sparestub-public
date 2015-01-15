@@ -150,19 +150,27 @@ def request_to_buy(request):
     return ajax_other_message('Your request to buy has been submitted', 200)
 
 @login_required()
-def cancel_request_to_but(request):
+def cancel_request_to_buy(request):
+    """
+    Mark a pending request as cancelled
+    """
+    import pdb
+    pdb.set_trace()
 
     user = request.user
 
+    # Make sure that ticket exists
     try:
         ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
     except Ticket.DoesNotExist:
-        return ajax_other_message("It looks like that ticket doesn't exist!", 400)
+        ajax_other_message('Uh oh, something went wrong', 400)
 
-
-    if Request.has_requested(ticket, user):
-        request = Request.objects.filter(ticket=ticket, user=user, status='P')
-        request.status = 'C'
+    # Make sure that the username entered is the actual poster of this ticket
+    request = Request.objects.filter(requester=user, ticket=ticket, status='P')
+    if request:
+        request[0].cancel()
+        return ajax_other_message('Your request has been cancelled', 200)
     else:
-        return ajax_popup_notification('You have not requested to buy this ticket.', 400)
+        return ajax_other_message('You do not have a pending request', 400)
+
 

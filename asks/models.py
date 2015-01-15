@@ -171,6 +171,8 @@ class Request(TimeStampedModel):
         ticket = self.ticket
         poster = ticket.poster
         requester = self.requester
+        self.status = 'C'
+        self.save()
 
         message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
                                         {'user': requester, 'ticket': ticket})

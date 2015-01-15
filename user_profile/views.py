@@ -368,6 +368,7 @@ def view_ticket(request, username, ticket_id):
                   content_type='text/html',
                   )
 
+
 def update_question(request, username, question_id):
     """
     Update a single answer for a particular profile question of a particular user
