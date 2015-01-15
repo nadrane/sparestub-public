@@ -68,13 +68,21 @@ function prepare_delete_ticket_button() {
     // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
     // The answer is that this modal is multi-purposed, and another button might use it in the future.
     $('#delete-ticket').on('click', function () {
-        prepare_yes_cancel_modal('<p>Are you sure you want to permanently delete this ticket listing?</p>' +
-                                 '<p>Note: Your deleted tickets appear in the Past Tickets section of your profile.</p>',
-                                  window.additional_parameters.delete_ticket_url);
-    }).always(function (response) {
-        var message = handle_ajax_response(response.responseJSON);
-        show_ajax_message(message);
+        can_delete_ticket();
     });
+}
+
+function can_delete_ticket() {
+    $.post(window.additional_parameters.can_delete_url, 'json')
+        .done(function () {
+             prepare_yes_cancel_modal('<p>Are you sure you want to permanently delete this ticket listing?</p>' +
+                                     '<p>Note: Your deleted tickets appear in the Past Tickets section of your profile.</p>',
+                                      window.additional_parameters.delete_ticket_url);
+        })
+        .fail(function (response) {
+            var error_message = handle_ajax_response(response.responseJSON);
+            show_ajax_message(error_message, 'error');
+        });
 }
 
 function can_request_to_buy() {
@@ -90,15 +98,33 @@ function can_request_to_buy() {
         })
         .fail(function (response) {
             var error_message = handle_ajax_response(response.responseJSON);
-            show_ajax_message(error_message);
+            show_ajax_message(error_message, 'danger');
         });
 
 }
 
-function show_ajax_message(message) {
+function cancel_request_to_buy() {
+    $.post(window.additional_parameters.cancel_request_ticket_url,
+           {'ticket_id': window.additional_parameters.ticket_id},
+           "json")
+        .done(function (response) {
+            var message = handle_ajax_response(response);
+            show_ajax_message(message, 'success');
+            $('#cancel-request').replaceWith('<button id="request-to-buy" class="btn btn-primary">Request To Buy</button>');
+        })
+        .fail(function (response) {
+            var error_message = handle_ajax_response(response);
+            show_ajax_message(error_message, 'danger');
+
+        });
+}
+
+function show_ajax_message(message, type) {
     var ajax_errors = $('#ajax-errors');
-    ajax_errors.css('display', '');
-    ajax_errors.find('p').text(message);
+    ajax_errors.find('.alert').removeClass('alert-danger').removeClass('alert-success');
+    ajax_errors.css('display', '')
+               .addClass('alert-' + type)
+               .find('p').text(message);
 }
 
 function prepare_stripe_button() {
@@ -123,7 +149,15 @@ function prepare_stripe_button() {
                   // You can access the token ID with `token.id`
                 $.post(window.additional_parameters.request_to_buy_url,
                     {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
-                     "json");
+                     "json")
+                    .done(function (response) {
+                        var message = handle_ajax_response(response);
+                        $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>');
+                        show_ajax_message(message, 'success');
+                    })
+                    .fail(function () {
+                        show_ajax_message('Something went wrong with the payment!', 'danger');
+                    });
             }
         });
 

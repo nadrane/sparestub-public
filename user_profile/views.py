@@ -294,10 +294,12 @@ def view_ticket(request, username, ticket_id):
     View the details for a particular ticket. This view allows us to message the user or buy the ticket from him.
     """
 
+    user = request.user
+
      # Look up the user record who corresponds to this profile
     profile = UserProfile.get_user_profile_from_username(username)
     if profile:
-        user = profile.user
+        profile_user = profile.user
     else:
         raise Http404('The username {} does not exist.'.format(username))
 
@@ -308,34 +310,34 @@ def view_ticket(request, username, ticket_id):
         raise Http404()
 
     # Make sure that the username entered is the actual poster of this ticket
-    if ticket.poster != user:
-        raise Http404('{} did not post that ticket.'.format(user.user_profile.username))
+    if ticket.poster != profile_user:
+        raise Http404('{} did not post that ticket.'.format(profile_user.user_profile.username))
 
-    if not ticket.can_view(user):
+    if not ticket.can_view(profile_user):
         raise Http404('It looks like this page no longer exists. The user probably cancelled their ticket.')
 
     # If the user looking at this profile is its owner, then we want to render a couple edit buttons
-    if request.user == user:
+    if user == profile_user:
         is_owner = True
     else:
         is_owner = False
 
-    user_location = user.location
+    user_location = profile_user.location
 
-    most_recent_review = user.most_recent_review()
+    most_recent_review = profile_user.most_recent_review()
 
-    user_info = {'name': user,
-                 'age': user.age(),
+    user_info = {'name': profile_user,
+                 'age': profile_user.age(),
                  'city': user_location.city,
                  'state': user_location.state,
-                 'rating': user.rating,
+                 'rating': profile_user.rating,
                  'username': username,
-                 'user_id': user.id,
-                 'email': user.email
+                 'user_id': profile_user.id,
+                 'email': profile_user.email
                  }
 
     try:
-        user_info['profile_picture'] = user.profile_picture
+        user_info['profile_picture'] = profile_user.profile_picture
     except ObjectDoesNotExist:
         pass
 
@@ -359,42 +361,12 @@ def view_ticket(request, username, ticket_id):
                    'ticket': ticket,
                    'most_recent_review_info': most_recent_review_info,
                    'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY,
-                   'has_requested': Request.has_requested(ticket, user)
+                   'has_request': Request.has_requested(ticket, user)
                    },
                   content_type='text/html',
                   )
 
 #def cancel_request_to_buy(request):
-
-
-
-def delete_ticket(request, ticket_id):
-    """
-    Delete the inputted ticket
-    """
-
-    user = request.user
-
-    # Make sure that ticket exists
-    try:
-        ticket = Ticket.objects.get(pk=ticket_id)
-    except Ticket.DoesNotExist:
-        return ajax_other_message("That ticket doesn't exist")
-
-    # Make sure that the username entered is the actual poster of this ticket
-    if ticket.poster != user:
-        logging.critical('user id {} tried to delete ticket id {}, which is not his'.format(user.id, ticket.id))
-        return ajax_other_message('You are not the owner of that ticket')
-
-    if ticket.can_delete():
-        ticket.change_status('C')
-
-        return ajax_other_message('Your message was successfully deleted.', 200)
-    else:
-        return ajax_other_message("We're sorry. You cannot delete this ticket since you have already "
-                                                "accepted a user's request to buy it. If you have any questions "
-                                                "please contact us at Shout@sparestub.com.", 400)
-
 
 def update_question(request, username, question_id):
     """

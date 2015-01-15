@@ -108,7 +108,7 @@ def can_request_ticket(request, ticket_id):
         return ajax_other_message("You cannot request this ticket because you've already"
                                   " requested a ticket within two hours of this event", 400)
 
-    return ajax_http(True)
+    return ajax_other_message('Your request has been submitted', 200)
 
 
 @login_required()
@@ -147,7 +147,7 @@ def request_to_buy(request):
     except stripe.CardError as e:
         logging.critical('Stripe failed with error {}'.format(e))
 
-    return ajax_http(True)
+    return ajax_other_message('Your request to buy has been submitted', 200)
 
 @login_required()
 def cancel_request_to_but(request):

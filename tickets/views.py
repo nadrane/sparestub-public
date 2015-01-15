@@ -1,12 +1,16 @@
+# Standard Imports
+import logging
+
 # Django imports
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, Http404, redirect
+from django.core.urlresolvers import reverse
 
 # 3rd Party Imports
 from haystack.views import FacetedSearchView
 
 # SpareStub Imports
-from utils.networking import ajax_http, ajax_popup_notification, non_field_errors_notification
+from utils.networking import ajax_http, ajax_popup_notification, non_field_errors_notification, ajax_other_message
 from .settings import ticket_submit_form_settings
 
 # Module Imports
@@ -64,3 +68,49 @@ def submit_ticket(request):
 
 class SearchResults(FacetedSearchView):
     template = 'search/search_results.html'
+
+
+def can_delete_ticket(request):
+    user = request.user
+
+    ticket_id = request.POST.get('ticket_id', None)
+
+    # Make sure that ticket exists
+    try:
+         ticket = Ticket.objects.get(pk=ticket_id)
+    except Ticket.DoesNotExist:
+        return ajax_other_message("That ticket doesn't exist", 400)
+
+    if not ticket.can_delete():
+        return ajax_other_message("We're sorry. You cannot delete this ticket since you have already "
+                                                "accepted a user's request to buy it. If you have any questions "
+                                                "please contact us at Shout@sparestub.com.", 400)
+
+    return ajax_http(True);
+
+
+def delete_ticket(request, ticket_id):
+    """
+    Delete the inputted ticket
+    """
+
+    user = request.user
+
+    # Make sure that ticket exists
+    try:
+        ticket = Ticket.objects.get(pk=ticket_id)
+    except Ticket.DoesNotExist:
+        raise Http404()
+
+    # Make sure that the username entered is the actual poster of this ticket
+    if ticket.poster != user:
+        logging.critical('user id {} tried to delete ticket id {}, which is not his'.format(user.id, ticket.id))
+        raise Http404()
+
+    if ticket.can_delete():
+        ticket.change_status('C')
+
+        return redirect(reverse('profile_tickets', kwargs={'username': user.user_profile.username}))
+    else:
+        raise Http404()
+

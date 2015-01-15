@@ -173,6 +173,7 @@
     display: inline-block;
     vertical-align: top;
     width: 250px;
+    margin: 20px;
 }
 
 /* END PRESS */
@@ -257,25 +258,6 @@ li {
     .intro-btn {
         padding: 10px;
         font-size: 15px;
-    }
-}
-
-/* Target IOS devices which can't seem to handle the fixed option of background-attachment correctly */
-@media only screen and (min-device-width : 768px) and (max-device-width : 1024px)  {
-    #introducing-sparestub {
-        background-attachment: scroll;
-    }
-    .link-column {
-        margin-left: 10px;
-    }
-}
-
-@media (max-width: 525px) {
-    #social-media {
-        margin-left: 30px;
-    }
-    #talking-shop {
-        margin-right: 40px;
     }
 }
 
