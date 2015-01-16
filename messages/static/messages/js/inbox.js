@@ -11,7 +11,7 @@ function accept_request() {
             'other_user_id': $current_thread.data('identity-user')},
             "json")
         .always(function (response) {
-            handle_ajax_response(response.responseJSON);
+            handle_ajax_response(response);
         });
 }
 
@@ -25,11 +25,11 @@ function decline_request() {
             'other_user_id': $current_thread.data('identity-user')},
             "json")
         .done(function (response) {
-            handle_ajax_response(response.responseJSON);
+            handle_ajax_response(response);
             toggle_messaging('off');
         })
         .fail(function (response) {
-            handle_ajax_response(response.responseJSON);
+            handle_ajax_response(response);
         });
 }
 

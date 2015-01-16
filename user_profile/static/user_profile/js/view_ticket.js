@@ -145,7 +145,7 @@ function prepare_stripe_button() {
                      "json")
                     .done(function (response) {
                         var message = handle_ajax_response(response);
-                        $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>')
+                        $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>');
                         $('#cancel-request').on('click', cancel_request_to_buy);
                         show_ajax_message(message, 'success');
                     })
@@ -161,7 +161,7 @@ function prepare_stripe_button() {
             description: window.additional_parameters.ticket_title,
             allowRememberMe: true,
             email: window.additional_parameters.user_email,
-            panelLabel: 'Pay $5 Fee)'
+            panelLabel: 'Pay $5 Fee'
         });
     });
 

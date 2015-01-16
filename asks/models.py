@@ -57,8 +57,8 @@ class RequestManager(models.Manager):
                             )
 
         message_body = 'This is an automated message to let you know that {} has requested to buy your ticket. ' \
-                       'You have 48 to respond by clicking one of the buttons at the top ' \
-                       'of the screen'.format(requester.first_name.title())
+                       'You have 48 hours to respond by clicking either the accept button or decline button at the ' \
+                       'top of the screen'.format(requester.first_name.title())
 
         # No need to send an email that a message was sent since we just sent an email about the request
         Message.objects.create_message(requester, poster, ticket, message_body, False)
