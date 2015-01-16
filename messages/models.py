@@ -277,7 +277,8 @@ class Message(TimeStampedModel):
             # If the ticket is sold or the event has passed
             elif status == 'S' or status == 'E':
                 # If the user purchased the ticket, conversation may continue
-                if Request.get_all_requests(user, ticket).filter(status='A').exists():
+                if Request.objects.filter(ticket=ticket, status='A')\
+                                  .filter(Q(requester=user) | Q(requester=other_user)).exists():
                     can_message = True
                 else:
                     can_message = False

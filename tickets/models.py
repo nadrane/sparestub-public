@@ -368,7 +368,7 @@ class Ticket(TimeStampedModel):
         if not tickets_sold_and_cancelled_tickets and not requests_for_tickets:
             return None
 
-        return chain(tickets_sold_and_cancelled_tickets, [request.ticket for request in requests_for_tickets])
+        return set(chain(tickets_sold_and_cancelled_tickets, [request.ticket for request in requests_for_tickets]))
 
     @staticmethod
     def upcoming_tickets(user):
@@ -384,4 +384,4 @@ class Ticket(TimeStampedModel):
         if not upcoming_shows_user_posted and not upcoming_shows_user_requested:
             return None
 
-        return chain(upcoming_shows_user_posted, [request.ticket for request in upcoming_shows_user_requested])
+        return set(chain(upcoming_shows_user_posted, [request.ticket for request in upcoming_shows_user_requested]))

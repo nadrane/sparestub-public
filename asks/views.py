@@ -155,7 +155,7 @@ def request_to_buy(request):
         logging.critical('Stripe failed with error {}'.format(e))
 
     return ajax_other_message('Your request to buy has been submitted. '
-                              'Your card will be charged if the buyer accepts your request.', 200)
+                              'Your card will be charged if the seller accepts your request.', 200)
 
 @login_required()
 def cancel_request_to_buy(request):
