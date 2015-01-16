@@ -1,8 +1,8 @@
 {% load tz %}
 
 <div class="ticket-info-ribbon" data-identity-ticket="{{ ticket_id }}">
-  <a href="{{ ticket_ribbon.absolute_url }}">Jump to Ticket: </a>
-  <span>Price: ${{ ticket_ribbon.price }} |   </span>
+  <a href="{{ ticket_ribbon.absolute_url }}">Jump to Ticket:</a>
+  <span> Price: ${{ ticket_ribbon.price }} |   </span>
   <span>When: {% localtime off %}{{ ticket_ribbon.when }}{% endlocaltime %} |   </span>
   <span>Where: {{ticket_ribbon.where}}</span>
 </div>
