@@ -271,6 +271,7 @@ def profile_tickets(request, username):
         most_recent_review_info = None
 
     # Grab every ticket that this user has posted or has bid on
+    upcoming_tickets = Ticket.upcoming_tickets(user)
     available_tickets = Ticket.available_tickets(user)
     in_progress_tickets = Ticket.in_progress_ticket(user)
     past_tickets = Ticket.past_tickets(user)
@@ -279,6 +280,7 @@ def profile_tickets(request, username):
                   'user_profile/profile_tickets.html',
                   {'user_info': user_info,
                    'is_owner': is_owner,
+                   'upcoming_tickets': upcoming_tickets,
                    'available_tickets': available_tickets,
                    'in_progress_tickets': in_progress_tickets,
                    'past_tickets': past_tickets,
@@ -293,7 +295,6 @@ def view_ticket(request, username, ticket_id):
     """
     View the details for a particular ticket. This view allows us to message the user or buy the ticket from him.
     """
-
     user = request.user
 
      # Look up the user record who corresponds to this profile
@@ -313,7 +314,7 @@ def view_ticket(request, username, ticket_id):
     if ticket.poster != profile_user:
         raise Http404('{} did not post that ticket.'.format(profile_user.user_profile.username))
 
-    if not ticket.can_view(profile_user):
+    if not ticket.can_view(user):
         raise Http404('It looks like this page no longer exists. The user probably cancelled their ticket.')
 
     # If the user looking at this profile is its owner, then we want to render a couple edit buttons

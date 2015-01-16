@@ -197,7 +197,7 @@ class Ticket(TimeStampedModel):
         # If the ticket is sold or the event has passed, only the buyer and seller may see it
         elif status == 'E' or status == 'S':
             if poster == user or poster == self.get_buyer():
-                is_viewable == True
+                is_viewable = True
             else:
                 is_viewable = False
 
@@ -369,3 +369,19 @@ class Ticket(TimeStampedModel):
             return None
 
         return chain(tickets_sold_and_cancelled_tickets, [request.ticket for request in requests_for_tickets])
+
+    @staticmethod
+    def upcoming_tickets(user):
+        """
+        Returns a QuerySet of tickets that this user either successfully bought or successfully sold
+        """
+        from asks.models import Request
+
+        upcoming_shows_user_posted = Ticket.objects.filter(poster=user, status='S')
+        upcoming_shows_user_requested = Request.objects.filter(requester=user, status='A')
+
+        # An if statement on the return from chain actually passes... so return None explicitly if there's nothing
+        if not upcoming_shows_user_posted and not upcoming_shows_user_requested:
+            return None
+
+        return chain(upcoming_shows_user_posted, [request.ticket for request in upcoming_shows_user_requested])

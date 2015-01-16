@@ -108,6 +108,9 @@ class Request(TimeStampedModel):
             self.save()
             ticket.change_status('S')
 
+        Message.objects.create_message(poster, requester, ticket,
+                                       "Congratulations, you're going to the event together!", False)
+
         message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE,
                                         {'ticket': ticket})
 
@@ -128,9 +131,18 @@ class Request(TimeStampedModel):
         self.status = 'D'
         self.save()
 
+        requester = self.requester
+        ticket = self.ticket
+        poster = ticket.poster
+
+        Message.objects.create_message(poster, requester, ticket,
+                                       "The bad news: your request was declined. "
+                                       "The good news: there are plenty of stubs in the sea.",
+                                       False)
+
         message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
-                                        {'user': self.requester,
-                                         'ticket': self.ticket})
+                                        {'user': requester,
+                                         'ticket': ticket})
         self.requester.send_mail(REQUEST_INACTIVE_SUBJECT,
                                  message='',
                                  html=message_body)
@@ -200,7 +212,7 @@ class Request(TimeStampedModel):
         Note that there can be multiple requests for a ticket/user combination if a request was cancelled by the user
         or if a request expired.
         """
-        request = Request.objects.filter(requester=user, ticket=ticket).order_by('creation_timestamp')
+        request = Request.objects.filter(requester=user, ticket=ticket).order_by('-creation_timestamp')
         if request:
             return request[0]
         return None

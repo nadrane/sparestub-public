@@ -254,7 +254,7 @@ class Message(TimeStampedModel):
         return Message.objects.filter(receiver=user.id).filter(is_read=False).count()
 
     @staticmethod
-    def can_message(ticket, user):
+    def can_message(ticket, user, other_user):
         """
         Can the inputted user send a message about this ticket?
         """
@@ -268,8 +268,9 @@ class Message(TimeStampedModel):
             status = ticket.status
             # If the ticket is posted
             if status == 'P':
-                # If the user has a previously declined request for that ticket, disable messaging
-                if Request.get_all_requests(user, ticket).filter(status='D').exists():
+                # If either user has a previously declined request for that ticket, disable messaging
+                if Request.objects.filter(ticket=ticket, status='D')\
+                                  .filter(Q(requester=user) | Q(requester=other_user)).exists():
                     can_message = False
                 else:
                     can_message = True

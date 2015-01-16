@@ -70,11 +70,7 @@ class SearchResults(FacetedSearchView):
     template = 'search/search_results.html'
 
 
-def can_delete_ticket(request):
-    user = request.user
-
-    ticket_id = request.POST.get('ticket_id', None)
-
+def can_delete_ticket(request, ticket_id):
     # Make sure that ticket exists
     try:
          ticket = Ticket.objects.get(pk=ticket_id)

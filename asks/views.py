@@ -32,17 +32,21 @@ def accept_request(request):
                          .format(user, ticket.poster))
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
-    if not ticket.is_requestable():
-        return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
-
     try:
         other_user = User.objects.get(pk=request.POST.get('other_user_id'))
     except User.DoesNotExist:
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
     user_request = Request.get_last_request(other_user, ticket)
+
+    if user_request.status == 'A':
+        return ajax_popup_notification('success', "You've already accepted this ticket!", 400)
+
     if user_request.status != 'P':
         return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
+
+    if not ticket.is_requestable():
+        return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
 
     customer = Customer.get_customer_from_user(other_user)
     if not customer:
@@ -51,7 +55,7 @@ def accept_request(request):
 
     user_request.accept()
     return ajax_popup_notification('success', 'Congratulations, you and {} are going the event together'
-                                   .format(other_user.first_name.title()))
+                                   .format(other_user.first_name.title()), 200)
 
 @login_required()
 def decline_request(request):
@@ -75,13 +79,17 @@ def decline_request(request):
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
     user_request = Request.get_last_request(other_user, ticket)
+
+    if user_request.status == 'D':
+        return ajax_popup_notification('success', "You've already declined this ticket!", 400)
+
     if user_request.status != 'P':
-        return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
+        return ajax_popup_notification('info', 'There is no outstanding request for this ticket.', 400)
 
     user_request.decline()
 
     return ajax_popup_notification('info', "Aww, we'll let {} down easy. Good like finding another gig buddy."
-                                   .format(other_user.first_name.title()))
+                                   .format(other_user.first_name.title()), 200)
 
 @login_required()
 def can_request_ticket(request, ticket_id):
@@ -91,7 +99,6 @@ def can_request_ticket(request, ticket_id):
         1. Make sure the user has not already requested to purchase this ticket.
         2. Make sure that the user has not requested to go to another show at the same time.
     """
-
     user = request.user
     try:
         ticket = Ticket.objects.get(pk=ticket_id)
@@ -154,9 +161,6 @@ def cancel_request_to_buy(request):
     """
     Mark a pending request as cancelled
     """
-    import pdb
-    pdb.set_trace()
-
     user = request.user
 
     # Make sure that ticket exists
