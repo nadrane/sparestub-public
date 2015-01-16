@@ -200,7 +200,6 @@ html, body, #page-wrapper, #page-wrapper>.row {
 .talk-bubble-pic {
 	height: 40px;
 	border-radius: 20px;
-    border: 1px black solid;
     margin-right: 10px; /* Don't the let body of the message encroach on the image */
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
