@@ -161,7 +161,7 @@ function prepare_stripe_button() {
             description: window.additional_parameters.ticket_title,
             allowRememberMe: true,
             email: window.additional_parameters.user_email,
-            panelLabel: '$' + (parseFloat(window.additional_parameters.ticket_amount) + 5).toString() + ' ($' + (parseFloat(window.additional_parameters.ticket_amount)).toString() + ' + $5 fee)'
+            panelLabel: 'Pay $5 Fee)'
         });
     });
 
