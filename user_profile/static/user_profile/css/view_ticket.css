@@ -7,6 +7,16 @@
     word-wrap: break-word; /* TEST ME TODO handle really really long one word titles that overflow */
 }
 
+.transbox {
+  background-color: #ffffff;
+  opacity:0.8;
+  filter:alpha(opacity=60); /* For IE8 and earlier */
+}
+.transbox table {
+  color: #000000;
+}
+
+
 #buy-or-message-buttons {
     margin-top: 25px;
 }
@@ -53,4 +63,34 @@
     float: right;
     width: 50%;
 }
+
+.instruction{
+    max-width: 350px;
+
+}
+
+@media (max-width: 898px) {
+    .instruction{
+        max-width: 350px;
+        text-align: center;
+}
+}
+
+@media (max-width: 897px) {
+   .instruction {
+       max-width: 300px;
+       padding: 15px;
+   }
+    .column-right-ticket {
+        clear: left;
+        display: block;
+        width: 100%;
+    }
+    .column-left-ticket {
+        float: none;
+        display: block;
+        width: 100%;
+    }
+}
+
 
