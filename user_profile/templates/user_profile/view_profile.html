@@ -10,7 +10,7 @@
         <h4 class="question">{{ pair.1.question }}</h4>
       </div>
       <div class="col-xs-12 col-md-10">
-        <textarea class="answer" name="answer"{% if not is_owner %}readonly="true" {% endif %}>{{ pair.0.answer }}</textarea>
+        <textarea class="answer transbox" name="answer"{% if not is_owner %}readonly="true" {% endif %}>{{ pair.0.answer }}</textarea>
         {% if is_owner %}<button type="submit" class="btn btn-primary pull-left answer-button">Save<div class="answer-button-status"></div></button>{% endif %}
       </div>
     </div>

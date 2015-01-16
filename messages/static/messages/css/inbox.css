@@ -30,6 +30,14 @@ html, body, #page-wrapper, #page-wrapper>.row {
     position: relative;
 }
 
+.ticket-info-ribbon a:hover {
+    color: #CA2473;
+}
+
+.ticket-info-ribbon a {
+    color: #2CB0EF;
+}
+
 .delete-conversation {
     position: absolute;
     font-size: 16px;
@@ -100,7 +108,7 @@ html, body, #page-wrapper, #page-wrapper>.row {
 }
 
 #convo-header {
-    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/backgrounds/old_moon.png");
+    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/backgrounds/squared_metal.png");
     padding: 10px;
     height: 90px;
     position: fixed;
@@ -153,11 +161,11 @@ html, body, #page-wrapper, #page-wrapper>.row {
 #ticket-ribbon {
     -webkit-font-smoothing: antialiased;
     background-color: rgb(245, 245, 245);
-    height: 20px;
     padding-left: 10px;
     border-bottom: solid rgb(221, 221, 221) 1px;
     position: relative;
     top: 90px; /* Position directly below the header */
+    height: auto;
 }
 
 /* END CURRENT CONVERSATION */
@@ -210,11 +218,11 @@ html, body, #page-wrapper, #page-wrapper>.row {
 }
 
 .this-user {
-    background-color: #A3E0FF;
+    background-color: rgb(177, 248, 255);
 }
 
 .that-user {
-    background-color: #ffa2c3;
+    background-color: #31BAFF;
 }
 /* END CURRENT CONVERSATION BODY*/
 

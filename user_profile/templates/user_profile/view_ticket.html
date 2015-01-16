@@ -22,36 +22,34 @@
         </div>
       </div>
       <div id="row-middle" class="row">
-        <div id="left-middle" class="col-xs-2 middle-contents">
-          <div class="middle-label">Where: </div>
-          <div class="middle-item">{{ ticket.location }}<br>{{ ticket.venue }}</div>
+        <div id="left-middle" class="col-xs-6 col-sm-4 middle-contents">
+          <div class="middle-label"><b>Where:</b> {{ ticket.location }}<br>
+          <div class="middle-item">{{ ticket.venue }}</div>
         </div>
-        <div id="mid-middle" class="col-xs-2 middle-contents">
-          <div class="middle-label">When: </div>
+      </div>
+        <div id="right-middle" class="col-xs-6 col-sm-4 middle-contents">
+            <div class="middle-label"><b>Price:</b> {{ ticket.price | currency}}</div>
+        </div>
+        <div id="mid-middle" class="col-xs-6 col-sm-4 middle-contents">
+          <div class="middle-label"><b>When:</b>
             {% comment %}Turn localtimeoff because the events might be in a different timezone than the user. We don't want to
             convert the event time to the timezone of the user but to the timezone of the event's location.
             Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
-          <div class="middle-item">{% localtime off %}{{ ticket.get_formatted_start_datetime|date:"D N d, P" }}{% endlocaltime %}</div>
-        </div>
-        <div id="right-middle" class="col-xs-2 middle-contents">
-            <div class="middle-label">Price: </div>
-            <div class="middle-item">{{ ticket.price | currency}}</div>
+          {% localtime off %}{{ ticket.get_formatted_start_datetime|date:"D N d, P" }}{% endlocaltime %}</div>
         </div>
       </div>
-      <div id="about" class="row">
-        <div class="col-xs-6">
+    </div>
+  <div id="column-left-ticket">
+      <div id="about">
           {{ ticket.about }}
         </div>
       </div>
       <div id="ajax-errors" class="row" style="display:none;">
-        <div class="col-xs-12">
           <div class="alert alert-danger">
             <p></p>
           </div>
-        </div>
       </div>
-      <div id="buy-or-message-buttons" class="row">
-        <div class="col-xs-12">
+      <div id="buy-or-message-buttons">
           {% if is_owner %}
             <button id="delete-ticket" type=button class="btn btn-primary cancel-ticket" type="button"> Delete Ticket</button>
           {% else %}
@@ -65,8 +63,11 @@
               <button id="buy-it-now" class="btn btn-default" type="button">Buy It Now</button>
             {% endif %}
           {% endif %}
-        </div>
       </div>
+  </div>
+     <div class="column-right-ticket">
+          <img src="https://s3.amazonaws.com/sparestub/static_root/sparestub/logos/ticket_instructions.png">
+     </div>
     </div>
   </div>
 {% endblock %}
