@@ -75,9 +75,9 @@
         </table>
       </div>
     {% elif is_owner %}
-        You do not have any available tickets.
+        <div class="profile-body">You do not have any available tickets.</div>
     {% else %}
-        This user has no available tickets.
+        <div class="profile-body">This user has no available tickets.</div>
     {% endif %}
   </div>
   {% if is_owner %}
@@ -96,7 +96,7 @@
           </table>
         </div>
       {% else %}
-        You do not have any tickets in progress!
+        <div class="profile-body">You do not have any tickets in progress!</div>
       {% endif %}
     </div>
   {% endif %}
@@ -116,7 +116,7 @@
           </table>
         </div>
       {% else %}
-        You have not been to any events yet!
+        <div class="panel-body">You have not been to any events yet!</div>
       {% endif %}
     </div>
   {% endif %}
