@@ -131,7 +131,7 @@ def inbox(request):
                                                                  request_status=request_status,
                                                                  ticket_id=ticket_id,
                                                                  other_user_id=other_user_id,
-                                                                 can_message=Message.can_message(ticket, user)
+                                                                 can_message=Message.can_message(ticket, user, other_user)
                                                                  )
 
             if ticket_id not in ticket_ribbons:
@@ -172,6 +172,7 @@ def inbox(request):
 
         # The django template language cannot handle defaultdict's properly. This resolves our issue.
         # Django Issues explains why.
+
         messages.default_factory = None
         convo_headers.default_factory = None
         for key in messages.keys():

@@ -97,7 +97,7 @@ function add_failure_x($target) {
     $target.append('<span class="glyphicon glyphicon-remove">');
 }
 
-function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
+function show_yes_cancel_modal(title, post_url, modal_yes_function) {
     'use strict';
 
     var $modal_yes = $('#modal-yes');
@@ -118,6 +118,8 @@ function prepare_yes_cancel_modal(title, post_url, modal_yes_function) {
     } else {
         $modal_yes.attr('type', 'button');
     }
+
+    $('#modal-yes-cancel-root').modal('show');
 }
 
 function setup_pop_notification_modal() {
@@ -138,7 +140,11 @@ function show_popup_notification_modal(notification_content, notification_type, 
     $('.in.modal').modal('hide');
 
     var $modal_popup_notification_content = $('#modal-popup-notification-content');
-    $modal_popup_notification_content.addClass('alert-' + notification_type);
+    $modal_popup_notification_content.removeClass('alert-success')
+                                     .removeClass('alert-danger')
+                                     .removeClass('alert-warning')
+                                     .removeClass('alert-info')
+                                     .addClass('alert-' + notification_type);
     if (use_html) {
         $modal_popup_notification_content.html(notification_content);
     } else {

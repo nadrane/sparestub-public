@@ -24,13 +24,12 @@ function decline_request() {
            {'ticket_id': $current_thread.data('identity-ticket'),
             'other_user_id': $current_thread.data('identity-user')},
             "json")
-        .done(function () {
-            handle_ajax_response();
-            $('#new-message-textarea').attr('disabled', true)
-                                      .val('This converation is no longer active');
+        .done(function (response) {
+            handle_ajax_response(response.responseJSON);
+            toggle_messaging('off');
         })
-        .fail(function () {
-            handle_ajax_response();
+        .fail(function (response) {
+            handle_ajax_response(response.responseJSON);
         });
 }
 
@@ -125,6 +124,10 @@ function load_thread ($this, ticket_id, other_user_id) {
         toggle_messaging('off');
     }
 
+    // Need to do these after the thread is loaded since that creates the buttons
+    $('.accept-request').on('click', accept_request);
+    $('.decline-request').on('click', decline_request);
+
     mark_messages_read(ticket_id, other_user_id);
 }
 
@@ -193,14 +196,6 @@ $(document).on('ready', function () {
 
     $('#send-message').on('click', function (e) {
         send_message(e);
-    });
-
-    $('.accept-request').on('click', function (e) {
-        accept_request();
-    });
-
-    $('.decline-request').on('click', function (e) {
-        decline_request();
     });
 
     // Load a threads contents when it is clicked

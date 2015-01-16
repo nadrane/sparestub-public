@@ -14,6 +14,7 @@ from utils.networking import ajax_http, ajax_popup_notification, non_field_error
 from .settings import ticket_submit_form_settings
 # Module Imports
 from .models import Ticket
+from asks.models import Request
 from .forms import SubmitTicketForm
 
 @login_required()
@@ -69,11 +70,7 @@ class SearchResults(FacetedSearchView):
     template = 'search/search_results.html'
 
 
-def can_delete_ticket(request):
-    user = request.user
-
-    ticket_id = request.POST.get('ticket_id', None)
-
+def can_delete_ticket(request, ticket_id):
     # Make sure that ticket exists
     try:
          ticket = Ticket.objects.get(pk=ticket_id)
@@ -112,21 +109,4 @@ def delete_ticket(request, ticket_id):
         return redirect(reverse('profile_tickets', kwargs={'username': user.user_profile.username}))
     else:
         raise Http404()
-
-
-def cancel_request_to_buy(request):
-    """
-    Mark a pending request as cancelled
-    """
-    user = request.user
-
-    # Make sure that ticket exists
-    try:
-        ticket = Ticket.objects.get(pk=ticket_id)
-    except Ticket.DoesNotExist:
-        ajax_other_message('False')
-
-    # Make sure that the username entered is the actual poster of this ticket
-    if ticket.can_delete():
-        ticket.change_status('C')
 

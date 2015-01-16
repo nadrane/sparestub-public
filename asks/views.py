@@ -32,17 +32,21 @@ def accept_request(request):
                          .format(user, ticket.poster))
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
-    if not ticket.is_requestable():
-        return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
-
     try:
         other_user = User.objects.get(pk=request.POST.get('other_user_id'))
     except User.DoesNotExist:
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
     user_request = Request.get_last_request(other_user, ticket)
+
+    if user_request.status == 'A':
+        return ajax_popup_notification('success', "You've already accepted this ticket!", 400)
+
     if user_request.status != 'P':
         return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
+
+    if not ticket.is_requestable():
+        return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
 
     customer = Customer.get_customer_from_user(other_user)
     if not customer:
@@ -51,7 +55,7 @@ def accept_request(request):
 
     user_request.accept()
     return ajax_popup_notification('success', 'Congratulations, you and {} are going the event together'
-                                   .format(other_user.first_name.title()))
+                                   .format(other_user.first_name.title()), 200)
 
 @login_required()
 def decline_request(request):
@@ -75,13 +79,17 @@ def decline_request(request):
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
     user_request = Request.get_last_request(other_user, ticket)
+
+    if user_request.status == 'D':
+        return ajax_popup_notification('success', "You've already declined this ticket!", 400)
+
     if user_request.status != 'P':
-        return ajax_popup_notification('danger', 'There is no outstanding request for this ticket.', 400)
+        return ajax_popup_notification('info', 'There is no outstanding request for this ticket.', 400)
 
     user_request.decline()
 
     return ajax_popup_notification('info', "Aww, we'll let {} down easy. Good like finding another gig buddy."
-                                   .format(other_user.first_name.title()))
+                                   .format(other_user.first_name.title()), 200)
 
 @login_required()
 def can_request_ticket(request, ticket_id):
@@ -91,7 +99,6 @@ def can_request_ticket(request, ticket_id):
         1. Make sure the user has not already requested to purchase this ticket.
         2. Make sure that the user has not requested to go to another show at the same time.
     """
-
     user = request.user
     try:
         ticket = Ticket.objects.get(pk=ticket_id)
@@ -150,19 +157,24 @@ def request_to_buy(request):
     return ajax_other_message('Your request to buy has been submitted', 200)
 
 @login_required()
-def cancel_request_to_but(request):
-
+def cancel_request_to_buy(request):
+    """
+    Mark a pending request as cancelled
+    """
     user = request.user
 
+    # Make sure that ticket exists
     try:
         ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
     except Ticket.DoesNotExist:
-        return ajax_other_message("It looks like that ticket doesn't exist!", 400)
+        ajax_other_message('Uh oh, something went wrong', 400)
 
-
-    if Request.has_requested(ticket, user):
-        request = Request.objects.filter(ticket=ticket, user=user, status='P')
-        request.status = 'C'
+    # Make sure that the username entered is the actual poster of this ticket
+    request = Request.objects.filter(requester=user, ticket=ticket, status='P')
+    if request:
+        request[0].cancel()
+        return ajax_other_message('Your request has been cancelled', 200)
     else:
-        return ajax_popup_notification('You have not requested to buy this ticket.', 400)
+        return ajax_other_message('You do not have a pending request', 400)
+
 
