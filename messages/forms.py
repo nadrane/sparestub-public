@@ -76,7 +76,8 @@ class SendMessageForm(EditMessageForm):
         super(SendMessageForm, self).clean(*args, **kwargs)
         ticket = self.cleaned_data.get('ticket')
         sender = self.request.user
-        if Message.can_message(ticket, sender):
+        other_user = self.cleaned_data.get('other_user')
+        if Message.can_message(ticket, sender, other_user):
             forms.ValidationError('Sorry, you are not allowed to send a message for that ticket.')
 
 
