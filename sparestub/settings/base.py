@@ -165,3 +165,7 @@ LOGIN_URL = '/registration/login_redirect/'
 LOGIN_REDIRECT_URL = '/'
 
 SEND_EMAILS = False  # Default to sending emails unless a specific settings file disables it
+
+# django-compressor settings
+COMPRESS_OFFLINE = True
+COMPRESS_ENABLED = True
