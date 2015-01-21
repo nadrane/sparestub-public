@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% load compress %}
+
+{% block css %}
+  {% compress css %}
+    {{ block.super }}
+  {% endcompress %}
+{% endblock %}
 
 {% block content %}
   <div class="jumbotron" style="height: 500px">
@@ -10,4 +17,10 @@
       <!-- TODO MAKE PRETTIER AND LINK TO HOMEPAGE -->
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  {% compress js %}
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}

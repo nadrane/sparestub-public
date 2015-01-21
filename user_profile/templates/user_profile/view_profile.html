@@ -1,5 +1,12 @@
 {% extends "user_profile/base_profile.html" %}
 {% load static %}
+{% load compress %}
+
+{% block css %}
+  {% compress css %}
+    {{ block.super }}
+  {% endcompress %}
+{% endblock %}
 
 {% block profile_body %}
   {% for pair in question_answer_pairs %}
@@ -19,8 +26,10 @@
 {% endblock %}
 
 {% block js %}
-  <!-- The spin wheel used when updating profile question/answer information
-       Needs to be loaded before user_profile.js since user_profile.js calls spin.()-->
-  <script type="text/javascript" src="{% static "sparestub/js/spin.js" %}"></script>
-  {{ block.super }}
+    <!-- The spin wheel used when updating profile question/answer information
+         Needs to be loaded before user_profile.js since user_profile.js calls spin.()-->
+  {% compress js %}
+    <script type="text/javascript" src="{% static "sparestub/js/spin.js" %}"></script>
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}

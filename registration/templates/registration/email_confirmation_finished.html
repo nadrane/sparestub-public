@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% load compress %}
+
+{% block css %}
+  {% compress css %}
+    {{ block.super }}
+  {% endcompress %}
+{% endblock %}
 
 {% block content %}
   <div class="row">
@@ -13,4 +20,10 @@
       </p>
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  {% compress js %}
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}

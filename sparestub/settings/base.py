@@ -55,12 +55,13 @@ INSTALLED_APPS = (
     'messages',
     'asks',
     'stripe_data',
+    'compressor',
 
     # All needed for zinnia
-    'django_comments',
-    'mptt',
-    'tagging',
-    'zinnia',
+    #'django_comments',
+    #'mptt',
+    #'tagging',
+    #'zinnia',
 )
 
 SITE_ID = 1  # Needed for allauth
@@ -139,6 +140,9 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(BASE_DIR), 'tickets', 'email_templates'),
 )
 
+STATICFILES_FINDERS = ("django.contrib.staticfiles.finders.FileSystemFinder",
+                       "django.contrib.staticfiles.finders.AppDirectoriesFinder"
+                       )
 
 AUTH_USER_MODEL = 'registration.User'  # We wrote a custom user model that is used everywhere.
 
@@ -160,4 +164,4 @@ DEFAULT_CITY_LIST_JSON = os.path.join(ROOT_DIR, 'locations', 'static', 'location
 LOGIN_URL = '/registration/login_redirect/'
 LOGIN_REDIRECT_URL = '/'
 
-SEND_EMAILS = True  # Default to sending emails unless a specific settings file disables it
+SEND_EMAILS = False  # Default to sending emails unless a specific settings file disables it

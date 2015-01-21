@@ -151,22 +151,6 @@ function initialize_login_form_signup_link() {
     });
 }
 
-function initialize_resend_email_notification() {
-    /* Prepare the notification bar at the top of the screen that prompts the user to confirm their email address.
-     * This function readies the link that the user can click to resend the confirmation email. */
-
-    $('#resend-confirm-email').on('click', function (e) {
-        e.preventDefault();
-        $.post(window.additional_parameters.resend_confirmation_email_link, 'json')
-            .done(function(response) {
-                handle_ajax_response(response.contents);
-            })
-            .fail(function(response) {
-                handle_ajax_response(response.contents);
-            });
-    });
-}
-
 $(document).ready(function ($) {
     'use strict';
 
@@ -174,8 +158,6 @@ $(document).ready(function ($) {
     $('.close').on('click touchstart touchend', function() {
         $(this).parent().remove();
     });
-
-    initialize_resend_email_notification();
 
     $('.contact-form-button').on('click', function () {
         // If the modal content has already been loaded, don't do it again
@@ -233,7 +215,5 @@ $(document).ready(function ($) {
 
     // Initialize when the page loads so that ticker search autocomplete woks
     initialize_location_autocomplete();
-
-    setup_pop_notification_modal();
 }($));
 

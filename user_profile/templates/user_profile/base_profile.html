@@ -1,18 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 {% load misc_filters %}
-
-<script type="text/javascript">
-  window.additional_parameters.is_owner = {{ is_owner }};
-</script>
+{% load compress %}
 
 {% comment %} TODO add gender field. also make header editable {% endcomment %}
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static "user_profile/css/user_profile.css" %}">
-  {% if is_owner %}
-    <link rel="stylesheet" href="{% static "sparestub/css/cropper.css" %}"/>
-  {% endif %}
+  {# Only include conditionally if user owns profile. need to configure with django compressor. JS needs this too. #}
+  <link rel="stylesheet" href="{% static "sparestub/css/cropper.css" %}"/>
 {% endblock %}
 
 {% block content %}
@@ -86,16 +82,14 @@
 {% endblock %}
 
 {% block js %}
-  <script type="text/javascript">
-    window.additional_parameters.is_owner = {% if is_owner %}true{% else %}false{% endif %}; // Is the current viewer of the profile the owner of it?
-  </script>
-
-  {{ block.super }}
-  <script type="text/javascript" src="{% static "user_profile/js/user_profile.js" %}"></script>
-  {% if is_owner %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "user_profile/js/user_profile.js" %}"></script>
+    {% comment %}
+    TODO Ideally these shouldn't be loaded if the user doesn't own the profile, but creating two
+    compressed files and telling django-compressor to load the right one was a little daunting. Optimization.
+    {% endcomment %}
     <script type="text/javascript" src="{% static "sparestub/js/cropper.js" %}"></script>
     <script type="text/javascript" src="{% static "user_profile/js/edit_profile.js" %}"></script>
-  {% endif %}
 {% endblock %}
 
 {% block modals %}

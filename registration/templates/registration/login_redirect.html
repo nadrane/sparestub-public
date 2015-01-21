@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% load compress %}
 
 {% block css %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static "registration/css/login_redirect.css" %}">
+  {% compress css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "registration/css/login_redirect.css" %}">
+  {% endcompress %}
 {% endblock %}
 
 {% comment %}There's no ened to show login and and signup buttons if the form is already displayed below.{% endcomment %}
@@ -105,6 +108,8 @@
   </div>
 
 {% block js %}
-  {{ block.super }}
-  <script type="text/javascript" src="{% static "registration/js/login_redirect.js" %}"></script>
+  {% compress js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "registration/js/login_redirect.js" %}"></script>
+  {% endcompress %}
 {% endblock %}

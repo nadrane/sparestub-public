@@ -1,6 +1,13 @@
 {% extends "user_profile/base_profile.html" %}
 {% load static %}
 {% load misc_filters %}
+{% load compress %}
+
+{% block css %}
+  {% compress css %}
+    {{ block.super }}
+  {% endcompress %}
+{% endblock %}
 
 {% block profile_body %}
   <div class="panel panel-primary tickets-review-panel transbox">
@@ -41,4 +48,10 @@
       {% endif %}
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  {% compress js %}
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}

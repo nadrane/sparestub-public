@@ -1,9 +1,12 @@
 ﻿{% extends "base.html" %}
 {% load static %}
+{% load compress %}
 
 {% block css %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static "sparestub/css/home.css" %}">
+  {% compress css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "sparestub/css/home.css" %}">
+  {% endcompress %}
 {% endblock %}
 
 {% block notification %}
@@ -145,6 +148,8 @@
 {% endblock %}
 
 {% block js %}
-  {{ block.super }}
-  <script type="text/javascript" src="{% static "sparestub/js/home.js" %}"></script>
+  {% compress js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "sparestub/js/home.js" %}"></script>
+  {% endcompress %}
 {% endblock %}

@@ -8,3 +8,6 @@ bower_components
 *.csv
 .DS_Store
 **logging.txt
+server.csr
+server.key
+server.pass.key

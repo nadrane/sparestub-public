@@ -2,10 +2,13 @@
 {% load static %}
 {% load humanize %}
 {% load misc_filters %}
+{% load compress %}
 
 {% block css %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static "messages/css/inbox.css" %}">
+  {% compress css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "messages/css/inbox.css" %}">
+  {% endcompress %}
 {% endblock %}
 
 {% block content %}
@@ -91,7 +94,8 @@
        window.additional_parameters.accept_request_url = "{% url "accept_request" %}";
        window.additional_parameters.decline_request_url = "{% url "decline_request" %}";
    </script>
-
-  {{ block.super }}
-  <script type="text/javascript" src="{% static "messages/js/inbox.js" %}"></script>
+  {% compress js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "messages/js/inbox.js" %}"></script>
+  {% endcompress %}
 {% endblock %}

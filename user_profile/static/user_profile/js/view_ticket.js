@@ -21,6 +21,19 @@ function initialize_bootstrap_validator_message_user() {
     });
 }
 
+function setup_stripe_popup_modal() {
+    'use strict';
+    /* This function needs to be called once when sparestub starts to make sure that the popup notification modal
+    kicks off an event when it closes that other functions can bind to.
+     */
+    var $document = $(document);
+    $document.on('hidden.bs.modal', function (e) {
+        if (e.target.id === 'stripe-popup-notification-root') {
+            $document.trigger('stripe-popup-notification-closed');
+        }
+    });
+}
+
 function load_message_user_modal(show_modal) {
     'use strict';
     /* Load the message user modal content from the server and display that form if requested.
@@ -55,12 +68,8 @@ function load_message_user_modal(show_modal) {
 }
 
 function initiate_stripe() {
-
-    show_popup_notification_modal('<p>After you close this popup, you will be asked to enter your credit card ' +
-        'information. You will not be charged immediately or necessarily at all.</p><p>The seller of this ticket must ' +
-        'first approve you and agree to go to the event with you. If he accepts your request, your card will be ' +
-        'charged. If he does not accept your request, you will not be charged.</p><p>After initiating this request, you ' +
-        'will not be able to request to go to another show on the same day at the same time.</p>', 'warning', true);
+    $('.in.modal').modal('hide');
+    $('#stripe-popup-notification-root').modal('show');
 }
 
 
@@ -133,7 +142,7 @@ function prepare_stripe_button() {
 
     $('#request-to-buy').on('click', request_to_buy);
 
-    $(document).on('modal-popup-notification-closed', function () {
+    $(document).on('stripe-popup-notification-closed', function () {
         var handler = StripeCheckout.configure({
             key: window.additional_parameters.stripe_public_key,
             image: '/square-image.png',
@@ -199,6 +208,7 @@ $(document).ready(function ($) {
                                         // in the HTML to handle it for us
     prepare_delete_ticket_button();
     prepare_stripe_button();
+    setup_stripe_popup_modal();
 
     $('#cancel-request').on('click', cancel_request_to_buy);
 });

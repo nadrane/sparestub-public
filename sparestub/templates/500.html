@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
+{% load compress %}
 
+{% block css %}
+  {% compress css %}
+    {{ block.super }}
+  {% endcompress %}
+{% endblock %}
 
 {% block content %}
   <!-- Main jumbotron for a primary marketing message or call to action -->
@@ -11,4 +17,10 @@
       <p><a href="/contact" class="btn btn-primary btn-lg" role="button" data-toggle="modal" data-target="#modal-contact-form" href="{% url "contact.views.submit" %}/">Contact Us!</a></p>
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  {% compress js %}
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}

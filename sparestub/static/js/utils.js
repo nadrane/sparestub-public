@@ -122,18 +122,6 @@ function show_yes_cancel_modal(title, post_url, modal_yes_function) {
     $('#modal-yes-cancel-root').modal('show');
 }
 
-function setup_pop_notification_modal() {
-    'use strict';
-    /* This function needs to be called once when sparestub starts to make sure that the popup notification modal
-    kicks off an event when it closes that other functions can bind to.
-     */
-    $(document).on('hidden.bs.modal', function (e) {
-        if (e.target.id === 'modal-popup-notification-root') {
-            $(document).trigger('modal-popup-notification-closed');
-        }
-    });
-}
-
 function show_popup_notification_modal(notification_content, notification_type, use_html) {
     'use strict';
     // Make sure that a modal is not currently open. Close it if one is.
