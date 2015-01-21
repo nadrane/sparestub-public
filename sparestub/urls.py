@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^disputeresolution/$', TemplateView.as_view(template_name="dispute_resolution.html"), name='dispute resolution'),
     url(r'^buyersguide/$', TemplateView.as_view(template_name="buyers_guide.html"), name='buyers guide'),
     url(r'^sellersguide/$', TemplateView.as_view(template_name="sellers_guide.html"), name='sellers guide'),
+    url(r'^safetytips/$', TemplateView.as_view(template_name="safety_tips.html"), name='safety tips'),
 
     url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
     url(r'^comments/', include('django_comments.urls')),
