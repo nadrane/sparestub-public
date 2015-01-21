@@ -50,3 +50,4 @@ STRIPE_PUBLIC_API_KEY = 'pk_test_6VZiRzF0eM4jjp3VJ7avVPZj'
 
 #django-compressor settings
 COMPRESS_OFFLINE_MANIFEST = 'staging-manifest.json'
+COMPRESS_STORAGE = 'utils.backends.cached_s3_boto.CachedS3BotoStorage'
