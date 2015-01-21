@@ -113,10 +113,8 @@ USE_THOUSAND_SEPARATOR = True  # We expect currency input to contain thousands s
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
 
 # Parse database configuration from $DATABASE_URL
 DATABASES = dict()
