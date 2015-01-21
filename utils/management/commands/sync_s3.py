@@ -93,7 +93,8 @@ class Command(BaseCommand):
         'text/css',
         'application/javascript',
         'application/x-javascript',
-        'text/javascript'
+        'text/javascript',
+        'application/json',
     )
 
     uploaded_files = []
@@ -292,6 +293,11 @@ class Command(BaseCommand):
 
         for file in filenames:
             headers = {}
+
+            file_name, file_extension = os.path.splitext(file)
+            # These are compressed and uploaded to S3 using ./manage.py compress. No need to upload them here too.
+            if file_extension  in ('.js', '.css'):
+                continue
 
             if file in self.FILTER_LIST:
                 continue  # Skip files we don't want to sync

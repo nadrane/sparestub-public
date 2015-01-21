@@ -1,5 +1,6 @@
 from .s3_boto import S3BotoStorage
 
+
 class GzipCompressorFileStorage(S3BotoStorage):
     """
     The standard compressor file system storage that gzips storage files
