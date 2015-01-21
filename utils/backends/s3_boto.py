@@ -11,7 +11,7 @@ from gzip import GzipFile
 import datetime
 from tempfile import SpooledTemporaryFile
 
-from io import StringIO
+from io import BytesIO
 
 from django.core.files.base import File
 from django.core.files.storage import Storage
@@ -378,7 +378,7 @@ class S3BotoStorage(Storage):
 
     def _compress_content(self, content):
         """Gzip a given string content."""
-        zbuf = StringIO()
+        zbuf = BytesIO()
         zfile = GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
         try:
             zfile.write(content.read())

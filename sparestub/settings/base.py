@@ -150,7 +150,8 @@ AWS_SECRET_ACCESS_KEY = get_env_variable('AWS_SECRET_ACCESS_KEY')
 AWS_QUERYSTRING_EXPIRE = 99999999  # This cannot be a small number! When we compress our files offline, they are set to
                                    # expire this many seconds from the creation date. We obviously can't have our static
                                    # files ever reaching this expiration date, or S3 will give us a 403 error.
-#AWS_IS_GZIPPED = True  # We really should gzip anything we send up to S3. This means all static files and all media.
+AWS_IS_GZIPPED = False  # PNG and JPEG formats are already compressed (eg PNG has deflate built into the format).
+                        # Static files will be gzipped when running ./manage.py compress
 
 SOCIAL_EMAIL_ADDRESS = 'shout@sparestub.com'
 SOCIAL_EMAIL_NAME = 'SpareStub'
