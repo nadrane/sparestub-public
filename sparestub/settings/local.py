@@ -76,10 +76,5 @@ STRIPE_PUBLIC_API_KEY = 'pk_test_6VZiRzF0eM4jjp3VJ7avVPZj'
 
 SEND_EMAILS = True
 
-# django-compressor settings
-COMPRESS_YUI_BINARY = "java -jar " + os.path.join(dirname(BASE_DIR), "yuicompressor/build/yuicompressor-2.4.7.jar")
-COMPRESS_CLOSURE_COMPILER_BINARY = "java -jar " + os.path.join(dirname(BASE_DIR), "closure-compiler/compiler.jar")
-COMPRESS_CLOSURE_COMPILER_ARGUMENTS = "--compilation_level SIMPLE_OPTIMIZATIONS"
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
-STATICFILES_FINDERS += ('compressor.finders.CompressorFinder',)
+#django-compressor settings
+COMPRESS_OFFLINE_MANIFEST = 'local-manifest.json'

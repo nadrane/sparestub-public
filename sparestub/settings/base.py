@@ -167,5 +167,9 @@ LOGIN_REDIRECT_URL = '/'
 SEND_EMAILS = False  # Default to sending emails unless a specific settings file disables it
 
 # django-compressor settings
-COMPRESS_OFFLINE = True
+COMPRESS_YUI_BINARY = "java -jar " + os.path.join(os.path.dirname(BASE_DIR), "yuicompressor/build/yuicompressor-2.4.7.jar")
+COMPRESS_CLOSURE_COMPILER_BINARY = "java -jar " + os.path.join(os.path.dirname(BASE_DIR), "closure-compiler/compiler.jar")
+COMPRESS_CLOSURE_COMPILER_ARGUMENTS = "--compilation_level SIMPLE_OPTIMIZATIONS"
 COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+STATICFILES_FINDERS += ('compressor.finders.CompressorFinder',)

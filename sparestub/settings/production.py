@@ -37,3 +37,6 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'haystack',
     },
 }
+
+#django-compressor settings
+COMPRESS_OFFLINE_MANIFEST = 'production-manifest.json'
