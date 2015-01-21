@@ -21,7 +21,11 @@
       <link href="{% static "sparestub/css/bootstrap-datetimepicker.css" %}" rel="stylesheet">
 
       <link href="{% static "sparestub/css/jasny-bootstrap.css" %}" rel="stylesheet">
-      <link href="{% static "sparestub/css/jasny-bootstrap.css.map" %}" rel="stylesheet">
+
+      {# No need to load map files in PRD #}
+      {% if environment != "production" %}
+        <link href="{% static "sparestub/css/jasny-bootstrap.css.map" %}" rel="stylesheet">
+      {% endif %}
 
       <!-- Add favicon -->
       <link rel="shortcut icon" href="{% static "sparestub/logos/favicon6.ico" %}">

@@ -117,7 +117,7 @@ class Command(BaseCommand):
                     default=getattr(settings, 'AWS_DEFAULT_ACL', 'public-read'),
                     help="Enables to override default acl (public-read)."),
         make_option('--gzip',
-                    action='store_true', dest='gzip', default=False,
+                    action='store_true', dest='gzip', default=True,
                     help="Enables gzipping CSS and Javascript files."),
         make_option('--renamegzip',
                     action='store_true', dest='renamegzip', default=False,
@@ -178,8 +178,8 @@ class Command(BaseCommand):
 
         self.verbosity = int(options.get('verbosity'))
         self.prefix = options.get('prefix')
-        self.do_gzip = options.get('gzip', True)           # gzip the files by default
-        self.rename_gzip = options.get('renamegzip', True) # Rename the zipped file by default so that Safari can load them
+        self.do_gzip = options.get('gzip')           # gzip the files by default
+        self.rename_gzip = options.get('renamegzip')
         self.do_expires = options.get('expires')
         self.do_force = options.get('force')
         self.invalidate = options.get('invalidate')
@@ -205,7 +205,7 @@ class Command(BaseCommand):
         elif self.DIRECTORIES:
             self.DIRECTORIES = [self.DIRECTORIES]
         else:
-            self.DIRECTORIES = [settings.MEDIA_ROOT, settings.STATIC_ROOT]
+            self.DIRECTORIES = [settings.STATIC_ROOT]
 
         # Now call the syncing method to walk the MEDIA_ROOT directory and
         # upload all files found.
