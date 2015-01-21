@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tz %}
+{% load compress %}
 
 {% block css %}
-  {{ block.super }}
-  <link href="{% static "tickets/css/search.css" %}" rel="stylesheet">
+  {% compress %}
+    {{ block.super }}
+    <link href="{% static "tickets/css/search.css" %}" rel="stylesheet">
+  {% endcompress %}
 {% endblock %}
 
 {% block content %}
@@ -30,4 +33,10 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  {% compress js %}
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}
