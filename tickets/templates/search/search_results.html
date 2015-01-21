@@ -4,7 +4,7 @@
 {% load compress %}
 
 {% block css %}
-  {% compress %}
+  {% compress css %}
     {{ block.super }}
     <link href="{% static "tickets/css/search.css" %}" rel="stylesheet">
   {% endcompress %}
