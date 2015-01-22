@@ -88,8 +88,9 @@
         window.additional_parameters.ticket_id = "{{ ticket.id }}";
         window.additional_parameters.ticket_amount = "{{ ticket.price }}";
         window.additional_parameters.ticket_title = "{{ ticket.title }}";
+        window.additional_parameters.logo_icon = "{% static "sparestub/logos/logo_icon.png" %}";
         window.additional_parameters.user_id = "{{ user_info.user_id }}";
-        window.additional_parameters.user_email = "{{ user_info.email }}";
+        window.additional_parameters.user_email = "{{ request.user.email }}";
         window.additional_parameters.send_message_url = "{% url "send_message" %}";
         window.additional_parameters.message_user_form_url = "{% url "message_user_modal" ticket_id=ticket_id %}";
         window.additional_parameters.delete_ticket_url = "{% url "delete_ticket" ticket_id=ticket_id %}";

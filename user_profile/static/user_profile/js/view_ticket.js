@@ -145,7 +145,7 @@ function prepare_stripe_button() {
     $(document).on('stripe-popup-notification-closed', function () {
         var handler = StripeCheckout.configure({
             key: window.additional_parameters.stripe_public_key,
-            image: '/square-image.png',
+            image: window.additional_parameters.logo_icon,
             token: function (token) {
                   // Use the token to create the charge with a server-side script.
                   // You can access the token ID with `token.id`

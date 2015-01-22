@@ -20,6 +20,7 @@
   </div>
 
   <form id="submit-ticket-form" class="form-horizontal" action="{% url "tickets.views.submit_ticket" %}"> {% csrf_token %}
+    <input id="token" name="token" type="hidden">
     <div class="modal-body">
       <div class="row">
         <div class="col-md-12">
