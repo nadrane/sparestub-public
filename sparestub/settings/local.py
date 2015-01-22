@@ -40,6 +40,13 @@ DATABASES = {
     }
 }
 
+TEMPLATE_LOADERS = (
+    # Disable the cached loader in dev. It creates issues when trying to make rapid html changes.
+    # Requires you to restart the server
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+
 
 es = urlparse(os.environ.get('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
 
