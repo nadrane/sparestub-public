@@ -40,3 +40,5 @@ HAYSTACK_CONNECTIONS = {
 
 #django-compressor settings
 COMPRESS_OFFLINE_MANIFEST = 'production-manifest.json'
+
+SEND_EMAILS = True
