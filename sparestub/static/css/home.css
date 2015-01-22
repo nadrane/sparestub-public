@@ -247,6 +247,10 @@ li {
         padding: 10px;
         font-size: 15px;
     }
+
+    .top-intro {
+        font-size: 30px;
+    }
 }
 
 @media (max-width: 1050px) {

@@ -1,9 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title></title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
 
-</body>
-</html>
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "sparestub/css/sellers_guide.css" %}">
+{% endblock %}
+
+{% block content %}
+
+  <div class="container">
+   <div class="guide-title">SpareStub Seller’s Guide:</div>
+    <p>We rely on our Sellers to help us keep SpareStub a safe, secure, and reliable place for fans to buy and sell tickets. Make sure you’ve read and understand our basic guidelines and rules in the <a href="{% url "tos" %}">Terms of Service</a> and <a href="{% url "privacy policy" %}">Privacy Policy</a>.</p>
+    <p>In addition, when posting on SpareStub you are subject to the following Seller rules and guidelines.</p>
+      <h3>You are not allowed to post:</h3>
+        <ul>
+          <li>Non-transferable tickets: If you can’t transfer the ticket to another person, you can’t sell the ticket to them.</li>
+          <li>Speculative tickets: Before listing tickets, you must know the exact seat locations.</li>
+          <li>Illegally acquired tickets.</li>
+        </ul>
+      <h3>Posting Guidelines:</h3>
+        <ul>
+          <li>Be honest. You are required to post accurate ticket information including date, time, and all other applicable information. If you violate this, you might be subject to consequences per our User Agreement.</li>
+          <li>Be fair. We understand that other resale websites are fine with crazy scalping prices that are hundreds of dollars over face value. We’re not one of those sites. While we’re not going to big brother every posted ticket price, we’re fostering an environment and culture of fair-priced tickets, and we’d appreciate your help in making that a reality. Plus, you’re going to have to sit next to these people all night. Don’t screw them over!</li>
+          <li>List only valid tickets. You, the seller, are solely responsible for ensuring your ticket is real and valid and able to be transferred or sold.</li>
+          <li>As buyers “Request to Buy” your ticket, you have the ultimate decision to whom you sell the ticket. You are required to Accept or Decline a buyer’s purchase request within 48 hours, otherwise the request expires and the buyer is released from the commitment to buy. If you decline the ticket, you will no longer be able to message the user.</li>
+        </ul>
+      <h3>Exchanging the Ticket and Payment:</h3>
+        <ul>
+          <li>When you accept the buyer’s purchase request, you are obligated to provide the ticket to the buyer before the start of the event. Upon accepting the purchase request, your transaction fee is collected.</li>
+          <li>You should determine what makes most sense for you and the buyer to exchange both the ticket and the payment for the ticket, whether meeting at or before the event, personal paper ticket transfer or electronic transfer if applicable. For payment, you can consider meeting in person or exchanging using personal accounts like PayPal or Venmo. Expect that the buyer will want to acquire the ticket before sending payment. Be sure to read our <a href="{% url "safety tips" %}">Safety Tips</a>.</li>
+          <li>It is your responsibility as a seller to get the ticket to the buyer, so be aware that you must exhaust all possible efforts to get the tickets into the buyer’s hands. We take all disputes on a case-by-case basis, but be aware that we believe the responsibility lies with the seller. In case something ends up going wrong, the more evidence you can provide that you are not at fault, the better. Be sure to review our <a href="{% url "dispute resolution" %}">Dispute Resolution Guidelines</a>.</li>
+        </ul>
+      <h3>After the Event</h3>
+        <ul>
+          <li>We hope you have a great time and make a new friend! After the event, we will message you to ask how everything went. We will also prompt you to leave a review for your new gig buddy. We also love when users submit photos and success stories!</li>
+        </ul>
+      <h3>Be fair! Be safe! Have fun!</h3>
+  </div>
+
+
+
+
+
+
+
+
+{% endblock %}

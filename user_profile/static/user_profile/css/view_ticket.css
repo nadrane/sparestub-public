@@ -30,6 +30,10 @@
     display: block;
 }
 
+#label-title {
+    font-size: 20px;
+}
+
 .middle-item {
     display: block;
 }
