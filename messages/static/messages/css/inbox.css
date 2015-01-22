@@ -217,11 +217,11 @@ html, body, #page-wrapper, #page-wrapper>.row {
 }
 
 .this-user {
-    background-color: rgb(177, 248, 255);
+    background-color: rgba(102, 175, 233, 1);
 }
 
 .that-user {
-    background-color: #31BAFF;
+    background-color: rgba(166, 225, 236, 1);
 }
 /* END CURRENT CONVERSATION BODY*/
 

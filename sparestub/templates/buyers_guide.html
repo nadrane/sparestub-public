@@ -1,9 +1,42 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title></title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
 
-</body>
-</html>
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "sparestub/css/buyers_guide.css" %}">
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="container">
+   <div class="guide-title">SpareStub Buyer's Guide:</div>
+<p>We rely on our Buyers to help us keep SpareStub a safe, secure, and reliable place for fans to buy and sell tickets. Make sure you’ve read and understand our basic guidelines and rules in the <a href="{% url "tos" %}">Terms of Service</a> and <a href="{% url "privacy policy" %}">Privacy Policy</a></p>
+<p>In addition, when buying on SpareStub you are subject to the following Buyer rules and guidelines.</p>
+<h3>Commitment to Buy:</h3>
+    <ul>
+      <li>Initiating the purchase of a ticket on SpareStub by clicking “Request to Buy” enters the buyer into a contract to purchase the ticket from the seller at the listed price if the seller accepts the request. The buyer should get to know the seller by reviewing the seller’s profile and messaging them to be sure they want to purchase the available ticket.</li>
+      <li>The seller has 48 hours to Accept or Decline the request before it expires. During this time, the buyer cannot request to buy another ticket on the same date within a two-hour window. The buyer is still able to message other sellers during this window. If the request expires, the buyer is released from their purchase commitment and can pursue other tickets.</li>
+      <li>When you request to buy a ticket, SpareStub collects your payment information for the $5 fee. This fee is collected once the seller accepts your request. If the seller declines the request or lets it expire, you are not charged.</li>
+    </ul>
+  <h3>Cancelling a Purchase Request</h3>
+    <ul>
+      <li>A buyer can cancel a “Request to Buy” as long as the seller has not yet Accepted the request. Once the seller Accepts, the buyer is committed to purchase.</li>
+    </ul>
+  <h3>Exchanging the Ticket and Payment:</h3>
+    <ul>
+      <li>When a seller accepts the buyer’s purchase request, they are legally obligated to provide the ticket to the buyer before the start of the event. Upon the seller accepting the purchase request, your transaction fee is collected.</li>
+      <li>You should determine what makes most sense for you and the seller to exchange both the ticket and the payment for the ticket, whether meeting at or before the event, personal paper ticket transfer or electronic transfer if applicable. For payment, you can consider meeting in person or exchanging payment using personal accounts like PayPal or Venmo. We recommend making sure you have received or will receive the ticket before delivering payment. Be sure to read our <a href="{% url "safety tips" %}">Safety Tips</a>.</li>
+      <li>As a buyer, you should make sure you have a clear plan to receive your ticket. In case something ends up going wrong, the more evidence you can provide that you are not at fault, the better. We take all disputes on a case-by-case basis, but for some solutions to common issues, be sure to review our Dispute Resolution Guidelines.</li>
+    </ul>
+  <h3>After the Event</h3>
+    <ul>
+      <li>We hope you have a great time and make a new friend! After the event, we will message you to ask how everything went. We will also prompt you to leave a review for your new gig buddy. We also love when users submit photos and success stories!</li>
+    </ul>
+  <h3>Be fair! Be safe! Have fun!</h3>
+
+</div>
+
+  
+  
+{% endblock %}

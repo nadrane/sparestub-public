@@ -27,19 +27,21 @@
     <div id="column-left-ticket">
     <div id="row-middle" class="row">
       <div id="right-middle" class="col-xs-12 col-sm-4 middle-contents">
-        <div class="middle-label"><b>Price:</b><br> {{ ticket.price | currency}}</div>
+        <div class="middle-label"><span id="label-title">Price:</span>
+          <div class="middle-item">{{ ticket.price | currency}}</div>
+      </div>
       </div>
       <div id="left-middle" class="col-xs-12 col-sm-4 middle-contents">
-        <div class="middle-label"><b>Where:</b><br> {{ ticket.location }}<br>
-          <div class="middle-item">{{ ticket.venue }}</div>
+        <div class="middle-label"><span id="label-title">Where:</span>
+          <div class="middle-item">{{ ticket.location }}<br>{{ ticket.venue }}</div>
       </div>
       </div>
       <div id="mid-middle" class="col-xs-12 col-sm-4 middle-contents">
-        <div class="middle-label"><b>When:</b><br>
+        <div class="middle-label"><span id="label-title">When:</span>
           {% comment %}Turn localtimeoff because the events might be in a different timezone than the user. We don't want to
           convert the event time to the timezone of the user but to the timezone of the event's location.
           Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
-          {% localtime off %}{{ ticket.get_formatted_start_datetime|date:"D N d, P" }}{% endlocaltime %}
+          <div class="middle-item">{% localtime off %}{{ ticket.get_formatted_start_datetime|date:"D N d, P" }}{% endlocaltime %}</div>
         </div>
       </div>
     </div>
