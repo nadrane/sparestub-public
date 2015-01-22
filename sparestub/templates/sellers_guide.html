@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
+{% load compress %}
 
 {% block css %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static "sparestub/css/sellers_guide.css" %}">
+  {% compress css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "sparestub/css/sellers_guide.css" %}">
+  {% endcompress %}
 {% endblock %}
 
 {% block content %}
-
   <div class="container">
-   <div class="guide-title">SpareStub Seller’s Guide:</div>
+  <div class="guide-title">SpareStub Seller’s Guide:</div>
     <p>We rely on our Sellers to help us keep SpareStub a safe, secure, and reliable place for fans to buy and sell tickets. Make sure you’ve read and understand our basic guidelines and rules in the <a href="{% url "tos" %}">Terms of Service</a> and <a href="{% url "privacy policy" %}">Privacy Policy</a>.</p>
     <p>In addition, when posting on SpareStub you are subject to the following Seller rules and guidelines.</p>
       <h3>You are not allowed to post:</h3>
@@ -37,12 +39,10 @@
         </ul>
       <h3>Be fair! Be safe! Have fun!</h3>
   </div>
+{% endblock %}
 
-
-
-
-
-
-
-
+{% block js %}
+  {% compress js %}
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}

@@ -1,32 +1,37 @@
 {% extends "base.html" %}
 {% load static %}
+{% load compress %}
 
 {% block css %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static "sparestub/css/dispute_resolution.css" %}">
+  {% compress css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "sparestub/css/dispute_resolution.css" %}">
+  {% endcompress %}
 {% endblock %}
 
 {% block content %}
-
   <div class="container">
-   <div class="guide-title">Dispute Resolution:</div>
+  <div class="guide-title">Dispute Resolution:</div>
   <p>We want to provide an easy and enjoyable experience for our sellers and buyers. But we understand that with the nature of SpareStub, occasionally there will be issues if a buyer and seller don’t connect to exchange the ticket. We will arbitrate each dispute on a case-by-case basis, but want to make sure you have the information you need to help us find a solution to your dispute.</p>
-<p>As a basic rule, the more evidence you can show to prove your case, the better.</p>
-<p>Sellers: Consider if it’s possible to get the ticket to the buyer before the event in a way that gives you confirmation (i.e. UPS confirmation, electronic ticket transfer confirmation e-mail)</p>
-<p>We strongly recommend keeping the majority of your communication within the SpareStub messaging system or E-mail for auditing purposes.</p>
-<p>Here are a few common scenarios and the guidelines you should follow to make sure you have the proof you need during dispute resolution:</p>
-<ul>
-  <li>Scenario 1: Buyer and Seller are supposed to meet at the event, but cannot find each other to exchange the ticket.</li>
-  <li>Solution: In this scenario, we expect both the buyer and the seller to take pictures of the venue to submit to SpareStub as proof that they were, in fact, there. If one cannot produce photo evidence, we cannot be sure they showed up to exchange the ticket.</li>
-  <li>Scenario 2: Buyer and Seller never meet to exchange ticket.</li>
-  <li>Solution: Provide as much evidence as possible to show that you exhausted all efforts to meet with the other person. This is where SpareStub message and E-mail proof can come in handy.</li>
-  <li>Scenario 3: Tickets don’t turn out to be valid or are unable to be used.</li>
-  <li>Solution: We need verifiable proof provided by the venue in written letter format. Written or stamped "voids" do not constitute verifiable proof.</li>
-</ul>
+  <p>As a basic rule, the more evidence you can show to prove your case, the better.</p>
+  <p>Sellers: Consider if it’s possible to get the ticket to the buyer before the event in a way that gives you confirmation (i.e. UPS confirmation, electronic ticket transfer confirmation e-mail)</p>
+  <p>We strongly recommend keeping the majority of your communication within the SpareStub messaging system or E-mail for auditing purposes.</p>
+  <p>Here are a few common scenarios and the guidelines you should follow to make sure you have the proof you need during dispute resolution:</p>
+  <ul>
+    <li>Scenario 1: Buyer and Seller are supposed to meet at the event, but cannot find each other to exchange the ticket.</li>
+    <li>Solution: In this scenario, we expect both the buyer and the seller to take pictures of the venue to submit to SpareStub as proof that they were, in fact, there. If one cannot produce photo evidence, we cannot be sure they showed up to exchange the ticket.</li>
+    <li>Scenario 2: Buyer and Seller never meet to exchange ticket.</li>
+    <li>Solution: Provide as much evidence as possible to show that you exhausted all efforts to meet with the other person. This is where SpareStub message and E-mail proof can come in handy.</li>
+    <li>Scenario 3: Tickets don’t turn out to be valid or are unable to be used.</li>
+    <li>Solution: We need verifiable proof provided by the venue in written letter format. Written or stamped "voids" do not constitute verifiable proof.</li>
+  </ul>
 
   <h3>Be fair! Be safe! Have fun!</h3>
-
 </div>
+{% endblock %}
 
-
+{% block js %}
+  {% compress js %}
+    {{ block.super }}
+  {% endcompress %}
 {% endblock %}
