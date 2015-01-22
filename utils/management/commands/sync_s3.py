@@ -95,6 +95,7 @@ class Command(BaseCommand):
         'application/x-javascript',
         'text/javascript',
         'application/json',
+        'image/svg+xml'
     )
 
     uploaded_files = []
