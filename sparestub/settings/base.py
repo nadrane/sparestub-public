@@ -76,13 +76,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'utils.middleware.history.LastVisitedMiddleware'
 )
 
 AUTHENTICATION_BACKENDS = ('registration.backends.user_backend.UserBackend',)
@@ -136,6 +136,13 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(BASE_DIR), 'contact', 'email_templates'),
     os.path.join(os.path.dirname(BASE_DIR), 'asks', 'email_templates'),
     os.path.join(os.path.dirname(BASE_DIR), 'tickets', 'email_templates'),
+)
+
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 
 STATICFILES_FINDERS = ("django.contrib.staticfiles.finders.FileSystemFinder",
