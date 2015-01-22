@@ -85,3 +85,4 @@ SEND_EMAILS = True
 
 #django-compressor settings
 COMPRESS_OFFLINE_MANIFEST = 'local-manifest.json'
+COMPRESS_ENABLED = False
