@@ -60,15 +60,15 @@
               <button id="delete-ticket" type=button class="btn btn-primary cancel-ticket" type="button"
               data-toggle="modal" data-target="#modal-yes-cancel-root">Delete Ticket</button>
             {% else %}
-            {% if has_request %}
-              <button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>
-            {% else %}
-              <button id="request-to-buy" class="btn btn-primary">Request To Buy</button>
-            {% endif %}
+              {% if has_request %}
+                <button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>
+              {% else %}
+                <button id="request-to-buy" class="btn btn-primary">Request To Buy</button>
+              {% endif %}
               <button class="btn btn-default message-user" type="button">Message User</button>
-            {% if ticket.is_buy_it_now_enabled %}
-              <button id="buy-it-now" class="btn btn-default" type="button">Buy It Now</button>
-            {% endif %}
+              {% if ticket.is_buy_it_now_enabled %}
+                <button id="buy-it-now" class="btn btn-default" type="button">Buy It Now</button>
+              {% endif %}
             {% endif %}
           </div>
     </div>
