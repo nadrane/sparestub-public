@@ -10,7 +10,7 @@
     color: white;
     font-family: Helvetica, Arial, sans-serif;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/concert.jpg") no-repeat center center scroll;
+    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/backgroundtest.png") no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -254,7 +254,7 @@ li {
     text-align: -webkit-match-parent;
 }
 
-@media (max-width: 500px) {
+@media screen and (max-device-width: 500px), screen and (max-width: 500px) {
     .intro-btn {
         padding: 10px;
         font-size: 15px;
@@ -270,13 +270,13 @@ li {
 }
 }
 
-@media (max-width: 1050px) {
+@media screen and (max-device-width: 1050px), screen and (max-width: 1050px) {
     .step-image {
         max-width: 260px;
     }
 }
 
-@media (max-width: 950px){
+@media screen and (max-device-width: 950px), screen and (max-width: 950px){
     .step-image {
         max-width: 225px;
     }
