@@ -5,6 +5,14 @@ body {
     padding-top: 70px;
 }
 
+.visible-small {
+    display: none!important;
+}
+
+tr > td {
+    border-top-color: #2CB0EF!important;
+}
+
 .search-result-title {
     font-size: 16px;
     line-height: 17px;
@@ -51,3 +59,128 @@ body {
     border-radius: 37px;
     max-height: 75px;
 }
+
+@media (min-width: 551px) and (max-width: 850px) {
+    .visible-small {
+        display: none!important;
+    }
+
+    .ticket-result-date {
+        font-size: 20px;
+        margin-top: 8px;
+        margin-bottom: 5px;
+        text-align: center;
+}
+    .ticket-result-time {
+        text-align: center;
+    }
+    .ticket-result-price {
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .search-result-picture {
+        border-radius: 37px;
+        max-height: 75px;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        border-right: 1px solid gray;
+}
+    .ticket-result-name {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    hr.visible-small {
+        clear: both;
+        margin: 0;
+        display: block;
+    }
+
+    .glyphicon-container > span {
+        display: inline;
+        font-size: 18px;
+    }
+
+    .panel-body {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .search-result-location {
+        margin-left: 10px;
+}
+
+    .search-result-title {
+        font-size: 16px;
+        line-height: 100%;
+        margin-left: 10px;
+        margin-top: 8px;
+}
+
+}
+
+@media (max-width: 550px) {
+    .visible-small {
+        display: block!important;
+    }
+    .hidden-small {
+        display: none!important;
+    }
+
+    .ticket-result-date {
+        font-size: 20px;
+        margin-top: 8px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .ticket-result-price {
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .search-result-picture {
+        border-radius: 40px;
+        max-height: 70px;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        border-right: 1px solid gray;
+    }
+
+    .ticket-result-name {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    hr.visible-small {
+        clear: both;
+        margin: 0;
+        display: block;
+    }
+
+    .glyphicon-container > span {
+        display: inline;
+        font-size: 10px;
+    }
+
+    .panel-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .search-result-location {
+        margin-top: 20px;
+        margin-left: 10px;
+    }
+
+    .search-result-title {
+        font-size: 20px;
+        line-height: 100%;
+        margin-left: 10px margin-top : 8 px;
+    }
+}
+
