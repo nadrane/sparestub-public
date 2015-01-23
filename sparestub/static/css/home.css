@@ -133,6 +133,10 @@
     font-weight: 200;
 }
 
+.step-explanation > p a {
+    color: #CA2473;
+}
+
 #how-it-works .title {
     font-size: 50px;
     font-weight: 300;
@@ -146,7 +150,7 @@
 
 #press {
     padding: 25px 0 30px;
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/logos/bg3.jpg");
+    background: center top;
     border-bottom: 1px solid darkgray;
     border-top: 1px solid darkgray;
     margin: 0 auto;
@@ -154,26 +158,37 @@
     position: relative;
 }
 
+.column-press {
+    opacity: 0.8;
+    background-color: #ffffff;
+    padding: 20px;
+    -moz-border-radius:30px;  /* for Firefox */
+    -webkit-border-radius:30px; /* for Webkit-Browsers */
+    border-radius:30px; /* regular */
+    display: inline-block;
+    vertical-align: top;
+    margin: 20px;
+}
+
+
+
 #press a {
-    color:#000000;
+    color: black;
+    text-shadow: 1px 1px white;
+    font-size: 20px;
+    font-weight: 500;
 }
 
 #press-title {
     padding-bottom: 40px;
     color: rgb(51, 51, 51);
+    text-shadow: 1px 1px white;
 }
 
 .press-image {
     max-width: 250px;
     border-radius: 25px;
     padding-bottom: 20px;
-}
-
-.column-press {
-    display: inline-block;
-    vertical-align: top;
-    width: 250px;
-    margin: 20px;
 }
 
 /* END PRESS */
@@ -184,6 +199,7 @@
     text-align: center;
     position: relative;
     z-index: 30;
+    background-color: #f5f5f5;
 }
 
 .transbox {
@@ -192,11 +208,6 @@
   filter:alpha(opacity=60); /* For IE8 and earlier */
 }
 
-#footer-transbox {
-  background-color: #ffffff;
-  opacity:0.7;
-  filter:alpha(opacity=60); /* For IE8 and earlier */
-}
 .transbox li {
   color: #000000;
         font-weight: 600;
@@ -210,6 +221,7 @@
 
 .footer a {
     font-size: 14px;
+    color: #CA2473;
 }
 
 .footer-container {
@@ -219,7 +231,7 @@
 
 .footer-column {
     font-size: 13px;
-    color: white;
+    color: #CA2473;
     display: inline-block;
     vertical-align: top;
     width: 300px;
@@ -230,7 +242,7 @@
 
 .footer-column-title {
     font-weight: 500;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #CA2473;
     width: 70%;
     margin-bottom: 8px;
     font-size: 16px;
@@ -252,6 +264,10 @@ li {
         font-size: 28px;
         padding-top: 5px;
     }
+
+    #introducing-sparestub {
+        padding: 30px 0;
+}
 }
 
 @media (max-width: 1050px) {

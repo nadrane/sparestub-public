@@ -1,35 +1,39 @@
 @charset "Utf-8";
 
-.search-result-title {
+.visible-small {
+    display: none!important;
+}
+
+.search-result-title, .available-search-result-title {
     font-size: 16px;
     line-height: 17px;
     word-break: normal;
 }
 
-.search-result-location {
+.search-result-location, .available-search-result-location {
     font-size: 12px;
     margin-top: 4px;
     margin-bottom: 0px;
 }
 
-.search-result-title-location {
+.search-result-title-location, .available-search-result-title-location {
     margin-top: 4px;
     margin-bottom: 0;
 }
 
-.ticket-result-time {
+.ticket-result-time, .available-ticket-result-time {
     display: block;
     font-size: 14px;
     line-height: 20px;
 }
 
-.ticket-result-date {
+.ticket-result-date, .available-ticket-result-date {
     margin-top: 4px;
     display: block;
     font-size: 14px;
 }
 
-.ticket-result-price {
+.ticket-result-price, .available-ticket-result-price {
     margin-top: 4px;
     font-size: 14px;
 }
@@ -45,4 +49,128 @@
     border: 1px solid gray;
     border-radius: 37px;
     max-height: 75px;
+}
+
+@media (min-width: 551px) and (max-width: 850px) {
+    .visible-small {
+        display: none!important;
+    }
+
+    .ticket-result-date {
+        font-size: 20px;
+        margin-top: 8px;
+        margin-bottom: 5px;
+        text-align: center;
+}
+    .ticket-result-time {
+        text-align: center;
+    }
+    .ticket-result-price {
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .search-result-picture {
+        border-radius: 37px;
+        max-height: 75px;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        border-right: 1px solid gray;
+}
+    .ticket-result-name {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    hr.visible-small {
+        clear: both;
+        margin: 0;
+        display: block;
+    }
+
+    .glyphicon-container > span {
+        display: inline;
+        font-size: 18px;
+    }
+
+    .panel-body {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .search-result-location {
+        margin-left: 10px;
+}
+
+    .search-result-title {
+        font-size: 16px;
+        line-height: 100%;
+        margin-left: 10px;
+        margin-top: 8px;
+}
+
+}
+
+@media (max-width: 550px) {
+    .visible-small {
+        display: block!important;
+    }
+    .hidden-small {
+        display: none!important;
+    }
+
+    .ticket-result-date {
+        font-size: 20px;
+        margin-top: 8px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .ticket-result-price {
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .search-result-picture {
+        border-radius: 40px;
+        max-height: 70px;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        border-right: 1px solid gray;
+    }
+
+    .ticket-result-name {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    hr.visible-small {
+        clear: both;
+        margin: 0;
+        display: block;
+    }
+
+    .glyphicon-container > span {
+        display: inline;
+        font-size: 10px;
+    }
+
+    .panel-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .search-result-location {
+        margin-top: 20px;
+        margin-left: 10px;
+    }
+
+    .search-result-title {
+        font-size: 20px;
+        line-height: 100%;
+        margin-left: 10px margin-top : 8 px;
+    }
 }
