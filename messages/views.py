@@ -53,16 +53,22 @@ def send_message(request):
             return ajax_http(non_field_errors_notification(send_message_form))
 
 @login_required()
-def can_message(request, ticket_id, other_user_id):
+def can_message(request):
+    ticket_id = request.GET.get('ticket_id', None)
+    other_user_id = request.GET.get('other_user_id', None)
+
+    if not ticket_id or not other_user_id:
+        return ajax_popup_notification('Uh oh, something went wrong', 400)
+
     try:
         ticket = Ticket.objects.get(pk=ticket_id)
     except Ticket.DoesNotExist:
-        return ajax_popup_notification('warning', "Uh oh, something went wrong", 400)
+        return ajax_popup_notification('danger', "Uh oh, something went wrong", 400)
 
     try:
         other_user = User.objects.get(pk=other_user_id)
     except User.DoesNotExist:
-        return ajax_popup_notification('warning', "Uh oh, something went wrong", 400)
+        return ajax_popup_notification('danger', "Uh oh, something went wrong", 400)
 
     if Message.can_message(ticket, request.user, other_user):
         return ajax_http(True)

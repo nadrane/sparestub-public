@@ -46,25 +46,35 @@ function load_message_user_modal(show_modal) {
         return;
     }
 
-    var $modal_message_user_form_content = $('#modal-message-user-form-content');
-    // If the modal content has already been loaded, don't do it again
-    if ($modal_message_user_form_content.children().length > 0) {
-        if (show_modal) {
-            $('#modal-message-user-root').modal('show');
-        }
-        return;
-    }
-    $.get(window.additional_parameters.message_user_form_url, function (data) {
-        $modal_message_user_form_content.html(data);
-        initialize_bootstrap_validator_message_user();
-        if (show_modal) {
-            $('#modal-message-user-root').modal('show');
-        }
-        $('#message-user-form-submit-button').on('click', function () {
-            modal_message_user_button();
+    // Before we load the message user modal, make sure the user is allowed to message about this ticket.
+    $.get(window.additional_parameters.can_message_url,
+           {'other_user_id': window.additional_parameters.user_id,
+            'ticket_id': window.additional_parameters.ticket_id
+            },
+          'json')
+        .fail(function (response) {
+            handle_ajax_response(response);
+        })
+        .done(function () {
+             var $modal_message_user_form_content = $('#modal-message-user-form-content');
+            // If the modal content has already been loaded, don't do it again
+            if ($modal_message_user_form_content.children().length > 0) {
+                if (show_modal) {
+                    $('#modal-message-user-root').modal('show');
+                }
+                return;
+            }
+            $.get(window.additional_parameters.message_user_form_url, function (data) {
+                $modal_message_user_form_content.html(data);
+                initialize_bootstrap_validator_message_user();
+                if (show_modal) {
+                    $('#modal-message-user-root').modal('show');
+                }
+                $('#message-user-form-submit-button').on('click', function () {
+                    modal_message_user_button();
+                });
+            });
         });
-
-    });
 }
 
 function initiate_stripe() {
@@ -193,27 +203,19 @@ function modal_message_user_button() {
     /* When the user clicks the Send Message button inside the modal messaging form, this tag is called to contact the
      * server and add the message to the database.
      */
-    var ticket_id = window.additional_parameters.ticket_id;
-    var other_user_id = window.additional_parameters.user_id;
-    $.get(window.additional_parameters.can_message_url,
-           {'other_user_id': other_user_id,
-            'ticket_id': ticket_id
-            },
-          'json').
-    done(function () {
-        $.post(window.additional_parameters.send_message_url,
-               {'other_user_id': other_user_id,
-                'ticket_id': ticket_id,
-                'body': $('#message-user-body').val()
-                },
-                'json');
-        }
-    )
+    $.post(window.additional_parameters.send_message_url,
+        {'other_user_id': window.additional_parameters.user_id,
+          'ticket_id': window.additional_parameters.ticket_id,
+          'body': $('#message-user-body').val()
+          },
+          'json')
     .fail(function(response) {
         handle_ajax_response(response);
     });
 
 }
+
+
 
 $(document).ready(function ($) {
     $('.message-user').on('click', function () {
