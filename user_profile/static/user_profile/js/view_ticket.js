@@ -193,12 +193,26 @@ function modal_message_user_button() {
     /* When the user clicks the Send Message button inside the modal messaging form, this tag is called to contact the
      * server and add the message to the database.
      */
-    $.post(window.additional_parameters.send_message_url,
-           {'other_user_id': window.additional_parameters.user_id,
-            'ticket_id': window.additional_parameters.ticket_id,
-            'body': $('#message-user-body').val()
+    var ticket_id = window.additional_parameters.ticket_id;
+    var other_user_id = window.additional_parameters.user_id;
+    $.get(window.additional_parameters.can_message_url,
+           {'other_user_id': other_user_id,
+            'ticket_id': ticket_id
             },
-            'json');
+          'json').
+    done(function () {
+        $.post(window.additional_parameters.send_message_url,
+               {'other_user_id': other_user_id,
+                'ticket_id': ticket_id,
+                'body': $('#message-user-body').val()
+                },
+                'json');
+        }
+    )
+    .fail(function(response) {
+        handle_ajax_response(response);
+    });
+
 }
 
 $(document).ready(function ($) {

@@ -256,7 +256,7 @@ class Message(TimeStampedModel):
     @staticmethod
     def can_message(ticket, user, other_user):
         """
-        Can the inputted user send a message about this ticket?
+        Can the inputted user send a message to the other user about this ticket?
         """
         from asks.models import Request
         can_message = None

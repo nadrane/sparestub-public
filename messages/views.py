@@ -11,7 +11,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from tickets.models import Ticket
 from messages.models import Message
 from asks.models import Request
-from utils.networking import ajax_http, non_field_errors_notification, form_success_notification
+from registration.models import User
+from utils.networking import ajax_http, non_field_errors_notification, form_success_notification,\
+                             ajax_popup_notification
 
 # Module Imports
 from .settings import send_message_form_settings
@@ -50,6 +52,23 @@ def send_message(request):
         else:
             return ajax_http(non_field_errors_notification(send_message_form))
 
+@login_required()
+def can_message(request, ticket_id, other_user_id):
+    try:
+        ticket = Ticket.objects.get(pk=ticket_id)
+    except Ticket.DoesNotExist:
+        return ajax_popup_notification('warning', "Uh oh, something went wrong", 400)
+
+    try:
+        other_user = User.objects.get(pk=other_user_id)
+    except User.DoesNotExist:
+        return ajax_popup_notification('warning', "Uh oh, something went wrong", 400)
+
+    if Message.can_message(ticket, request.user, other_user):
+        return ajax_http(True)
+    else:
+        return ajax_popup_notification('You are not allowed to message this user about this ticket.'
+                                       'Chances are it was already sold.')
 
 @login_required
 def inbox(request):
