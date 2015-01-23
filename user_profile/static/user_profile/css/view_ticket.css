@@ -69,32 +69,45 @@
 }
 
 .instruction{
-    max-width: 350px;
-
+    max-width: 100%;
+    float: right;
 }
 
-@media (max-width: 898px) {
-    .instruction{
-        max-width: 350px;
-        text-align: center;
-}
-}
+
 
 @media (max-width: 897px) {
    .instruction {
-       max-width: 300px;
-       padding: 15px;
+       float: none;
    }
     .column-right-ticket {
         clear: left;
-        display: block;
         width: 100%;
+        padding-top: 10px;
     }
-    .column-left-ticket {
+
+    #column-left-ticket {
         float: none;
         display: block;
         width: 100%;
     }
+
+    #row-middle {
+        font-size: 120%;
+    }
+
+    #buy-or-message-buttons > button {
+        width: 45%;
+        font-size: 12px;
+        padding: 10px;
+        float: left;
+    }
+
+    #buy-or-message-buttons > button:first-child {
+        margin-right: 5px;
+    }
+
+
+
 }
 
 .modal-body-wrapper {
