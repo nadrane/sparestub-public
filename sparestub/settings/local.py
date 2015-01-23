@@ -72,9 +72,6 @@ AWS_STORAGE_BUCKET_NAME = 'sparestub'
 LOG_FILENAME = os.path.join(BASE_DIR, 'logging.txt')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
 
-# Make indexing happen whenever a model is saved or loaded
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
 # Used to create links in emails to our site... and subdomain and method
 DOMAIN = 'http://localhost:8000'
 
@@ -86,3 +83,12 @@ SEND_EMAILS = False
 #django-compressor settings
 COMPRESS_OFFLINE_MANIFEST = 'local-manifest.json'
 COMPRESS_ENABLED = False
+
+# Celery Configuration
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
+CELERY_ACCEPT_CONTENT = ['json']
+CELERYBEAT_MAX_LOOP_INTERVAL = 2
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_SERIALIZER = 'json'

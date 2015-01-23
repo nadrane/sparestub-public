@@ -1,5 +1,6 @@
 # Standard Imports
 from itertools import chain
+from django.utils import timezone as django_timezone # Need to rename to avoid conflicting with pytz
 
 # 3rd Party Imports
 from pytz import timezone
@@ -159,6 +160,14 @@ class Ticket(TimeStampedModel):
             return requests[0]
         return None
 
+    @staticmethod
+    def completed_but_not_expired():
+        """
+        Return a QuerySet of tickets whose event date and time has passed but has not been marked as expired.
+        """
+        return Ticket.objects.filter(Q(status='P') | Q(status='S')).filter(start_datetime__lte=django_timezone.now())
+
+
     def is_messageable(self):
         """
         A user is allowed to message another user about a particular ticket if it has a status of posted, sold, or expired.
@@ -250,11 +259,15 @@ class Ticket(TimeStampedModel):
                 if not user_requests.exists():
                     Message.objects.create_message(poster, user, self, message_body, False)
 
-
         # Event date has passed and ticket expired
         elif new_status == 'E':
-            # Update all expired requests to a status of closed
+            # Update all expired requests to a status of closed.
             self.get_requests().filter(status='E').update(status='C')
+
+            # Update the ticket status last in case the task that calls this crashes. That way any expired requests
+            # that didn't get marked as closed will be caught the next time the task runs
+            self.status = 'E'
+            self.save()
 
         # Ticket sold... seller accepted request to buy
         # Should only be called by requests.models.Request.accept, so there won't be additional handling for the

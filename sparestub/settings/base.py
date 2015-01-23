@@ -183,3 +183,9 @@ COMPRESS_CLOSURE_COMPILER_ARGUMENTS = "--compilation_level SIMPLE_OPTIMIZATIONS"
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 STATICFILES_FINDERS += ('compressor.finders.CompressorFinder',)
+
+# Celery Configuration
+BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_SERIALIZER = 'json'

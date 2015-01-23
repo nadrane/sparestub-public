@@ -54,3 +54,13 @@ COMPRESS_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
 COMPRESS_ENABLED = True
 
 SEND_EMAILS = True
+
+# Celery Configuration
+redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+BROKER_URL = redis_url
+CELERY_RESULT_BACKEND = redis_url
+BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_SERIALIZER = 'json'
+CELERYBEAT_MAX_LOOP_INTERVAL = 15
