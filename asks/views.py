@@ -51,7 +51,14 @@ def accept_request(request):
     customer1 = Customer.get_customer_from_user(other_user)
     customer2 = Customer.get_customer_from_user(user)
     if not (customer1 and customer2):
-        logging.critical('Customer information not available for request {}'.format(user_request.id))
+        if not customer1:
+            logging.critical('Failed to accept request {}. '
+                             'Customer information not available for user {}'
+                             .format(user_request.id), other_user)
+        if not customer2:
+            logging.critical('Failed to accept request {}. '
+                             'Customer information not available for user {}'
+                             .format(user_request.id), user)
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
 
     # Charge them first. We actually might have a scenario where one of the cards is declined

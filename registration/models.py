@@ -379,7 +379,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         pass
 
     def __str__(self):
-        return self.get_full_name()
+        return str(self.id) + " - " + self.get_full_name()
 
 
 class EmailConfirmationLinkManager(models.Manager):
