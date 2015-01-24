@@ -75,7 +75,7 @@
 
 
 
-@media (max-width: 897px) {
+@media screen and (max-device-width: 897px), screen and (max-width: 897px) {
    .instruction {
        float: none;
    }

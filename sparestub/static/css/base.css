@@ -155,7 +155,7 @@ input[type=number] {
 }
 
 
-@media (max-width: 767px) or (max-device-width: 767px) {
+@media screen and (max-width: 767px), screen and (max-device-width: 767px) {
     /* Removes padding from navbar on small screens so that logo, search bar, and menu toggle can all fit*/
     .navbar {
         padding: 0;
@@ -188,7 +188,7 @@ input[type=number] {
 }
 
 /* Allows login/signup buttons and contact/submit Ticket buttons to display text to eachother on mobile. */
-@media (max-width: 834px) or (max-device-width: 834px) {
+@media screen and (max-width: 834px), screen and (max-device-width: 834px) {
     .nav > li {
         display: inline-block;
     }
@@ -207,7 +207,7 @@ input[type=number] {
 }
 
 /* Before the navbar collapases, let's try to shrink it down so it doesn't take up 2 lines of space */
-@media (min-width:900px) and (max-width: 1000px), (min-device-width: 767px) and (max-device-width: 1000px) {
+@media screen and (min-width:901px) and (max-width: 1000px), screen and (min-device-width: 901px) and (max-device-width: 1000px) {
     .navbar-nav>li>a {
         padding: 15px 12px;
         font-size: 14px;
@@ -234,7 +234,7 @@ input[type=number] {
 }
 
 /* Before the navbar collapases, let's try to shrink it down so it doesn't take up 2 lines of space */
-@media (min-width:768px) and (max-width: 900px) {
+@media screen and (min-device-width:768px) and (max-device-width:900px), screen and (min-width:768px) and (max-width: 900px) {
     .navbar-nav>li>a {
         padding: 15px 8px;
         font-size: 13px;

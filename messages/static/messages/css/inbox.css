@@ -268,7 +268,7 @@ html, body, #page-wrapper, #page-wrapper>.row {
 }
 /* END NEW MESSAGE BOX */
 
-@media (max-width: 1350px) {
+@media screen and (max-device-width:1350px), screen and (max-width: 1350px) {
     .talk-bubble-timestamp {
         width: 20%;
     }
@@ -277,7 +277,7 @@ html, body, #page-wrapper, #page-wrapper>.row {
     }
 }
 
-@media (max-width: 500px) {
+@media screen and (max-device-width:500px), screen and (max-width: 500px) {
     .talk-bubble-timestamp {
         width: 25%;
     }

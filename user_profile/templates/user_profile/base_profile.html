@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-fluid" style="max-width: 1000px">
+  <div id="background-container" class="container-fluid" style="max-width: 1000px">
     <div id="profile-header" class="row wave">
     {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
       <div id="user-picture"class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
@@ -68,7 +68,7 @@
             <span class="glyphicon glyphicon-star"></span><a class="side-bar-title" href="{% url "profile_reviews" username=user_info.username %}">Reviews</a>
           </div>
           <div id="tickets" class="col-xs-4 col-sm-12 side-bar-element">
-            <span class="glyphicon glyphicon-tags"></span><a class="side-bar-title" href="{% url "profile_tickets" username=user_info.username %}">Tickets</a>
+            <span class="glyphicon glyphicon-folder-close "></span><a class="side-bar-title" href="{% url "profile_tickets" username=user_info.username %}">Tickets</a>
           </div>
         </div>
       </div>

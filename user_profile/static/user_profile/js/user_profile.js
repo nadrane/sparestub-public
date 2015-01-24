@@ -16,3 +16,12 @@ $(window).on('load resize', function () {
     resize_header();  // Do this once when the page initially loads, but we need to make sure the
                       // profile picture has loaded. This is why we use window.load instead of document.ready.
 });
+
+(function () {
+    'use strict';
+    var ios = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    // IOS devices do not properly support fixed background images. Change them to scroll if the device is ios.
+    if (ios) {
+        document.getElementById('background-container').style.backgroundAttachment = 'scroll';
+    }
+}());
