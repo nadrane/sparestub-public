@@ -61,6 +61,8 @@ tr > td {
 }
 
 @media (min-width: 551px) and (max-width: 850px) {
+
+
     .visible-small {
         display: none!important;
     }

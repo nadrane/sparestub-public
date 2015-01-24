@@ -23,24 +23,7 @@
             <table class="table table-hover">
               <tbody data-link="row" class="rowlink">
                 {% for ticket in upcoming_tickets %}
-                  <tr>
-                    {% comment %}Turn localtimeoff because the events might be in a different timezone than the user. We don't want to
-                    convert the event time to the timezone of the user but to the timezone of the event's location.
-                    Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
-                    <td class="col-xs-2 col-sm-1"><a href="{{ ticket.get_absolute_url }}">{% localtime off %}
-                      <span class="ticket-result-date">{{ ticket.get_formatted_start_datetime.date }}</span>
-                      <span class="ticket-result-time">{{ ticket.get_formatted_start_datetime|date:"D P" }}</span>
-                      {% endlocaltime %}</a></td>
-                    <td class="col-xs-2 col-sm-1">
-                      <p class="ticket-result-price">{{ ticket.price | currency}}</p>
-                      {% comment %}TODO enable secure payment{{ ticket.get_payment_method_display }}{% endcomment %}
-                    </td>
-                    <td class="col-xs-2 col-sm-4"><div class="search-result-title-location">
-                                                    <p class="search-result-title">{{ ticket.title | truncatechars:200}}</p>
-                                                    <p class="search-result-location">{{ ticket.location }} - {{ ticket.venue | truncatechars:200}}</p>
-                                                  </div>
-                    </td>
-                  </tr>
+                   {% include "tickets/search_result.html" %} <!-- Defining ticket is not necessary, but I think it's more clear -->
                 {% endfor %}
               </tbody>
             </table>
@@ -66,16 +49,16 @@
                   convert the event time to the timezone of the user but to the timezone of the event's location.
                   Ticket.get_formatted_start_datetime does this for us. Django will undo the change if localtime is on {% endcomment %}
                   <td class="col-xs-2 col-sm-1"><a href="{{ ticket.get_absolute_url }}">{% localtime off %}
-                    <span class="ticket-result-date">{{ ticket.get_formatted_start_datetime.date }}</span>
-                    <span class="ticket-result-time">{{ ticket.get_formatted_start_datetime|date:"D P" }}</span>
+                    <span class="available-ticket-result-date">{{ ticket.get_formatted_start_datetime.date }}</span>
+                    <span class="available-ticket-result-time">{{ ticket.get_formatted_start_datetime|date:"D P" }}</span>
                     {% endlocaltime %}</a></td>
                   <td class="col-xs-2 col-sm-1">
-                    <p class="ticket-result-price">{{ ticket.price | currency}}</p>
+                    <p class="available-ticket-result-price">{{ ticket.price | currency}}</p>
                     {% comment %}TODO enable secure payment{{ ticket.get_payment_method_display }}{% endcomment %}
                   </td>
-                  <td class="col-xs-2 col-sm-4"><div class="search-result-title-location">
-                                                  <p class="search-result-title">{{ ticket.title | truncatechars:200}}</p>
-                                                  <p class="search-result-location">{{ ticket.location }} - {{ ticket.venue | truncatechars:200}}</p>
+                  <td class="col-xs-2 col-sm-4"><div class="available-search-result-title-location">
+                                                  <p class="available-search-result-title">{{ ticket.title | truncatechars:200}}</p>
+                                                  <p class="available-search-result-location">{{ ticket.location }} - {{ ticket.venue | truncatechars:200}}</p>
                                                 </div>
                   </td>
                 </tr>
