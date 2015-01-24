@@ -56,7 +56,7 @@ COMPRESS_ENABLED = True
 SEND_EMAILS = True
 
 # Celery Configuration
-redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+redis_url = urlparse(os.environ.get('REDISCLOUD_URL'))
 BROKER_URL = redis_url
 CELERY_RESULT_BACKEND = redis_url
 BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
