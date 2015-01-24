@@ -53,4 +53,4 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_TASK_SERIALIZER = 'json'
 CELERYBEAT_MAX_LOOP_INTERVAL = 15
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
