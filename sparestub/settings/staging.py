@@ -35,9 +35,6 @@ HAYSTACK_CONNECTIONS = {
 if es.username:
     HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": es.username + ':' + es.password}
 
-# Make indexing happen whenever a model is saved or loaded
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
 # File Storage Backend Settings
 DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = 'sparestub-staging'
