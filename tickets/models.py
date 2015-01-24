@@ -1,6 +1,7 @@
 # Standard Imports
 from itertools import chain
 from django.utils import timezone as django_timezone # Need to rename to avoid conflicting with pytz
+import logging
 
 # 3rd Party Imports
 from pytz import timezone
@@ -48,6 +49,8 @@ class TicketManager(models.Manager):
                             )
 
         ticket.save()
+
+        logging.info('Ticket created'.format(ticket))
 
         # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
         message_body = render_to_string(POST_TICKET_SUBMIT_TEMPLATE,
@@ -136,6 +139,13 @@ class Ticket(TimeStampedModel):
                                  )
 
     objects = TicketManager()
+
+    def __repr__(self):
+        return '{class_object} - {id} \n'\
+               'Poster: {poster}'\
+               .format(class_object=self.__class__,
+                       id=self.id,
+                       poster=repr(self.poster))
 
     def __str__(self):
         return self.title

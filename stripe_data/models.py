@@ -32,7 +32,7 @@ class CustomerManager(models.Manager):
 
         customer.save()
 
-        logging.info('Creating new customer record: {}'.format(customer))
+        logging.info('Customer created: {}'.format(customer))
 
 
 class Customer(TimeStampedModel):
@@ -49,9 +49,11 @@ class Customer(TimeStampedModel):
                                  )
 
     def __repr__(self):
-        return '{class_object} {id} - {customer}'.format(class_object=self.__class__,
-                                                         id=self.stripe_id,
-                                                         customer=repr(self.customer))
+        return '{class_object} - {id} \n' \
+               'customer: {customer}'\
+               .format(class_object=self.__class__,
+                       id=self.stripe_id,
+                       customer=repr(self.customer))
 
     def __str__(self):
         return self.customer

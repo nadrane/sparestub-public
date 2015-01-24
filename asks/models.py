@@ -1,5 +1,6 @@
 # Standard Imports
 import datetime
+import logging
 
 # Django Imports
 from utils.models import TimeStampedModel
@@ -36,6 +37,8 @@ class RequestManager(models.Manager):
                              )
         request.save()
 
+        logging.info('Request created: {}'.format(request))
+
         poster = ticket.poster
 
         received_html_message = render_to_string(REQUEST_RECEIVED_TEMPLATE,
@@ -51,6 +54,7 @@ class RequestManager(models.Manager):
                                              {'user': requester,
                                               'ticket': ticket
                                               })
+
         requester.send_mail(REQUEST_SENT_SUBJECT,
                             message='',
                             html=send_html_message
@@ -89,6 +93,14 @@ class Request(TimeStampedModel):
                               )
 
     objects = RequestManager()
+
+    def __repr__(self):
+        return '{class_object} - {id} \n' \
+               'requester: {requester} \n' \
+               'ticket: {ticket}'\
+               .format(class_object=self.__class__,
+                       requester=repr(self.requester),
+                       ticket=repr(self.ticket))
 
     def calculate_expiration_datetime(self):
         return self.creation_timestamp + datetime.timedelta(hours=48)

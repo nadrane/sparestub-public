@@ -62,7 +62,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save()
 
-        logging.info('Creating new User record: {}'.format(user))
+        logging.info('User created: {}'.format(user))
 
         # Email the user to welcome them to out website
         message_body = render_to_string(SIGNUP_EMAIL_TEMPlATE,
@@ -382,7 +382,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         pass
 
     def __repr__(self):
-        return '{class_object} {id} - {full_name}'.format(class_object=self.__class__,
+        return '{class_object} - {id} {full_name}'.format(class_object=self.__class__,
                                                           id=self.id,
                                                           full_name=self.get_full_name())
 
