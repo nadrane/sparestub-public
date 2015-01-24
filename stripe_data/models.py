@@ -32,7 +32,7 @@ class CustomerManager(models.Manager):
 
         customer.save()
 
-        logging.info('Customer created: {}'.format(customer))
+        logging.info('Customer created: {}'.format(repr(customer)))
 
 
 class Customer(TimeStampedModel):
@@ -56,7 +56,7 @@ class Customer(TimeStampedModel):
                        customer=repr(self.customer))
 
     def __str__(self):
-        return self.customer
+        return str(self.customer)
 
     def get_customer(self):
         """
