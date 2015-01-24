@@ -24,13 +24,11 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3iy-!-d$!pc_ll$#$elg&cpr@*tfn-d5&n9ag=)%#()t$$5%5^'
+SECRET_KEY = 'fmwJ774fU>kuGW/4Tx]/7Fwk4GvGEFn@FNXn4n6z7(F;,{gH,3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -123,9 +121,6 @@ DATABASES['default'] = dj_database_url.config()
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
 
 TEMPLATE_DIRS = (
     # Location of base.html and a couple others

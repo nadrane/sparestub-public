@@ -7,23 +7,15 @@ from urllib.parse import urlparse
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-# Put on hold until https://github.com/cobrateam/django-htmlmin is migrated to python 3.
-# Or, more likely, migrate part of the project myself.
-MIDDLEWARE_CLASSES += (#'htmlmin.middleware.HTMLMinMiddleware',
-                       #'htmlmin.middleware.MarkRequestMiddleware',
-                       )
-
 STATIC_URL = 'https://s3.amazonaws.com/sparestub-staging/static_root/'
 MEDIA_URL = 'https://s3.amazonaws.com/sparestub-staging/media_root/'
 
-#ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
+ALLOWED_HOSTS = ['sparestub-staging.herokuapp.com', 'www.sparestub-staging.herokuapp.com']
 
 AWS_BUCKET_NAME = 'sparestub-staging'
 
 es = urlparse(get_env_variable('SEARCHBOX_URL') or 'http://127.0.0.1:9200/')
-
 port = es.port or 80
-
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
@@ -31,7 +23,6 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'haystack',
     },
 }
-
 if es.username:
     HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": es.username + ':' + es.password}
 
@@ -61,3 +52,5 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TIMEZONE = 'UTC'
 CELERY_TASK_SERIALIZER = 'json'
 CELERYBEAT_MAX_LOOP_INTERVAL = 15
+
+logging.basicConfig(level=logging.DEBUG)
