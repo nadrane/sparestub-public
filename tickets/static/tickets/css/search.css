@@ -60,7 +60,7 @@ tr > td {
     max-height: 75px;
 }
 
-@media (min-width: 551px) and (max-width: 850px) {
+@media screen and (min-device-width: 551px) and (max-device-width: 850px), screen and (min-width: 551px) and (max-width: 850px) {
 
 
     .visible-small {
@@ -123,7 +123,7 @@ tr > td {
 
 }
 
-@media (max-width: 550px) {
+@media screen and (max-device-width: 550px), screen and (max-width: 550px) {
     .visible-small {
         display: block!important;
     }
@@ -176,13 +176,14 @@ tr > td {
 
     .search-result-location {
         margin-top: 20px;
-        margin-left: 10px;
+        margin-left: 0;
     }
 
     .search-result-title {
         font-size: 20px;
         line-height: 100%;
-        margin-left: 10px margin-top : 8 px;
+        margin-left: 0;
+        margin-top : 8px;
     }
 }
 
