@@ -1,5 +1,6 @@
 # Standard Imports
 import logging
+import stripe
 
 # Django imports
 from django.contrib.auth.decorators import login_required
@@ -12,10 +13,20 @@ from haystack.views import FacetedSearchView
 # SpareStub Imports
 from utils.networking import ajax_http, ajax_popup_notification, non_field_errors_notification, ajax_other_message
 from .settings import ticket_submit_form_settings
+from stripe_data.models import Customer
+
 # Module Imports
 from .models import Ticket
-from asks.models import Request
-from .forms import SubmitTicketForm
+from .forms import ValidTicketForm, SubmitTicketForm
+
+@login_required()
+def valid_ticket(request):
+    if request.method == 'GET':
+        valid_ticket_form = ValidTicketForm(request.GET)
+        if valid_ticket_form.is_valid():
+            return ajax_http(True)
+        return ajax_http(**non_field_errors_notification(valid_ticket_form))
+    return ajax_http(False)
 
 @login_required()
 def submit_ticket(request):
@@ -24,6 +35,8 @@ def submit_ticket(request):
         submit_ticket_form = SubmitTicketForm(request.POST)
         #Determine which form the user submitted.
         if submit_ticket_form.is_valid():
+            response = None
+            user = request.user
             title = submit_ticket_form.cleaned_data.get('title')
             price = submit_ticket_form.cleaned_data.get('price')
             location_raw = submit_ticket_form.cleaned_data.get('location_raw')
@@ -34,6 +47,7 @@ def submit_ticket(request):
             payment_method = submit_ticket_form.cleaned_data.get('payment_method', 'G')  # TODO Assume good faith since
                                                                                          # lean launch won't have secure
             about = submit_ticket_form.cleaned_data.get('about') or ''  # Might be empty
+            token = submit_ticket_form.cleaned_data.get('token', None)
 
             Ticket.objects.create_ticket(poster=request.user,
                                          price=price,
@@ -48,10 +62,29 @@ def submit_ticket(request):
                                          venue=venue,
                                          )
 
-            return ajax_popup_notification('success',
-                                           'Your ticket was successfully submitted! '
-                                           'It will become visible to others shortly.',
-                                           200)
+            try:
+                # Check to see if a customer record exists for this user and make one if not
+                if Customer.customer_exists(user):
+                    response = ajax_popup_notification('success',
+                                                       'Your ticket was successfully submitted! '
+                                                       'It will become visible to others shortly.',
+                                                       200)
+                elif not token:
+                    response = ajax_popup_notification('danger',
+                                                       'Uh oh, Something went wrong. Please submit your ticket again.',
+                                                       400)
+                # A customer does not exist but a token does
+                else:
+                    customer = stripe.Customer.create(card=token)
+                    Customer.objects.create_customer(stripe_id=customer.id, user=user)
+                    response = ajax_popup_notification('success',
+                                                       'Your ticket was successfully submitted! '
+                                                       'It will become visible to others shortly.',
+                                                       200)
+            except stripe.CardError as e:
+                logging.critical('Stripe failed with error {}'.format(e))
+
+            return response
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
         # We don't actually specify what the form error was (unless it was a non_field error that we couldn't validate

@@ -380,6 +380,15 @@ input[type=number] {
     padding-right: 20px;
 }
 
+.modal-body-wrapper {
+    margin: 15px;
+}
+
+.modal-body-wrapper .modal-body {
+    margin: 0;
+    overflow: auto;
+}
+
 
 /* YES CANCEL MODAL */
 #modal-yes-cancel-title {

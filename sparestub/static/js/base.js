@@ -195,7 +195,7 @@ $(document).ready(function ($) {
             return;
         }
 
-        $.get(window.additional_parameters.submit_ticket_form_url, function (data) {
+        $.get(window.additional_parameters.submit_ticket_url, function (data) {
             $modal_submit_ticket_form_content.html(data);
             initialize_bootstrap_validator_submit_ticket();
 

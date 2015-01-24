@@ -23,13 +23,10 @@ function initialize_bootstrap_validator_message_user() {
 
 function setup_stripe_popup_modal() {
     'use strict';
-    /* This function needs to be called once when sparestub starts to make sure that the popup notification modal
-    kicks off an event when it closes that other functions can bind to.
-     */
-    var $document = $(document);
-    $document.on('hidden.bs.modal', function (e) {
+    // When the notification popup closes, open Stripe immediately afterwards
+    $(document).on('hidden.bs.modal', function (e) {
         if (e.target.id === 'stripe-popup-notification-root') {
-            $document.trigger('stripe-popup-notification-closed');
+            show_stripe_button();
         }
     });
 }
@@ -147,41 +144,37 @@ function show_ajax_message(message, type) {
                .find('p').text(message);
 }
 
-function prepare_stripe_button() {
+function show_stripe_button() {
     'use strict';
 
-    $('#request-to-buy').on('click', request_to_buy);
-
-    $(document).on('stripe-popup-notification-closed', function () {
-        var handler = StripeCheckout.configure({
-            key: window.additional_parameters.stripe_public_key,
-            image: window.additional_parameters.logo_icon,
-            token: function (token) {
-                  // Use the token to create the charge with a server-side script.
-                  // You can access the token ID with `token.id`
-                $.post(window.additional_parameters.request_to_buy_url,
-                    {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
-                     "json")
-                    .done(function (response) {
-                        var message = handle_ajax_response(response);
-                        $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>');
-                        $('#cancel-request').on('click', cancel_request_to_buy);
-                        show_ajax_message(message, 'success');
-                    })
-                    .fail(function () {
-                        show_ajax_message('Something went wrong with the payment!', 'danger');
-                    });
-            }
-        });
+    var handler = StripeCheckout.configure({
+        key: window.additional_parameters.stripe_public_key,
+        image: window.additional_parameters.logo_icon,
+        token: function (token) {
+              // Use the token to create the charge with a server-side script.
+              // You can access the token ID with `token.id`
+            $.post(window.additional_parameters.request_to_buy_url,
+                {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
+                 "json")
+                .done(function (response) {
+                    var message = handle_ajax_response(response);
+                    $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>');
+                    $('#cancel-request').on('click', cancel_request_to_buy);
+                    show_ajax_message(message, 'success');
+                })
+                .fail(function () {
+                    show_ajax_message('Something went wrong with the payment!', 'danger');
+                });
+        }
+    });
 
         // Open Stripe checkout modal
-        handler.open({
+    handler.open({
             name: 'SpareStub',
             description: window.additional_parameters.ticket_title,
             allowRememberMe: true,
             email: window.additional_parameters.user_email,
             panelLabel: 'Pay $5 Fee'
-        });
     });
 
     // Close Checkout on page navigation
@@ -222,8 +215,9 @@ $(document).ready(function ($) {
         load_message_user_modal(true);
     });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
+
+    $('#request-to-buy').on('click', request_to_buy);
     prepare_delete_ticket_button();
-    prepare_stripe_button();
     setup_stripe_popup_modal();
 
     $('#cancel-request').on('click', cancel_request_to_buy);

@@ -104,9 +104,12 @@
         'contact_form_url' : "{% url "contact.views.submit" %}",
         'signup_form_url' : "{% url "registration.views.signup" %}",
         'login_form_url' : "{% url "registration.views.login" %}",
-        'submit_ticket_form_url' : "{% url "tickets.views.submit_ticket" %}",
+        'submit_ticket_url' : "{% url "submit_ticket" %}",
         'cities_list_url' : "{% static "locations/json/cities.json" %}",
-        'edit_profile_form_url' : "{% if user.is_authenticated  %}{% url "edit_profile" username=user.user_profile.username %}{% else %} {% endif %}"
+        'edit_profile_form_url' : "{% if user.is_authenticated  %}{% url "edit_profile" username=user.user_profile.username %}{% else %} {% endif %}",
+        'logo_icon': "{% static "sparestub/logos/logo_icon.png" %}",
+        'stripe_public_key': "{{ stripe_public_api_key }}",
+        'user_email': "{{ request.user.email }}"
     }
     </script>
 
@@ -140,6 +143,9 @@
 
       <script type="text/javascript" src="{% static "tickets/js/submit_ticket.js" %}"></script>
     {% endblock %}
+
+    {# outside of the script block because it can't get compiled. #}
+    <script src="https://checkout.stripe.com/checkout.js"></script>
 
     {% block modals %}
        <!-- TODO aria-labeledby we need to set this appropriately -->
@@ -191,6 +197,25 @@
                     <button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                   </p>
                 </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="stripe-submit-popup-notification-root" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="popup-notification" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-body-wrapper">
+                <div class="modal-body alert alert-warning">
+                  <div class="pull-left" style="width: 90%;">
+                    <p>PLEASE READ: When you close this box, you will be asked to enter your credit card information for the $5 fee.</p>
+                    <p>You will not be charged until you accept a buyer's request to buy your ticket. If you do not accept anyone's request, you will not be charged.</p>
+                  </div>
+                  <div class="pull-right" style="width: 10%;">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

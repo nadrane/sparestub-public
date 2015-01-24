@@ -21,6 +21,8 @@ from .models import Request
 
 @login_required()
 def accept_request(request):
+    import pdb
+    pdb.set_trace()
     user = request.user
     try:
         ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
@@ -48,10 +50,18 @@ def accept_request(request):
     if not ticket.is_requestable():
         return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
 
-    customer = Customer.get_customer_from_user(other_user)
-    if not customer:
-        logging.critical('Customer information not available for request {}', request.id)
+    customer1 = Customer.get_customer_from_user(other_user)
+    customer2 = Customer.get_customer_from_user(user)
+    if not (customer1 and customer2):
+        logging.critical('Customer information not available for request {}'.format(user_request.id))
         return ajax_popup_notification('danger', 'Uh Oh, something went wrong. Our developers are on it!', 400)
+
+    # Charge them first. We actually might have a scenario where one of the cards is declined
+    try:
+        customer1.charge(500)
+        customer2.charge(500)
+    except stripe.CardError as e:
+        return ajax_popup_notification('danger', "One of the payments didn't quite go through. We'll follow up with you")
 
     user_request.accept()
     return ajax_popup_notification('success', 'Congratulations, you and {} are going the event together'

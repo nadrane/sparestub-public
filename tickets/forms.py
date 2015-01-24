@@ -103,7 +103,7 @@ class SearchTicketForm(FacetedSearchForm):
         return city_state_location
 
 
-class SubmitTicketForm(forms.Form):
+class ValidTicketForm(forms.Form):
     price = CurrencyField(required=True,
                           min_value=float(ticket_submit_form_settings.get('PRICE_MIN_VALUE')),
                           max_value=float(ticket_submit_form_settings.get('PRICE_MAX_VALUE')),
@@ -132,7 +132,7 @@ class SubmitTicketForm(forms.Form):
     ticket_type = forms.ChoiceField(required=True,
                                     choices=ticket_submit_form_settings.get('TICKET_TYPES'))
 
-    about = forms.CharField(required=True,
+    about = forms.CharField(required=False,
                             max_length=ticket_submit_form_settings.get('ABOUT_MAX_LENGTH')
                             )
 
@@ -198,3 +198,10 @@ class SubmitTicketForm(forms.Form):
     def clean(self):
         self.handle_location()
         self.handle_datetime()
+
+
+class SubmitTicketForm(ValidTicketForm):
+    # This token is not required because there will be cases where a user has a customer record already and never needs
+    # to submit information to the stripe modal
+    token = forms.CharField(required=False)
+

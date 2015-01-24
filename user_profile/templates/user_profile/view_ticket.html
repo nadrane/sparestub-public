@@ -87,13 +87,10 @@
         window.additional_parameters.can_message_url = "{% url "can_message" %}";
         window.additional_parameters.can_request_ticket_url = "{% url "can_request_ticket" ticket_id=ticket_id %}";
         window.additional_parameters.request_to_buy_url = "{% url "request_to_buy" %}";
-        window.additional_parameters.stripe_public_key = "{{ stripe_public_api_key }}";
         window.additional_parameters.ticket_id = "{{ ticket.id }}";
         window.additional_parameters.ticket_amount = "{{ ticket.price }}";
         window.additional_parameters.ticket_title = "{{ ticket.title }}";
-        window.additional_parameters.logo_icon = "{% static "sparestub/logos/logo_icon.png" %}";
         window.additional_parameters.user_id = "{{ user_info.user_id }}";
-        window.additional_parameters.user_email = "{{ request.user.email }}";
         window.additional_parameters.send_message_url = "{% url "send_message" %}";
         window.additional_parameters.message_user_form_url = "{% url "message_user_modal" ticket_id=ticket_id %}";
         window.additional_parameters.delete_ticket_url = "{% url "delete_ticket" ticket_id=ticket_id %}";
@@ -103,7 +100,6 @@
       {{ block.super }}
       <script type="text/javascript" src="{% static "user_profile/js/view_ticket.js" %}"></script>
     {% endcompress %}
-    <script src="https://checkout.stripe.com/checkout.js"></script>
 {% endblock %}
 
 {% block modals %}

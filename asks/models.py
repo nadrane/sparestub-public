@@ -124,6 +124,8 @@ class Request(TimeStampedModel):
                             html=message_body
                             )
 
+
+
     def decline(self):
         """
         When a seller declines to go to an event with a user

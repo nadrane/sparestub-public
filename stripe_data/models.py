@@ -1,3 +1,6 @@
+# Standard Imports
+import logging
+
 #3rd Party Imports
 import stripe
 
@@ -9,6 +12,7 @@ from django.conf import settings
 from utils.models import TimeStampedModel
 from registration.models import User
 
+stripe.api_key = settings.STRIPE_SECRET_API_KEY
 
 class CustomerManager(models.Manager):
 
@@ -45,7 +49,6 @@ class Customer(TimeStampedModel):
         customer information from Stripe. Do that here.
         """
 
-        stripe.api_key = settings.STRIPE_SECRET_API_KEY
         return stripe.Customer.retrieve(self.id)
 
     @staticmethod
@@ -65,8 +68,26 @@ class Customer(TimeStampedModel):
         """
         Check to see if a customer record exists in the system for a particular user.
         """
-        stripe.api_key = settings.STRIPE_SECRET_API_KEY
+
         return Customer.objects.filter(customer=user).exists()
+
+    def charge(self, amount):
+        """
+        Bill this customer record the amount inputted. Amount should be in cents.
+        """
+
+        try:
+            charge = stripe.Charge.create(amount=amount, # amount in cents, again
+                                          currency="usd",
+                                          card=self.stripe_id,
+                                          description="charging {} $5.00 for ticket match".format(self.stripe_id)
+                                          )
+            logging.info('charging {} $5.00 for ticket match'.format(self.stripe_id))
+
+        except stripe.CardError as e:
+            logging.critical('An error occurred trying to charge {} ${}s'.format(self.stripe_id, amount))
+            # The card has been declined
+            raise stripe.CardError
 
     objects = CustomerManager()
 

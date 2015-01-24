@@ -2,11 +2,11 @@ var $ = jQuery;
 var document = window.document;
 
 function validate_date_not_before_today(value) {
-    'use strict';
     /*
     This function will be used by bootstrap validator as a callbackto validate the
     event date of the ticket to ensure that it is not before the current date.
      */
+    'use strict';
 
     var value_array = value.split('/');
     var inputted_date = new Date(value_array[2], value_array[0] - 1, value_array[1]);
@@ -24,6 +24,37 @@ function validate_date_not_before_today(value) {
     }
     return false;
 }
+
+function prepare_stripe() {
+    'use strict';
+
+    var handler = StripeCheckout.configure({
+        key: window.additional_parameters.stripe_public_key,
+        image: window.additional_parameters.logo_icon,
+        token: function (token) {
+            $('#token').val(token.id); // Insert stripe token into form before serializing
+            $.post(window.additional_parameters.submit_ticket_url, $('#submit-ticket-form').serialize(), "json")
+                .always(function (response) {
+                    handle_ajax_response(response);
+                });
+        }
+    });
+
+    // Open Stripe checkout modal
+    handler.open({
+        name: 'SpareStub',
+        description: window.additional_parameters.ticket_title,
+        allowRememberMe: true,
+        email: window.additional_parameters.user_email,
+        panelLabel: 'Pay $5 Fee'
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function () {
+        handler.close();
+    });
+}
+
 
 // We need to kick the function off when we finish loading the modal content/
 // It appears as in callback to the ajax request that grabs this content in base.html
@@ -58,21 +89,15 @@ function initialize_bootstrap_validator_submit_ticket() {
         // Get the form instance
         var $form = $(e.target);
 
-        $.post($form.attr('action'), $form.serialize(), 'json')
-            .done(function (data, textStatus, xhr) {
-                // It's probably redundant to check the json value for true seeing as the server returned a 200 status
-                // code, but an extra check never hurts.
-                handle_ajax_response(data);
-
+        $.get($form.attr('action'), $form.serialize(), 'json')
+            .done(function (data) {
                 // If a notification error exists in the modal currently that was not cleared by the user, clear it now.
-                // We don't want it to exist if the user opens the modal and trys to submit another ticket.
+                // We don't want it to exist if the user opens the modal and tries to submit another ticket.
                 clear_notification($('#submit-ticket-notification-root'));
-
-
-                $form.data('bootstrapValidator').resetForm(true);
                 $('#modal-submit-ticket-root').modal('hide');
+                $('#stripe-submit-popup-notification-root').modal('show');
             })
-            .fail(function (data, textStatus, xhr) {
+            .fail(function (data) {
                 // Obviously there are cases were we never reached the server (internet down or incredibly high loads
                 // resulting in the web server turning people away), so we cannot check the JSON object that might or
                 // might not have been returned by the application level.
@@ -102,5 +127,12 @@ function initialize_bootstrap_validator_submit_ticket() {
     // Bootstrap validator will break the datetime picker. We need this function to undo the breakage.
     $('#submit-ticket-time-picker').on('dp.change dp.show', function (e) {
         $('#submit-ticket-form').bootstrapValidator('revalidateField', 'start_time');
+    });
+
+    // Make sure that when the popup closes, it initializes the stripe form
+    $(document).on('hidden.bs.modal', function (e) {
+        if (e.target.id === 'stripe-submit-popup-notification-root') {
+            prepare_stripe();
+        }
     });
 }

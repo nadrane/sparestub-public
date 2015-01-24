@@ -109,12 +109,3 @@
 
 
 }
-
-.modal-body-wrapper {
-    margin: 15px;
-}
-
-.modal-body-wrapper .modal-body {
-    margin: 0;
-    overflow: auto;
-}

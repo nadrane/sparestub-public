@@ -17,7 +17,7 @@ from .forms import EditProfileForm, ProfileAnswerForm, ChangePasswordForm
 from .settings import edit_profile_form_settings, profile_answer_form_settings
 from registration.settings import password_form_settings
 from utils.networking import ajax_http, form_failure_notification, \
-    form_success_notification, ajax_other_message, ajax_popup_notification
+    form_success_notification
 from photos.models import Photo
 from asks.models import Request
 
@@ -361,7 +361,6 @@ def view_ticket(request, username, ticket_id):
                    'is_owner': is_owner,
                    'ticket': ticket,
                    'most_recent_review_info': most_recent_review_info,
-                   'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY,
                    'has_request': Request.has_requested(ticket, user.id) # We pass in user.id because otherwise the
                                                                          # if the user is anonymous, it would be a
                                                                          # SimpleLazyObject, and Django would error out

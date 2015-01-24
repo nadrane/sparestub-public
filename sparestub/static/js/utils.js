@@ -49,6 +49,11 @@ var handle_ajax_response = function (response, $notification_root) {
         return;
     }
 
+    // Sometimes the json response comes in a complex object, sometimes just a JSON object.
+    // I have no idea what makes this happen. Just make it so we can safely pass the response in here.
+    if (!!response.responseJSON) {
+        response = response.responseJSON;
+    }
 
     if (!$notification_root) {
         $notification_root = $('#notification-root');
@@ -77,6 +82,8 @@ var handle_ajax_response = function (response, $notification_root) {
         }
         return error_message;
     // We expect any ajax response to either redirect, give some type of notification, or reload the current page
+    } else if (response.status === 500) {
+        show_popup_notification_modal("Uh oh, looks like our server broke. Our developers are on it", 'danger');
     } else {
         window.location.reload();
     }

@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <form id="submit-ticket-form" class="form-horizontal" action="{% url "tickets.views.submit_ticket" %}"> {% csrf_token %}
+  <form id="submit-ticket-form" class="form-horizontal" action="{% url "valid_ticket" %}"> {% csrf_token %}
     <input id="token" name="token" type="hidden">
     <div class="modal-body">
       <div class="row">
@@ -156,7 +156,7 @@
 
     <div class="modal-footer">
         <!-- Notice that the button type is submit. This is required by bootstrap validator. -->
-        <button id="submit-ticket-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Submit Stub!</button>
+        <button id="submit-ticket-form-submit-button" class='btn btn-primary form-submit-button' type="submit">Continue</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
   </form>  <!-- signup form -->

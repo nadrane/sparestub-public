@@ -73,6 +73,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'zinnia.context_processors.version',  # Optional - for Zinnia
   'utils.context_processors.environment',
   'utils.context_processors.ticket_types',
+  'utils.context_processors.stripe_public_key',
 )
 
 MIDDLEWARE_CLASSES = (
