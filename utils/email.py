@@ -9,7 +9,6 @@ from djrill import MandrillAPIError
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 
-
 def normalize_email(email):
     """
     Normalize the address by lowercasing the domain part of the email
@@ -25,7 +24,7 @@ def normalize_email(email):
     return email
 
 
-def send_email(recipient_list, subject, message, from_email, from_name='', **kwargs):
+def send_email(recipient_list, subject, message, from_email='', from_name='', **kwargs):
     """
     Generic function to send an email. We encapsulate the 3rd party API call in case we every change APIs
 
@@ -39,9 +38,11 @@ def send_email(recipient_list, subject, message, from_email, from_name='', **kwa
     if not isinstance(recipient_list, list):
         recipient_list = [recipient_list]
 
+    if not from_email:
+        from_email = settings.SOCIAL_EMAIL_ADDRESS
+
     if not from_name:
-        from_name = from_email
-        #TODO pass from name to mandrill???
+        from_name = settings.SOCIAL_EMAIL_NAME
 
     fail_silently = kwargs.get('fail_silently', False)
 

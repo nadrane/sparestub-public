@@ -17,6 +17,7 @@ from django.template.loader import render_to_string
 # SparStub imports
 from registration.models import User
 from .settings import ticket_model_settings, POST_TICKET_SUBMIT_SUBJECT, POST_TICKET_SUBMIT_TEMPLATE
+from asks.settings import REQUEST_INACTIVE_SUBJECT, REQUEST_INACTIVE_TEMPLATE
 from locations.models import Location
 
 
@@ -284,11 +285,14 @@ class Ticket(TimeStampedModel):
         # attached request. But there will be for other requests for that ticket.
         elif new_status == 'S':
             # Change all other requests besides the calling request to Ticket Sold.
+            # The other request is changed to accepted in self.accept
             # That means that a different user purchased the ticket.
             requests = self.get_requests().filter(status='P')
             requests.update(status='S')
             for request in requests:
-                request.requster.send_mail()
+                request.requster.send_mail(REQUEST_INACTIVE_SUBJECT,
+                                           message='',
+                                           html=render_to_string(REQUEST_INACTIVE_TEMPLATE))
 
         # User account deactivated, and ticket deactivated along with it
         elif new_status == 'D':
@@ -296,8 +300,14 @@ class Ticket(TimeStampedModel):
             #for request in requests:
             #    request.requster.send_mail()
 
+        old_status = self.status
         self.status = new_status
         self.save()
+        logging.info('Ticket status change from {old_status} to {new_status}\n'
+                     '{ticket}'.format(old_status=old_status,
+                                       new_status=new_status,
+                                       ticket=self)
+                     )
 
     def convert_price_to_stripe_amount(self):
         """

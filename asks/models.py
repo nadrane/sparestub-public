@@ -13,6 +13,7 @@ from django.db.models import Q
 from registration.models import User
 from tickets.models import Ticket
 from messages.models import Message
+from utils.email import send_email
 
 # Module Imports
 from .settings import request_model_settings,\
@@ -127,16 +128,11 @@ class Request(TimeStampedModel):
         message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE,
                                         {'ticket': ticket})
 
-        poster.send_mail(REQUEST_ACCEPTED_SUBJECT,
-                         message='',
-                         html=message_body
-                         )
-
-        requester.send_mail(REQUEST_ACCEPTED_SUBJECT,
-                            message='',
-                            html=message_body
-                            )
-
+        send_email([poster.email, requester.email],
+                   REQUEST_ACCEPTED_SUBJECT,
+                   message='',
+                   html=message_body
+                   )
 
     def decline(self):
         """

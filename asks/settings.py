@@ -33,4 +33,4 @@ REQUEST_CANCELLED_TO_SELLER_TEMPLATE = "asks/request_cancelled_to_seller.html"
 
 # When a request is accepted by a seller. This email goes to both the buyer and the seller.
 REQUEST_ACCEPTED_SUBJECT = "SpareStub - Request Accepted"
-REQUEST_ACCEPTED_TEMPLATE = "asks/request_accepted_email.html"
+REQUEST_ACCEPTED_TEMPLATE = "asks/request_accepted.html"
