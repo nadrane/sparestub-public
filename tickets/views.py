@@ -75,8 +75,7 @@ def submit_ticket(request):
                                                        400)
                 # A customer does not exist but a token does
                 else:
-                    customer = stripe.Customer.create(card=token)
-                    Customer.objects.create_customer(stripe_id=customer.id, user=user)
+                    Customer.objects.create_customer(user=user, token=token)
                     response = ajax_popup_notification('success',
                                                        'Your ticket was successfully submitted! '
                                                        'It will become visible to others shortly.',

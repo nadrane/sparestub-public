@@ -94,6 +94,7 @@
         window.additional_parameters.send_message_url = "{% url "send_message" %}";
         window.additional_parameters.message_user_form_url = "{% url "message_user_modal" ticket_id=ticket_id %}";
         window.additional_parameters.delete_ticket_url = "{% url "delete_ticket" ticket_id=ticket_id %}";
+        window.additional_parameters.cancel_request_to_buy_url = "{% url "cancel_request_to_buy" %}";
     </script>
   {% endwith %}
     {% compress js %}

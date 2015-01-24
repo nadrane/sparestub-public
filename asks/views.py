@@ -13,7 +13,7 @@ import stripe
 #SpareStub Imports
 from tickets.models import Ticket
 from utils.networking import ajax_http, ajax_other_message, ajax_popup_notification
-from stripe_data.models import Customer
+from stripe_data.models import Customer, StripeError
 from registration.models import User
 
 # Module Imports
@@ -60,7 +60,7 @@ def accept_request(request):
     try:
         customer1.charge(500)
         customer2.charge(500)
-    except stripe.CardError as e:
+    except StripeError as e:
         return ajax_popup_notification('danger', "One of the payments didn't quite go through. We'll follow up with you")
 
     user_request.accept()
@@ -158,8 +158,7 @@ def request_to_buy(request):
         # Check to see if a customer record exists for this user. If it already does, we only need to create
         # a request record.
         if not Customer.customer_exists(user):
-            customer = stripe.Customer.create(card=token)
-            Customer.objects.create_customer(stripe_id=customer.id, user=user)
+            Customer.objects.create_customer(user=user, token=token)
         Request.objects.create_request(ticket, user)
     except stripe.CardError as e:
         logging.critical('Stripe failed with error {}'.format(e))

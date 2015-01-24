@@ -14,16 +14,19 @@ from registration.models import User
 
 stripe.api_key = settings.STRIPE_SECRET_API_KEY
 
+
 class CustomerManager(models.Manager):
 
-    def create_customer(self, stripe_id, user):
+    def create_customer(self, user, token):
         """
         Creates a customer record using the id returned from the Stripe API
         None of the actual customer information is stored on our system, just an ID that Stripe associates with our
         customer data. This ID can be used to retrieve the customer information from Stripe's servers.
         """
 
-        customer = self.model(stripe_id=stripe_id,
+        stripe_customer_object = stripe.Customer.create(card=token)
+
+        customer = self.model(stripe_id=stripe_customer_object.id,
                               customer=user
                               )
 
@@ -42,6 +45,9 @@ class Customer(TimeStampedModel):
                                  unique=True,
                                  db_index=True,
                                  )
+
+    def __str__(self):
+        return self.stripe_id + ' - ' + self.customer
 
     def get_customer(self):
         """
@@ -79,15 +85,26 @@ class Customer(TimeStampedModel):
         try:
             charge = stripe.Charge.create(amount=amount, # amount in cents, again
                                           currency="usd",
-                                          card=self.stripe_id,
+                                          customer=self.stripe_id,
                                           description="charging {} $5.00 for ticket match".format(self.stripe_id)
                                           )
             logging.info('charging {} $5.00 for ticket match'.format(self.stripe_id))
 
         except stripe.CardError as e:
-            logging.critical('An error occurred trying to charge {} ${}s'.format(self.stripe_id, amount))
-            # The card has been declined
-            raise stripe.CardError
+            logging.critical('A card was declined for customer {} for {} cents'
+                             .format(self.stripe_id, amount))
+            raise StripeError
+        except stripe.InvalidRequestError as e:
+            logging.critical('A major error caused stripe to fail to process a payment of {} cents for customer {}'
+                             .format(amount, self.stripe_id))
+            raise StripeError
 
     objects = CustomerManager()
+
+
+class StripeError(Exception):
+    """
+    A generic error that we can raise when Stripe fails and then catch in the view.
+    """
+    pass
 
