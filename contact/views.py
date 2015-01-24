@@ -22,9 +22,6 @@ def submit(request):
             body = contact_form.cleaned_data.get('body')
             from_email_address = contact_form.cleaned_data.get('from_email_address')
 
-            import pdb
-            pdb.set_trace()
-
             # Send an email to shout@sparestub.com with the user's message
             send_email(SOCIAL_EMAIL_ADDRESS,
                        subject_type,
