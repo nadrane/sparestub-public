@@ -9,6 +9,7 @@ from djrill import MandrillAPIError
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 
+
 def normalize_email(email):
     """
     Normalize the address by lowercasing the domain part of the email

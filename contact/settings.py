@@ -1,8 +1,8 @@
 contact_form_settings = {'SUBJECT_TYPES':
-                         [('Q', 'Question'),
-                          ('R', 'Report Bug'),
-                          ('S', 'Suggestion'),
-                          ('U', 'Sign Up for Updates')
+                         [('F', 'Feedback/Question'),
+                          ('R', 'Issue with site/Report a Bug'),
+                          ('S', 'Success Story'),
+                          ('O', 'Other'),
                           ],
                          'BODY_MINLENGTH': 0,
                          'BODY_MAXLENGTH': 5000,

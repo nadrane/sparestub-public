@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from .forms import ContactForm
 from .settings import contact_form_settings
 from utils.miscellaneous import reverse_category_lookup, get_variable_from_settings
-from utils.networking import ajax_http
+from utils.networking import ajax_popup_notification, ajax_http
 from utils.email import send_email
 from .settings import FEEDBACK_SUBMISSION_RESPONSE_SUBJECT, FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE
 
@@ -21,6 +21,9 @@ def submit(request):
             subject_type = reverse_category_lookup(subject_type, contact_form_settings.get('SUBJECT_TYPES'))
             body = contact_form.cleaned_data.get('body')
             from_email_address = contact_form.cleaned_data.get('from_email_address')
+
+            import pdb
+            pdb.set_trace()
 
             # Send an email to shout@sparestub.com with the user's message
             send_email(SOCIAL_EMAIL_ADDRESS,
@@ -40,14 +43,15 @@ def submit(request):
 
             # Notice that we always return True. If the email failed to send, we need to figure it out on our side.
             # There is nothing additional for the client to do.
-            return ajax_http(True, 200)
+            return ajax_popup_notification('success','We got your message! '
+                                                     'Someone should respond to you within 24 hours.', 200)
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
         # We don't actually specify what the form error was. This is okay because our app requires JS to be enabled.
         # If the user managed to send us an aysynch request with JS disabled, they aren't using the site as designed.
         # eg., possibly a malicious user. No need to repeat the form pretty validation already done on the front end.
         else:
-            return ajax_http(True, 400)
+            return ajax_http(False)
     else:
         contact_form = ContactForm()
 

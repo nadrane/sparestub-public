@@ -32,12 +32,9 @@
         <select id="contact-subject-type" class="form-control" name="subject_type" required
                 data-bv-notempty-message="{{ form_settings.SUBJECT_TYPE_NOTEMPTY_MESSAGE }}">
           <option value="" disabled selected>Select a subject</option>
-          <option value="S">Sign up for updates</option>
-        {% comment %}
           {% for option in form_settings.SUBJECT_TYPES %}
             <option value="{{ option.0 }}"> {{ option.1 }} </option>
           {% endfor %}
-          {% endcomment %}
         </select>
       </div>  <!-- form group -->
 
@@ -50,8 +47,8 @@
                                 prevent us from entering more than 5000 characters and give no explanation as to why.
                   {% endcomment %}
                   data-bv-stringlength="true"
-                  data-bv-stringlength-min="{{ form_settings.BODY_MINLENGTH }}"
-                  data-bv-stringlength-max="{{ form_settings.BODY_MAXLENGTH }}"
+                  data-bv-stringlength-min="{% localize off %}{{ form_settings.BODY_MINLENGTH }}{% endlocalize %}""
+                  data-bv-stringlength-max="{% localize off %}{{ form_settings.BODY_MAXLENGTH }}{% endlocalize %}""
                   data-bv-stringlength-message="{{ form_settings.BODY_LENGTH_MESSAGE }}"></textarea>
       </div>  <!-- form group -->
     </div>  <!-- modal body -->

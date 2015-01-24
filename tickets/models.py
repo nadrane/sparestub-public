@@ -332,7 +332,7 @@ class Ticket(TimeStampedModel):
         """
         Return a QuerySet of tickets that this user posted that are still available to buy
         """
-        return Ticket.objects.filter(poster=user, status='P')
+        return Ticket.objects.filter(poster=user, status='P').order_by('start_datetime')
 
     @staticmethod
     def in_progress_ticket(user):
