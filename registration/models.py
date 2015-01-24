@@ -3,6 +3,7 @@ import re
 import random
 import string
 import os
+import logging
 
 # Django modules
 from django.db import models, transaction
@@ -60,6 +61,8 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.save()
+
+        logging.info('Creating new User record: {}'.format(user))
 
         # Email the user to welcome them to out website
         message_body = render_to_string(SIGNUP_EMAIL_TEMPlATE,
@@ -123,8 +126,8 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
                                  )
 
     birthdate = models.DateField(null=False,
-                               blank=False
-                               )
+                                 blank=False
+                                 )
 
     rating = models.IntegerField(null=False,
                                  blank=True,
@@ -378,8 +381,13 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     def generate_forgot_password_link(email):
         pass
 
+    def __repr__(self):
+        return '{class_object} {id} - {full_name}'.format(class_object=self.__class__,
+                                                          id=self.id,
+                                                          full_name=self.get_full_name())
+
     def __str__(self):
-        return str(self.id) + " - " + self.get_full_name()
+        return self.get_full_name()
 
 
 class EmailConfirmationLinkManager(models.Manager):

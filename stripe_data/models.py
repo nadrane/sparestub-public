@@ -32,6 +32,8 @@ class CustomerManager(models.Manager):
 
         customer.save()
 
+        logging.info('Creating new customer record: {}'.format(customer))
+
 
 class Customer(TimeStampedModel):
     stripe_id = models.CharField(primary_key=True,
@@ -46,8 +48,13 @@ class Customer(TimeStampedModel):
                                  db_index=True,
                                  )
 
+    def __repr__(self):
+        return '{class_object} {id} - {customer}'.format(class_object=self.__class__,
+                                                         id=self.stripe_id,
+                                                         customer=repr(self.customer))
+
     def __str__(self):
-        return self.stripe_id + ' - ' + self.customer
+        return self.customer
 
     def get_customer(self):
         """

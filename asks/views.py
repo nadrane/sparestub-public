@@ -48,6 +48,9 @@ def accept_request(request):
     if not ticket.is_requestable():
         return ajax_popup_notification('warning', 'It looks like this ticket is no longer available', 400)
 
+    import pdb
+    pdb.set_trace()
+
     customer1 = Customer.get_customer_from_user(other_user)
     customer2 = Customer.get_customer_from_user(user)
     if not (customer1 and customer2):
