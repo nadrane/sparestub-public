@@ -37,7 +37,7 @@ class RequestManager(models.Manager):
                              )
         request.save()
 
-        logging.info('Request created: {}'.format(request))
+        logging.info('Request created: {}'.format(repr(request)))
 
         poster = ticket.poster
 
@@ -99,6 +99,7 @@ class Request(TimeStampedModel):
                'requester: {requester} \n' \
                'ticket: {ticket}'\
                .format(class_object=self.__class__,
+                       id=self.id,
                        requester=repr(self.requester),
                        ticket=repr(self.ticket))
 

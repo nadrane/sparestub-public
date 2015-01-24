@@ -50,7 +50,7 @@ class TicketManager(models.Manager):
 
         ticket.save()
 
-        logging.info('Ticket created'.format(ticket))
+        logging.info('Ticket created {}'.format(repr(ticket)))
 
         # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
         message_body = render_to_string(POST_TICKET_SUBMIT_TEMPLATE,

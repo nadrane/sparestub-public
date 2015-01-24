@@ -165,6 +165,14 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         verbose_name = 'user'
         verbose_name_plural = 'users'
 
+    def __repr__(self):
+        return '{class_object} - {id} {full_name}'.format(class_object=self.__class__,
+                                                          id=self.id,
+                                                          full_name=self.get_full_name())
+
+    def __str__(self):
+        return self.get_full_name()
+
     def timezone(self):
         return self.location.timezone
 
@@ -380,14 +388,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     @staticmethod
     def generate_forgot_password_link(email):
         pass
-
-    def __repr__(self):
-        return '{class_object} - {id} {full_name}'.format(class_object=self.__class__,
-                                                          id=self.id,
-                                                          full_name=self.get_full_name())
-
-    def __str__(self):
-        return self.get_full_name()
 
 
 class EmailConfirmationLinkManager(models.Manager):

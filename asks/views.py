@@ -150,10 +150,6 @@ def request_to_buy(request):
         logging.warning('User cannot request to buy their own ticket')
         return ajax_http(False)
 
-    # Set your secret key: remember to change this to your live secret key in production
-    # See your keys here https://dashboard.stripe.com/account
-    stripe.api_key = settings.STRIPE_SECRET_API_KEY
-
     # Get the token that stripe sent us
     token = request.POST.get('token[id]')
 
