@@ -138,6 +138,7 @@ class Request(TimeStampedModel):
         poster = ticket.poster
 
         Message.objects.create_message(poster, requester, ticket,
+                                       "This is an automated message. "
                                        "The bad news: your request was declined. "
                                        "The good news: there are plenty of stubs in the sea.",
                                        False)

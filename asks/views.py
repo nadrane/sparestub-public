@@ -21,8 +21,6 @@ from .models import Request
 
 @login_required()
 def accept_request(request):
-    import pdb
-    pdb.set_trace()
     user = request.user
     try:
         ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
@@ -98,7 +96,7 @@ def decline_request(request):
 
     user_request.decline()
 
-    return ajax_popup_notification('info', "Aww, we'll let {} down easy. Good like finding another gig buddy."
+    return ajax_popup_notification('info', "Aww, we'll let {} down easy. Good luck finding another gig buddy."
                                    .format(other_user.first_name.title()), 200)
 
 @login_required()
