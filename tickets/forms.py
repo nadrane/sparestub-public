@@ -132,6 +132,10 @@ class SubmitTicketForm(forms.Form):
     ticket_type = forms.ChoiceField(required=True,
                                     choices=ticket_submit_form_settings.get('TICKET_TYPES'))
 
+    about = forms.CharField(required=True,
+                            max_length=ticket_submit_form_settings.get('ABOUT_MAX_LENGTH')
+                            )
+
     # Disabling for lean launch
     #payment_method = forms.ChoiceField(required=True,
     #                                   choices=ticket_submit_form_settings.get('PAYMENT_METHODS'))
