@@ -144,11 +144,11 @@ def request_to_buy(request):
 
     # Do this validation again...
     if not Request.can_request(ticket, user) or Request.requested_other_ticket_same_time(user, ticket):
-        return ajax_http(False)
+        return ajax_http(False, 400)
 
     if ticket.poster == user:
         logging.warning('User cannot request to buy their own ticket')
-        return ajax_http(False)
+        return ajax_http(False, 400)
 
     # Get the token that stripe sent us
     token = request.POST.get('token[id]')
@@ -158,11 +158,16 @@ def request_to_buy(request):
     try:
         # Check to see if a customer record exists for this user. If it already does, we only need to create
         # a request record.
-        if not Customer.customer_exists(user):
-            Customer.objects.create_customer(user=user, token=token)
-        Request.objects.create_request(ticket, user)
+        customer = Customer.get_customer_from_user(user)
+        if not customer and token:
+                customer = Customer.objects.create_customer(user=user, token=token)
+        if customer:
+            Request.objects.create_request(ticket, user)
+        else:
+            return ajax_other_message('Your request was unable to be processed. Our developers are on it', 400)
     except stripe.CardError as e:
         logging.critical('Stripe failed with error {}'.format(e))
+        return ajax_other_message('Your request was unable to be processed. Our developers are on it', 400)
 
     return ajax_other_message('Your request to buy has been submitted. '
                               'Your card will be charged if the seller accepts your request.', 200)

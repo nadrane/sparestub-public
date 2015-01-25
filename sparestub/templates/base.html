@@ -102,7 +102,8 @@
         'edit_profile_form_url' : "{% if user.is_authenticated  %}{% url "edit_profile" username=user.user_profile.username %}{% else %} {% endif %}",
         'logo_icon': "{% static "sparestub/logos/logo_icon.png" %}",
         'stripe_public_key': "{{ stripe_public_api_key }}",
-        'user_email': "{{ request.user.email }}"
+        'user_email': "{{ request.user.email }}",
+        'customer_exists_url': "{% url "customer_exists" %}",
     }
     </script>
 
@@ -200,7 +201,7 @@
           <div class="modal-dialog modal-md">
             <div class="modal-content">
               <div class="modal-body-wrapper">
-                <div class="modal-body alert alert-warning">
+                <div class="modal-body alert alert-info">
                   <div class="pull-left" style="width: 90%;">
                     <p>PLEASE READ: When you close this box, you will be asked to enter your credit card information for the $5 fee.</p>
                     <p>You will not be charged until you accept a buyer's request to buy your ticket. If you do not accept anyone's request, you will not be charged.</p>

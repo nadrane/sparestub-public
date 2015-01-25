@@ -21,16 +21,6 @@ function initialize_bootstrap_validator_message_user() {
     });
 }
 
-function setup_stripe_popup_modal() {
-    'use strict';
-    // When the notification popup closes, open Stripe immediately afterwards
-    $(document).on('hidden.bs.modal', function (e) {
-        if (e.target.id === 'stripe-popup-notification-root') {
-            show_stripe_button();
-        }
-    });
-}
-
 function load_message_user_modal(show_modal) {
     'use strict';
     /* Load the message user modal content from the server and display that form if requested.
@@ -74,11 +64,28 @@ function load_message_user_modal(show_modal) {
         });
 }
 
-function initiate_stripe() {
-    $('.in.modal').modal('hide');
-    $('#stripe-popup-notification-root').modal('show');
+function modal_message_user_button() {
+    /* When the user clicks the Send Message button inside the modal messaging form, this tag is called to contact the
+     * server and add the message to the database.
+     */
+    $.post(window.additional_parameters.send_message_url,
+        {'other_user_id': window.additional_parameters.user_id,
+          'ticket_id': window.additional_parameters.ticket_id,
+          'body': $('#message-user-body').val()
+          },
+          'json')
+    .fail(function(response) {
+        handle_ajax_response(response);
+    });
 }
 
+function show_ajax_message(message, type) {
+    var ajax_errors = $('#ajax-errors');
+    ajax_errors.find('.alert').removeClass('alert-danger').removeClass('alert-success');
+    ajax_errors.css('display', '')
+               .addClass('alert-' + type)
+               .find('p').text(message);
+}
 
 function prepare_delete_ticket_button() {
     // This looks dumb at first glance. Why do we prepare the modal every time a user clicks on the button?
@@ -101,22 +108,31 @@ function can_delete_ticket() {
         });
 }
 
+
+function setup_stripe_popup_modal() {
+    'use strict';
+    // When the notification popup closes, open Stripe immediately afterwards
+    $(document).on('hidden.bs.modal', function (e) {
+        if (e.target.id === 'stripe-popup-notification-root') {
+            show_stripe_modal();
+        }
+    });
+}
+
+function show_pre_stripe_popup() {
+    $('.in.modal').modal('hide');
+    $('#stripe-popup-notification-root').modal('show');
+}
+
 function can_request_to_buy() {
     /* There are some cases where we will not allow a user to request to buy a ticket.
      * If the ticket was cancelled or the buyer is already going to another show or already requested to buy this ticket
      */
+    'use strict';
 
-    $.post(window.additional_parameters.can_request_ticket_url,
-           {'ticket_id': window.additional_parameters.ticket_id},
-           "json")
-        .done(function (response) {
-            initiate_stripe();
-        })
-        .fail(function (response) {
-            var error_message = handle_ajax_response(response.responseJSON);
-            show_ajax_message(error_message, 'danger');
-        });
-
+    return $.post(window.additional_parameters.can_request_ticket_url,
+                  {'ticket_id': window.additional_parameters.ticket_id},
+                  "json");
 }
 
 function cancel_request_to_buy() {
@@ -136,15 +152,7 @@ function cancel_request_to_buy() {
         });
 }
 
-function show_ajax_message(message, type) {
-    var ajax_errors = $('#ajax-errors');
-    ajax_errors.find('.alert').removeClass('alert-danger').removeClass('alert-success');
-    ajax_errors.css('display', '')
-               .addClass('alert-' + type)
-               .find('p').text(message);
-}
-
-function show_stripe_button() {
+function show_stripe_modal() {
     'use strict';
 
     var handler = StripeCheckout.configure({
@@ -157,10 +165,7 @@ function show_stripe_button() {
                 {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
                  "json")
                 .done(function (response) {
-                    var message = handle_ajax_response(response);
-                    $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>');
-                    $('#cancel-request').on('click', cancel_request_to_buy);
-                    show_ajax_message(message, 'success');
+                    request_to_buy_success(response);
                 })
                 .fail(function () {
                     show_ajax_message('Something went wrong with the payment!', 'danger');
@@ -189,34 +194,55 @@ function request_to_buy() {
         load_login_modal(true);
         return;
     }
-    can_request_to_buy();
-}
+    var can_request_response = can_request_to_buy();
 
-function modal_message_user_button() {
-    /* When the user clicks the Send Message button inside the modal messaging form, this tag is called to contact the
-     * server and add the message to the database.
-     */
-    $.post(window.additional_parameters.send_message_url,
-        {'other_user_id': window.additional_parameters.user_id,
-          'ticket_id': window.additional_parameters.ticket_id,
-          'body': $('#message-user-body').val()
-          },
-          'json')
-    .fail(function(response) {
-        handle_ajax_response(response);
+    can_request_response.done(function (response) {
+        if (customer_exists) {
+            // Actually create the request on the server
+            $.post(window.additional_parameters.request_to_buy_url,
+                  {'ticket_id': window.additional_parameters.ticket_id},
+                  "json")
+                .done(function (response) {
+                    request_to_buy_success(response);
+                })
+                .fail(function () {
+                    var message = handle_ajax_response(response);
+                    show_ajax_message(message);
+                });
+        } else {
+            show_pre_stripe_popup();
+        }
+    })
+    .fail(function (response) {
+        var error_message = handle_ajax_response(response);
+        show_ajax_message(error_message, 'danger');
     });
-
 }
 
+function request_to_buy_success(response) {
+    /* Kick this off whenever a request to buy successfully goes through */
+    var message = handle_ajax_response(response);
+    $('#request-to-buy').replaceWith('<button id="cancel-request" class="btn btn-primary">Cancel Request To Buy</button>');
+    $('#cancel-request').on('click', cancel_request_to_buy);
+    show_ajax_message(message, 'success');
+}
 
+var customer_exists = false; // This is global because request_to_buy can be unbound and rebound,
+                             // making a closure impossible without querying the server every time.
 
-$(document).ready(function ($) {
+$(document).ready(function () {
     $('.message-user').on('click', function () {
         load_message_user_modal(true);
     });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
-
-    $('#request-to-buy').on('click', request_to_buy);
+    $.get(window.additional_parameters.customer_exists_url, "json")
+        .done(function () {
+            customer_exists = true;
+        })
+        .always(function () {
+            // Don't make request to buy clickable until we know if the customer exists
+            $('#request-to-buy').on('click', request_to_buy);
+        });
     prepare_delete_ticket_button();
     setup_stripe_popup_modal();
 

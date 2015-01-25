@@ -1,3 +1,10 @@
+/*!
+ * @preserve Cropper v0.7.7
+ * https://github.com/fengyuanchen/cropper
+ *
+ * Copyright 2014-2015 Fengyuan Chen
+ * Released under the MIT license
+ */
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     // AMD. Register as anonymous module.
@@ -58,6 +65,31 @@
         return typeof n === "number";
       },
 
+      toArray = function (obj, offset) {
+        var args = [];
+
+        if (typeof offset === "number") { // It's necessary for IE8
+          args.push(offset);
+        }
+
+        return args.slice.apply(obj, args);
+      },
+
+      // Custom proxy to avoid jQuery's guid
+      proxy = function (fn, context) {
+        var args = toArray(arguments, 2);
+
+        return function () {
+          return fn.apply(context, args.concat(toArray(arguments)));
+        };
+      },
+
+      addTimestamp = function (url) {
+        var timestamp = "timestamp=" + (new Date()).getTime();
+
+        return (url + (url.indexOf("?") === -1 ? "?" : "&") + timestamp);
+      },
+
       // Constructor
       Cropper = function (element, options) {
         this.element = element;
@@ -74,7 +106,6 @@
       },
 
       // Others
-      round = Math.round,
       sqrt = Math.sqrt,
       min = Math.min,
       max = Math.max,
@@ -152,6 +183,7 @@
       if (this.defaults.checkImageOrigin) {
         if ($this.prop("crossOrigin") || this.isCrossOriginURL(url)) {
           crossOrigin = " crossOrigin";
+          url = addTimestamp(url); // Bust cache (#119, #148)
         }
       }
 
@@ -217,7 +249,7 @@
         this.$original = this.$clone.clone();
 
         // Append the image to document to avoid "NS_ERROR_NOT_AVAILABLE" error on Firefox when call the "drawImage" method.
-        this.$original.addClass(CLASS_INVISIBLE).prependTo(this.$cropper);
+        this.$original.addClass(CLASS_HIDDEN).prependTo(this.$cropper);
 
         this.originalImage = $.extend({}, this.image);
       }
@@ -230,19 +262,18 @@
       this.$viewer = $cropper.find(".cropper-viewer");
 
       defaults.autoCrop ? (this.cropped = TRUE) : this.$dragger.addClass(CLASS_HIDDEN);
-      defaults.dragCrop && this.setDragMode("crop");
       defaults.modal && this.$canvas.addClass(CLASS_MODAL);
       !defaults.dashed && this.$dragger.find(".cropper-dashed").addClass(CLASS_HIDDEN);
       !defaults.movable && this.$dragger.find(".cropper-face").data(STRING_DIRECTIVE, "move");
       !defaults.resizable && this.$dragger.find(".cropper-line, .cropper-point").addClass(CLASS_HIDDEN);
 
-      this.$scope = defaults.multiple ? this.$cropper : $document;
-
       this.addListeners();
       this.initPreview();
 
-      this.built = TRUE;
+      this.built = TRUE; // Set `true` before update
+      defaults.dragCrop && this.setDragMode("crop"); // Set after built
       this.update();
+      this.replaced = FALSE; // Reset to `false` after update
 
       $this.one(EVENT_BUILT, defaults.built); // Only trigger once
       $this.trigger(EVENT_BUILT);
@@ -295,10 +326,10 @@
           top = dragger.top - image.top;
 
       this.$viewer.find("img").css({
-        width: round(width),
-        height: round(height),
-        marginLeft: -round(left),
-        marginTop: -round(top)
+        width: width,
+        height: height,
+        marginLeft: -left,
+        marginTop: -top
       });
 
       this.$preview.each(function () {
@@ -306,10 +337,10 @@
             ratio = $this.width() / dragger.width;
 
         $this.find("img").css({
-          width: round(width * ratio),
-          height: round(height * ratio),
-          marginLeft: -round(left * ratio),
-          marginTop: -round(top * ratio)
+          width: width * ratio,
+          height: height * ratio,
+          marginLeft: -left * ratio,
+          marginTop: -top * ratio
         });
       });
     },
@@ -318,20 +349,36 @@
       var defaults = this.defaults;
 
       this.$element.on(EVENT_DRAG_START, defaults.dragstart).on(EVENT_DRAG_MOVE, defaults.dragmove).on(EVENT_DRAG_END, defaults.dragend);
-      this.$cropper.on(EVENT_MOUSE_DOWN, (this._dragstart = $.proxy(this.dragstart, this))).on(EVENT_DBLCLICK, (this._dblclick = $.proxy(this.dblclick, this)));
-      defaults.zoomable && this.$cropper.on(EVENT_WHEEL, (this._wheel = $.proxy(this.wheel, this)));
-      this.$scope.on(EVENT_MOUSE_MOVE, (this._dragmove = $.proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = $.proxy(this.dragend, this)));
+      this.$cropper.on(EVENT_MOUSE_DOWN, $.proxy(this.dragstart, this)).on(EVENT_DBLCLICK, $.proxy(this.dblclick, this));
 
-      $window.on(EVENT_RESIZE, (this._resize = $.proxy(this.resize, this)));
+      if (defaults.zoomable) {
+        this.$cropper.on(EVENT_WHEEL, $.proxy(this.wheel, this));
+      }
+
+      if (defaults.multiple) {
+        this.$cropper.on(EVENT_MOUSE_MOVE, $.proxy(this.dragmove, this)).on(EVENT_MOUSE_UP, $.proxy(this.dragend, this));
+      } else {
+        $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
+      }
+
+      $window.on(EVENT_RESIZE, (this._resize = proxy(this.resize, this)));
     },
 
     removeListeners: function () {
       var defaults = this.defaults;
 
       this.$element.off(EVENT_DRAG_START, defaults.dragstart).off(EVENT_DRAG_MOVE, defaults.dragmove).off(EVENT_DRAG_END, defaults.dragend);
-      this.$cropper.off(EVENT_MOUSE_DOWN, this._dragstart).off(EVENT_DBLCLICK, this._dblclick);
-      defaults.zoomable && this.$cropper.off(EVENT_WHEEL, this._wheel);
-      this.$scope.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
+      this.$cropper.off(EVENT_MOUSE_DOWN, this.dragstart).off(EVENT_DBLCLICK, this.dblclick);
+
+      if (defaults.zoomable) {
+        this.$cropper.off(EVENT_WHEEL, this.wheel);
+      }
+
+      if (defaults.multiple) {
+        this.$cropper.off(EVENT_MOUSE_MOVE, this.dragmove).off(EVENT_MOUSE_UP, this.dragend);
+      } else {
+        $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
+      }
 
       $window.off(EVENT_RESIZE, this._resize);
     },
@@ -377,10 +424,10 @@
       }
 
       this.$cropper.css({
-        width: round(cropper.width),
-        height: round(cropper.height),
-        left: round(cropper.left),
-        top: round(cropper.top)
+        width: cropper.width,
+        height: cropper.height,
+        left: cropper.left,
+        top: cropper.top
       });
 
       this.cropper = cropper;
@@ -408,7 +455,6 @@
 
         // Reset image ratio
         if (this.replaced) {
-          this.replaced = FALSE;
           image.ratio = defaultImage.ratio;
         }
       }
@@ -429,10 +475,10 @@
       image.top = min(max(image.top, image._height - image.height), 0);
 
       this.$clone.css({
-        width: round(image.width),
-        height: round(image.height),
-        marginLeft: round(image.left),
-        marginTop: round(image.top)
+        width: image.width,
+        height: image.height,
+        marginLeft: image.left,
+        marginTop: image.top
       });
 
       if (mode) {
@@ -447,6 +493,7 @@
           // If not set, use the original aspect ratio of the image.
           aspectRatio = defaults.aspectRatio || this.image.aspectRatio,
           ratio = this.image.ratio,
+          autoCropDragger,
           dragger;
 
       if (((cropper.height * aspectRatio) - cropper.width) >= 0) {
@@ -500,15 +547,18 @@
       dragger.minHeight = min(dragger.maxHeight, dragger.minHeight);
 
       // Center the dragger by default
-      dragger.height *= defaults.autoCropArea;
-      dragger.width *= defaults.autoCropArea;
-      dragger.left = (cropper.width - dragger.width) / 2;
-      dragger.top = (cropper.height - dragger.height) / 2;
-      dragger.oldLeft = dragger.left;
-      dragger.oldTop = dragger.top;
+      autoCropDragger = $.extend({}, dragger);
+      autoCropDragger.height = dragger.height * defaults.autoCropArea;
+      autoCropDragger.width = dragger.width * defaults.autoCropArea;
+      autoCropDragger.left = (cropper.width - autoCropDragger.width) / 2;
+      autoCropDragger.top = (cropper.height - autoCropDragger.height) / 2;
 
-      this.defaultDragger = dragger;
-      this.dragger = $.extend({}, dragger);
+      autoCropDragger.oldLeft = dragger.oldLeft = dragger.left;
+      autoCropDragger.oldTop = dragger.oldTop = dragger.top;
+
+      this.autoCropDragger = autoCropDragger;
+      this.defaultDragger = $.extend({}, dragger);
+      this.dragger = dragger;
     },
 
     renderDragger: function () {
@@ -544,10 +594,10 @@
       }
 
       this.$dragger.css({
-        width: round(dragger.width),
-        height: round(dragger.height),
-        left: round(dragger.left),
-        top: round(dragger.top)
+        width: dragger.width,
+        height: dragger.height,
+        left: dragger.left,
+        top: dragger.top
       });
 
       this.preview();
@@ -641,7 +691,7 @@
       }
 
       if (data === NULL || $.isEmptyObject(data)) {
-        dragger = $.extend({}, this.defaultDragger);
+        dragger = $.extend({}, this.autoCropDragger);
       }
 
       if ($.isPlainObject(data) && !$.isEmptyObject(data)) {
@@ -683,7 +733,7 @@
       this.renderDragger();
     },
 
-    getData: function () {
+    getData: function (rounded) {
       var dragger = this.dragger,
           image = this.image,
           data = {};
@@ -696,13 +746,13 @@
           height: dragger.height
         };
 
-        data = this.transformData(data, TRUE);
+        data = this.transformData(data, TRUE, rounded);
       }
 
       return data;
     },
 
-    transformData: function (data, reverse) {
+    transformData: function (data, reversed, rounded) {
       var ratio = this.image.ratio,
           result = {};
 
@@ -710,8 +760,7 @@
         n = num(n);
 
         if (REGEXP_OPTIONS.test(i) && !isNaN(n)) {
-          // Not round when set data.
-          result[i] = reverse ? round(n / ratio) : n * ratio;
+          result[i] = reversed ? (rounded ? Math.round(n / ratio) : n / ratio) : n * ratio;
         }
       });
 
@@ -1507,7 +1556,7 @@
 
   // Register as jQuery plugin
   $.fn.cropper = function (options) {
-    var args = [].slice.call(arguments, 1),
+    var args = toArray(arguments, 1),
         result;
 
     this.each(function () {

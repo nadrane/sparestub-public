@@ -21,12 +21,14 @@ from .forms import ValidTicketForm, SubmitTicketForm
 
 @login_required()
 def valid_ticket(request):
-    if request.method == 'GET':
-        valid_ticket_form = ValidTicketForm(request.GET)
-        if valid_ticket_form.is_valid():
-            return ajax_http(True)
-        return ajax_http(**non_field_errors_notification(valid_ticket_form))
-    return ajax_http(False)
+    """
+    This function just checks if a ticket a user wishes to create has valid data.
+    It is a POST to make the frontend simpler. It doesn't actually change server data.
+    """
+    valid_ticket_form = ValidTicketForm(request.POST)
+    if valid_ticket_form.is_valid():
+        return ajax_http(True)
+    return ajax_http(**non_field_errors_notification(valid_ticket_form))
 
 @login_required()
 def submit_ticket(request):

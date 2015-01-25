@@ -1,13 +1,9 @@
-# Standard Imports
-import logging
-
 # Django Imports
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
-from django.conf import settings
 
 # SpareStub Imports
 from user_profile.models import UserProfile, ProfileQuestion, ProfileAnswer

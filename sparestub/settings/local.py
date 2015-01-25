@@ -70,7 +70,7 @@ if es.username:
 AWS_STORAGE_BUCKET_NAME = 'sparestub'
 
 LOG_FILENAME = os.path.join(BASE_DIR, 'logging.txt')
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
 # Used to create links in emails to our site... and subdomain and method
 DOMAIN = 'http://localhost:8000'
