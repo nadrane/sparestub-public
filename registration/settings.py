@@ -97,7 +97,7 @@ PASSWORD_RESET_EMAIL_SUBJECT = 'SpareStub - Reset your password'
 PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/reset_pasword_email.html'
 
 # Send to a user to ask him to confirm his email address
-EMAIL_CONFIRMATION_EMAIL_SUBJECT = 'SpareStub - Email confirmation'
+EMAIL_CONFIRMATION_EMAIL_SUBJECT = 'SpareStub Email Confirmation'
 EMAIL_CONFIRMATION_EMAIL_TEMPLATE = 'registration/email_confirmation.html'
 
 # Send to a user after he signs up

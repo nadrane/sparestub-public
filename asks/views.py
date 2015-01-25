@@ -69,7 +69,7 @@ def accept_request(request):
         return ajax_popup_notification('danger', "One of the payments didn't quite go through. We'll follow up with you")
 
     user_request.accept()
-    return ajax_popup_notification('success', 'Congratulations, you and {} are going the event together'
+    return ajax_popup_notification('success', "Congratulations, you accepted {}'s request"
                                    .format(other_user.first_name.title()), 200)
 
 @login_required()
