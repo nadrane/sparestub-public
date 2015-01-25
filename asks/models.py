@@ -123,7 +123,7 @@ class Request(TimeStampedModel):
             ticket.change_status('S')
 
         Message.objects.create_message(poster, requester, ticket,
-                                       "This is an automated message: Congratulations,the request was accepted! Check your email for next steps.", False)
+                                       "This is an automated message: Congratulations, the request was accepted! Check your email for next steps.", False)
 
         message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE,
                                         {'ticket': ticket})
@@ -146,7 +146,7 @@ class Request(TimeStampedModel):
         poster = ticket.poster
 
         Message.objects.create_message(poster, requester, ticket,
-                                       "This is an automated message. "
+                                       "This is an automated message: "
                                        "The bad news: your request was declined. "
                                        "The good news: there are plenty of stubs in the sea.",
                                        False)
