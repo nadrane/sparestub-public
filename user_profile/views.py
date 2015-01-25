@@ -362,9 +362,10 @@ def view_ticket(request, username, ticket_id):
                    'ticket': ticket,
                    'most_recent_review_info': most_recent_review_info,
                    'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY,
-                   'has_request': Request.has_requested(ticket, user.id) # We pass in user.id because otherwise the
-                                                                         # if the user is anonymous, it would be a
-                                                                         # SimpleLazyObject, and Django would error out
+                   'has_request': Request.has_requested(ticket, user.id), # We pass in user.id because otherwise the
+                                                                          # if the user is anonymous, it would be a
+                                                                          # SimpleLazyObject, and Django would error out
+                   'is_available': ticket.status == 'P',
                    },
                   content_type='text/html',
                   )
