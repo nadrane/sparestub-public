@@ -227,8 +227,6 @@ class Ticket(TimeStampedModel):
     def change_status(self, new_status):
         from asks.models import Request
         from messages.models import Message
-        import pdb
-        pdb.set_trace()
 
         # Ticket posted by seller
         if new_status == 'P':
@@ -289,22 +287,28 @@ class Ticket(TimeStampedModel):
             # Change all other requests besides the calling request to Ticket Sold.
             # The other request is changed to accepted in self.accept
             # That means that a different user purchased the ticket.
-            message_body = "This is an automated message. Aw shucks, it looks like the seller accepted a different user's request."
+            message_body = "This is an automated message. Aw shucks, " \
+                           "it looks like the seller accepted a different user's request."
             for request in self.get_requests().filter(status='P'):
                 # Note we don't use update. That's because update would modify the queryset,
                 # so we couldn't iterate over it to send messages and emails
                 request.status = 'S'
                 request.save()
-                Message.objects.create_message(request.ticket.poster, request.requster, self, message_body, False)
-                request.requster.send_mail(REQUEST_INACTIVE_SUBJECT,
-                                           message='',
-                                           html=render_to_string(REQUEST_INACTIVE_TEMPLATE))
+                requester = request.requester
+                Message.objects.create_message(request.ticket.poster, request.requester, self, message_body, False)
+                requester.send_mail(REQUEST_INACTIVE_SUBJECT,
+                                    message='',
+                                    html=render_to_string(REQUEST_INACTIVE_TEMPLATE,
+                                                          {'requester': requester,
+                                                           'ticket': request.ticket
+                                                           }
+                                                          ))
 
         # User account deactivated, and ticket deactivated along with it
         elif new_status == 'D':
             pass # TODO figure out how to handle this
             #for request in requests:
-            #    request.requster.send_mail()
+            #    request.requester.send_mail()
 
         old_status = self.status
         self.status = new_status

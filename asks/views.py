@@ -136,7 +136,6 @@ def can_request_ticket(request, ticket_id):
 @login_required()
 def request_to_buy(request):
     user = request.user
-
     try:
         ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
     except Ticket.DoesNotExist:

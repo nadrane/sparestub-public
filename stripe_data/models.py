@@ -11,6 +11,7 @@ from django.conf import settings
 # SpareStub Imports
 from utils.models import TimeStampedModel
 from registration.models import User
+from .settings import card_model_settings
 
 stripe.api_key = settings.STRIPE_SECRET_API_KEY
 
@@ -111,9 +112,47 @@ class Customer(TimeStampedModel):
     objects = CustomerManager()
 
 
+class Card(models.Model):
+    stripe_id = models.CharField(primary_key=True,
+                                 max_length=255,   # Let's just be safe with the potential length of Stripe ids.
+                                 unique=True,
+                                 )
+
+    customer = models.ForeignKey(Customer,
+                                 blank=False,
+                                 null=False
+                                 )
+
+    last4 = models.CharField(max_length=4,
+                             blank=False,
+                             null=False
+                             )
+
+    brand = models.CharField(max_length=10,
+                             blank=False,
+                             null=False,
+                             choices=card_model_settings.get('BRAND_CHOICES'),
+                             )
+
+    funding = models.CharField(max_length=1,
+                               blank=False,
+                               null=False,
+                               choices=card_model_settings.get('FUNDING_CHOICES'),
+                               )
+
+    expiration_month = models.IntegerField(blank=False,
+                                           null=False,
+                                           )
+
+    expiration_year = models.IntegerField(blank=False,
+                                          null=False
+                                          )
+
+
 class StripeError(Exception):
     """
     A generic error that we can raise when Stripe fails and then catch in the view.
     """
     pass
+
 

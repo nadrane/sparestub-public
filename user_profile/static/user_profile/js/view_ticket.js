@@ -165,6 +165,7 @@ function show_stripe_modal() {
                 {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
                  "json")
                 .done(function (response) {
+                    customer_exists = true;
                     request_to_buy_success(response);
                 })
                 .fail(function () {
