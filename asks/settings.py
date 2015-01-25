@@ -24,7 +24,7 @@ REQUEST_SENT_TEMPLATE = "asks/request_sent.html"
   # 1. Requested ticket expired
   # 2. Requested declined by seller
   # 3. Ticket cancelled by seller
-REQUEST_INACTIVE_SUBJECT = "SpareStub - Request Cancelled"
+REQUEST_INACTIVE_SUBJECT = "SpareStub - Request Not Accepted"
 REQUEST_INACTIVE_TEMPLATE = "asks/request_inactive.html"
 
 # What to send a seller when a user who requested to buy his ticket cancelled it
