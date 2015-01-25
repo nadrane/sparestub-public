@@ -80,11 +80,10 @@ function modal_message_user_button() {
 }
 
 function show_ajax_message(message, type) {
-    var ajax_errors = $('#ajax-errors');
-    ajax_errors.find('.alert').removeClass('alert-danger').removeClass('alert-success');
-    ajax_errors.css('display', '')
-               .addClass('alert-' + type)
-               .find('p').text(message);
+    var $ajax_errors = $('#ajax-errors');
+    var $alert_div = $ajax_errors.find('.alert');
+    $alert_div.removeClass('alert-danger').removeClass('alert-success').addClass('alert-' + type).find('p').text(message);
+    $ajax_errors.css('display', '');
 }
 
 function prepare_delete_ticket_button() {

@@ -160,9 +160,7 @@ class Request(TimeStampedModel):
 
     def ticket_cancelled(self):
         """
-        This happens when a ticket is deactivated.
-        The status will actually be changed in tickes.models.Ticket.deactivate because we can update all the request
-        statuses in bulk.
+        This happens when a ticket is deactivated. It changes the status of the request to 'T - Ticket Cancelled'
         This function will send emails to inform the requester that the ticket was cancelled.
         It will also send an automated message that explains that the message was cancelled
         """
@@ -182,6 +180,9 @@ class Request(TimeStampedModel):
 
         # No need to send an email that a message was sent since we just sent an email about the request
         Message.objects.create_message(ticket.poster, self.requester, ticket, message_body, False)
+
+        self.status = 'T'
+        self.save()
 
     def cancel(self):
         """

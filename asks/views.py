@@ -159,7 +159,7 @@ def request_to_buy(request):
         # a request record.
         customer = Customer.get_customer_from_user(user)
         if not customer and token:
-                customer = Customer.objects.create_customer(user=user, token=token)
+            customer = Customer.objects.create_customer(user=user, token=token)
         if customer:
             Request.objects.create_request(ticket, user)
         else:
