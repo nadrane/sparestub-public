@@ -204,7 +204,7 @@
                 <div class="modal-body alert alert-info">
                   <div class="pull-left" style="width: 90%;">
                     <p>PLEASE READ: When you close this box, you will be asked to enter your credit card information for the $5 fee.</p>
-                    <p>You will not be charged until you accept a buyer's request to buy your ticket. If you do not accept anyone's request, you will not be charged.</p>
+                    <p>You will not be charged until you accept a buyer's request to buy your ticket. If you do not accept a request, you will not be charged.</p>
                   </div>
                   <div class="pull-right" style="width: 10%;">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
@@ -236,5 +236,16 @@
       </div> <!-- end container fluid -->
 
     {% endblock %}
+
+  {% comment %}Begin Crazy Egg heat map{% endcomment %}
+    <script type="text/javascript">
+      setTimeout(function(){var a=document.createElement("script");
+      var b=document.getElementsByTagName("script")[0];
+      a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0028/6011.js?"+Math.floor(new Date().getTime()/3600000);
+      a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+    </script>
+  {% comment %}Begin Crazy Egg heat map{% endcomment %}
+
+
     </body>
 </html>
