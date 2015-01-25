@@ -194,34 +194,16 @@ class Ticket(TimeStampedModel):
         """
         return self.status == 'P'
 
-    def can_view(self, user):
+    def can_view(self):
         """
         Is this ticket viewable? A ticket is not viewable if
         """
-        is_viewable = None
-        status = self.status
-        poster = self.poster
-
-        # If the ticket is posted, anyone may view it
-        if status == 'P':
-            is_viewable = True
-        # If the user cancelled the ticket, only he may view it
-        elif status == 'C':
-            if poster == user:
-                is_viewable = True
-            else:
-                is_viewable = False
-        # If the buyer's account was deactivated, no one may see the request
-        elif status == 'D':
-            is_viewable = False
-        # If the ticket is sold or the event has passed, only the buyer and seller may see it
-        elif status == 'E' or status == 'S':
-            if poster == user or poster == self.get_buyer():
-                is_viewable = True
-            else:
-                is_viewable = False
-
-        return is_viewable
+        # If the ticket is deactivated, no one may view it.
+        # Otherwise they can. The thought is that after the ticket is sold or cancelled, it is removed from search
+        # results and from the profile_tickets page for everyone but the buyer and seller. This means that it is
+        # effectively invisible for everyone who shouldn't be viewing it anyhow. But if one of those users does happen
+        # to get to the ticket before the search index is recomputed, they won't see a 404.
+        return self.status != 'D'
 
     @transaction.atomic()
     def change_status(self, new_status):

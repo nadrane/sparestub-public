@@ -21,7 +21,7 @@
     <div id="ticket-contents" class="panel-body">
       <div id="row-top" class="row">
         <div class="col-xs-12">
-          <h2 {% if is_available %}style="color:red;"{% endif %} id="ticket-title">{% if is_available %}SOLD: {% endif %}{{ ticket.title}}</h2>
+          <h2 {% if ticket_status == 'S' or ticket_status == 'C' or ticket_status == 'E' %}style="color:red;"{% endif %} id="ticket-title">{% if ticket_status == 'S' %}SOLD: {% endif %}{% if ticket_status == 'C' %}CANCELLED: {% endif %}{% if ticket_status == 'E' %}EVENT PASSED: {% endif %}{{ ticket.title}}</h2>
         </div>
       </div>
     <div id="column-left-ticket">

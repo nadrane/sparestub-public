@@ -314,7 +314,7 @@ def view_ticket(request, username, ticket_id):
     if ticket.poster != profile_user:
         raise Http404('{} did not post that ticket.'.format(profile_user.user_profile.username))
 
-    if not ticket.can_view(user):
+    if not ticket.can_view():
         raise Http404('It looks like this page no longer exists. The user probably cancelled their ticket.')
 
     # If the user looking at this profile is its owner, then we want to render a couple edit buttons
@@ -365,7 +365,7 @@ def view_ticket(request, username, ticket_id):
                    'has_request': Request.has_requested(ticket, user.id), # We pass in user.id because otherwise the
                                                                           # if the user is anonymous, it would be a
                                                                           # SimpleLazyObject, and Django would error out
-                   'is_available': ticket.status == 'P',
+                   'ticket_status': ticket.status,
                    },
                   content_type='text/html',
                   )

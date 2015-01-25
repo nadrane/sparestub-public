@@ -120,7 +120,7 @@ def can_request_ticket(request, ticket_id):
     except ObjectDoesNotExist:
         return ajax_other_message("Uh Oh, something went wrong. Our developers are on it!", 400)
 
-    if not ticket.is_requestable:
+    if not ticket.is_requestable():
         return ajax_other_message("It looks like this ticket is no longer available. Sorry!", 400)
 
     if not Request.can_request(ticket, user):
