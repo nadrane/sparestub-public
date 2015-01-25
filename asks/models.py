@@ -62,7 +62,7 @@ class RequestManager(models.Manager):
                             )
 
         message_body = 'This is an automated message to let you know that {} has requested to buy your ticket. ' \
-                       'You have 48 hours to respond by clicking either the accept button or decline button at the ' \
+                       'Sellers have 48 hours to respond by clicking either the Accept or Decline button at the ' \
                        'top of the screen'.format(requester.first_name.title())
 
         # No need to send an email that a message was sent since we just sent an email about the request
@@ -123,7 +123,7 @@ class Request(TimeStampedModel):
             ticket.change_status('S')
 
         Message.objects.create_message(poster, requester, ticket,
-                                       "Congratulations, you're going to the event together!", False)
+                                       "This is an automated message: Congratulations,the request was accepted! Check your email for next steps.", False)
 
         message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE,
                                         {'ticket': ticket})
