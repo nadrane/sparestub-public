@@ -1,9 +1,13 @@
+# Standard Imports
+import logging
+
 # Django Imports
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 # SpareStub Imports
 from user_profile.models import UserProfile, ProfileQuestion, ProfileAnswer
@@ -357,9 +361,11 @@ def view_ticket(request, username, ticket_id):
                    'is_owner': is_owner,
                    'ticket': ticket,
                    'most_recent_review_info': most_recent_review_info,
-                   'has_request': Request.has_requested(ticket, user.id) # We pass in user.id because otherwise the
-                                                                         # if the user is anonymous, it would be a
-                                                                         # SimpleLazyObject, and Django would error out
+                   'stripe_public_api_key': settings.STRIPE_PUBLIC_API_KEY,
+                   'has_request': Request.has_requested(ticket, user.id), # We pass in user.id because otherwise the
+                                                                          # if the user is anonymous, it would be a
+                                                                          # SimpleLazyObject, and Django would error out
+                   'is_available': ticket.status == 'P',
                    },
                   content_type='text/html',
                   )
