@@ -156,7 +156,7 @@ class Ticket(TimeStampedModel):
         Return whether a ticket can be deleted or not
         """
 
-        if self.get_buyer():
+        if self.get_buyer() or self.status != 'P':
             return False
         return True
 
@@ -216,8 +216,6 @@ class Ticket(TimeStampedModel):
 
         # Ticket cancelled by seller
         elif new_status == 'C':
-            import pdb
-            pdb.set_trace()
             # Mark all of the associated requests as cancelled
             # We only care about requests that are pended and expired. These are the only user's who care to learn more.
             requests = Request.objects.filter(ticket=self).filter(Q(status='P') | Q(status='E'))\

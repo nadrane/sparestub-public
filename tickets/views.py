@@ -112,9 +112,8 @@ def can_delete_ticket(request, ticket_id):
         return ajax_other_message("That ticket doesn't exist", 400)
 
     if not ticket.can_delete():
-        return ajax_other_message("We're sorry. You cannot delete this ticket since you have already "
-                                                "accepted a user's request to buy it. If you have any questions "
-                                                "please contact us at Shout@sparestub.com.", 400)
+        return ajax_other_message("We're sorry. You cannot delete this ticket. Perhaps it has already been sold or "
+                                  "cancelled. If you have any questions please contact us at Shout@sparestub.com.", 400)
 
     return ajax_http(True);
 
