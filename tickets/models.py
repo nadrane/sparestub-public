@@ -349,7 +349,7 @@ class Ticket(TimeStampedModel):
         """
         Return a QuerySet of tickets that this user posted that are still available to buy
         """
-        return Ticket.objects.filter(poster=user, status='P')
+        return Ticket.objects.filter(poster=user, status='P').order_by('start_datetime')
 
     @staticmethod
     def in_progress_ticket(user):
@@ -360,7 +360,8 @@ class Ticket(TimeStampedModel):
 
         # Get any open pending requests for posted tickets where you were the poster or the requester
         open_requests = Request.objects.filter(status='P', ticket__status='P')\
-                                       .filter(Q(requester=user) | Q(ticket__poster=user))
+                                       .filter(Q(requester=user) | Q(ticket__poster=user))\
+                                       .order_by('ticket__start_datetime')
 
         return [open_request.ticket for open_request in open_requests]
 
@@ -378,7 +379,8 @@ class Ticket(TimeStampedModel):
         if not tickets_expired_and_cancelled_tickets and not requests_for_tickets:
             return None
 
-        return set(chain(tickets_expired_and_cancelled_tickets, [request.ticket for request in requests_for_tickets]))
+        all_shows = set(chain(tickets_expired_and_cancelled_tickets, [request.ticket for request in requests_for_tickets]))
+        return sorted(all_shows, key=lambda x: x.start_datetime)
 
     @staticmethod
     def upcoming_tickets(user):
@@ -394,4 +396,5 @@ class Ticket(TimeStampedModel):
         if not upcoming_shows_user_posted and not upcoming_shows_user_requested:
             return None
 
-        return set(chain(upcoming_shows_user_posted, [request.ticket for request in upcoming_shows_user_requested]))
+        all_shows = set(chain(upcoming_shows_user_posted, [request.ticket for request in upcoming_shows_user_requested]))
+        return sorted(all_shows, key=lambda x: x.start_datetime)
