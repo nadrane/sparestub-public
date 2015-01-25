@@ -14,6 +14,7 @@ from registration.models import User
 from tickets.models import Ticket
 from messages.models import Message
 from utils.email import send_email
+from stripe_data.models import Card
 
 # Module Imports
 from .settings import request_model_settings,\
@@ -89,9 +90,13 @@ class Request(TimeStampedModel):
     status = models.CharField(max_length=1,
                               null=False,
                               blank=False,
-                              default='',
                               choices=request_model_settings.get('REQUEST_STATUSES'),
                               )
+
+    card = models.ForeignKey(Card,
+                             null=False,
+                             blank=False,
+                             )
 
     objects = RequestManager()
 
