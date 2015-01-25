@@ -220,10 +220,12 @@ class Ticket(TimeStampedModel):
             # We only care about requests that are pended and expired. These are the only user's who care to learn more.
             requests = Request.objects.filter(ticket=self).filter(Q(status='P') | Q(status='E'))\
                                       .order_by('requester').distinct('requester')   # Handle users that had an expired request that re-requested
-            requests.update(status='T')
             users_messaged = set()  # Maintain a set of users who have already been messaged
             potential_users_to_message = set()  # A second set of users who might need to be messaged if they aren't in the first set
             for request in requests:
+                # Do these separately instead of in bulk because otherwise we would need to requery.
+                request.status = 'T'
+                request.save()
                 users_messaged.add(request.requster)
                 request.ticket_cancelled()
 
@@ -244,7 +246,7 @@ class Ticket(TimeStampedModel):
             # Remove the users we have already messaged
             for user in potential_users_to_message.difference(users_messaged):
 
-                # Continue to remove users we've already messaged based on if they have a requesy
+                # Continue to remove users we've already messaged based on if they have a request
                 user_requests = Request.objects.filter(requester=user)
 
                 # If there is no request or the request is expired, we want to send them a message
@@ -281,7 +283,7 @@ class Ticket(TimeStampedModel):
                 requester.send_mail(REQUEST_INACTIVE_SUBJECT,
                                     message='',
                                     html=render_to_string(REQUEST_INACTIVE_TEMPLATE,
-                                                          {'requester': requester,
+                                                          {'user': requester,
                                                            'ticket': request.ticket
                                                            }
                                                           ))
