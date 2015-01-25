@@ -95,14 +95,14 @@ function prepare_delete_ticket_button() {
 }
 
 function can_delete_ticket() {
-    $.post(window.additional_parameters.can_delete_ticket_url, 'json')
+    $.get(window.additional_parameters.can_delete_ticket_url, 'json')
         .done(function () {
-             show_yes_cancel_modal('<p>Are you sure you want to permanently delete this ticket listing?</p>' +
-                                     '<p>Note: Your deleted tickets appear in the Past Tickets section of your profile.</p>',
-                                      window.additional_parameters.delete_ticket_url);
+            show_yes_cancel_modal('<p>Are you sure you want to permanently delete this ticket listing?</p>' +
+                                  '<p>Note: Your deleted tickets appear in the Past Tickets section of your profile.</p>',
+                                   window.additional_parameters.delete_ticket_url);
         })
         .fail(function (response) {
-            var error_message = handle_ajax_response(response.responseJSON);
+            var error_message = handle_ajax_response(response);
             show_ajax_message(error_message, 'danger');
         });
 }
