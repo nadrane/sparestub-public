@@ -349,56 +349,36 @@ class Ticket(TimeStampedModel):
         """
         Return a QuerySet of tickets that this user posted that are still available to buy
         """
-        return Ticket.objects.filter(poster=user, status='P').order_by('start_datetime')
+        return Ticket.objects.filter(poster=user, status='P')
 
     @staticmethod
     def in_progress_ticket(user):
         """
         Return a QuerySet of tickets that are in progress for this user.
-        This list is aggregated from both active conversations and from active requests.
-        Any ticket with an associated request of
-            1. Accepted
-            2. Pending
-        will be added to this list if that ticket has a status of
-            1. Sold
-            2. Posted
         """
-        from messages.models import Message
         from asks.models import Request
 
-        # Get any open accepted and pending requests for sold and posted tickets
-        open_requests = Request.objects.filter(Q(status='A') | Q(status='P'))\
-                                       .filter(Q(ticket__status='S') | Q(ticket__status='P'))
+        # Get any open pending requests for posted tickets where you were the poster or the requester
+        open_requests = Request.objects.filter(status='P', ticket__status='P')\
+                                       .filter(Q(requester=user) | Q(ticket__poster=user))
 
-        # Get the tickets that this user has messaged other users about.
-        # We do not care about messages I've received because those ticket's
-        # are available in the "available tickets" section
-        # We only care about posted tickets, not sold ones. If a sold one was relevant to me,
-        # it would be bundled up from the Request
-        active_messages = Message.get_messages_sent(user).exclude(ticket__poster=user).filter(ticket__status='P')
-
-        # Filter out duplicate tickets. There are lots of messages between two people about one ticket,
-        # and potentially multiple requests for that matter
-        tickets_requested = set(request.ticket for request in open_requests)
-        tickets_messaged_about = set(message.ticket for message in active_messages)
-
-        return tickets_requested.union(tickets_messaged_about)
+        return [open_request.ticket for open_request in open_requests]
 
     @staticmethod
     def past_tickets(user):
         """
-        Returns a QuerySet of tickets that this user either successfully bought or successfully sold
+        Returns a QuerySet of tickets that this user either successfully bought or successfully sold or cancelled
         """
         from asks.models import Request
 
-        tickets_sold_and_cancelled_tickets = Ticket.objects.filter(poster=user).filter(Q(status='S') | Q(status='C'))
-        requests_for_tickets = Request.objects.filter(requester=user, ticket__status='S')
+        tickets_expired_and_cancelled_tickets = Ticket.objects.filter(poster=user).filter(Q(status='E') | Q(status='C'))
+        requests_for_tickets = Request.objects.filter(requester=user, status='A', ticket__status='E')
 
         # An if statement on the return from chain actually passes... so return None explicitly if there's nothing
-        if not tickets_sold_and_cancelled_tickets and not requests_for_tickets:
+        if not tickets_expired_and_cancelled_tickets and not requests_for_tickets:
             return None
 
-        return set(chain(tickets_sold_and_cancelled_tickets, [request.ticket for request in requests_for_tickets]))
+        return set(chain(tickets_expired_and_cancelled_tickets, [request.ticket for request in requests_for_tickets]))
 
     @staticmethod
     def upcoming_tickets(user):
@@ -408,7 +388,7 @@ class Ticket(TimeStampedModel):
         from asks.models import Request
 
         upcoming_shows_user_posted = Ticket.objects.filter(poster=user, status='S')
-        upcoming_shows_user_requested = Request.objects.filter(requester=user, status='A')
+        upcoming_shows_user_requested = Request.objects.filter(requester=user, status='A', ticket__status='S')
 
         # An if statement on the return from chain actually passes... so return None explicitly if there's nothing
         if not upcoming_shows_user_posted and not upcoming_shows_user_requested:

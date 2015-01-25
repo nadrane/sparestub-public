@@ -271,10 +271,10 @@ def profile_tickets(request, username):
         most_recent_review_info = None
 
     # Grab every ticket that this user has posted or has bid on
-    upcoming_tickets = Ticket.upcoming_tickets(user)
-    available_tickets = Ticket.available_tickets(user)
-    in_progress_tickets = Ticket.in_progress_ticket(user)
-    past_tickets = Ticket.past_tickets(user)
+    upcoming_tickets = Ticket.upcoming_tickets(user).order_by('start_datetime')
+    available_tickets = Ticket.available_tickets(user).order_by('start_datetime')
+    in_progress_tickets = Ticket.in_progress_ticket(user).order_by('start_datetime')
+    past_tickets = Ticket.past_tickets(user).order_by('start_datetime')
 
     return render(request,
                   'user_profile/profile_tickets.html',
