@@ -214,30 +214,30 @@ def reset_password(request, reset_link):
         if request.method == 'POST':
             reset_password_form = ResetPasswordForm(request.POST)
             if reset_password_form.is_valid():
-                    forgot_password_link = forgot_password_link[0]
-                    user = forgot_password_link.user
-                    email = user.email
+                forgot_password_link = forgot_password_link[0]
+                user = forgot_password_link.user
+                email = user.email
 
-                    new_password = reset_password_form.cleaned_data.get('new_password')
-                    user.set_password(new_password)
-                    forgot_password_link.expired = True
+                new_password = reset_password_form.cleaned_data.get('new_password')
+                user.set_password(new_password)
+                forgot_password_link.expired = True
 
-                    with transaction.atomic():
-                        user.save()
-                        forgot_password_link.save()
+                with transaction.atomic():
+                    user.save()
+                    forgot_password_link.save()
 
-                    user = authenticate(email=email, password=new_password)
-                    auth_login(request, user)
-                    return HttpResponseRedirect('/')
+                user = authenticate(email=email, password=new_password)
+                auth_login(request, user)
+                return HttpResponseRedirect('/')
             else:
                 return render(request,
-                              'registration/reset_password_email.html',
+                              'registration/reset_password.html',
                               {'reset_link': reset_link,
                                'bad_password': True,
                                'form_settings': password_form_settings
                                })
         return render(request,
-                      'registration/reset_password_email.html',
+                      'registration/reset_password.html',
                       {'reset_link': reset_link,
                        'form_settings': password_form_settings
                        })

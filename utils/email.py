@@ -4,10 +4,12 @@ import logging
 # 3rd Party Imports
 from requests.exceptions import RequestException
 from djrill import MandrillAPIError
+import premailer
 
 # Django Imports
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
+from django.template.loader import render_to_string
 
 def normalize_email(email):
     """
@@ -24,7 +26,7 @@ def normalize_email(email):
     return email
 
 
-def send_email(recipient_list, subject, message, from_email='', from_name='', **kwargs):
+def send_email(recipient_list, subject, message, template=None, from_email='', from_name='', **kwargs):
     """
     Generic function to send an email. We encapsulate the 3rd party API call in case we every change APIs
 
@@ -46,10 +48,13 @@ def send_email(recipient_list, subject, message, from_email='', from_name='', **
 
     fail_silently = kwargs.get('fail_silently', False)
 
+    if template:
+        html = premailer.transform(render_to_string(template, kwargs), settings.DOMAIN)
+
     try:
-        if kwargs.get('html'):
+        if html:
             msg = EmailMultiAlternatives(subject=subject, from_email=from_email, to=recipient_list, body=message)
-            msg.attach_alternative(kwargs.get('html'), 'text/html')
+            msg.attach_alternative(html, 'text/html')
             msg.send(fail_silently=fail_silently)
 
         else:

@@ -43,23 +43,20 @@ class RequestManager(models.Manager):
 
         poster = ticket.poster
 
-        received_html_message = render_to_string(REQUEST_RECEIVED_TEMPLATE,
-                                                 {'user': requester,
-                                                  'ticket': ticket
-                                                  })
         poster.send_mail(REQUEST_RECEIVED_SUBJECT,
-                         message='',
-                         html=received_html_message
+                         '',
+                         REQUEST_RECEIVED_TEMPLATE,
+                         {'user': requester,
+                          'ticket': ticket
+                          }
                          )
 
-        send_html_message = render_to_string(REQUEST_SENT_TEMPLATE,
-                                             {'user': requester,
-                                              'ticket': ticket
-                                              })
-
         requester.send_mail(REQUEST_SENT_SUBJECT,
-                            message='',
-                            html=send_html_message
+                            '',
+                            REQUEST_SENT_TEMPLATE,
+                            {'user': requester,
+                             'ticket': ticket
+                             }
                             )
 
         message_body = 'This is an automated message to let you know that {} has requested to buy your ticket. ' \
@@ -130,13 +127,11 @@ class Request(TimeStampedModel):
         Message.objects.create_message(poster, requester, ticket,
                                        "This is an automated message: Congratulations,the request was accepted! Check your email for next steps.", False)
 
-        message_body = render_to_string(REQUEST_ACCEPTED_TEMPLATE,
-                                        {'ticket': ticket})
-
         send_email([poster.email, requester.email],
                    REQUEST_ACCEPTED_SUBJECT,
-                   message='',
-                   html=message_body
+                   '',
+                   REQUEST_ACCEPTED_TEMPLATE,
+                   ticket=ticket
                    )
 
     def decline(self):
@@ -156,12 +151,11 @@ class Request(TimeStampedModel):
                                        "The good news: there are plenty of stubs in the sea.",
                                        False)
 
-        message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
-                                        {'user': requester,
-                                         'ticket': ticket})
         self.requester.send_mail(REQUEST_INACTIVE_SUBJECT,
-                                 message='',
-                                 html=message_body)
+                                 '',
+                                 REQUEST_INACTIVE_TEMPLATE,
+                                 user=requester,
+                                 ticket=ticket)
 
     def ticket_cancelled(self):
         """
@@ -173,12 +167,12 @@ class Request(TimeStampedModel):
         requester = self.requester
         ticket = self.ticket
 
-        message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
-                                        {'user': requester, 'ticket': ticket})
-
         self.requester.send_mail(REQUEST_INACTIVE_SUBJECT,
-                                 message='',
-                                 html=message_body)
+                                 '',
+                                 REQUEST_INACTIVE_TEMPLATE,
+                                 user=requester,
+                                 ticket=ticket
+                                 )
 
         message_body = 'This is an automated message to let you know that {}' \
                        ' has cancelled this ticket.'.format(ticket.poster.first_name.title())
@@ -203,18 +197,21 @@ class Request(TimeStampedModel):
         self.status = 'C'
         self.save()
 
-        message_body = render_to_string(REQUEST_INACTIVE_TEMPLATE,
-                                        {'user': requester, 'ticket': ticket})
-
         requester.send_mail(REQUEST_INACTIVE_SUBJECT,
-                            message='',
-                            html=message_body)
+                            '',
+                            REQUEST_INACTIVE_SUBJECT,
+                            user=requester,
+                            ticket=ticket
+                            )
 
         message_body = render_to_string(REQUEST_CANCELLED_TO_SELLER_TEMPLATE,
                                         {'requester': requester, 'ticket': ticket})
         poster.send_mail(REQUEST_CANCELLED_TO_SELLER_SUBJECT,
-                         message='',
-                         html=message_body)
+                         '',
+                         REQUEST_CANCELLED_TO_SELLER_TEMPLATE,
+                         requester=requester,
+                         ticket=ticket
+                         )
 
         message_body = 'This is an automated message to let you know that {}' \
                        ' has cancelled their request.'.format(requester.first_name.title())

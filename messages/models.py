@@ -35,11 +35,10 @@ class MessageManager(models.Manager):
         Message.mark_conversation_hidden_toggle(sender.id, ticket.id, receiver.id, False, True)
 
         if send_email:
-            message_body = render_to_string(NEW_MESSAGE_EMAIL,
-                                            {'user': receiver})
             receiver.send_mail(NEW_MESSAGE_SUBJECT,
                                '',
-                               html=message_body,
+                               NEW_MESSAGE_EMAIL,
+                               user=receiver
                                )
 
         message.save()

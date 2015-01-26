@@ -26,16 +26,14 @@ def submit(request):
             send_email(SOCIAL_EMAIL_ADDRESS,
                        subject_type,
                        body,
-                       from_email_address,
+                       from_email=from_email_address,
                        )
 
             # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
             send_email(from_email_address,
                        FEEDBACK_SUBMISSION_RESPONSE_SUBJECT,
                        '',
-                       SOCIAL_EMAIL_ADDRESS,
-                       'SpareStub',
-                       html=render_to_string(FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE)
+                       FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE,
                        )
 
             # Notice that we always return True. If the email failed to send, we need to figure it out on our side.

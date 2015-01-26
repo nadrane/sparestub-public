@@ -54,11 +54,10 @@ class TicketManager(models.Manager):
         logging.info('Ticket created {}'.format(repr(ticket)))
 
         # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
-        message_body = render_to_string(POST_TICKET_SUBMIT_TEMPLATE,
-                                {'user': poster})
         poster.send_mail(POST_TICKET_SUBMIT_SUBJECT,
-                         message='',
-                         html=message_body
+                         '',
+                         POST_TICKET_SUBMIT_TEMPLATE,
+                         user=poster
                          )
 
         return ticket
@@ -282,12 +281,11 @@ class Ticket(TimeStampedModel):
                 requester = request.requester
                 Message.objects.create_message(request.ticket.poster, request.requester, self, message_body, False)
                 requester.send_mail(REQUEST_INACTIVE_SUBJECT,
-                                    message='',
-                                    html=render_to_string(REQUEST_INACTIVE_TEMPLATE,
-                                                          {'user': requester,
-                                                           'ticket': request.ticket
-                                                           }
-                                                          ))
+                                    '',
+                                    REQUEST_INACTIVE_TEMPLATE,
+                                    user=requester,
+                                    ticket=request.ticket
+                                    )
 
         # User account deactivated, and ticket deactivated along with it
         elif new_status == 'D':

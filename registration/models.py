@@ -9,7 +9,6 @@ import logging
 from django.db import models, transaction
 from django.forms import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -65,11 +64,10 @@ class UserManager(BaseUserManager):
         logging.info('User created: {}'.format(user))
 
         # Email the user to welcome them to out website
-        message_body = render_to_string(SIGNUP_EMAIL_TEMPlATE,
-                                        {'first_name': first_name})
         user.send_mail(SIGNUP_EMAIL_SUBJECT,
                        '',
-                       html=message_body
+                       SIGNUP_EMAIL_TEMPlATE,
+                       first_name=first_name
                        )
 
         EmailConfirmationLink.objects.create_email_confirmation(user)
@@ -258,16 +256,19 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
         return self.first_name.capitalize()
 
-    def send_mail(self, subject, message, **kwargs):
+    def send_mail(self, subject, message, template, **kwargs):
         """
         Sends an email to this User.
         """
 
+        from_email = kwargs.pop('from_email', get_variable_from_settings('SOCIAL_EMAIL_ADDRESS'))
+        from_name = kwargs.pop('from_name', get_variable_from_settings('SOCIAL_EMAIL_NAME'))
         send_email([self.email],
                    subject,
                    message,
-                   get_variable_from_settings('SOCIAL_EMAIL_ADDRESS'),
-                   get_variable_from_settings('SOCIAL_EMAIL_NAME'),
+                   template,
+                   from_email,
+                   from_name,
                    **kwargs)
 
     @staticmethod
@@ -410,9 +411,8 @@ class EmailConfirmationLinkManager(models.Manager):
 
         user.send_mail(EMAIL_CONFIRMATION_EMAIL_SUBJECT,
                        '',
-                       html=render_to_string(EMAIL_CONFIRMATION_EMAIL_TEMPLATE, {'new_link': new_link,
-                                                                                 'DOMAIN': settings.DOMAIN,
-                                                                                 }),
+                       EMAIL_CONFIRMATION_EMAIL_TEMPLATE,
+                       new_link=new_link,
                        )
 
         return email_confirm_link
@@ -436,14 +436,10 @@ class ForgotPasswordLinkManager(models.Manager):
 
         forgot_password_link.save()
 
-        times_requested = ForgotPasswordLink.objects.filter(user=user).count()
-
         user.send_mail(PASSWORD_RESET_EMAIL_SUBJECT,
                        '',
-                       html=render_to_string(PASSWORD_RESET_EMAIL_TEMPLATE, {'new_link': new_link,
-                                                                             'times': times_requested,
-                                                                             'DOMAIN': settings.DOMAIN,
-                                                                             }),
+                       PASSWORD_RESET_EMAIL_TEMPLATE,
+                       new_link=new_link,
                        )
 
         return forgot_password_link
