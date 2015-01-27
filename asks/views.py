@@ -20,7 +20,7 @@ from .models import Request
 
 @login_required()
 def accept_request(request):
-    user = request.user
+    user = request.user    # This is the owner of the ticket
     try:
         ticket = Ticket.objects.get(pk=request.POST.get('ticket_id'))
     except Ticket.DoesNotExist:
@@ -62,7 +62,7 @@ def accept_request(request):
 
     # Charge them first. We actually might have a scenario where one of the cards is declined
     try:
-        customer1.charge(500, request.card)
+        customer1.charge(500, user_request.card)
         customer2.charge(500, ticket.card)
     except StripeError as e:
         return ajax_popup_notification('danger', "One of the payments didn't quite go through. We'll follow up with you")

@@ -106,28 +106,27 @@ class Customer(TimeStampedModel):
 
         return Customer.objects.filter(customer=user).exists()
 
-    def charge(self, amount, card=None):
+    def charge(self, amount, card):
         """
         Bill this customer record the amount inputted. Amount should be in cents.
         Bill this using the specified card if one is supplied
         """
-
         try:
-            charge = stripe.Charge.create(amount=amount, # amount in cents, again
-                                          currency="usd",
-                                          customer=self.stripe_id,
-                                          card=card,
-                                          description="charging {} $5.00 for ticket match".format(self.stripe_id)
-                                          )
-            logging.info('charging {} $5.00 for ticket match'.format(self.stripe_id))
+            stripe.Charge.create(amount=amount, # amount in cents, again
+                                 currency="usd",
+                                 customer=self.stripe_id,
+                                 card=card.card_id,
+                                 description="charging {} $5.00 for ticket match".format(self.stripe_id)
+                                 )
+            logging.info('Charging {} {} cents for ticket match using {}'.format(self, amount, card))
 
         except stripe.CardError as e:
-            logging.critical('A card was declined for customer {} for {} cents'
-                             .format(self.stripe_id, amount))
+            logging.critical('Card {} was declined for customer {} for {} cents'
+                             .format(card, self, amount))
             raise StripeError
         except stripe.InvalidRequestError as e:
-            logging.critical('A major error caused stripe to fail to process a payment of {} cents for customer {}'
-                             .format(amount, self.stripe_id))
+            logging.critical('Card {} was error out for customer {} for {} cents'
+                             .format(card, self, amount))
             raise StripeError
 
 
