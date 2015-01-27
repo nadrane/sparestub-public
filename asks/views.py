@@ -12,7 +12,7 @@ import stripe
 #SpareStub Imports
 from tickets.models import Ticket
 from utils.networking import ajax_http, ajax_other_message, ajax_popup_notification
-from stripe_data.models import StripeError, create_customer_and_card
+from stripe_data.models import StripeError, create_customer_and_card, Customer
 from registration.models import User
 
 # Module Imports
@@ -62,8 +62,8 @@ def accept_request(request):
 
     # Charge them first. We actually might have a scenario where one of the cards is declined
     try:
-        customer1.charge(500)
-        customer2.charge(500)
+        customer1.charge(500, request.card)
+        customer2.charge(500, ticket.card)
     except StripeError as e:
         return ajax_popup_notification('danger', "One of the payments didn't quite go through. We'll follow up with you")
 
