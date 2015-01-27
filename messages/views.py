@@ -71,10 +71,10 @@ def can_message(request):
         return ajax_popup_notification('danger', "Uh oh, something went wrong", 400)
 
     if Message.can_message(ticket, request.user, other_user):
-        return ajax_http(True)
+        return ajax_http(True, 200)
     else:
-        return ajax_popup_notification('You are not allowed to message this user about this ticket.'
-                                       'Chances are it was already sold.')
+        return ajax_popup_notification('danger', 'You are not allowed to message this user about this ticket.'
+                                       'Chances are it was already sold.', 400)
 
 @login_required
 def inbox(request):
