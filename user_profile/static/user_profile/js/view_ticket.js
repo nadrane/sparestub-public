@@ -161,14 +161,16 @@ function show_stripe_modal() {
               // Use the token to create the charge with a server-side script.
               // You can access the token ID with `token.id`
             $.post(window.additional_parameters.request_to_buy_url,
-                {'token': token, 'ticket_id': window.additional_parameters.ticket_id},
-                 "json")
+                  {'token': token.id,
+                   'card_id': token.card.id,
+                   'ticket_id': window.additional_parameters.ticket_id},
+                   "json")
                 .done(function (response) {
-                    customer_exists = true;
                     request_to_buy_success(response);
                 })
-                .fail(function () {
-                    show_ajax_message('Something went wrong with the payment!', 'danger');
+                .fail(function (response) {
+                    var error = handle_ajax_response(response);
+                    show_ajax_message(error, 'danger');
                 });
         }
     });
@@ -197,21 +199,7 @@ function request_to_buy() {
     var can_request_response = can_request_to_buy();
 
     can_request_response.done(function (response) {
-        if (customer_exists) {
-            // Actually create the request on the server
-            $.post(window.additional_parameters.request_to_buy_url,
-                  {'ticket_id': window.additional_parameters.ticket_id},
-                  "json")
-                .done(function (response) {
-                    request_to_buy_success(response);
-                })
-                .fail(function () {
-                    var message = handle_ajax_response(response);
-                    show_ajax_message(message);
-                });
-        } else {
-            show_pre_stripe_popup();
-        }
+        show_pre_stripe_popup();
     })
     .fail(function (response) {
         var error_message = handle_ajax_response(response);
@@ -227,22 +215,12 @@ function request_to_buy_success(response) {
     show_ajax_message(message, 'success');
 }
 
-var customer_exists = false; // This is global because request_to_buy can be unbound and rebound,
-                             // making a closure impossible without querying the server every time.
-
 $(document).ready(function () {
     $('.message-user').on('click', function () {
         load_message_user_modal(true);
     });  // The show_modal parameter is false because we can expect the data attributes
                                         // in the HTML to handle it for us
-    $.get(window.additional_parameters.customer_exists_url, "json")
-        .done(function () {
-            customer_exists = true;
-        })
-        .always(function () {
-            // Don't make request to buy clickable until we know if the customer exists
-            $('#request-to-buy').on('click', request_to_buy);
-        });
+    $('#request-to-buy').on('click', request_to_buy);
     prepare_delete_ticket_button();
     setup_stripe_popup_modal();
 

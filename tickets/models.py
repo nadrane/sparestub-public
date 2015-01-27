@@ -12,19 +12,19 @@ from django.db import models
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.template.loader import render_to_string
 
 # SparStub imports
 from registration.models import User
 from .settings import ticket_model_settings, POST_TICKET_SUBMIT_SUBJECT, POST_TICKET_SUBMIT_TEMPLATE
 from asks.settings import REQUEST_INACTIVE_SUBJECT, REQUEST_INACTIVE_TEMPLATE
 from locations.models import Location
+from stripe_data.models import Card
 
 
 class TicketManager(models.Manager):
 
     def create_ticket(self, poster, price, title, start_datetime, location_raw, location, ticket_type, payment_method,
-                      venue, status='P', about=None):
+                      venue, card, status='P', about=None):
         """
         Creates a ticket record using the given input
         """
@@ -34,7 +34,6 @@ class TicketManager(models.Manager):
         rating = poster.rating
 
         ticket = self.model(poster=poster,
-                            bidders=None,  # Bidders cannot exist at ticket creation
                             price=price,
                             title=title,
                             about=about,
@@ -47,6 +46,7 @@ class TicketManager(models.Manager):
                             payment_method=payment_method,
                             status=status,
                             rating=rating,
+                            card=card
                             )
 
         ticket.save()
@@ -70,13 +70,6 @@ class Ticket(TimeStampedModel):
                                db_index=True,
                                related_name='poster',
                                )
-
-    bidders = models.ForeignKey(User,
-                                blank=True,
-                                null=True,
-                                db_index=True,
-                                related_name='bidders',
-                                )
 
     price = models.FloatField(blank=False)
 
@@ -137,6 +130,13 @@ class Ticket(TimeStampedModel):
                                  null=True,
                                  default=None,
                                  )
+
+    # What card will be used to charge the $5 fee for the buyer.
+    # If this were secure payment, we would expect this to be a debit card and would add money to it (likely).
+    card = models.ForeignKey(Card,
+                             blank=False,
+                             null=False,
+                             )
 
     objects = TicketManager()
 

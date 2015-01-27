@@ -201,7 +201,6 @@ class ValidTicketForm(forms.Form):
 
 
 class SubmitTicketForm(ValidTicketForm):
-    # This token is not required because there will be cases where a user has a customer record already and never needs
-    # to submit information to the stripe modal
-    token = forms.CharField(required=False)
+    token = forms.CharField(required=True)
+    card_id = forms.CharField(required=True)
 

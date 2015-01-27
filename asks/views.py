@@ -5,7 +5,6 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import Http404
 from django.core.exceptions import ObjectDoesNotExist
-from django.conf import settings
 
 # 3rd Party Imports
 import stripe
@@ -13,7 +12,7 @@ import stripe
 #SpareStub Imports
 from tickets.models import Ticket
 from utils.networking import ajax_http, ajax_other_message, ajax_popup_notification
-from stripe_data.models import Customer, StripeError
+from stripe_data.models import StripeError, create_customer_and_card
 from registration.models import User
 
 # Module Imports
@@ -149,24 +148,21 @@ def request_to_buy(request):
         logging.warning('User cannot request to buy their own ticket')
         return ajax_http(False, 400)
 
-    # Get the token that stripe sent us
-    token = request.POST.get('token[id]')
+    # Get the token and card that stripe sent us
+    token = request.POST.get('token')
+    card_id = request.POST.get('card_id')
 
-    # Create a customer record to store the credit card information in the Stripe system.
-    # We can use this information to charge the customer later.
+    if not token or not card_id:
+        logging.info('Request to buy submitted without Stripe token for {}'.format(user))
+        return ajax_other_message('Your request was unable to be processed. Our developers are on it!', 400)
+
     try:
-        # Check to see if a customer record exists for this user. If it already does, we only need to create
-        # a request record.
-        customer = Customer.get_customer_from_user(user)
-        if not customer and token:
-            customer = Customer.objects.create_customer(user=user, token=token)
-        if customer:
-            Request.objects.create_request(ticket, user)
-        else:
-            return ajax_other_message('Your request was unable to be processed. Our developers are on it', 400)
-    except stripe.CardError as e:
-        logging.critical('Stripe failed with error {}'.format(e))
+        customer, card = create_customer_and_card(user, token, card_id)
+    except StripeError as e:
+        logging.critical('Request creation failed')
         return ajax_other_message('Your request was unable to be processed. Our developers are on it', 400)
+
+    Request.objects.create_request(ticket, user, card)
 
     return ajax_other_message('Your request to buy has been submitted. '
                               'Your card will be charged if the seller accepts your request.', 200)
@@ -176,6 +172,8 @@ def cancel_request_to_buy(request):
     """
     Mark a pending request as cancelled
     """
+    import pdb
+    pdb.set_trace()
     user = request.user
 
     # Make sure that ticket exists

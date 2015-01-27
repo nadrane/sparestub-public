@@ -111,7 +111,6 @@
         'logo_icon': "{% static "sparestub/logos/logo_icon.png" %}",
         'stripe_public_key': "{{ stripe_public_api_key }}",
         'user_email': "{{ request.user.email }}",
-        'customer_exists_url': "{% url "customer_exists" %}",
     }
     </script>
 
@@ -242,7 +241,6 @@
         </div>
 
       </div> <!-- end container fluid -->
-
     {% endblock %}
 
     </body>

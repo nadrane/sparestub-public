@@ -27,7 +27,7 @@ from .settings import request_model_settings,\
 
 class RequestManager(models.Manager):
 
-    def create_request(self, ticket, requester):
+    def create_request(self, ticket, requester, card):
         """
         Creates a request record using the given input.
         This function will shoot off an email to both the ticket poster and the user that requested to buy the ticket.
@@ -35,7 +35,8 @@ class RequestManager(models.Manager):
 
         request = self.model(requester=requester,
                              ticket=ticket,
-                             status='P'
+                             status='P',
+                             card=card,
                              )
         request.save()
 
@@ -46,17 +47,15 @@ class RequestManager(models.Manager):
         poster.send_mail(REQUEST_RECEIVED_SUBJECT,
                          '',
                          REQUEST_RECEIVED_TEMPLATE,
-                         {'user': requester,
-                          'ticket': ticket
-                          }
+                         user=requester,
+                         ticket=ticket,
                          )
 
         requester.send_mail(REQUEST_SENT_SUBJECT,
                             '',
                             REQUEST_SENT_TEMPLATE,
-                            {'user': requester,
-                             'ticket': ticket
-                             }
+                            user=requester,
+                            ticket=ticket,
                             )
 
         message_body = 'This is an automated message to let you know that {} has requested to buy your ticket. ' \
@@ -119,7 +118,6 @@ class Request(TimeStampedModel):
 
         # Make sure that the ticket and request are updated in tandem
         with transaction.atomic():
-            #TODO make sure atomic transactions does not cause this ticket to change it's status to 'S' instead of 'A' inside change_status
             self.status = 'A'
             self.save()
             ticket.change_status('S')
@@ -199,13 +197,11 @@ class Request(TimeStampedModel):
 
         requester.send_mail(REQUEST_INACTIVE_SUBJECT,
                             '',
-                            REQUEST_INACTIVE_SUBJECT,
+                            REQUEST_INACTIVE_TEMPLATE,
                             user=requester,
                             ticket=ticket
                             )
 
-        message_body = render_to_string(REQUEST_CANCELLED_TO_SELLER_TEMPLATE,
-                                        {'requester': requester, 'ticket': ticket})
         poster.send_mail(REQUEST_CANCELLED_TO_SELLER_SUBJECT,
                          '',
                          REQUEST_CANCELLED_TO_SELLER_TEMPLATE,

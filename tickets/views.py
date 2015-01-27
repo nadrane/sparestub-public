@@ -13,7 +13,7 @@ from haystack.views import FacetedSearchView
 # SpareStub Imports
 from utils.networking import ajax_http, ajax_popup_notification, non_field_errors_notification, ajax_other_message
 from .settings import ticket_submit_form_settings
-from stripe_data.models import Customer
+from stripe_data.models import create_customer_and_card, StripeError
 
 # Module Imports
 from .models import Ticket
@@ -23,12 +23,13 @@ from .forms import ValidTicketForm, SubmitTicketForm
 def valid_ticket(request):
     """
     This function just checks if a ticket a user wishes to create has valid data.
-    It is a POST to make the frontend simpler. It doesn't actually change server data.
     """
-    valid_ticket_form = ValidTicketForm(request.POST)
-    if valid_ticket_form.is_valid():
-        return ajax_http(True)
-    return ajax_http(**non_field_errors_notification(valid_ticket_form))
+    if request.method == 'GET':
+        valid_ticket_form = ValidTicketForm(request.GET)
+        if valid_ticket_form.is_valid():
+            return ajax_http(True, 200)
+        return ajax_http(**non_field_errors_notification(valid_ticket_form))
+    return ajax_http(False, 400)
 
 @login_required()
 def submit_ticket(request):
@@ -37,7 +38,6 @@ def submit_ticket(request):
         submit_ticket_form = SubmitTicketForm(request.POST)
         #Determine which form the user submitted.
         if submit_ticket_form.is_valid():
-            response = None
             user = request.user
             title = submit_ticket_form.cleaned_data.get('title')
             price = submit_ticket_form.cleaned_data.get('price')
@@ -49,7 +49,15 @@ def submit_ticket(request):
             payment_method = submit_ticket_form.cleaned_data.get('payment_method', 'G')  # TODO Assume good faith since
                                                                                          # lean launch won't have secure
             about = submit_ticket_form.cleaned_data.get('about') or ''  # Might be empty
-            token = submit_ticket_form.cleaned_data.get('token', None)
+            token = submit_ticket_form.cleaned_data.get('token')
+            card_id = submit_ticket_form.cleaned_data.get('card_id')
+
+
+            try:
+                customer, card = create_customer_and_card(user, token, card_id)
+            except StripeError as e:
+                logging.critical('Ticket creation failed')
+                return ajax_other_message('Uh oh, it looks like our server broke! Our developers are on it.', 400)
 
             Ticket.objects.create_ticket(poster=request.user,
                                          price=price,
@@ -60,32 +68,15 @@ def submit_ticket(request):
                                          location=location,
                                          ticket_type=ticket_type,
                                          payment_method=payment_method,
+                                         card=card,
                                          status='P',
                                          venue=venue,
                                          )
 
-            try:
-                # Check to see if a customer record exists for this user and make one if not
-                if Customer.customer_exists(user):
-                    response = ajax_popup_notification('success',
-                                                       'Your ticket was successfully submitted! '
-                                                       'It will become visible to others shortly.',
-                                                       200)
-                elif not token:
-                    response = ajax_popup_notification('danger',
-                                                       'Uh oh, Something went wrong. Please submit your ticket again.',
-                                                       400)
-                # A customer does not exist but a token does
-                else:
-                    Customer.objects.create_customer(user=user, token=token)
-                    response = ajax_popup_notification('success',
-                                                       'Your ticket was successfully submitted! '
-                                                       'It will become visible to others shortly.',
-                                                       200)
-            except stripe.CardError as e:
-                logging.critical('Stripe failed with error {}'.format(e))
-
-            return response
+            return ajax_popup_notification('success',
+                                           'Your ticket was successfully submitted! '
+                                           'It will become visible to others shortly.',
+                                           200)
 
         # If the user ignored out javascript validation and sent an invalid form, send back an error.
         # We don't actually specify what the form error was (unless it was a non_field error that we couldn't validate

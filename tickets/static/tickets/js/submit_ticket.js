@@ -32,11 +32,15 @@ function prepare_stripe() {
         key: window.additional_parameters.stripe_public_key,
         image: window.additional_parameters.logo_icon,
         token: function (token) {
-            $('#token').val(token.id); // Insert stripe token into form before serializing
+            // Insert stripe token into form before serializing
+            $('#token').val(token.id);
+            $('#card-id').val(token.card.id);
             $.post(window.additional_parameters.submit_ticket_url, $('#submit-ticket-form').serialize(), "json")
                 .done(function (response) {
                     //This can only be done once all the form data is submitted.
                     // Notice this is the submit ticket form we are clearing out here
+                    // We don't want to do this when continuing form the ticket screen in case there is a payment error.
+                    // Let the user resubmit without refilling in EVERYTHING
                     $('#submit-ticket-form').data('bootstrapValidator').resetForm(true);
                 })
                 .always(function (response) {
@@ -66,21 +70,6 @@ function prepare_stripe() {
 function initialize_bootstrap_validator_submit_ticket() {
     'use strict';
 
-    var customer_exists = false;  // Done this user have a customer record in our system? Assume no.
-
-    $.get(window.additional_parameters.customer_exists_url, "json")
-        .done(function () {
-            customer_exists = true;
-            // Change the action on the form to just submit the ticket
-            $('#submit-ticket-form').attr('action', window.additional_parameters.submit_ticket_url);
-            // Change the button to read submit stub instead of continue
-            $('#submit-ticket-form-submit-button').text('Submit Stub');
-        })
-        .fail(function () {
-            customer_exists = false;
-        });
-
-
     var $submit_ticket_form = $('#submit-ticket-form');
 
     // Need to do this again now that the DOM has changed
@@ -109,32 +98,15 @@ function initialize_bootstrap_validator_submit_ticket() {
         // Get the form instance
         var $form = $(e.target);
 
-        $.post($form.attr('action'), $form.serialize(), 'json')
+        $.get($form.attr('action'), $form.serialize(), 'json')
             .done(function (data) {
                 // If a notification error exists in the modal currently that was not cleared by the user, clear it now.
                 // We don't want it to exist if the user opens the modal and tries to submit another ticket.
                 clear_notification($('#submit-ticket-notification-root'));
                 $('#modal-submit-ticket-root').modal('hide');
 
-                // If the user does not have a customer record, make sure the stripe window will pop up
-                if (!customer_exists) {
-                    $('#stripe-submit-popup-notification-root').modal('show');
-
-                    // In case the user submits another ticket, prepare it to not ask for a token next time
-                    customer_exists = true;
-                    // Change the action on the form to just submit the ticket
-                    $('#submit-ticket-form').attr('action', window.additional_parameters.submit_ticket_url);
-                    // Change the button to read submit stub instead of continue
-                    $('#submit-ticket-form-submit-button').text('Submit Stub');
-
-                // This will display the ticket submission successful window
-                } else {
-                    handle_ajax_response(data);
-
-                    // If the ticket was already creted, clear the form now.
-                    // Otherwise do it after the stripe form closes and submit the form information to the server.
-                    $form.data('bootstrapValidator').resetForm(true);
-                }
+                // Make sure the stripe window will pop up
+                $('#stripe-submit-popup-notification-root').modal('show');
             })
             .fail(function (data) {
                 // Obviously there are cases were we never reached the server (internet down or incredibly high loads
