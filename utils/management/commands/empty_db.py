@@ -45,23 +45,3 @@ class Command(BaseCommand):
 
         # Recreate the tables in the database according to our models
         call_command('syncdb', interactive=False)
-
-
-'''
-def recreate_empty_database():
-    with psycopg2.connect(database="postgres", user="postgres", password=password) as conn:  #http://stackoverflow.com/questions/19426448/creating-a-postgresql-db-using-psycopg2
-        with conn.cursor() as cur:
-            conn.autocommit = True   #  Explains why we do this - we cannot drop or create from within a DB transaction. http://initd.org/psycopg/docs/connection.html#connection.autocommit
-            try:
-                cur.execute('DROP DATABASE {};'.format(database_to_drop))
-            except psycopg2.ProgrammingError as e: # Thrown if sparestub DB does not exist
-                logging.warning('Commands fail', exc_info=True, stack_info=True)
-            cur.execute('CREATE DATABASE {};'.format(database_to_drop))
-
-    # Recreate the tables in the database according to our models
-    call_command('syncdb', interactive=False)
-
-    # Create the cache table for DB queries
-    call_command('createcachetable', 'cache_table', interactive=False)
-    return
-'''

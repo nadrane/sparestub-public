@@ -47,7 +47,7 @@ class RequestManager(models.Manager):
         poster.send_mail(REQUEST_RECEIVED_SUBJECT,
                          '',
                          REQUEST_RECEIVED_TEMPLATE,
-                         user=requester,
+                         user=ticket.poster,
                          ticket=ticket,
                          )
 
