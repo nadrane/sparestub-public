@@ -12,73 +12,74 @@
 {% endblock %}
 
 {% block content %}
-  <div id="background-container" class="container-fluid" style="max-width: 1000px">
-    <div id="profile-header" class="row wave">
-    {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
-      <div id="user-picture"class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
-        <div>
-          <img src="{% if user_info.profile_picture.search_thumbnail.url %}{{ user_info.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
-          {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
-                           <span style="display: none;" id="edit-profile-text">Edit Profile</span>
+  <div id="background-image" class="container-fluid" style="background-image: url('{% static "user_profile/backgrounds/counting_crows_girl.jpg" %}');">
+    <div id="background-container" class="container">
+      <div id="profile-header" class="row wave">
+      {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
+        <div id="user-picture"class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
+          <div>
+            <img src="{% if user_info.profile_picture.search_thumbnail.url %}{{ user_info.profile_picture.search_thumbnail.url }}{% else %}{% static "sparestub/logos/lilman.jpg" %}{% endif %}">
+            {% if is_owner %}<span id="edit-profile-icon" class="glyphicon glyphicon-pencil"></span>
+                             <span style="display: none;" id="edit-profile-text">Edit Profile</span>
+            {% endif %}
+          </div>
+        </div>
+        <div id="user-info" class="col-xs-12 col-sm-4">
+          <div id="name">
+            <!-- This h3 tag has been overridden to render inline so that stars are on the same line as it -->
+            <h3>{{ user_info.name | title}}{% if user_info.age %}, {{ user_info.age }}{% endif %}</h3>
+            <div id="user-rating">
+              <h3>
+                {% for x in user_info.rating|get_range %}
+                  <span class="glyphicon glyphicon-star"></span>
+                {% endfor %}
+              </h3>
+            </div>
+          </div>
+          <div id="location">
+            {{ user_info.city | title }}, {{ user_info.state | upper }}
+          </div>
+        </div>
+        <div id="last-review" class="col-sm-6 hidden-xs">
+          <strong id="recent-review-header">Most Recent Review:</strong>
+          {% if most_recent_review_info.rating %}
+            {% for x in most_recent_review_info.rating|get_range %}
+              <strong><span class="glyphicon glyphicon-star"></span></strong>
+            {% endfor %}
+            <span>
+              {% comment %}TODO come up with a truncating solution that varies by screen size. Right now it's for the tiniest screen possible {% endcomment %}
+              "{{ most_recent_review_info.contents | truncatechars:140}}"
+            </span><br>
+            <span>{{ most_recent_review_info.name }}, {{ most_recent_review_info.age }} | </span>
+            <span>{{ most_recent_review_info.city | title }}, {{ most_recent_review_info.state | upper }}</span>
+          {% else %}
+            <i>This user hasn't been reviewed yet!</i>
           {% endif %}
         </div>
       </div>
-      <div id="user-info" class="col-xs-12 col-sm-4">
-        <div id="name">
-          <!-- This h3 tag has been overridden to render inline so that stars are on the same line as it -->
-          <h3>{{ user_info.name | title}}{% if user_info.age %}, {{ user_info.age }}{% endif %}</h3>
-          <div id="user-rating">
-            <h3>
-              {% for x in user_info.rating|get_range %}
-                <span class="glyphicon glyphicon-star"></span>
-              {% endfor %}
-            </h3>
-          </div>
-        </div>
-        <div id="location">
-          {{ user_info.city | title }}, {{ user_info.state | upper }}
-        </div>
-      </div>
-      <div id="last-review" class="col-sm-6 hidden-xs">
-        <strong id="recent-review-header">Most Recent Review:</strong>
-        {% if most_recent_review_info.rating %}
-          {% for x in most_recent_review_info.rating|get_range %}
-            <strong><span class="glyphicon glyphicon-star"></span></strong>
-          {% endfor %}
-          <span>
-            {% comment %}TODO come up with a truncating solution that varies by screen size. Right now it's for the tiniest screen possible {% endcomment %}
-            "{{ most_recent_review_info.contents | truncatechars:140}}"
-          </span><br>
-          <span>{{ most_recent_review_info.name }}, {{ most_recent_review_info.age }} | </span>
-          <span>{{ most_recent_review_info.city | title }}, {{ most_recent_review_info.state | upper }}</span>
-        {% else %}
-          <i>This user hasn't been reviewed yet!</i>
-        {% endif %}
-      </div>
-    </div>
-    <div id="profile-body" class="row">
-      <!--Note that the columns spanned by this div need to equal the columns spanned by the profile picture div-->
+      <div id="profile-body" class="row">
+        <!--Note that the columns spanned by this div need to equal the columns spanned by the profile picture div-->
 
-      <div id="left-side-bar" class="col-xs-12 col-sm-2">
-        <div id="left-side-bar-content" class="row">
-          <div id="profile" class="col-xs-4 col-sm-12 side-bar-element">
-            <span class="glyphicon glyphicon-user"></span><a class="side-bar-title" href="{% url "view_profile" username=user_info.username %}">Profile</a>
-          </div>
-          <div id="reviews" class="col-xs-4 col-sm-12 side-bar-element">
-            <span class="glyphicon glyphicon-star"></span><a class="side-bar-title" href="{% url "profile_reviews" username=user_info.username %}">Reviews</a>
-          </div>
-          <div id="tickets" class="col-xs-4 col-sm-12 side-bar-element">
-            <span class="glyphicon glyphicon-folder-close "></span><a class="side-bar-title" href="{% url "profile_tickets" username=user_info.username %}">Tickets</a>
+        <div id="left-side-bar" class="col-xs-12 col-sm-2">
+          <div id="left-side-bar-content" class="row">
+            <div id="profile" class="col-xs-4 col-sm-12 side-bar-element">
+              <span class="glyphicon glyphicon-user"></span><a class="side-bar-title" href="{% url "view_profile" username=user_info.username %}">Profile</a>
+            </div>
+            <div id="reviews" class="col-xs-4 col-sm-12 side-bar-element">
+              <span class="glyphicon glyphicon-star"></span><a class="side-bar-title" href="{% url "profile_reviews" username=user_info.username %}">Reviews</a>
+            </div>
+            <div id="tickets" class="col-xs-4 col-sm-12 side-bar-element">
+              <span class="glyphicon glyphicon-folder-close "></span><a class="side-bar-title" href="{% url "profile_tickets" username=user_info.username %}">Tickets</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div id="profile-main" class="col-xs-12 col-sm-10">
-        {% block profile_body %}
-        {% endblock %}
+        <div id="profile-main" class="col-xs-12 col-sm-10">
+          {% block profile_body %}
+          {% endblock %}
+        </div>
       </div>
     </div>
   </div>
-
 {% endblock %}
 
 {% block js %}

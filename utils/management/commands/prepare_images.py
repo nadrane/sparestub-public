@@ -1,4 +1,5 @@
 import os
+import logging
 import subprocess
 from PIL import Image
 
@@ -21,13 +22,18 @@ class Command(BaseCommand):
                 for file in files:
                     file_name, file_extension = os.path.splitext(file)
                     # These files need to be resized and compressed
-                    if file_extension  in ('.jpeg', '.png', 'jpg'):
+                    if file_extension not in ('.jpeg', '.png', 'jpg'):
                         continue
 
                     import pdb
                     pdb.set_trace()
 
                     filename = os.path.join(current_directory, file)
-                    image = Image(filename)
-                    image = Image.resize((500, 500))
-                    Image.save(filename, 'jpeg')
+
+                    try:
+                        image = Image.open(filename)
+                        image = image.resize((500, 500))
+                        image.save(filename, 'JPEG')
+                    except OSError:
+                        logging.error('Failed to load {} for compression and resizing'.format(file))
+

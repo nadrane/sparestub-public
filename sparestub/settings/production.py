@@ -11,7 +11,7 @@ MEDIA_URL = 'https://s3.amazonaws.com/sparestub-production/media_root/'
 ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
 
 # Used to create links in emails to our site
-DOMAIN = 'http://sparestub.com'
+DOMAIN = 'https://sparestub.com'
 
 STRIPE_SECRET_API_KEY = get_env_variable('STRIPE_SECRET_API_KEY')
 STRIPE_PUBLIC_API_KEY = get_env_variable('STRIPE_PUBLIC_API_KEY')

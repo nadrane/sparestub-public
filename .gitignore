@@ -1,7 +1,7 @@
 venv
 *.pyc
-static_root
-media_root
+static_root/
+media_root/
 bower_components
 .env
 .idea

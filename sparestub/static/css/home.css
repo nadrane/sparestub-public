@@ -10,7 +10,7 @@
     color: white;
     font-family: Helvetica, Arial, sans-serif;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/concert.jpg") no-repeat center bottom scroll;
+    background: no-repeat center bottom scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -77,8 +77,8 @@
 #introducing-sparestub {
     text-align: center;
     color:white;
+    background: no-repeat center center fixed;
 
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/homepage_colored_lights.jpeg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -99,8 +99,6 @@
 /* HOW IT WORKS */
 
 #how-it-works {
-    background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/squared_metal.png");
-    /*url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/old_moon.png");*/
     padding: 40px 0;
 }
 
@@ -151,11 +149,12 @@
 #press {
     padding: 25px 0 30px;
     background: center top;
-    border-bottom: 1px solid darkgray;
-    border-top: 1px solid darkgray;
+    border: none;
     margin: 0 auto;
     text-align: center;
     position: relative;
+    height: auto;
+    width: auto;
 }
 
 .column-press {

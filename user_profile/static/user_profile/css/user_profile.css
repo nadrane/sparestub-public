@@ -1,12 +1,15 @@
 @charset "UTF-8";
 
+#background-image {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-bottom: 100px;  /* Don't just end the page at where the question/answer forms end */
+}
 
-body {
-  background: url("https://s3.amazonaws.com/sparestub/static_root/sparestub/backgrounds/bg_18.jpg") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+#background-container {
+    max-width: 1000px;
 }
 
 /* USER HEADER */
@@ -130,11 +133,6 @@ body {
     padding-left: 10px;
 }
 
-
-/* Don't just end when the text entered ends */
-body {
-    padding-bottom: 100px;
-}
 
 /* END LEFT SIDE BAR */
 
