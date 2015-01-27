@@ -8,6 +8,13 @@
     padding-bottom: 100px;  /* Don't just end the page at where the question/answer forms end */
 }
 
+
+@media (max-width: 767px) {
+    #background-image {
+        background-position: center center;
+    }
+}
+
 #background-container {
     max-width: 1000px;
 }

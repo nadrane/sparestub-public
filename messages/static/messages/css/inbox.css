@@ -108,7 +108,6 @@ html, body, #page-wrapper, #page-wrapper>.row {
 }
 
 #convo-header {
-    background: url("https://s3.amazonaws.com/sparestub-staging/static_root/sparestub/backgrounds/squared_metal.png");
     padding: 10px;
     height: 90px;
     position: fixed;
