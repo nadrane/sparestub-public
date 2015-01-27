@@ -59,6 +59,7 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'haystack',
     },
 }
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 if es.username:
     HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": es.username + ':' + es.password}

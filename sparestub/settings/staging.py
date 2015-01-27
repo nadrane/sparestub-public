@@ -25,6 +25,7 @@ HAYSTACK_CONNECTIONS = {
 }
 if es.username:
     HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": es.username + ':' + es.password}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # File Storage Backend Settings
 DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
