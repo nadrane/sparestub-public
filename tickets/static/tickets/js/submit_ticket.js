@@ -25,28 +25,8 @@ function validate_date_not_before_today(value) {
     return false;
 }
 
-function prepare_stripe() {
+function show_stripe_modal(handler) {
     'use strict';
-
-    var handler = StripeCheckout.configure({
-        key: window.additional_parameters.stripe_public_key,
-        image: window.additional_parameters.logo_icon,
-        token: function (token) {
-            // Insert stripe token into form before serializing
-            $('#token').val(token.id);
-            $('#card-id').val(token.card.id);
-            $.post(window.additional_parameters.submit_ticket_url, $('#submit-ticket-form').serialize(), "json")
-                .done(function () {
-                    // Bootstrap validator won't clear the fields when the form isn't open, and we cannot delete the
-                    // form data before Stripe's form closes, but we also don't want to lose form data if Stripe
-                    // payment fails, so just clear out the submit ticket form here.
-                    $('#submit-ticket-form').data('bootstrapValidator').resetForm(true);
-                })
-                .always(function (response) {
-                    handle_ajax_response(response);
-                });
-        }
-    });
 
     // Open Stripe checkout modal
     handler.open({
@@ -55,11 +35,6 @@ function prepare_stripe() {
         allowRememberMe: true,
         email: window.additional_parameters.user_email,
         panelLabel: 'Pay $5 Fee'
-    });
-
-    // Close Checkout on page navigation
-    $(window).on('popstate', function () {
-        handler.close();
     });
 }
 
@@ -140,10 +115,36 @@ function initialize_bootstrap_validator_submit_ticket() {
         $('#submit-ticket-form').bootstrapValidator('revalidateField', 'start_time');
     });
 
+    /* Configure the stripe form that will popup later */
+    var handler = StripeCheckout.configure({
+        key: window.additional_parameters.stripe_public_key,
+        image: window.additional_parameters.logo_icon,
+        token: function (token) {
+            // Insert stripe token into form before serializing
+            $('#token').val(token.id);
+            $('#card-id').val(token.card.id);
+            $.post(window.additional_parameters.submit_ticket_url, $('#submit-ticket-form').serialize(), "json")
+                .done(function () {
+                    // Bootstrap validator won't clear the fields when the form isn't open, and we cannot delete the
+                    // form data before Stripe's form closes, but we also don't want to lose form data if Stripe
+                    // payment fails, so just clear out the submit ticket form here.
+                    $('#submit-ticket-form').data('bootstrapValidator').resetForm(true);
+                })
+                .always(function (response) {
+                    handle_ajax_response(response);
+                });
+        }
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function () {
+        handler.close();
+    });
+
     // Make sure that when the popup closes, it initializes the stripe form
     $(document).on('hidden.bs.modal', function (e) {
         if (e.target.id === 'stripe-submit-popup-notification-root') {
-            prepare_stripe();
+            show_stripe_modal(handler);
         }
     });
 }

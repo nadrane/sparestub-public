@@ -110,11 +110,39 @@ function can_delete_ticket() {
 
 function setup_stripe_popup_modal() {
     'use strict';
+
+    /* These are the settings that the stripe modal will use */
+    var handler = StripeCheckout.configure({
+        key: window.additional_parameters.stripe_public_key,
+        image: window.additional_parameters.logo_icon,
+        token: function (token) {
+              // Use the token to create the charge with a server-side script.
+              // You can access the token ID with `token.id`
+            $.post(window.additional_parameters.request_to_buy_url,
+                  {'token': token.id,
+                   'card_id': token.card.id,
+                   'ticket_id': window.additional_parameters.ticket_id},
+                   "json")
+                .done(function (response) {
+                    request_to_buy_success(response);
+                })
+                .fail(function (response) {
+                    var error = handle_ajax_response(response);
+                    show_ajax_message(error, 'danger');
+                });
+        }
+    });
+
     // When the notification popup closes, open Stripe immediately afterwards
     $(document).on('hidden.bs.modal', function (e) {
         if (e.target.id === 'stripe-popup-notification-root') {
-            show_stripe_modal();
+            show_stripe_modal(handler);
         }
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function () {
+        handler.close();
     });
 }
 
@@ -151,42 +179,16 @@ function cancel_request_to_buy() {
         });
 }
 
-function show_stripe_modal() {
+function show_stripe_modal(handler) {
     'use strict';
 
-    var handler = StripeCheckout.configure({
-        key: window.additional_parameters.stripe_public_key,
-        image: window.additional_parameters.logo_icon,
-        token: function (token) {
-              // Use the token to create the charge with a server-side script.
-              // You can access the token ID with `token.id`
-            $.post(window.additional_parameters.request_to_buy_url,
-                  {'token': token.id,
-                   'card_id': token.card.id,
-                   'ticket_id': window.additional_parameters.ticket_id},
-                   "json")
-                .done(function (response) {
-                    request_to_buy_success(response);
-                })
-                .fail(function (response) {
-                    var error = handle_ajax_response(response);
-                    show_ajax_message(error, 'danger');
-                });
-        }
-    });
-
-        // Open Stripe checkout modal
+    // Open Stripe checkout modal
     handler.open({
             name: 'SpareStub',
             description: window.additional_parameters.ticket_title,
             allowRememberMe: true,
             email: window.additional_parameters.user_email,
             panelLabel: 'Pay $5 Fee'
-    });
-
-    // Close Checkout on page navigation
-    $(window).on('popstate', function () {
-        handler.close();
     });
 }
 
