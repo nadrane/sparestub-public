@@ -172,8 +172,6 @@ def cancel_request_to_buy(request):
     """
     Mark a pending request as cancelled
     """
-    import pdb
-    pdb.set_trace()
     user = request.user
 
     # Make sure that ticket exists
