@@ -36,11 +36,10 @@ function prepare_stripe() {
             $('#token').val(token.id);
             $('#card-id').val(token.card.id);
             $.post(window.additional_parameters.submit_ticket_url, $('#submit-ticket-form').serialize(), "json")
-                .done(function (response) {
-                    //This can only be done once all the form data is submitted.
-                    // Notice this is the submit ticket form we are clearing out here
-                    // We don't want to do this when continuing form the ticket screen in case there is a payment error.
-                    // Let the user resubmit without refilling in EVERYTHING
+                .done(function () {
+                    // Bootstrap validator won't clear the fields when the form isn't open, and we cannot delete the
+                    // form data before Stripe's form closes, but we also don't want to lose form data if Stripe
+                    // payment fails, so just clear out the submit ticket form here.
                     $('#submit-ticket-form').data('bootstrapValidator').resetForm(true);
                 })
                 .always(function (response) {
@@ -90,6 +89,7 @@ function initialize_bootstrap_validator_submit_ticket() {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
+        excluded: [],
         submitButtons: $('#submit-ticket-form-submit-button')
     }).on('success.form.bv', function (e) {
         // Prevent form submission

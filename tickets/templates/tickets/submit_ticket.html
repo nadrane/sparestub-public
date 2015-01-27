@@ -20,8 +20,10 @@
   </div>
 
   <form id="submit-ticket-form" class="form-horizontal" action="{% url "valid_ticket" %}"> {% csrf_token %}
-    <input id="token" name="token" type="hidden">
-    <input id="card-id" name="card_id" type="hidden">
+    {# Keep the values in token and card-id. We need to fields to be considered validated by BV. #}
+    {# Their values will be repalced when we get the actual values from Stripe #}
+    <input id="token" name="token" type="hidden" value="2">
+    <input id="card-id" name="card_id" type="hidden" value="2">
     <div class="modal-body">
       <div class="row">
         <div class="col-md-12">
