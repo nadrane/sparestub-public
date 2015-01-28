@@ -13,7 +13,7 @@
 
 {% block content %}
   <div id="background-image" class="container-fluid" style="background-image: url('{% static "user_profile/pics/counting_crows_girl.jpg" %}');">
-    <div id="background-container" class="container">
+    <div id="background-container" class="container-fluid">
       <div id="profile-header" class="row wave">
       {% comment %}Clicking this profile picture pops up a modal to edit profile information {% endcomment %}
         <div id="user-picture"class="col-xs-12 col-sm-2"{% if is_owner %} data-toggle="modal" data-target="#modal-edit-profile-root" {% endif %}>
