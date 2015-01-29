@@ -107,7 +107,9 @@ def rotate_image(pil_image, rotate_degrees=0):
     if rotate_degrees == 0:
         return pil_image
 
-    return pil_image.rotate(rotate_degrees)
+    # Somewhere the degrees get reversed... Suffice to say, if I don't throw a negative sign in front of the degrees,
+    # then I end up with a mirror image of what I want.
+    return pil_image.rotate(-rotate_degrees)
 
 
 def convert_to_jpeg(pil_image):

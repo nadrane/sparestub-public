@@ -1,6 +1,3 @@
-# Standard Imports
-import logging
-
 # Django Imports
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
@@ -25,7 +22,6 @@ from asks.models import Request
 def edit_profile(request, username):
     profile = UserProfile.get_user_profile_from_username(username)
     # Make sure that the profile exists
-
     if profile:
         user = profile.user
     else:

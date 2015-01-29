@@ -109,10 +109,13 @@ function store_crop() {
     'use strict';
 
     var data = $cropper_image.cropper('getData');
-    $('#x').val(data.x);
-    $('#y').val(data.y);
-    $('#w').val(data.width);
-    $('#h').val(data.height);
+
+    // parseInt will always round down, so this will introduce some rounding error,
+    // but that's probably fine for this application. A integer is expected by a server, which is why we do this.
+    $('#x').val(parseInt(data.x));
+    $('#y').val(parseInt(data.y));
+    $('#w').val(parseInt(data.width));
+    $('#h').val(parseInt(data.height));
 }
 
 
