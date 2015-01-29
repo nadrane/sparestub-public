@@ -322,21 +322,9 @@ input[type=number] {
 
 /* NOTIFICATIONS */
 
-#notification-root {
-    text-align: center;   /* Center the text for the notification bar */
-    position: fixed;
-    z-index: 100;
-    right: 0;
-}
-
-#notification-root .notification-style {
-    margin: 0;
-}
-
 .close {
     line-height: 20px;
 }
-
 
 .notification-style {
     padding: 5px;

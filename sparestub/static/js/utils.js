@@ -55,10 +55,6 @@ var handle_ajax_response = function (response, $notification_root) {
         response = response.responseJSON;
     }
 
-    if (!$notification_root) {
-        $notification_root = $('#notification-root');
-    }
-
     if (!!response.redirect_href) {
         window.location.href = response.redirect_href;
 

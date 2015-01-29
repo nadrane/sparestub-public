@@ -2,6 +2,14 @@
     font-weight: 300;
 }
 
+#introduction, #introducing-sparestub, #press {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 .title {
     text-align: center;
 }
@@ -10,12 +18,7 @@
     color: white;
     font-family: Helvetica, Arial, sans-serif;
 
-    background: no-repeat center bottom scroll;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-
+    background-position: center bottom;
     padding-top: 40px;
 }
 
@@ -77,12 +80,8 @@
 #introducing-sparestub {
     text-align: center;
     color:white;
-    background: no-repeat center center fixed;
-
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 #introducing-sparestub {

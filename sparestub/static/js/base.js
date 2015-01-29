@@ -154,11 +154,6 @@ function initialize_login_form_signup_link() {
 $(document).ready(function ($) {
     'use strict';
 
-    // Remove a notificaiton when clicked, regardless of where. The bootstrap code for alert-dismiss takes forver.
-    $('.close').on('click touchstart touchend', function() {
-        $(this).parent().remove();
-    });
-
     $('.contact-form-button').on('click', function () {
         // If the modal content has already been loaded, don't do it again
         if ($('#modal-contact-form-content').children().length > 0) {
