@@ -21,19 +21,42 @@ class Command(BaseCommand):
                     # 3. A list containing the files within that current_directory
                 for file in files:
                     file_name, file_extension = os.path.splitext(file)
-                    # These files need to be resized and compressed
-                    if file_extension not in ('.jpeg', '.png', 'jpg'):
+
+                    save_extension = None
+                    if file_extension in ('.jpeg', '.jpg'):
+                        save_extension = 'JPEG'
+
+                    elif file_extension == '.png':
+                        save_extension = 'PNG'
+
+                    else:
                         continue
 
-                    import pdb
-                    pdb.set_trace()
-
                     filename = os.path.join(current_directory, file)
+                    new_filename = os.path.join(current_directory, 'resized_' + file)
 
                     try:
                         image = Image.open(filename)
-                        image = image.resize((500, 500))
-                        image.save(filename, 'JPEG')
+                        current_size = image.size
+                        if current_size[0] > 1000:
+                            image = image.resize((int(current_size[0] / 2), int(current_size[1] / 2)))
+                        image.save(new_filename, save_extension)
+                        if save_extension == 'JPEG':
+                            subprocess.call(['/Users/nicholasdrane/Documents/coding/sparestub/cjpeg-mozjpeg3-mac/cjpeg',
+                                             '-verbose',
+                                             "-outfile",
+                                             filename,
+                                             new_filename])
+                        else:
+                            subprocess.call(['/Users/nicholasdrane/Documents/coding/sparestub/pngquant/pngquant',
+                                             '--verbose',
+                                             new_filename,
+                                             '-o',
+                                             filename,
+                                             '--speed',
+                                             '1',
+                                             '-f'])
+
                     except OSError:
                         logging.error('Failed to load {} for compression and resizing'.format(file))
 
