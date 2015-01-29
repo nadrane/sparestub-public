@@ -35,16 +35,13 @@ function initialize_remove_photo() {
         // When an image is selected, we change this width to auto so that the div scales to the child img dimensions
         $('.fileinput-preview').width('250px').height('200px');
 
-        // We need this since events are attached to the image when it is initially uploaded.
-        $('#rotate-right, #rotate-left, #crop').off('click');
-
         // Handle the case where the remove button was clicked after cropping occurred.
         $('#crop').text('Crop');
         $('#rotate-left, #rotate-right').css('cursor', 'pointer');
     });
 }
 
-function initialize_crop_button() {
+function initialize_crop_button($cropper_image) {
     'use strict';
 
     $('#crop').click(function () {
@@ -73,7 +70,7 @@ function initialize_crop_button() {
     });
 }
 
-function initialize_rotation_buttons() {
+function initialize_rotation_buttons($cropper_image) {
     'use strict';
 
     var $rotate_degrees = $('#rotate-degrees');
@@ -158,9 +155,12 @@ function resize_profile_picture_preview() {
         $(original_image).cropper({aspectRatio : 1.0,
                                    zoomable: false});
 
+        // Before we accidentally attach these events multiple times, remove any old instances.
+        $('#rotate-right, #rotate-left, #crop').off('click');
+
         // These need to be done once the img tags exist.
-        initialize_rotation_buttons();
-        initialize_crop_button();
+        initialize_rotation_buttons($cropper_image);
+        initialize_crop_button($cropper_image);
     });
 }
 
