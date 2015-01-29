@@ -1,5 +1,5 @@
 ﻿/**
-* autoNumeric.js
+* @preserve autoNumeric.js
 * @author: Bob Knothe
 * @author: Sokolov Yura
 * @version: 1.9.26 - 2014-10-07 GMT 2:00 PM
