@@ -38,6 +38,9 @@ function initialize_remove_photo() {
         // Handle the case where the remove button was clicked after cropping occurred.
         $('#crop').text('Crop');
         $('#rotate-left, #rotate-right').css('cursor', 'pointer');
+
+        // Make it so that the user can remove a profile picture
+        $('#use-old-photo').val(false);
     });
 }
 
