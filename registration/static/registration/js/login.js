@@ -1,5 +1,4 @@
 var $ = jQuery;
-var document = window.document;
 
 // We need to kick the function off when we finish loading the modal content/
 // It appears as in callback to the ajax request that grabs this content in base.html

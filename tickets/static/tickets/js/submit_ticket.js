@@ -1,5 +1,4 @@
 var $ = jQuery;
-var document = window.document;
 
 function validate_date_not_before_today(value) {
     /*

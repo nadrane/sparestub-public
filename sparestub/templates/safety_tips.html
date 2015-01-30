@@ -5,7 +5,14 @@
 {% block css %}
   {% compress css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "sparestub/css/safety_tips.css" %}">
+    <style>
+      .guide-title {
+          font-size: 40px;
+      }
+      li {
+          padding-bottom: 10px;
+      }
+    </style>
   {% endcompress %}
 {% endblock %}
 

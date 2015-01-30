@@ -5,7 +5,19 @@
 {% block css %}
   {% compress css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "sparestub/css/privacy_policy.css" %}">
+    <style>
+      .privacy-title {
+          font-size: 40px;
+      }
+
+      .privacy-container {
+          padding: 25px;
+      }
+
+      li {
+          padding-bottom: 10px;
+      }
+    </style>
   {% endcompress %}
 {% endblock %}
 

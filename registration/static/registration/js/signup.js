@@ -1,5 +1,4 @@
 var $ = jQuery;
-var document = window.document;
 
 function validate_user_is_18(birthdate) {
     'use strict';

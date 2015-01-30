@@ -3,7 +3,6 @@
  */
 
 var $ = jQuery;
-var document = window.document;
 
 function getCookie(name) {
     var cookieValue = null;

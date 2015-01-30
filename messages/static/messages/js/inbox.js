@@ -1,4 +1,3 @@
-var document = window.document;
 var $ = jQuery;
 
 function accept_request() {

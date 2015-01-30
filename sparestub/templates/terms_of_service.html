@@ -5,7 +5,19 @@
 {% block css %}
   {% compress css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "sparestub/css/terms_of_service.css" %}">
+      <style>
+        .terms-title {
+            font-size: 40px;
+        }
+
+        .terms-container {
+            padding: 25px;
+        }
+
+        li {
+            padding-bottom: 10px;
+        }
+      </style>
   {% endcompress %}
 {% endblock %}
 

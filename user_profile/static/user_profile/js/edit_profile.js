@@ -238,7 +238,7 @@ function initialize_bootstrap_validator_change_password() {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
-        submitButtons: $('#change-password-form-submit-button'),
+        submitButtons: $('#change-password-form-submit-button')
     });
 }
 
