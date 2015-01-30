@@ -214,9 +214,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         try:
             pic = self.profile_picture
             if which_pic == 'search':
-                url = os.path.join(settings.STATIC_URL, pic.search_thumbnail.url)
+                url = pic.search_thumbnail.url
             elif which_pic == 'profile':
-                url = os.path.join(settings.STATIC_URL, pic.profile_thumbnail.url)
+                url = pic.profile_thumbnail.url
         # Some users don't have profile pictures. This is okay. We will use a default in the template.
         except ObjectDoesNotExist:
             pass
