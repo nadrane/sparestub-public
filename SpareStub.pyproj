@@ -274,7 +274,6 @@
     <Content Include="contact\email_templates\contact\feedback_submission_response.html" />
     <Content Include="contact\static\contact\js\contact.js" />
     <Content Include="contact\templates\contact\contact_form.html" />
-    <Content Include="locations\.DS_Store" />
     <Content Include="locations\cities.json" />
     <Content Include="locations\LICENSE" />
     <Content Include="locations\static\locations\json\cities.json" />
@@ -342,7 +341,6 @@
     <Content Include="registration\templates\registration\signup.html" />
     <Content Include="requirements.txt" />
     <Content Include="runtime.txt" />
-    <Content Include="sparestub\.DS_Store" />
     <Content Include="sparestub\db.sqlite3" />
     <Content Include="sparestub\static\backgrounds\cityscape-optimized.jpg" />
     <Content Include="sparestub\static\backgrounds\cityscape.jpg" />
@@ -377,18 +375,20 @@
     <Content Include="sparestub\static\js\spin.js" />
     <Content Include="sparestub\static\js\typeahead.bundle.js" />
     <Content Include="sparestub\static\js\utils.js" />
-    <Content Include="sparestub\static\logos\.DS_Store" />
+    <Content Include="sparestub\static\logos\buy-optimized.png" />
     <Content Include="sparestub\static\logos\buy.png" />
     <Content Include="sparestub\static\logos\dzone.png" />
     <Content Include="sparestub\static\logos\favicon.ico" />
     <Content Include="sparestub\static\logos\founder_nick.jpg" />
     <Content Include="sparestub\static\logos\founder_steph.jpg" />
+    <Content Include="sparestub\static\logos\go-optimized.png" />
     <Content Include="sparestub\static\logos\go.png" />
     <Content Include="sparestub\static\logos\lilman.jpg" />
     <Content Include="sparestub\static\logos\lioness.png" />
     <Content Include="sparestub\static\logos\logo_icon.png" />
     <Content Include="sparestub\static\logos\logo_official.png" />
     <Content Include="sparestub\static\logos\newborn.png" />
+    <Content Include="sparestub\static\logos\post-optimized.png" />
     <Content Include="sparestub\static\logos\post.png" />
     <Content Include="sparestub\static\logos\superheroyou.png" />
     <Content Include="sparestub\templates\404.html" />
