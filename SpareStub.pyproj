@@ -344,7 +344,9 @@
     <Content Include="runtime.txt" />
     <Content Include="sparestub\.DS_Store" />
     <Content Include="sparestub\db.sqlite3" />
+    <Content Include="sparestub\static\backgrounds\cityscape-optimized.jpg" />
     <Content Include="sparestub\static\backgrounds\cityscape.jpg" />
+    <Content Include="sparestub\static\backgrounds\concert-optimized.jpg" />
     <Content Include="sparestub\static\backgrounds\concert.jpg" />
     <Content Include="sparestub\static\backgrounds\homepage_colored_lights.jpg" />
     <Content Include="sparestub\static\backgrounds\squared_metal.png" />
