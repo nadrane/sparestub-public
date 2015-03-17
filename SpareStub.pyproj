@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <Name>DjangoSample</Name>
+    <RootNamespace>DjangoSample</RootNamespace>
+    <InterpreterId>
+    </InterpreterId>
+    <InterpreterVersion>
+    </InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>2c13cee3-f613-40b5-909e-2c46b38600dc</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <ProjectTypeGuids>{5F0BE9CA-D677-4A4D-8806-6076C0FAAD37};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <StartupFile>manage.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <LaunchProvider>Django launcher</LaunchProvider>
+    <OutputPath>.</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="asks\admin.py" />
+    <Compile Include="asks\forms.py" />
+    <Compile Include="asks\models.py" />
+    <Compile Include="asks\settings.py" />
+    <Compile Include="asks\tests.py" />
+    <Compile Include="asks\urls.py" />
+    <Compile Include="asks\views.py" />
+    <Compile Include="asks\__init__.py" />
+    <Compile Include="contact\admin.py" />
+    <Compile Include="contact\forms.py" />
+    <Compile Include="contact\models.py" />
+    <Compile Include="contact\settings.py" />
+    <Compile Include="contact\tests.py" />
+    <Compile Include="contact\urls.py" />
+    <Compile Include="contact\views.py" />
+    <Compile Include="contact\__init__.py" />
+    <Compile Include="formats\en\formats.py" />
+    <Compile Include="formats\en\__init__.py" />
+    <Compile Include="formats\__init__.py" />
+    <Compile Include="locations\admin.py" />
+    <Compile Include="locations\management\commands\process_zip_codes.py" />
+    <Compile Include="locations\management\commands\__init__.py" />
+    <Compile Include="locations\management\__init__.py" />
+    <Compile Include="locations\models.py" />
+    <Compile Include="locations\settings.py" />
+    <Compile Include="locations\tests.py" />
+    <Compile Include="locations\__init__.py" />
+    <Compile Include="manage.py" />
+    <Compile Include="messages\admin.py" />
+    <Compile Include="messages\forms.py" />
+    <Compile Include="messages\models.py" />
+    <Compile Include="messages\settings.py" />
+    <Compile Include="messages\tests.py" />
+    <Compile Include="messages\urls.py" />
+    <Compile Include="messages\views.py" />
+    <Compile Include="messages\__init__.py" />
+    <Compile Include="photos\admin.py" />
+    <Compile Include="photos\models.py" />
+    <Compile Include="photos\settings.py" />
+    <Compile Include="photos\tests.py" />
+    <Compile Include="photos\views.py" />
+    <Compile Include="photos\__init__.py" />
+    <Compile Include="registration\Backends\user_backend.py" />
+    <Compile Include="registration\Backends\__init__.py" />
+    <Compile Include="registration\forms.py" />
+    <Compile Include="registration\models.py" />
+    <Compile Include="registration\settings.py" />
+    <Compile Include="registration\tasks.py" />
+    <Compile Include="registration\tests.py" />
+    <Compile Include="registration\urls.py" />
+    <Compile Include="registration\utils.py" />
+    <Compile Include="registration\views.py" />
+    <Compile Include="registration\__init__.py" />
+    <Compile Include="reviews\admin.py" />
+    <Compile Include="reviews\models.py" />
+    <Compile Include="reviews\settings.py" />
+    <Compile Include="reviews\tests.py" />
+    <Compile Include="reviews\views.py" />
+    <Compile Include="reviews\__init__.py" />
+    <Compile Include="sparestub\celery.py" />
+    <Compile Include="sparestub\settings\base.py" />
+    <Compile Include="sparestub\settings\local.py" />
+    <Compile Include="sparestub\settings\production.py" />
+    <Compile Include="sparestub\settings\staging.py" />
+    <Compile Include="sparestub\settings\test.py" />
+    <Compile Include="sparestub\settings\__init__.py" />
+    <Compile Include="sparestub\urls.py" />
+    <Compile Include="sparestub\wsgi.py" />
+    <Compile Include="sparestub\__init__.py" />
+    <Compile Include="stripe_data\models.py" />
+    <Compile Include="stripe_data\settings.py" />
+    <Compile Include="stripe_data\urls.py" />
+    <Compile Include="stripe_data\views.py" />
+    <Compile Include="stripe_data\__init__.py" />
+    <Compile Include="tickets\admin.py" />
+    <Compile Include="tickets\forms.py" />
+    <Compile Include="tickets\management\commands\expire_completed_events.py" />
+    <Compile Include="tickets\management\commands\__init__.py" />
+    <Compile Include="tickets\management\__init__.py" />
+    <Compile Include="tickets\models.py" />
+    <Compile Include="tickets\search_indexes.py" />
+    <Compile Include="tickets\settings.py" />
+    <Compile Include="tickets\tasks.py" />
+    <Compile Include="tickets\tests.py" />
+    <Compile Include="tickets\urls.py" />
+    <Compile Include="tickets\views.py" />
+    <Compile Include="tickets\__init__.py" />
+    <Compile Include="user_profile\admin.py" />
+    <Compile Include="user_profile\forms.py" />
+    <Compile Include="user_profile\models.py" />
+    <Compile Include="user_profile\settings.py" />
+    <Compile Include="user_profile\tests.py" />
+    <Compile Include="user_profile\urls.py" />
+    <Compile Include="user_profile\views.py" />
+    <Compile Include="user_profile\__init__.py" />
+    <Compile Include="utils\backends\gzipped_s3_boto.py" />
+    <Compile Include="utils\backends\s3_boto.py" />
+    <Compile Include="utils\backends\__init__.py" />
+    <Compile Include="utils\context_processors.py" />
+    <Compile Include="utils\email.py" />
+    <Compile Include="utils\fields.py" />
+    <Compile Include="utils\management\commands\empty_db.py" />
+    <Compile Include="utils\management\commands\initialize_db.py" />
+    <Compile Include="utils\management\commands\prepare_images.py" />
+    <Compile Include="utils\management\commands\sync_s3.py" />
+    <Compile Include="utils\management\commands\__init__.py" />
+    <Compile Include="utils\management\__init__.py" />
+    <Compile Include="utils\middleware\history.py" />
+    <Compile Include="utils\miscellaneous.py" />
+    <Compile Include="utils\models.py" />
+    <Compile Include="utils\networking.py" />
+    <Compile Include="utils\templatetags\misc_filters.py" />
+    <Compile Include="utils\templatetags\__init__.py" />
+    <Compile Include="utils\urls.py" />
+    <Compile Include="utils\views.py" />
+    <Compile Include="utils\__init__.py" />
+    <Compile Include="__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".idea\" />
+    <Folder Include=".idea\dictionaries\" />
+    <Folder Include=".idea\scopes\" />
+    <Folder Include="asks\" />
+    <Folder Include="asks\email_templates\" />
+    <Folder Include="asks\email_templates\asks\" />
+    <Folder Include="asks\templates\" />
+    <Folder Include="asks\templates\asks\" />
+    <Folder Include="cjpeg-mozjpeg3-mac\" />
+    <Folder Include="closure-compiler\" />
+    <Folder Include="contact\" />
+    <Folder Include="contact\email_templates\" />
+    <Folder Include="contact\email_templates\contact\" />
+    <Folder Include="contact\static\" />
+    <Folder Include="contact\static\contact\" />
+    <Folder Include="contact\static\contact\js\" />
+    <Folder Include="contact\templates\" />
+    <Folder Include="contact\templates\contact\" />
+    <Folder Include="formats\" />
+    <Folder Include="formats\en\" />
+    <Folder Include="locations\" />
+    <Folder Include="locations\management\" />
+    <Folder Include="locations\management\commands\" />
+    <Folder Include="locations\static\" />
+    <Folder Include="locations\static\locations\" />
+    <Folder Include="locations\static\locations\json\" />
+    <Folder Include="locations\static\locations\js\" />
+    <Folder Include="messages\" />
+    <Folder Include="messages\email_templates\" />
+    <Folder Include="messages\email_templates\messages\" />
+    <Folder Include="messages\static\" />
+    <Folder Include="messages\static\messages\" />
+    <Folder Include="messages\static\messages\css\" />
+    <Folder Include="messages\static\messages\js\" />
+    <Folder Include="messages\templates\" />
+    <Folder Include="messages\templates\messages\" />
+    <Folder Include="obj\" />
+    <Folder Include="obj\Debug\" />
+    <Folder Include="photos\" />
+    <Folder Include="pngquant\" />
+    <Folder Include="pngquant\logos\" />
+    <Folder Include="registration\" />
+    <Folder Include="registration\Backends\" />
+    <Folder Include="registration\email_templates\" />
+    <Folder Include="registration\email_templates\registration\" />
+    <Folder Include="registration\static\" />
+    <Folder Include="registration\static\registration\" />
+    <Folder Include="registration\static\registration\css\" />
+    <Folder Include="registration\static\registration\js\" />
+    <Folder Include="registration\templates\" />
+    <Folder Include="registration\templates\registration\" />
+    <Folder Include="reviews\" />
+    <Folder Include="sparestub\" />
+    <Folder Include="sparestub\settings\" />
+    <Folder Include="sparestub\static\" />
+    <Folder Include="sparestub\static\backgrounds\" />
+    <Folder Include="sparestub\static\css\" />
+    <Folder Include="sparestub\static\fonts\" />
+    <Folder Include="sparestub\static\js\" />
+    <Folder Include="sparestub\static\logos\" />
+    <Folder Include="sparestub\templates\" />
+    <Folder Include="stripe_data\" />
+    <Folder Include="tickets\" />
+    <Folder Include="tickets\email_templates\" />
+    <Folder Include="tickets\email_templates\tickets\" />
+    <Folder Include="tickets\management\" />
+    <Folder Include="tickets\management\commands\" />
+    <Folder Include="tickets\static\" />
+    <Folder Include="tickets\static\tickets\" />
+    <Folder Include="tickets\static\tickets\css\" />
+    <Folder Include="tickets\static\tickets\js\" />
+    <Folder Include="tickets\templates\" />
+    <Folder Include="tickets\templates\search\" />
+    <Folder Include="tickets\templates\search\indexes\" />
+    <Folder Include="tickets\templates\search\indexes\tickets\" />
+    <Folder Include="tickets\templates\tickets\" />
+    <Folder Include="user_profile\" />
+    <Folder Include="user_profile\static\" />
+    <Folder Include="user_profile\static\user_profile\" />
+    <Folder Include="user_profile\static\user_profile\css\" />
+    <Folder Include="user_profile\static\user_profile\js\" />
+    <Folder Include="user_profile\static\user_profile\pics\" />
+    <Folder Include="user_profile\templates\" />
+    <Folder Include="user_profile\templates\user_profile\" />
+    <Folder Include="utils\" />
+    <Folder Include="utils\backends\" />
+    <Folder Include="utils\management\" />
+    <Folder Include="utils\management\commands\" />
+    <Folder Include="utils\middleware\" />
+    <Folder Include="utils\templatetags\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".env" />
+    <Content Include=".idea\.name" />
+    <Content Include=".idea\dictionaries\nicholasdrane.xml" />
+    <Content Include=".idea\encodings.xml" />
+    <Content Include=".idea\misc.xml" />
+    <Content Include=".idea\modules.xml" />
+    <Content Include=".idea\scopes\scope_settings.xml" />
+    <Content Include=".idea\sparestub.iml" />
+    <Content Include=".idea\vcs.xml" />
+    <Content Include="asks\email_templates\asks\request_accepted.html" />
+    <Content Include="asks\email_templates\asks\request_cancelled_to_seller.html" />
+    <Content Include="asks\email_templates\asks\request_inactive.html" />
+    <Content Include="asks\email_templates\asks\request_received.html" />
+    <Content Include="asks\email_templates\asks\request_sent.html" />
+    <Content Include="asks\templates\asks\ticket_requested_poster_email.html" />
+    <Content Include="asks\templates\asks\ticket_requested_requester_email.html" />
+    <Content Include="aws_cors_configuration.xml" />
+    <Content Include="cjpeg-mozjpeg3-mac\cjpeg" />
+    <Content Include="cjpeg-mozjpeg3-mac\LICENSE.txt" />
+    <Content Include="cjpeg-mozjpeg3-mac\README" />
+    <Content Include="cjpeg-mozjpeg3-mac\README-mozilla.txt" />
+    <Content Include="cjpeg-mozjpeg3-mac\README-turbo.txt" />
+    <Content Include="cjpeg-mozjpeg3-mac\README.md" />
+    <Content Include="cjpeg-mozjpeg3-mac\usage.txt" />
+    <Content Include="closure-compiler\compiler.jar" />
+    <Content Include="closure-compiler\example-compiled.js" />
+    <Content Include="closure-compiler\example-compiled2.js" />
+    <Content Include="closure-compiler\example-compiled3.js" />
+    <Content Include="closure-compiler\example.js" />
+    <Content Include="contact\email_templates\contact\feedback_submission_response.html" />
+    <Content Include="contact\static\contact\js\contact.js" />
+    <Content Include="contact\templates\contact\contact_form.html" />
+    <Content Include="locations\.DS_Store" />
+    <Content Include="locations\cities.json" />
+    <Content Include="locations\LICENSE" />
+    <Content Include="locations\static\locations\json\cities.json" />
+    <Content Include="locations\static\locations\js\locations.js" />
+    <Content Include="locations\zip_code_database.json" />
+    <Content Include="messages\email_templates\messages\new_message.html" />
+    <Content Include="messages\static\messages\css\inbox.css" />
+    <Content Include="messages\static\messages\js\inbox.js" />
+    <Content Include="messages\templates\messages\convo.html" />
+    <Content Include="messages\templates\messages\convo_header.html" />
+    <Content Include="messages\templates\messages\inbox.html" />
+    <Content Include="messages\templates\messages\message_user_modal.html" />
+    <Content Include="messages\templates\messages\ticket_ribbon.html" />
+    <Content Include="newrelic.ini" />
+    <Content Include="pngquant\COPYRIGHT" />
+    <Content Include="pngquant\logos\buy-fs8.png" />
+    <Content Include="pngquant\logos\buy.png" />
+    <Content Include="pngquant\logos\dzone.png" />
+    <Content Include="pngquant\logos\favicon6.ico" />
+    <Content Include="pngquant\logos\founder_nick.jpg" />
+    <Content Include="pngquant\logos\founder_steph.jpg" />
+    <Content Include="pngquant\logos\go-fs8.png" />
+    <Content Include="pngquant\logos\go.png" />
+    <Content Include="pngquant\logos\lilman.jpg" />
+    <Content Include="pngquant\logos\lioness.png" />
+    <Content Include="pngquant\logos\logo_icon.png" />
+    <Content Include="pngquant\logos\logo_official.png" />
+    <Content Include="pngquant\logos\newborn.png" />
+    <Content Include="pngquant\logos\post-fs8.png" />
+    <Content Include="pngquant\logos\post.png" />
+    <Content Include="pngquant\logos\resized_buy.png" />
+    <Content Include="pngquant\logos\resized_dzone.png" />
+    <Content Include="pngquant\logos\resized_founder_nick.jpg" />
+    <Content Include="pngquant\logos\resized_founder_steph.jpg" />
+    <Content Include="pngquant\logos\resized_go.png" />
+    <Content Include="pngquant\logos\resized_lilman.jpg" />
+    <Content Include="pngquant\logos\resized_lioness.png" />
+    <Content Include="pngquant\logos\resized_logo_icon.png" />
+    <Content Include="pngquant\logos\resized_logo_official.png" />
+    <Content Include="pngquant\logos\resized_newborn.png" />
+    <Content Include="pngquant\logos\resized_post.png" />
+    <Content Include="pngquant\logos\resized_superheroyou.png" />
+    <Content Include="pngquant\logos\superheroyou.png" />
+    <Content Include="pngquant\pngquant" />
+    <Content Include="pngquant\pngquant-openmp" />
+    <Content Include="pngquant\pngquant-ppc" />
+    <Content Include="pngquant\README.md" />
+    <Content Include="Procfile" />
+    <Content Include="README.md" />
+    <Content Include="registration\email_templates\registration\account_cancelled.html" />
+    <Content Include="registration\email_templates\registration\email_confirmation.html" />
+    <Content Include="registration\email_templates\registration\reset_password_email.html" />
+    <Content Include="registration\email_templates\registration\signup_email.html" />
+    <Content Include="registration\static\registration\css\login_redirect.css" />
+    <Content Include="registration\static\registration\js\login.js" />
+    <Content Include="registration\static\registration\js\login_redirect.js" />
+    <Content Include="registration\static\registration\js\signup.js" />
+    <Content Include="registration\templates\registration\basic_info.html" />
+    <Content Include="registration\templates\registration\email_confirmation_finished.html" />
+    <Content Include="registration\templates\registration\forgot_password.html" />
+    <Content Include="registration\templates\registration\forgot_password_email_sent.html" />
+    <Content Include="registration\templates\registration\login.html" />
+    <Content Include="registration\templates\registration\login_redirect.html" />
+    <Content Include="registration\templates\registration\reset_password.html" />
+    <Content Include="registration\templates\registration\signup.html" />
+    <Content Include="requirements.txt" />
+    <Content Include="runtime.txt" />
+    <Content Include="sparestub\.DS_Store" />
+    <Content Include="sparestub\db.sqlite3" />
+    <Content Include="sparestub\static\backgrounds\cityscape.jpg" />
+    <Content Include="sparestub\static\backgrounds\concert.jpg" />
+    <Content Include="sparestub\static\backgrounds\homepage_colored_lights.jpg" />
+    <Content Include="sparestub\static\backgrounds\squared_metal.png" />
+    <Content Include="sparestub\static\css\base.css" />
+    <Content Include="sparestub\static\css\bootstrap-datetimepicker.css" />
+    <Content Include="sparestub\static\css\bootstrap.css" />
+    <Content Include="sparestub\static\css\bootstrap.css.map" />
+    <Content Include="sparestub\static\css\bootstrapValidator.css" />
+    <Content Include="sparestub\static\css\cropper.css" />
+    <Content Include="sparestub\static\css\home.css" />
+    <Content Include="sparestub\static\css\jasny-bootstrap.css" />
+    <Content Include="sparestub\static\css\jasny-bootstrap.css.map" />
+    <Content Include="sparestub\static\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="sparestub\static\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="sparestub\static\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="sparestub\static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="sparestub\static\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="sparestub\static\js\autoNumeric.js" />
+    <Content Include="sparestub\static\js\base.js" />
+    <Content Include="sparestub\static\js\bootstrap-datetimepicker.js" />
+    <Content Include="sparestub\static\js\bootstrap.js" />
+    <Content Include="sparestub\static\js\bootstrapValidator.js" />
+    <Content Include="sparestub\static\js\cropper.js" />
+    <Content Include="sparestub\static\js\home.js" />
+    <Content Include="sparestub\static\js\jasny-bootstrap.js" />
+    <Content Include="sparestub\static\js\jquery-1.11.1.js" />
+    <Content Include="sparestub\static\js\moment.js" />
+    <Content Include="sparestub\static\js\spin.js" />
+    <Content Include="sparestub\static\js\typeahead.bundle.js" />
+    <Content Include="sparestub\static\js\utils.js" />
+    <Content Include="sparestub\static\logos\.DS_Store" />
+    <Content Include="sparestub\static\logos\buy.png" />
+    <Content Include="sparestub\static\logos\dzone.png" />
+    <Content Include="sparestub\static\logos\favicon.ico" />
+    <Content Include="sparestub\static\logos\founder_nick.jpg" />
+    <Content Include="sparestub\static\logos\founder_steph.jpg" />
+    <Content Include="sparestub\static\logos\go.png" />
+    <Content Include="sparestub\static\logos\lilman.jpg" />
+    <Content Include="sparestub\static\logos\lioness.png" />
+    <Content Include="sparestub\static\logos\logo_icon.png" />
+    <Content Include="sparestub\static\logos\logo_official.png" />
+    <Content Include="sparestub\static\logos\newborn.png" />
+    <Content Include="sparestub\static\logos\post.png" />
+    <Content Include="sparestub\static\logos\superheroyou.png" />
+    <Content Include="sparestub\templates\404.html" />
+    <Content Include="sparestub\templates\500.html" />
+    <Content Include="sparestub\templates\base.html" />
+    <Content Include="sparestub\templates\buyers_guide.html" />
+    <Content Include="sparestub\templates\dispute_resolution.html" />
+    <Content Include="sparestub\templates\home.html" />
+    <Content Include="sparestub\templates\navigation_bar_right.html" />
+    <Content Include="sparestub\templates\privacy_policy.html" />
+    <Content Include="sparestub\templates\safety_tips.html" />
+    <Content Include="sparestub\templates\sellers_guide.html" />
+    <Content Include="sparestub\templates\terms_of_service.html" />
+    <Content Include="tickets\email_templates\tickets\after_event.html" />
+    <Content Include="tickets\email_templates\tickets\post_ticket_submit.html" />
+    <Content Include="tickets\static\tickets\css\search.css" />
+    <Content Include="tickets\static\tickets\js\search_results.js" />
+    <Content Include="tickets\static\tickets\js\search_ticket.js" />
+    <Content Include="tickets\static\tickets\js\submit_ticket.js" />
+    <Content Include="tickets\templates\search\gallery_results.html" />
+    <Content Include="tickets\templates\search\gallery_results.html.orig" />
+    <Content Include="tickets\templates\search\indexes\tickets\ticket_text.txt" />
+    <Content Include="tickets\templates\search\search_results.html" />
+    <Content Include="tickets\templates\tickets\search_result.html" />
+    <Content Include="tickets\templates\tickets\search_ticket.html" />
+    <Content Include="tickets\templates\tickets\submit_ticket.html" />
+    <Content Include="user_profile\static\user_profile\css\profile_tickets.css" />
+    <Content Include="user_profile\static\user_profile\css\user_profile.css" />
+    <Content Include="user_profile\static\user_profile\css\view_ticket.css" />
+    <Content Include="user_profile\static\user_profile\js\edit_profile.js" />
+    <Content Include="user_profile\static\user_profile\js\user_profile.js" />
+    <Content Include="user_profile\static\user_profile\js\view_ticket.js" />
+    <Content Include="user_profile\static\user_profile\pics\counting_crows_girl.jpg" />
+    <Content Include="user_profile\static\user_profile\pics\ticket_instructions.png" />
+    <Content Include="user_profile\templates\user_profile\base_profile.html" />
+    <Content Include="user_profile\templates\user_profile\edit_profile.html" />
+    <Content Include="user_profile\templates\user_profile\profile_reviews.html" />
+    <Content Include="user_profile\templates\user_profile\profile_tickets.html" />
+    <Content Include="user_profile\templates\user_profile\request_to_buy.html" />
+    <Content Include="user_profile\templates\user_profile\view_profile.html" />
+    <Content Include="user_profile\templates\user_profile\view_ticket.html" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
+  <!-- Specify pre- and post-build commands in the BeforeBuild and 
+       AfterBuild targets below. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <AutoAssignPort>True</AutoAssignPort>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
