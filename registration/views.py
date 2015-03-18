@@ -88,9 +88,15 @@ def login(request):
         if login_form.is_valid():
             email = login_form.cleaned_data.get('email')
             password = login_form.cleaned_data.get('password')
+            
+            try:
             # We actually do this authenticate function twice, once in LoginForm and once here.
             # The code is cleaner this way, despite the extra DB hits.
-            user = authenticate(email=email, password=password)
+                 user = authenticate(email=email, password=password)
+            except Exception as e:
+                 print("I/O error({0}): {1}".format(e.errno, e.strerror))
+                 raise
+
             if not user.is_confirmed:
                 EmailConfirmationLink.objects.create_email_confirmation(user)
                 return ajax_http({'notification_type': 'alert-danger',

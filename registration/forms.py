@@ -10,7 +10,6 @@ from locations.models import Location
 from utils.email import normalize_email
 from .settings import password_form_settings
 
-
 class UserInfoForm(forms.Form):
     email = forms.EmailField(required=True,
                              max_length=user_info_form_settings.get('EMAIL_MAX_LENGTH'),
@@ -87,7 +86,13 @@ class LoginForm(forms.Form):
         # We know the form data is valid at this point. Log the user in.
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
-        user = authenticate(email=email, password=password)
+       
+        try:
+             user = authenticate(email=email, password=password)
+        except Exception as e:
+             print("I/O error({0}): {1}".format(e.errno, e.strerror))
+             raise
+
         if user:
             if user.is_active:
                 pass
