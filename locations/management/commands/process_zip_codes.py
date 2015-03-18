@@ -58,6 +58,8 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
+        var = input("Pausing. Attach debugger now.")
+
         self.AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
         self.AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
         self.AWS_STORAGE_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
