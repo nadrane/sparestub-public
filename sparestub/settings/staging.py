@@ -1,4 +1,4 @@
-__author__ = 'Nick'
+__author__ = 'Sparestub'
 
 from .base import *
 from urllib.parse import urlparse
