@@ -8,7 +8,7 @@ TEMPLATE_DEBUG = False
 STATIC_URL = 'https://s3.amazonaws.com/sparestub-production/static_root/'
 MEDIA_URL = 'https://s3.amazonaws.com/sparestub-production/media_root/'
 
-ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com']
+ALLOWED_HOSTS = ['sparestub.com', 'www.sparestub.com', 'sparestub-production.herokuapp.com']
 
 # Used to create links in emails to our site
 DOMAIN = 'https://sparestub.com'
