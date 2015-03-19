@@ -53,3 +53,6 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 logging.basicConfig(level=logging.INFO)
+
+# django-sslify Configuration
+SSLIFY_DISABLE = False

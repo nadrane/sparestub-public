@@ -75,6 +75,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'sslify.middleware.SSLifyMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -185,3 +186,6 @@ BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TIMEZONE = 'UTC'
 CELERY_TASK_SERIALIZER = 'json'
+
+# django-sslify Configuration
+SSLIFY_DISABLE = True
