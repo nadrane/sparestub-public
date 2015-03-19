@@ -93,6 +93,7 @@
     <Compile Include="sparestub\celery.py" />
     <Compile Include="sparestub\settings\base.py" />
     <Compile Include="sparestub\settings\local.py" />
+    <Compile Include="sparestub\settings\beta.py" />
     <Compile Include="sparestub\settings\production.py" />
     <Compile Include="sparestub\settings\staging.py" />
     <Compile Include="sparestub\settings\test.py" />
