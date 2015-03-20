@@ -46,3 +46,4 @@ unittest2py3k==0.5.1
 urllib3==1.10
 yuicompressor==2.4.8
 django-sslify==0.2.5
+logentries==0.7
