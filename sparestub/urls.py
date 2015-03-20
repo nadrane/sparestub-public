@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^buyersguide/$', TemplateView.as_view(template_name="buyers_guide.html"), name='buyers guide'),
     url(r'^sellersguide/$', TemplateView.as_view(template_name="sellers_guide.html"), name='sellers guide'),
     url(r'^safetytips/$', TemplateView.as_view(template_name="safety_tips.html"), name='safety tips'),
+	url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt")),
 
     url(r'', include('stripe_data.urls')),
     url(r'^profile/', include('user_profile.urls')),

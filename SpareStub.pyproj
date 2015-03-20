@@ -403,6 +403,7 @@
     <Content Include="sparestub\templates\home.html" />
     <Content Include="sparestub\templates\navigation_bar_right.html" />
     <Content Include="sparestub\templates\privacy_policy.html" />
+    <Content Include="sparestub\templates\robots.txt" />
     <Content Include="sparestub\templates\safety_tips.html" />
     <Content Include="sparestub\templates\sellers_guide.html" />
     <Content Include="sparestub\templates\terms_of_service.html" />
