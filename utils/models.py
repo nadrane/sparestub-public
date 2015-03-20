@@ -1,4 +1,4 @@
-__author__ = 'nicholasdrane'
+__author__ = 'Spare Stub'
 
 from django.db import models
 from django.utils import timezone

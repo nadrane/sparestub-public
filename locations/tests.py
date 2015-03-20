@@ -1,4 +1,4 @@
-__author__ = 'nicholasdrane'
+__author__ = 'Spare Stub'
 import unittest
 
 from collections import namedtuple

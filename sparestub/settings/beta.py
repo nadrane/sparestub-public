@@ -1,9 +1,11 @@
+__author__ = 'Sparestub'
+
 from .base import *
 from urllib.parse import urlparse
 
 # Keep these in here always. regardless of what base.py says. Just be safe.
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = True
 
 STATIC_URL = 'https://s3.amazonaws.com/sparestub-production/static_root/'
 MEDIA_URL = 'https://s3.amazonaws.com/sparestub-production/media_root/'
