@@ -37,7 +37,7 @@ AWS_STORAGE_BUCKET_NAME = 'sparestub-production'
 #django-compressor settings
 COMPRESS_OFFLINE_MANIFEST = 'production-manifest.json'
 COMPRESS_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 
 # Celery Configuration
 redis_url = urlparse(os.environ.get('REDISCLOUD_URL'))
