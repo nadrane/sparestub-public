@@ -21,7 +21,7 @@
       <link href="{% static "sparestub/css/jasny-bootstrap.css" %}" rel="stylesheet">
 
       {# No need to load map files in PRD #}
-      {% if environment != "production" %}
+      {% if environment != "beta" %}
         <link href="{% static "sparestub/css/jasny-bootstrap.css.map" %}" rel="stylesheet">
       {% endif %}
 
