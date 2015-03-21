@@ -7,8 +7,8 @@ from urllib.parse import urlparse
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-STATIC_URL = 'https://s3.amazonaws.com/sparestub-production/static_root/'
-MEDIA_URL = 'https://s3.amazonaws.com/sparestub-production/media_root/'
+STATIC_URL = 'https://s3.amazonaws.com/sparestub-beta/static_root/'
+MEDIA_URL = 'https://s3.amazonaws.com/sparestub-beta/media_root/'
 
 ALLOWED_HOSTS = ['beta.sparestub.com', 'sparestub-beta.herokuapp.com']
 
@@ -32,10 +32,10 @@ if es.username:
 
 # File Storage Backend Settings
 DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
-AWS_STORAGE_BUCKET_NAME = 'sparestub-production'
+AWS_STORAGE_BUCKET_NAME = 'sparestub-beta'
 
 #django-compressor settings
-COMPRESS_OFFLINE_MANIFEST = 'production-manifest.json'
+COMPRESS_OFFLINE_MANIFEST = 'beta-manifest.json'
 COMPRESS_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
 COMPRESS_ENABLED = True
 
