@@ -155,6 +155,7 @@ AWS_QUERYSTRING_EXPIRE = 99999999  # This cannot be a small number! When we comp
                                    # expire this many seconds from the creation date. We obviously can't have our static
                                    # files ever reaching this expiration date, or S3 will give us a 403 error.
 AWS_IS_GZIPPED = True
+AWS_QUERYSTRING_AUTH = False
 
 SOCIAL_EMAIL_ADDRESS = 'shout@sparestub.com'
 SOCIAL_EMAIL_NAME = 'SpareStub'
