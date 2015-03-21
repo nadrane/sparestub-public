@@ -33,6 +33,7 @@ if es.username:
 # File Storage Backend Settings
 DEFAULT_FILE_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = 'sparestub-beta'
+AWS_BUCKET_NAME = 'sparestub-beta'
 
 #django-compressor settings
 COMPRESS_OFFLINE_MANIFEST = 'beta-manifest.json'
