@@ -39,6 +39,7 @@ AWS_BUCKET_NAME = 'sparestub-beta'
 COMPRESS_OFFLINE_MANIFEST = 'beta-manifest.json'
 COMPRESS_STORAGE = 'utils.backends.s3_boto.S3BotoStorage'
 COMPRESS_ENABLED = True
+DISABLE_COLLECTSTATIC = False
 
 # Celery Configuration
 redis_url = urlparse(os.environ.get('REDISCLOUD_URL'))
