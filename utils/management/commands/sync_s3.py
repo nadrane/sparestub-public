@@ -363,8 +363,11 @@ class Command(BaseCommand):
                     print("\texpires: %s" % headers['Expires'])
                     print("\tcache-control: %s" % headers['Cache-Control'])
             try:
-                key.name = file_key
-                key.set_contents_from_string(filedata, headers, replace=True, policy=self.default_acl)
+                fixed_file_key = file_key.replace("\\", "/")
+                key.name = fixed_file_key
+                key.set_contents_from_filename(fixed_file_key, headers, replace=True, policy=self.default_acl)
+                #key.set_contents_from_string(filedata, headers, replace=True, policy=self.default_acl)
+
             except boto.exception.S3CreateError as e:
                 print("Failed: %s" % e)
             except Exception as e:
