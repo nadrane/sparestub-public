@@ -48,15 +48,14 @@ def send_email(recipient_list, subject, message, template=None, from_email='', f
 
     fail_silently = kwargs.get('fail_silently', False)
 
-    if template:
-        html = premailer.transform(render_to_string(template, kwargs), settings.DOMAIN)
 
     try:
-        if html:
-            msg = EmailMultiAlternatives(subject=subject, from_email=from_email, to=recipient_list, body=message)
-            msg.attach_alternative(html, 'text/html')
-            msg.send(fail_silently=fail_silently)
-
+        if template:
+            html = premailer.transform(render_to_string(template, kwargs), settings.DOMAIN)
+            if html:
+                msg = EmailMultiAlternatives(subject=subject, from_email=from_email, to=recipient_list, body=message)
+                msg.attach_alternative(html, 'text/html')
+                msg.send(fail_silently=fail_silently)
         else:
             send_mail(subject, message, from_email, recipient_list, fail_silently=fail_silently)
 
