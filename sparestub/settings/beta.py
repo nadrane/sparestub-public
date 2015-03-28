@@ -10,6 +10,15 @@ TEMPLATE_DEBUG = True
 STATIC_URL = 'https://s3.amazonaws.com/sparestub-beta/static_root/'
 MEDIA_URL = 'https://s3.amazonaws.com/sparestub-beta/media_root/'
 
+STATICFILES_DIRS = (
+    (os.path.join('sparestub', 'css'), os.path.join(BASE_DIR, 'static', 'css')),
+    (os.path.join('sparestub', 'js'), os.path.join(BASE_DIR, 'static', 'js')),
+    (os.path.join('sparestub', 'fonts'), os.path.join(BASE_DIR, 'static', 'fonts')),
+    (os.path.join('sparestub', 'logos'), os.path.join(BASE_DIR, 'static', 'logos')),
+    (os.path.join('sparestub', 'backgrounds'), os.path.join(BASE_DIR, 'static', 'backgrounds')),
+)
+
+
 ALLOWED_HOSTS = ['beta.sparestub.com', 'sparestub-beta.herokuapp.com']
 
 # Used to create links in emails to our site
@@ -59,4 +68,4 @@ SESSION_COOKIE_SECURE = True
 logging.basicConfig(level=logging.INFO)
 
 # django-sslify Configuration
-SSLIFY_DISABLE = False
+SSLIFY_DISABLE = True

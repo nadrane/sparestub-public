@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
-{% load staticfiles %}
+﻿{% load staticfiles %}
+<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Sparestub is Convenient. Social. It brings together those with extra event tickets and those who want to go. Creating friendships. Promoting good times.">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Sparestub is Convenient. Social. It brings together those with extra event tickets and those who want to go. Creating friendships. Promoting good times." />
 	<meta name="keywords" content="sports tickets, nfl tickets, nba tickets, mlb tickets, nhl tickets, concert tickets, ticket search, social tickets, convenient tickets, friendship tickets, good time tickets" />
     <title>SpareStub</title>
 
@@ -21,9 +22,9 @@
       <link href="{% static "sparestub/css/jasny-bootstrap.css" %}" rel="stylesheet">
 
       {# No need to load map files in PRD #}
-      {% if environment != "beta" %}
-        <link href="{% static "sparestub/css/jasny-bootstrap.css.map" %}" rel="stylesheet">
-      {% endif %}
+      {# if environment != "beta" #}
+      {#  <link href="{% static "sparestub/css/jasny-bootstrap.css.map" %}" rel="stylesheet">#}
+      {# endif #}
 
       <!-- Add favicon -->
       <link rel="icon" href="{% static "sparestub/logos/favicon.ico" %}">

@@ -134,6 +134,11 @@
     <Compile Include="utils\email.py" />
     <Compile Include="utils\fields.py" />
     <Compile Include="utils\management\commands\empty_db.py" />
+    <Compile Include="utils\management\commands\get_offline_manifest_filename.py" />
+    <Compile Include="utils\management\commands\get_hex.py" />
+    <Compile Include="utils\management\commands\flush.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utils\management\commands\initialize_db.py" />
     <Compile Include="utils\management\commands\prepare_images.py" />
     <Compile Include="utils\management\commands\sync_s3.py" />

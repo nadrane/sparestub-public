@@ -15,7 +15,7 @@ $(document).on('ready', function () {
     });
 });
 
-$(window).on('load resize', function () {
+$(document).ready(function () {
     var constant_height = $('.navbar').outerHeight(true) +
                           parseInt($('#introduction').css('padding-top'), 10) +
                           $('#top-intro1').outerHeight(true) +
@@ -23,7 +23,14 @@ $(window).on('load resize', function () {
                           $('#intro-button-div').outerHeight(true) +
                           $('#learn-more').outerHeight(true);
 
+
+    // normal
     var new_padding = $(window).height() - constant_height;
+
+    // override (chrome)
+    if (navigator.userAgent.search("Chrome") >= 0)
+        new_padding = ($(window).height() * .30) - constant_height; // fixing some fucked up chrome bug!
+
     if (new_padding < 10) {
         new_padding = 10;
     }
