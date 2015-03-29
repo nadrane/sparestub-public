@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'asks',
     'stripe_data',
     'compressor',
+    'djangosecure',
 
     # All needed for zinnia
     #'django_comments',
@@ -75,7 +76,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'sslify.middleware.SSLifyMiddleware',
+    'djangosecure.middleware.SecurityMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -188,5 +189,5 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TIMEZONE = 'UTC'
 CELERY_TASK_SERIALIZER = 'json'
 
-# django-sslify Configuration
-SSLIFY_DISABLE = True
+# django-secure
+SECURE_SSL_REDIRECT = False

@@ -67,5 +67,5 @@ SESSION_COOKIE_SECURE = True
 
 logging.basicConfig(level=logging.INFO)
 
-# django-sslify Configuration
-SSLIFY_DISABLE = True
+# django-secure
+SECURE_SSL_REDIRECT = True
