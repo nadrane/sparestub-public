@@ -421,7 +421,7 @@ class S3BotoStorage(Storage):
             self._entries[encoded_name] = key
 
         key.set_metadata('Content-Type', content_type)
-        key.set_metadata({'Cache-Control': 'max-age %d' % (3600 * 24 * 365 * 2)})
+        key.set_metadata('Cache-Control', 'max-age %d' % (3600 * 24 * 365 * 2))
         self._save_content(key, content, headers=headers)
         return cleaned_name
 

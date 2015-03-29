@@ -16,6 +16,16 @@ $(document).on('ready', function () {
 });
 
 $(document).ready(function () {
+    // avoiding iphone / ipad / ipod for now.
+    if (navigator.userAgent.search(/Iphone/i) >= 0)
+        return;
+
+    if (navigator.userAgent.search(/Ipod/i) >= 0)
+        return;
+
+    if (navigator.userAgent.search(/Ipad/i) >= 0)
+        return;
+
     var constant_height = $('.navbar').outerHeight(true) +
                           parseInt($('#introduction').css('padding-top'), 10) +
                           $('#top-intro1').outerHeight(true) +
@@ -23,13 +33,14 @@ $(document).ready(function () {
                           $('#intro-button-div').outerHeight(true) +
                           $('#learn-more').outerHeight(true);
 
-
     // normal
     var new_padding = $(window).height() - constant_height;
 
     // override (chrome)
     if (navigator.userAgent.search("Chrome") >= 0)
         new_padding = ($(window).height() * .30) - constant_height; // fixing some fucked up chrome bug!
+
+    //$('#debugging').html(navigator.userAgent);
 
     if (new_padding < 10) {
         new_padding = 10;
