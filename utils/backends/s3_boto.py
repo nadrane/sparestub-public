@@ -160,6 +160,7 @@ class S3BotoStorageFile(File):
                 provider.acl_header: self._storage.default_acl
             }
             upload_headers.update({'Content-Type': mimetypes.guess_type(self.key.name)[0] or self._storage.key_class.DefaultContentType})
+            upload_headers.update({'Cache-Control': 'max-age %d' % (3600 * 24 * 365 * 2)})
             upload_headers.update(self._storage.headers)
             self._multipart = self._storage.bucket.initiate_multipart_upload(
                 self.key.name,
@@ -405,6 +406,7 @@ class S3BotoStorage(Storage):
 
         # setting the content_type in the key object is not enough.
         headers.update({'Content-Type': content_type})
+        headers.update({'Cache-Control': 'max-age %d' % (3600 * 24 * 365 * 2)})
 
         if self.gzip and content_type in self.gzip_content_types:
             content = self._compress_content(content)
@@ -419,6 +421,7 @@ class S3BotoStorage(Storage):
             self._entries[encoded_name] = key
 
         key.set_metadata('Content-Type', content_type)
+        key.set_metadata({'Cache-Control': 'max-age %d' % (3600 * 24 * 365 * 2)})
         self._save_content(key, content, headers=headers)
         return cleaned_name
 
