@@ -96,7 +96,6 @@
     <Compile Include="sparestub\settings\beta.py" />
     <Compile Include="sparestub\settings\production.py" />
     <Compile Include="sparestub\settings\staging.py" />
-    <Compile Include="sparestub\settings\test.py" />
     <Compile Include="sparestub\settings\__init__.py" />
     <Compile Include="sparestub\urls.py" />
     <Compile Include="sparestub\wsgi.py" />

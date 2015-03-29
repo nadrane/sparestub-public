@@ -9,32 +9,64 @@ from utils.miscellaneous import reverse_category_lookup, get_variable_from_setti
 from utils.networking import ajax_popup_notification, ajax_http
 from utils.email import send_email
 from .settings import FEEDBACK_SUBMISSION_RESPONSE_SUBJECT, FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE
+from logentries import LogentriesHandler
+import logging
+import time
 
 SOCIAL_EMAIL_ADDRESS = get_variable_from_settings('SOCIAL_EMAIL_ADDRESS')
 
 
 def submit(request):
-    if request.method == 'POST':
-        contact_form = ContactForm(request.POST)
-        if contact_form.is_valid():
-            subject_type = contact_form.cleaned_data.get('subject_type')
-            subject_type = reverse_category_lookup(subject_type, contact_form_settings.get('SUBJECT_TYPES'))
-            body = contact_form.cleaned_data.get('body')
-            from_email_address = contact_form.cleaned_data.get('from_email_address')
+    log = logging.getLogger('logentries')
+    log.setLevel(logging.INFO)
+    handler = LogentriesHandler('28379e13-d9b8-434f-a233-7ec9369d2fcb')
+    log.addHandler(handler)
 
-            # Send an email to shout@sparestub.com with the user's message
-            send_email(SOCIAL_EMAIL_ADDRESS,
+    if request.method == 'POST':
+        log.info("executing views.submit()");
+        try:
+            contact_form = ContactForm(request.POST)
+        except Exception as e:
+            #log.error("ContactForm exception error({0}): {1}".format(e.errno, e.strerror))
+            log.error("ContactForm exception error")
+            raise
+
+        #log.info("contactForm() isvalid({0}) -> body: '{1}' email: '{2}' subject: '{3}'.".format(contact_form.is_valid(), contact_form.body, contact_form.from_email_address, contact_form.subject_type));
+
+        if contact_form.is_valid():
+            try:
+                subject_type = contact_form.cleaned_data.get('subject_type')
+                subject_type = reverse_category_lookup(subject_type, contact_form_settings.get('SUBJECT_TYPES'))
+                body = contact_form.cleaned_data.get('body')
+                from_email_address = contact_form.cleaned_data.get('from_email_address')
+            except Exception as e:
+                #log.error("contact_form.is_valid() error({0}): {1}".format(e.errno, e.strerror))
+                log.error("contact_form.is_valid()")
+                raise
+
+            try:
+                # Send an email to shout@sparestub.com with the user's message
+                send_email(SOCIAL_EMAIL_ADDRESS,
                        subject_type,
                        body,
-                       from_email=from_email_address,
-                       )
+                       from_email=from_email_address
+                )
+            except Exception as e:
+                 log.error("SOCIAL_EMAIL_ADDRESS error" )
+                 #log.error("SOCIAL_EMAIL_ADDRESS error({0}): {1}".format(e.errno, e.strerror))
+                 raise
 
-            # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
-            send_email(from_email_address,
+            try:
+                # Also shoot the user who contacted us an email to let them know we'll get back to them soon.
+                send_email(from_email_address,
                        FEEDBACK_SUBMISSION_RESPONSE_SUBJECT,
                        '',
                        FEEDBACK_SUBMISSION_RESPONSE_TEMPLATE,
                        )
+            except Exception as e:
+                log.error("from_email_address error")
+                #log.error("from_email_address error({0}): {1}".format(e.errno, e.strerror)) 
+                raise
 
             # Notice that we always return True. If the email failed to send, we need to figure it out on our side.
             # There is nothing additional for the client to do.
