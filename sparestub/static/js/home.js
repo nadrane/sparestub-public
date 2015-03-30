@@ -33,12 +33,16 @@ $(document).ready(function () {
                           $('#intro-button-div').outerHeight(true) +
                           $('#learn-more').outerHeight(true);
 
+    var window_height = $(window).height();  
+    if (window_height > 650) 
+        window_height = 650; // forcing a max. there are a serious bug on chrome.
+
     // normal
-    var new_padding = $(window).height() - constant_height;
+    var new_padding = window_height - constant_height;
 
     // override (chrome)
-    if (navigator.userAgent.search("Chrome") >= 0)
-        new_padding = ($(window).height() * .30) - constant_height; // fixing some fucked up chrome bug!
+    //if (navigator.userAgent.search("Chrome") >= 0)
+    //    new_padding = ($(window_height * .30) - constant_height; // fixing some fucked up chrome bug!
 
     //$('#debugging').html(navigator.userAgent);
 
