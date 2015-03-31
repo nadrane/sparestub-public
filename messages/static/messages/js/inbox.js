@@ -7,12 +7,12 @@ function accept_request() {
     var $current_thread = $('.current-thread');
     $.post(window.additional_parameters.accept_request_url,
            {'ticket_id': $current_thread.data('identity-ticket'),
-            'other_user_id': $current_thread.data('identity-user')},
+               'other_user_id': $current_thread.data('identity-user')},
             "json")
         .always(function (response) {
             handle_ajax_response(response);
         });
-}
+};
 
 function decline_request() {
     /* Kick this off when a seller decline's a buyer's request. */
@@ -21,7 +21,7 @@ function decline_request() {
     var $current_thread = $('.current-thread');
     $.post(window.additional_parameters.decline_request_url,
            {'ticket_id': $current_thread.data('identity-ticket'),
-            'other_user_id': $current_thread.data('identity-user')},
+               'other_user_id': $current_thread.data('identity-user')},
             "json")
         .done(function (response) {
             handle_ajax_response(response);
@@ -30,7 +30,7 @@ function decline_request() {
         .fail(function (response) {
             handle_ajax_response(response);
         });
-}
+};
 
 
 function send_message(e) {
@@ -38,7 +38,6 @@ function send_message(e) {
     *  Perform checks to make sure the user isn't exchanging contact info or talking about paying outside SpareStub.
     *  Lastly update the conversation body above to include their new message.
     */
-
     'use strict';
     var $current_thread = $('.current-thread');
     var $new_message_textarea = $('#new-message-textarea');
@@ -61,15 +60,20 @@ function send_message(e) {
     $conversation.animate({'scrollTop': ($conversation[0].scrollHeight)});
 
     $.post(window.additional_parameters.send_message_url,
-           {'other_user_id': $current_thread.data('identity-user'),
-            'ticket_id': $current_thread.data('identity-ticket'),
-            'body': body
-            },
-            'json');
+           {
+               'other_user_id': $current_thread.data('identity-user'),
+               'ticket_id': $current_thread.data('identity-ticket'),
+               'body': body
+           },
+            'json')
+     .done(function (data, textStatus, xhr) {
+         // fire when message is sent.
+         ss.gaEvents.track("button", "click", "Sent Message");
+     });
 
     // Blank out the message box so that a new message can be sent
     $new_message_textarea.val('');
-}
+};
 
 function set_conversation_body_height() {
     /* We need the height of the body to account for the fixed header above it, while still working on different screen
@@ -86,7 +90,7 @@ function set_conversation_body_height() {
 
     $('#conversation-body').height(new_height);
     $('#current-conversation').find('.conversation').height(new_height);
-}
+};
 
 function load_thread ($this, ticket_id, other_user_id) {
     // Find searches descendants but not top level nodes.
@@ -128,14 +132,14 @@ function load_thread ($this, ticket_id, other_user_id) {
     $('.decline-request').on('click', decline_request);
 
     mark_messages_read(ticket_id, other_user_id);
-}
+};
 
 function mark_messages_read(ticket_id, other_user_id) {
     $.post(window.additional_parameters.mark_messages_read_url,
            {'ticket_id': ticket_id,
             'other_user_id': other_user_id},
            'json');
-}
+};
 
 function load_first_thread() {
     var $threads = $('#threads');
@@ -144,19 +148,19 @@ function load_first_thread() {
         var other_user_id = $threads.children().data('identity-user');
         load_thread($($threads.children()[0]), ticket_id, other_user_id);
     }
-}
+};
 
 function  display_no_tickets_screen() {
     $('#threads').replaceWith('<div id="no-threads" class="col-xs-12">' +
                               '<h3 class="text-center">You have no messages!</h3>' +
                               '<p class="text-center">Find a ticket you like, and shoot the seller a message!</p>' +
                               '</div>');
-}
+};
 
 function can_message($thread) {
     /* Can the user message the other user form the inputted thread? */
     return ($thread.data('can-message').toLowerCase() === "true");
-}
+};
 
 function toggle_messaging(on_or_off) {
     /* Toggle whether it is possible to message another user. Some conversations are read-only */
@@ -173,12 +177,10 @@ function toggle_messaging(on_or_off) {
                              .attr('rows', 2);
 
         $('#send-message').css('display', 'none');
-
-
     }
     // Now that the size has changed from the rows attribute, recalcualte the conversation body height
     set_conversation_body_height();
-}
+};
 
 // When the user opens the page, load the first thread
 $(document).on('ready', function () {

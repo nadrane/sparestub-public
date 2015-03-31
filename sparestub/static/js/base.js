@@ -18,13 +18,13 @@ function getCookie(name) {
         }
     }
     return cookieValue;
-}
+};
 var csrftoken = getCookie('csrftoken');
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
+};
 
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
@@ -47,9 +47,10 @@ function initialize_location_autocomplete() {
             // those strings
             filter: function (list) {
                 return $.map(list, function (city) {
-                    return { name: city[0] + ', ' + city[1],
-                             pop: city[2]
-                             };
+                    return {
+                        name: city[0] + ', ' + city[1],
+                        pop: city[2]
+                    };
                 });
             }
         },
@@ -79,7 +80,7 @@ function initialize_location_autocomplete() {
             source: locations.ttAdapter()
         }
     );
-}
+};
 
 function initialize_date_pickers() {
     'use strict';
@@ -92,7 +93,7 @@ function initialize_date_pickers() {
         minDate: todayMonth + '/' + todayDay + '/' + todayYear,
         showToday: true
     });
-}
+};
 
 function load_login_modal(show_modal) {
     /* Load the login modal content from the server and display that form if requested.
@@ -116,7 +117,7 @@ function load_login_modal(show_modal) {
             $('#modal-login-root').modal('show');
         }
     });
-}
+};
 
 function load_signup_modal(show_modal, signup_with_redirect) {
     /* Load the signup modal content from the server and display that form if requested.
@@ -141,14 +142,14 @@ function load_signup_modal(show_modal, signup_with_redirect) {
             $('#modal-signup-root').modal('show');
         }
     });
-}
+};
 
 function initialize_login_form_signup_link() {
     $('#login-form-signup-link').on('click', function () {
         $('#modal-login-root').modal('hide');
         load_signup_modal(true);
     });
-}
+};
 
 $(document).ready(function ($) {
     'use strict';

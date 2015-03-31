@@ -91,14 +91,14 @@ function add_success_checkmark($target) {
     $target.empty();
     $target.append('<span class="glyphicon glyphicon-ok">');
 
-}
+};
 
 function add_failure_x($target) {
     /* Remove the old glyphicon associated with a element and add a failure x */
     'use strict';
     $target.empty();
     $target.append('<span class="glyphicon glyphicon-remove">');
-}
+};
 
 function show_yes_cancel_modal(title, post_url, modal_yes_function) {
     'use strict';
@@ -123,7 +123,7 @@ function show_yes_cancel_modal(title, post_url, modal_yes_function) {
     }
 
     $('#modal-yes-cancel-root').modal('show');
-}
+};
 
 function show_popup_notification_modal(notification_content, notification_type, use_html) {
     'use strict';
@@ -142,4 +142,25 @@ function show_popup_notification_modal(notification_content, notification_type, 
         $modal_popup_notification_content.text(notification_content);
     }
     $('#modal-popup-notification-root').modal('show');
-}
+};
+
+var ss = ss || {};
+
+// google-event-tracking
+// https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+//
+ss.gaEvents = function () {
+    // wire-up event and send-message.
+    var bindClickAndTrack = function (el, category, action, value) {
+        // Using jQuery Event API v1.3
+        $(el).on('click', function () {
+            send(category, action, value);
+        });
+    },
+
+    // track / send-message only.
+    track = function (category, action, value) {
+        ga('send', 'event', category, action, label, value);
+    };
+    return { bindClickAndTrack: bindClickAndTrack, track: track };
+}();

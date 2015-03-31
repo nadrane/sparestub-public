@@ -19,7 +19,7 @@ function validate_user_is_18(birthdate) {
         return age >= 18;
     }
     return true;
-}
+};
 
 // We need to kick the function off when we finish loading the modal content/
 // It appears as in callback to the ajax request that grabs this content in base.html
@@ -44,6 +44,9 @@ function initialize_bootstrap_validator_signup(redirect) {
                 // It's probably redundant to check the json value for true seeing as the server returned a 200 status
                 // code, but an extra check never hurts.
                 handle_ajax_response(data, $('#signup-notification-root'));
+
+                // fire when account is create(d).
+                ss.gaEvents.track("button", "click", "Created Account");
             })
             .fail(function (data, textStatus, xhr) {
                 // Obviously there are cases were we never reached the server (internet down or incredibly high loads
@@ -55,4 +58,4 @@ function initialize_bootstrap_validator_signup(redirect) {
                 $form.data('bootstrapValidator').resetForm(true);
             });
     });
-}
+};
