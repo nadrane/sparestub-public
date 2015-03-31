@@ -1,7 +1,7 @@
 # Django Imports
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^sellersguide/$', TemplateView.as_view(template_name="sellers_guide.html"), name='sellers guide'),
     url(r'^safetytips/$', TemplateView.as_view(template_name="safety_tips.html"), name='safety tips'),
 	url(r'^robots\.txt$', TemplateView.as_view(template_name="robots.txt")),
+    url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL+'sparestub/logos/favicon.ico')), #google chrome favicon fix
 
     url(r'', include('stripe_data.urls')),
     url(r'^profile/', include('user_profile.urls')),
