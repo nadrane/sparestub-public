@@ -13,7 +13,7 @@ django-appconf==0.6
 django-blog-zinnia==0.15
 django-compressor==1.4
 django-contrib-comments==1.5
-django-debug-toolbar==1.2.2
+django-debug-toolbar==1.11.1
 django-haystack==2.3.1
 django-mptt==0.6.1
 django-storages==1.1.8
