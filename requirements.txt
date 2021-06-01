@@ -43,7 +43,7 @@ sqlparse==0.1.13
 static3==0.5.1
 stripe==1.20.1
 unittest2py3k==0.5.1
-urllib3==1.10
+urllib3==1.26.5
 yuicompressor==2.4.8
 django-secure==1.0.1
 logentries==0.7
